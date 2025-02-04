@@ -15,7 +15,7 @@ use PrinsFrank\PdfParser\Document\Text\TextParser;
 
 #[CoversClass(TextParser::class)]
 class TextParserTest extends TestCase {
-    public function testParseText(): void {
+    public function testParseTextSingleObject(): void {
         static::assertEquals(
             new TextObjectCollection(
                 (new TextObject())
@@ -30,6 +30,73 @@ class TextParserTest extends TestCase {
                 100 100 Td
                 ( Hello World ) Tj
                 ET
+                EOD
+            )
+        );
+    }
+
+    public function testParseTextMultiObject(): void {
+        static::assertEquals(
+            new TextObjectCollection(
+                (new TextObject())
+                    ->addTextOperator(new TextOperator(TextStateOperator::FONT_SIZE, '/F1 24'))
+                    ->addTextOperator(new TextOperator(TextPositioningOperator::MOVE_OFFSET, '100 100'))
+                    ->addTextOperator(new TextOperator(TextShowingOperator::SHOW, '( Hello World )')),
+                (new TextObject())
+                    ->addTextOperator(new TextOperator(TextStateOperator::FONT_SIZE, '/F1 24'))
+                    ->addTextOperator(new TextOperator(TextPositioningOperator::MOVE_OFFSET, '100 100'))
+                    ->addTextOperator(new TextOperator(TextShowingOperator::SHOW, '( Hello World )'))
+            ),
+            TextParser::parse(
+                <<<EOD
+                BT
+                /F1 24 Tf
+                100 100 Td
+                ( Hello World ) Tj
+                ET
+                BT
+                /F1 24 Tf
+                100 100 Td
+                ( Hello World ) Tj
+                ET
+                EOD
+            )
+        );
+    }
+
+    public function testParseTextWithoutTextOperatorBegin(): void {
+        static::assertEquals(
+            new TextObjectCollection(
+                (new TextObject())
+                    ->addTextOperator(new TextOperator(TextStateOperator::FONT_SIZE, '/F1 24'))
+                    ->addTextOperator(new TextOperator(TextPositioningOperator::MOVE_OFFSET, '100 100'))
+                    ->addTextOperator(new TextOperator(TextShowingOperator::SHOW, '( Hello World )'))
+            ),
+            TextParser::parse(
+                <<<EOD
+                /F1 24 Tf
+                100 100 Td
+                ( Hello World ) Tj
+                ET
+                EOD
+            )
+        );
+    }
+
+    public function testParseTextWithoutTextOperatorEnd(): void {
+        static::assertEquals(
+            new TextObjectCollection(
+                (new TextObject())
+                    ->addTextOperator(new TextOperator(TextStateOperator::FONT_SIZE, '/F1 24'))
+                    ->addTextOperator(new TextOperator(TextPositioningOperator::MOVE_OFFSET, '100 100'))
+                    ->addTextOperator(new TextOperator(TextShowingOperator::SHOW, '( Hello World )'))
+            ),
+            TextParser::parse(
+                <<<EOD
+                BT
+                /F1 24 Tf
+                100 100 Td
+                ( Hello World ) Tj
                 EOD
             )
         );

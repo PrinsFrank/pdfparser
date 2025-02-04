@@ -3,78 +3,47 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Text;
 
-use PrinsFrank\PdfParser\Document\Generic\Operator\MarkedContentOperator;
-use PrinsFrank\PdfParser\Document\Generic\Parsing\InfiniteBuffer;
-use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\ColorOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\GraphicsStateOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextObjectOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class TextParser {
     public static function parse(string $text): TextObjectCollection {
-        $operatorBuffer = new RollingCharBuffer(4);
-        $textObject = null;
-        $operandBuffer = new InfiniteBuffer();
+        if (($textObjectStrings = preg_split('/' . TextObjectOperator::END->value . '((?!' . TextObjectOperator::BEGIN->value . ')[[:ascii:]\n])+' . TextObjectOperator::BEGIN->value . '/', $text)) === false) {
+            throw new ParseFailureException('Failed to parse text objects');
+        }
+
+        $operatorStrings = implode('|', array_map(
+            fn(TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator $operator) => str_replace(['*'], ['\*'], $operator->value),
+            [...TextPositioningOperator::cases(), ...TextShowingOperator::cases(), ...TextStateOperator::cases(), ...GraphicsStateOperator::cases(), ...ColorOperator::cases()],
+        ));
+
         $textObjects = [];
-        $inValue = false;
-        $previousChar = null;
-        foreach (str_split($text) as $char) {
-            $operandBuffer->addChar($char);
-            $operatorBuffer->next($char);
-            if (in_array($char, ['[', '<', '('], true) && $previousChar !== '\\') {
-                $inValue = true;
-                $previousChar = $char;
-                continue;
+        foreach ($textObjectStrings as $textObjectString) {
+            $textObjects[] = ($textObject = new TextObject());
+            if (str_starts_with($textObjectString, TextObjectOperator::BEGIN->value)) {
+                $textObjectString = substr($textObjectString, strlen(TextObjectOperator::BEGIN->value));
+            }
+            if (str_ends_with($textObjectString, TextObjectOperator::END->value)) {
+                $textObjectString = substr($textObjectString, 0, -strlen(TextObjectOperator::END->value));
             }
 
-            if ($inValue && in_array($char, [']', '>', ')'], true) && $previousChar !== '\\') {
-                $inValue = false;
-                $previousChar = $char;
-                continue;
+            $regex = '/(?<operand>\[[^]]*\]|\([^\)]*\)|[a-zA-Z0-9 \.\/_<>-]+?)\s*(?<operator>' . $operatorStrings . ')/';
+            if (preg_match_all($regex, $textObjectString, $matches, PREG_SET_ORDER) === false) {
+                throw new ParseFailureException();
             }
 
-            if ($inValue) {
-                $previousChar = $char;
-                continue;
-            }
-
-            if ($operatorBuffer->seenBackedEnumValue(TextObjectOperator::BEGIN)) {
-                $operandBuffer->flush();
-                $textObject = new TextObject();
-                $textObjects[] = $textObject;
-                $previousChar = $char;
-                continue;
-            }
-
-            if ($operatorBuffer->seenBackedEnumValue(TextObjectOperator::END)) {
-                $operandBuffer->flush();
-                $textObject = null;
-                $previousChar = $char;
-                continue;
-            }
-
-            if ($operatorBuffer->seenBackedEnumValue(MarkedContentOperator::BeginMarkedContent)
-                || $operatorBuffer->seenBackedEnumValue(MarkedContentOperator::BeginMarkedContentWithProperties)
-                || $operatorBuffer->seenBackedEnumValue(MarkedContentOperator::EndMarkedContent)) {
-                $operandBuffer->flush();
-                $previousChar = $char;
-                continue;
-            }
-
-            if ($textObject === null) {
-                $previousChar = $char;
-                continue;
-            }
-
-            $operator = $operatorBuffer->getBackedEnumValue(TextPositioningOperator::class, TextShowingOperator::class, TextStateOperator::class, GraphicsStateOperator::class, ColorOperator::class);
-            if (($operator instanceof TextPositioningOperator || $operator instanceof TextShowingOperator || $operator instanceof TextStateOperator || $operator instanceof GraphicsStateOperator || $operator instanceof ColorOperator)
-                && !$operatorBuffer->seenString('/' . $operator->value)) {
-                $textObject->addTextOperator(new TextOperator($operator, trim($operandBuffer->removeChar(strlen($operator->value))->__toString())));
-                $operandBuffer->flush();
-                $previousChar = $char;
+            foreach ($matches as $match) {
+                $textObject->addTextOperator(
+                    new TextOperator(
+                        TextPositioningOperator::tryFrom($match['operator']) ?? TextShowingOperator::tryFrom($match['operator']) ?? TextStateOperator::tryFrom($match['operator']) ?? GraphicsStateOperator::tryFrom($match['operator']) ?? ColorOperator::tryFrom($match['operator']) ?? throw new ParseFailureException(),
+                        trim($match['operand']),
+                    )
+                );
             }
         }
 
