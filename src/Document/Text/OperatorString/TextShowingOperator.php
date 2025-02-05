@@ -16,9 +16,10 @@ enum TextShowingOperator: string {
         $string = '';
         if ($this === self::MOVE_SHOW || $this === self::MOVE_SHOW_SPACING) {
             $string .= PHP_EOL;
-            if ($operands === '') {
-                return $string;
-            }
+        }
+
+        if ($operands === '') {
+            return $string;
         }
 
         if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $operands, $matches, PREG_SET_ORDER)) === false) {
