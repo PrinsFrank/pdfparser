@@ -22,14 +22,19 @@ class TextObjectCollection {
         $this->textObjects = $textObjects;
     }
 
-    public function getText(Document $document, Page $page, ?Font &$font): string {
+    public function getText(Document $document, Page $page): string {
         $text = '';
+        $font = null;
         foreach ($this->textObjects as $textObject) {
             $textObjectText = '';
             foreach ($textObject->textOperators as $textOperator) {
                 if ($textOperator->operator instanceof TextPositioningOperator) {
                     $textObjectText .= $textOperator->operator->display($textOperator->operands);
                 } elseif ($textOperator->operator instanceof TextShowingOperator) {
+                    if ($font === null) {
+                        throw new ParseFailureException('A font should be selected before being used');
+                    }
+
                     $textObjectText .= $textOperator->operator->displayOperands($textOperator->operands, $font);
                 } elseif ($textOperator->operator === TextStateOperator::FONT_SIZE) {
                     if (($fontDictionary = $page->getFontDictionary()) === null) {

@@ -14,7 +14,8 @@ class TextParser {
         $operandBuffer = '';
         $textObjects = [];
         $inValue = false;
-        $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = null;
+        $textObject = new TextObject();
+        $previousChar = $secondToLastChar = $thirdToLastChar = null;
         foreach (mb_str_split($text) as $char) {
             $operandBuffer .= $char;
             if (in_array($char, ['[', '<', '('], true) && $previousChar !== '\\') {
@@ -29,11 +30,11 @@ class TextParser {
                 $textObjects[] = $textObject;
             } elseif ($char === 'T' && $previousChar === 'E') { // TextObjectOperator::END
                 $operandBuffer = '';
-                $textObject = null;
+                $textObject = new TextObject();
             } elseif ($char === 'C'
                 && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
                 $operandBuffer = '';
-            } elseif ($textObject !== null && ($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null) {
+            } elseif (($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null) {
                 $textObject->addTextOperator(new TextOperator($operator, trim(substr($operandBuffer, 0, -strlen($operator->value)))));
                 $operandBuffer = '';
             }
@@ -43,7 +44,9 @@ class TextParser {
             $previousChar = $char;
         }
 
-        return new TextObjectCollection(...$textObjects);
+        return new TextObjectCollection(
+            ...array_filter($textObjects, fn (TextObject $textObject) => $textObject->isEmpty() === false)
+        );
     }
 
     public static function getOperator(string $currentChar, ?string $previousChar, ?string $secondToLastChar, ?string $thirdToLastChar): TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator|null {

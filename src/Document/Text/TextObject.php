@@ -12,4 +12,8 @@ class TextObject {
 
         return $this;
     }
+
+    public function isEmpty(): bool {
+        return $this->textOperators === [];
+    }
 }

@@ -13,26 +13,25 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class Page extends DecoratedObject {
     public function getText(): string {
-        $font = null;
-        return implode(' ', array_map(
-            function (TextObjectCollection $textObjectCollection) use (&$font) {
-                return $textObjectCollection->getText($this->document, $this, $font);
-            },
-            $this->getTextObjectCollections(),
-        ));
+        return $this->getTextObjectCollection()
+            ->getText($this->document, $this);
     }
 
-    /** @return list<TextObjectCollection> */
-    public function getTextObjectCollections(): array {
-        return array_map(
-            function (DecoratedObject $decoratedObject) {
-                if (!($objectItem = $decoratedObject->objectItem) instanceof UncompressedObject) {
-                    throw new ParseFailureException();
-                }
+    public function getTextObjectCollection(): TextObjectCollection {
+        return TextParser::parse(
+            implode(
+                '',
+                array_map(
+                    function (DecoratedObject $decoratedObject) {
+                        if (!($objectItem = $decoratedObject->objectItem) instanceof UncompressedObject) {
+                            throw new ParseFailureException('Text in compressed objects are currently not supported');
+                        }
 
-                return TextParser::parse($objectItem->getStreamContent($this->document->stream));
-            },
-            $this->document->getObjectsByDictionaryKey($this->getDictionary(), DictionaryKey::CONTENTS),
+                        return $objectItem->getStreamContent($this->document->stream);
+                    },
+                    $this->document->getObjectsByDictionaryKey($this->getDictionary(), DictionaryKey::CONTENTS),
+                ),
+            ),
         );
     }
 
