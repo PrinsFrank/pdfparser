@@ -54,38 +54,38 @@ class TextParser {
      * as operator retrieval happens possibly millions of times in a single file
      */
     public static function getOperator(string $currentChar, ?string $previousChar, ?string $secondToLastChar, ?string $thirdToLastChar): TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator|null {
-        $threeLetterMatch = match ([$secondToLastChar, $previousChar, $currentChar]) {
-            ['S', 'C', 'N'] => ColorOperator::SetStrokingParams,
-            ['s', 'c', 'n'] => ColorOperator::SetColorParams,
+        $threeLetterMatch = match ($secondToLastChar . $previousChar . $currentChar) {
+            'SCN' => ColorOperator::SetStrokingParams,
+            'scn' => ColorOperator::SetColorParams,
             default => null,
         };
         if ($threeLetterMatch !== null && $thirdToLastChar !== '\\') {
             return $threeLetterMatch;
         }
 
-        $twoLetterMatch = match ([$previousChar, $currentChar]) {
-            ['T', 'd'] => TextPositioningOperator::MOVE_OFFSET,
-            ['T', 'D'] => TextPositioningOperator::MOVE_OFFSET_LEADING,
-            ['T', 'm'] => TextPositioningOperator::SET_MATRIX,
-            ['T', '*'] => TextPositioningOperator::NEXT_LINE,
-            ['T', 'j'] => TextShowingOperator::SHOW,
-            ['T', 'J'] => TextShowingOperator::SHOW_ARRAY,
-            ['T', 'c'] => TextStateOperator::CHAR_SIZE,
-            ['T', 'w'] => TextStateOperator::WORD_SPACE,
-            ['T', 'z'] => TextStateOperator::SCALE,
-            ['T', 'L'] => TextStateOperator::LEADING,
-            ['T', 'f'] => TextStateOperator::FONT_SIZE,
-            ['T', 'r'] => TextStateOperator::RENDER,
-            ['T', 's'] => TextStateOperator::RISE,
-            ['c', 'm'] => GraphicsStateOperator::ModifyCurrentTransformationMatrix,
-            ['r', 'i'] => GraphicsStateOperator::SetIntent,
-            ['g', 's'] => GraphicsStateOperator::SetDictName,
-            ['C', 'S'] => ColorOperator::SetName,
-            ['c', 's'] => ColorOperator::SetNameNonStroking,
-            ['S', 'C'] => ColorOperator::SetStrokingColor,
-            ['s', 'c'] => ColorOperator::SetColor,
-            ['R', 'G'] => ColorOperator::SetStrokingColorDeviceRGB,
-            ['r', 'g'] => ColorOperator::SetColorDeviceRGB,
+        $twoLetterMatch = match ($previousChar . $currentChar) {
+            'Td' => TextPositioningOperator::MOVE_OFFSET,
+            'TD' => TextPositioningOperator::MOVE_OFFSET_LEADING,
+            'Tm' => TextPositioningOperator::SET_MATRIX,
+            'T*' => TextPositioningOperator::NEXT_LINE,
+            'Tj' => TextShowingOperator::SHOW,
+            'TJ' => TextShowingOperator::SHOW_ARRAY,
+            'Tc' => TextStateOperator::CHAR_SIZE,
+            'Tw' => TextStateOperator::WORD_SPACE,
+            'Tz' => TextStateOperator::SCALE,
+            'TL' => TextStateOperator::LEADING,
+            'Tf' => TextStateOperator::FONT_SIZE,
+            'Tr' => TextStateOperator::RENDER,
+            'Ts' => TextStateOperator::RISE,
+            'cm' => GraphicsStateOperator::ModifyCurrentTransformationMatrix,
+            'ri' => GraphicsStateOperator::SetIntent,
+            'gs' => GraphicsStateOperator::SetDictName,
+            'CS' => ColorOperator::SetName,
+            'cs' => ColorOperator::SetNameNonStroking,
+            'SC' => ColorOperator::SetStrokingColor,
+            'sc' => ColorOperator::SetColor,
+            'RG' => ColorOperator::SetStrokingColorDeviceRGB,
+            'rg' => ColorOperator::SetColorDeviceRGB,
             default => null,
         };
         if ($twoLetterMatch !== null && $secondToLastChar !== '\\') {
