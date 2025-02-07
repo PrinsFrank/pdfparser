@@ -3,7 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\CMap\ToUnicode;
 
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 class ToUnicodeCMapParser {
     public static function parse(Stream $stream, int $startOffset, int $nrOfBytes): ToUnicodeCMap {

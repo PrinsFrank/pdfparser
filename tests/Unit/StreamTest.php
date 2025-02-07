@@ -5,12 +5,13 @@ namespace PrinsFrank\PdfParser\Tests\Unit;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\FileStream;
+use PrinsFrank\PdfParser\Stream\AbstractStream;
 
-#[CoversClass(Stream::class)]
+#[CoversClass(AbstractStream::class)]
 class StreamTest extends TestCase {
     public function testStrrpos(): void {
-        $stream = Stream::fromString('123objxref');
+        $stream = FileStream::fromString('123objxref');
         static::assertSame(
             3,
             $stream->lastPos(Marker::OBJ, 0)
@@ -22,7 +23,7 @@ class StreamTest extends TestCase {
     }
 
     public function testFileStructure(): void {
-        $stream = Stream::fromString(
+        $stream = FileStream::fromString(
             <<<EOD
             trailer
             startxref
@@ -31,17 +32,17 @@ class StreamTest extends TestCase {
             EOD
         );
         $eofMarkerPos = $stream->lastPos(Marker::EOF, 0);
-        static::assertNotNull($eofMarkerPos);
+        static::assertSame(23, $eofMarkerPos);
         static::assertSame(Marker::EOF->value, $stream->read($eofMarkerPos, strlen(Marker::EOF->value)));
 
         $startXrefPos = $stream->lastPos(Marker::START_XREF, $stream->getSizeInBytes() - $eofMarkerPos);
-        static::assertNotNull($startXrefPos);
+        static::assertSame(8, $startXrefPos);
         static::assertSame(Marker::START_XREF->value, $stream->read($startXrefPos, strlen(Marker::START_XREF->value)));
 
         $byteOffsetPos = $stream->getStartOfNextLine($startXrefPos, $stream->getSizeInBytes());
-        static::assertNotNull($byteOffsetPos);
+        static::assertSame(18, $byteOffsetPos);
         $byteOffsetEndPos = $stream->getEndOfCurrentLine($byteOffsetPos, $stream->getSizeInBytes());
-        static::assertNotNull($byteOffsetEndPos);
+        static::assertSame(22, $byteOffsetEndPos);
         static::assertSame('1234', $stream->read($byteOffsetPos, $byteOffsetEndPos - $byteOffsetPos));
     }
 }

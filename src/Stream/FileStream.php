@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser;
+namespace PrinsFrank\PdfParser\Stream;
 
+use Override;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMapOperator;
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
@@ -10,7 +11,7 @@ use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
-class Stream {
+class FileStream extends AbstractStream {
     /** @var resource */
     private readonly mixed $handle;
 
@@ -44,6 +45,7 @@ class Stream {
         return new self($handle);
     }
 
+    #[Override]
     public function getSizeInBytes(): int {
         $stats = fstat($this->handle);
         if ($stats === false) {
@@ -53,7 +55,7 @@ class Stream {
         return $stats['size'];
     }
 
-    /** @phpstan-assert int<1, max> $nrOfBytes */
+    #[Override]
     public function read(int $from, int $nrOfBytes): string {
         if ($nrOfBytes <= 0) {
             throw new InvalidArgumentException(sprintf('$nrOfBytes must be greater than 0, %d given', $nrOfBytes));
@@ -69,10 +71,7 @@ class Stream {
         return $bytes;
     }
 
-    /**
-     * @phpstan-assert int<0, max> $startByteOffset
-     * @phpstan-assert int<0, max> $endByteOffset
-     */
+    #[Override]
     public function slice(int $startByteOffset, int $endByteOffset): string {
         if ($startByteOffset <= 0) {
             throw new InvalidArgumentException(sprintf('$nrOfBytes must be greater than 0, %d given', $startByteOffset));
@@ -92,12 +91,7 @@ class Stream {
         return $bytes;
     }
 
-    /**
-     * @phpstan-assert int<0, max> $from
-     * @phpstan-assert int<1, max> $nrOfBytes
-     *
-     * @return iterable<string>
-     */
+    #[Override]
     public function chars(int $from, int $nrOfBytes): iterable {
         if ($from < 0) {
             throw new InvalidArgumentException(sprintf('StartOffset should be greater than zero, %d given', $from));
@@ -119,6 +113,7 @@ class Stream {
         }
     }
 
+    #[Override]
     public function firstPos(WhitespaceCharacter|Marker|DelimiterCharacter|ToUnicodeCMapOperator $needle, int $offsetFromStart, int $before): ?int {
         $rollingCharBuffer = new RollingCharBuffer($needleLength = strlen($needle->value));
         while ($offsetFromStart < $before) {
@@ -137,15 +132,7 @@ class Stream {
         return null;
     }
 
-    public function getStartNextLineAfter(WhitespaceCharacter|Marker|DelimiterCharacter|ToUnicodeCMapOperator $needle, int $offsetFromStart, int $before): ?int {
-        $markerPos = $this->firstPos($needle, $offsetFromStart, $before);
-        if ($markerPos === null) {
-            return null;
-        }
-
-        return $this->getStartOfNextLine($markerPos, $before);
-    }
-
+    #[Override]
     public function lastPos(WhitespaceCharacter|Marker|DelimiterCharacter|ToUnicodeCMapOperator $needle, int $offsetFromEnd): ?int {
         $rollingCharBuffer = new RollingCharBuffer(strlen($needle->value));
         $offsetFromEnd++;
@@ -162,43 +149,6 @@ class Stream {
         }
 
         return null;
-    }
-
-    public function getStartOfNextLine(int $byteOffset, int $before): ?int {
-        $firstLineFeedPos = $this->firstPos(WhitespaceCharacter::LINE_FEED, $byteOffset, $before);
-        $firstCarriageReturnPos = $this->firstPos(WhitespaceCharacter::CARRIAGE_RETURN, $byteOffset, $before);
-        if ($firstLineFeedPos === null && $firstCarriageReturnPos === null) {
-            return null;
-        }
-
-        if ($firstCarriageReturnPos === null) {
-            return $firstLineFeedPos + 1;
-        }
-
-        if ($firstLineFeedPos === null) {
-            return $firstCarriageReturnPos + 1;
-        }
-
-        return min($firstLineFeedPos, $firstCarriageReturnPos)
-            + (abs($firstCarriageReturnPos - $firstLineFeedPos) === 1 ? 2 : 1); // If the CR and LF are next to each other, we need to add 2 bytes, otherwise 1
-    }
-
-    public function getEndOfCurrentLine(int $byteOffset, int $before): ?int {
-        $firstLineFeedPos = $this->firstPos(WhitespaceCharacter::LINE_FEED, $byteOffset, $before);
-        $firstCarriageReturnPos = $this->firstPos(WhitespaceCharacter::CARRIAGE_RETURN, $byteOffset, $before);
-        if ($firstLineFeedPos === null && $firstCarriageReturnPos === null) {
-            return null;
-        }
-
-        if ($firstCarriageReturnPos === null) {
-            return $firstLineFeedPos;
-        }
-
-        if ($firstLineFeedPos === null) {
-            return $firstCarriageReturnPos;
-        }
-
-        return min($firstLineFeedPos, $firstCarriageReturnPos);
     }
 
     public function __destruct() {

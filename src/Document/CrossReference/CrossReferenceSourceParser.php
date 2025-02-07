@@ -11,7 +11,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValu
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\MarkerNotFoundException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 class CrossReferenceSourceParser {
     public static function parse(Stream $stream): CrossReferenceSource {

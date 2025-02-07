@@ -23,7 +23,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
 #[CoversClass(DictionaryParser::class)]
 class DictionaryParserTest extends TestCase {
@@ -41,7 +41,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::FLATE_DECODE),
             ),
             DictionaryParser::parse(
-                $stream = Stream::fromString(
+                $stream = new InMemoryStream(
                     <<<EOD
                     15 0 obj
                     <<
@@ -70,7 +70,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::INDEX, new ArrayValue([0, 16])),
             ),
             DictionaryParser::parse(
-                $stream = Stream::fromString(
+                $stream = new InMemoryStream(
                     <<<EOD
                     <<
                     /Index [ 0 16 ]
@@ -102,7 +102,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::W, new WValue(1, 4, 0)),
             ),
             DictionaryParser::parse(
-                $stream = Stream::fromString(
+                $stream = new InMemoryStream(
                     '<<
                         /DecodeParms
                                 <<
@@ -146,7 +146,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::W, new WValue(1, 4, 0)),
             ),
             DictionaryParser::parse(
-                $stream = Stream::fromString('<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode/ID[<9A27A23F6A2546448EBB340FF38477BD><C5C4714E306446ABAE40FE784477D322>]/Index[2460 1 4311 1 4317 2 4414 1 4717 21]/Info 4318 0 R/Length 106/Prev 46153797/Root 4320 0 R/Size 4738/Type/XRef/W[1 4 0]>>stream'),
+                $stream = new InMemoryStream('<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode/ID[<9A27A23F6A2546448EBB340FF38477BD><C5C4714E306446ABAE40FE784477D322>]/Index[2460 1 4311 1 4317 2 4414 1 4717 21]/Info 4318 0 R/Length 106/Prev 46153797/Root 4320 0 R/Size 4738/Type/XRef/W[1 4 0]>>stream'),
                 0,
                 $stream->getSizeInBytes(),
             )
@@ -170,7 +170,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::FONT_FILE, new TextStringValue('11 0 R')),
             ),
             DictionaryParser::parse(
-                $stream = Stream::fromString(
+                $stream = new InMemoryStream(
                     <<<EOD
                     <<
                     /Type /FontDescriptor
@@ -206,7 +206,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::PTEX_FULLBANNER, new TextStringValue('(This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)')),
             ),
             DictionaryParser::parse(
-                $stream = Stream::fromString(
+                $stream = new InMemoryStream(
                     <<<EOD
                     <<
                     /Producer (pdfTeX-1.40.18)
@@ -230,7 +230,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::PRODUCER, new TextStringValue('(pdfTeX-1.40.18)')),
             ),
             DictionaryParser::parse(
-                $stream = Stream::fromString(
+                $stream = new InMemoryStream(
                     <<<EOD
                     <<
                     /Producer (pdfTeX-1.40.18)
@@ -259,7 +259,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
             ),
             DictionaryParser::parse(
-                $stream = Stream::fromString(
+                $stream = new InMemoryStream(
                     <<<EOD
                     <<
                     /OpenAction[3 0 R/Fit]
@@ -298,7 +298,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(6, 0)),
             ),
             DictionaryParser::parse(
-                $stream = Stream::fromString(
+                $stream = new InMemoryStream(
                     <<<EOD
                     <</Type /Page
                     /Resources <<

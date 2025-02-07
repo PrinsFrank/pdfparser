@@ -8,14 +8,14 @@ use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Document\Version\VersionParser;
 use PrinsFrank\PdfParser\Exception\UnsupportedFileFormatException;
 use PrinsFrank\PdfParser\Exception\UnsupportedPdfVersionException;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
 #[CoversClass(VersionParser::class)]
 class VersionParserTest extends TestCase {
     public function testParseThrowsExceptionWhenNoVersionMarker(): void {
         $this->expectException(UnsupportedFileFormatException::class);
         VersionParser::parse(
-            Stream::fromString(
+            new InMemoryStream(
                 'FOO'
             )
         );
@@ -25,7 +25,7 @@ class VersionParserTest extends TestCase {
         $this->expectException(UnsupportedPdfVersionException::class);
         $this->expectExceptionMessage('9.9');
         VersionParser::parse(
-            Stream::fromString(
+            new InMemoryStream(
                 '%PDF-9.9'
             )
         );
@@ -34,7 +34,7 @@ class VersionParserTest extends TestCase {
     public function testParse(): void {
         static::assertSame(
             Version::V1_0,
-            VersionParser::parse(Stream::fromString('%PDF-1.0'))
+            VersionParser::parse(new InMemoryStream('%PDF-1.0'))
         );
     }
 }

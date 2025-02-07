@@ -6,13 +6,13 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 class UncompressedObjectParser {
     public static function parseObject(
         CrossReferenceEntryInUseObject $crossReferenceEntry,
-        int $objectNumber,
-        Stream $stream,
+        int                            $objectNumber,
+        Stream                 $stream,
     ): UncompressedObject {
         $endObj = $stream->firstPos(Marker::END_OBJ, $crossReferenceEntry->byteOffsetInDecodedStream, $stream->getSizeInBytes()) ?? throw new ParseFailureException('Unable to locate end of object');
         $startObj = $stream->firstPos(Marker::OBJ, $crossReferenceEntry->byteOffsetInDecodedStream, $endObj) ?? throw new ParseFailureException('Unable to locate start of object');

@@ -17,7 +17,7 @@ use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectContent\CompressedObjectContentParser;
 use PrinsFrank\PdfParser\Exception\MarkerNotFoundException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 class CrossReferenceStreamParser {
     private const HEX_CHARS_IN_BYTE = 2;

@@ -9,7 +9,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\FilterNameValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 class CompressedObjectContentParser {
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes, Dictionary $dictionary): string {

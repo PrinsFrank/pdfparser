@@ -10,7 +10,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\CrossReference\Table\CrossReferenceTableParser;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
 #[CoversClass(CrossReferenceTableParser::class)]
 class CrossReferenceTableParserTest extends TestCase {
@@ -19,7 +19,7 @@ class CrossReferenceTableParserTest extends TestCase {
      * The following line introduces a subsection containing five objects numbered consecutively from 28 to 32.
      */
     public function testParseExample1(): void {
-        $stream = Stream::fromString(
+        $stream = new InMemoryStream(
             <<<EOD
             28 5
             trailer
@@ -42,7 +42,7 @@ class CrossReferenceTableParserTest extends TestCase {
      * 3 has been deleted, and the next object created with that object number is given a generation number of 7.
      */
     public function testParseExample2(): void {
-        $stream = Stream::fromString(
+        $stream = new InMemoryStream(
             <<<EOD
             0 6
             0000000003 65535 f
@@ -83,7 +83,7 @@ class CrossReferenceTableParserTest extends TestCase {
      * which is in use.
      */
     public function testParseExample3(): void {
-        $stream = Stream::fromString(
+        $stream = new InMemoryStream(
             <<<EOD
             0 1
             0000000000 65535 f

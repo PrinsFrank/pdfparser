@@ -8,7 +8,7 @@ use PrinsFrank\PdfParser\Document\CMap\ToUnicode\BFChar;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\BFRange;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMap;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMapParser;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
 #[CoversClass(ToUnicodeCMapParser::class)]
 class ToUnicodeCMapParserTest extends TestCase {
@@ -24,7 +24,7 @@ class ToUnicodeCMapParserTest extends TestCase {
                 new BFChar(0x3A51, 0xD840DC3E),
             ),
             ToUnicodeCMapParser::parse(
-                $stream = Stream::fromString(
+                $stream = new InMemoryStream(
                     <<<EOD
                     /CIDInit /ProcSet findresource begin
                     12 dict begin

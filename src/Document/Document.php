@@ -10,8 +10,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
-use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObjectFactory;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
+use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObjectFactory;
 use PrinsFrank\PdfParser\Document\Object\Decorator\InformationDictionary;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
@@ -19,7 +19,7 @@ use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObj
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 final class Document {
     /** @var list<Page> */

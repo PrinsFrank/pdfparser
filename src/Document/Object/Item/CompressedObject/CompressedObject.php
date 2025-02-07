@@ -11,7 +11,8 @@ use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\FileStream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 class CompressedObject implements ObjectItem {
     private readonly Dictionary $dictionary;
@@ -36,7 +37,7 @@ class CompressedObject implements ObjectItem {
         $first = $this->storedInObject->getDictionary($stream)->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
 
-        $objectContent = Stream::fromString(
+        $objectContent = FileStream::fromString(
             substr(
                 $this->storedInObject->getStreamContent($stream),
                 $first->value + $this->startByteOffsetInDecodedStream,

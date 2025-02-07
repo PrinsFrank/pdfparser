@@ -6,7 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Version;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\UnsupportedFileFormatException;
 use PrinsFrank\PdfParser\Exception\UnsupportedPdfVersionException;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 class VersionParser {
     /**

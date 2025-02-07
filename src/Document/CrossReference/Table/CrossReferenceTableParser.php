@@ -11,7 +11,7 @@ use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\InvalidCrossReferenceLineException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
-use PrinsFrank\PdfParser\Stream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 class CrossReferenceTableParser {
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {
