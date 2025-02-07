@@ -16,7 +16,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
-use PrinsFrank\PdfParser\Stream\FileStream;
+use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
 class Font extends DecoratedObject {
     private readonly ToUnicodeCMap|false $toUnicodeCMap;
@@ -67,7 +67,7 @@ class Font extends DecoratedObject {
         }
 
         return $this->toUnicodeCMap = ToUnicodeCMapParser::parse(
-            $stream = FileStream::fromString($toUnicodeObject->objectItem->getStreamContent($this->document->stream)),
+            $stream = new InMemoryStream($toUnicodeObject->objectItem->getStreamContent($this->document->stream)),
             0,
             $stream->getSizeInBytes()
         );
