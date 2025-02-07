@@ -46,17 +46,69 @@ class TextParser {
         return new TextObjectCollection(...$textObjects);
     }
 
+    /**
+     * This method uses three maps instead of calling $enum::tryFrom for all possible enums
+     * as operator retrieval happens possibly millions of times in a single file
+     */
     public static function getOperator(string $currentChar, ?string $previousChar, ?string $secondToLastChar, ?string $thirdToLastChar): TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator|null {
-        foreach ([TextPositioningOperator::class, TextShowingOperator::class, TextStateOperator::class, GraphicsStateOperator::class, ColorOperator::class] as $enumClass) {
-            if (($case = $enumClass::tryFrom($secondToLastChar . $previousChar . $currentChar)) !== null && $thirdToLastChar !== '\\') {
-                return $case;
-            }
-            if (($case = $enumClass::tryFrom($previousChar . $currentChar)) !== null && $secondToLastChar !== '\\') {
-                return $case;
-            }
-            if (($case = $enumClass::tryFrom($currentChar)) !== null && $previousChar !== '\\') {
-                return $case;
-            }
+        $threeLetterMatch = match ([$secondToLastChar, $previousChar, $currentChar]) {
+            ['S', 'C', 'N'] => ColorOperator::SetStrokingParams,
+            ['s', 'c', 'n'] => ColorOperator::SetColorParams,
+            default => null,
+        };
+        if ($threeLetterMatch !== null && $thirdToLastChar !== '\\') {
+            return $threeLetterMatch;
+        }
+
+        $twoLetterMatch = match ([$previousChar, $currentChar]) {
+            ['T', 'd'] => TextPositioningOperator::MOVE_OFFSET,
+            ['T', 'D'] => TextPositioningOperator::MOVE_OFFSET_LEADING,
+            ['T', 'm'] => TextPositioningOperator::SET_MATRIX,
+            ['T', '*'] => TextPositioningOperator::NEXT_LINE,
+            ['T', 'j'] => TextShowingOperator::SHOW,
+            ['T', 'J'] => TextShowingOperator::SHOW_ARRAY,
+            ['T', 'c'] => TextStateOperator::CHAR_SIZE,
+            ['T', 'w'] => TextStateOperator::WORD_SPACE,
+            ['T', 'z'] => TextStateOperator::SCALE,
+            ['T', 'L'] => TextStateOperator::LEADING,
+            ['T', 'f'] => TextStateOperator::FONT_SIZE,
+            ['T', 'r'] => TextStateOperator::RENDER,
+            ['T', 's'] => TextStateOperator::RISE,
+            ['c', 'm'] => GraphicsStateOperator::ModifyCurrentTransformationMatrix,
+            ['r', 'i'] => GraphicsStateOperator::SetIntent,
+            ['g', 's'] => GraphicsStateOperator::SetDictName,
+            ['C', 'S'] => ColorOperator::SetName,
+            ['c', 's'] => ColorOperator::SetNameNonStroking,
+            ['S', 'C'] => ColorOperator::SetStrokingColor,
+            ['s', 'c'] => ColorOperator::SetColor,
+            ['R', 'G'] => ColorOperator::SetStrokingColorDeviceRGB,
+            ['r', 'g'] => ColorOperator::SetColorDeviceRGB,
+            default => null,
+        };
+        if ($twoLetterMatch !== null && $secondToLastChar !== '\\') {
+            return $twoLetterMatch;
+        }
+
+        $oneLetterMatch = match ($currentChar) {
+            '\'' => TextShowingOperator::MOVE_SHOW,
+            '"' => TextShowingOperator::MOVE_SHOW_SPACING,
+            'q' => GraphicsStateOperator::SaveCurrentStateToStack,
+            'Q' => GraphicsStateOperator::RestoreMostRecentStateFromStack,
+            'w' => GraphicsStateOperator::SetLineWidth,
+            'J' => GraphicsStateOperator::SetLineCap,
+            'j' => GraphicsStateOperator::SetLineJoin,
+            'M' => GraphicsStateOperator::SetMiterJoin,
+            'd' => GraphicsStateOperator::SetLineDash,
+            'i' => GraphicsStateOperator::SetFlatness,
+            'G' => ColorOperator::SetStrokingColorSpace,
+            'g' => ColorOperator::SetColorSpace,
+            'K' => ColorOperator::SetStrokingColorDeviceCMYK,
+            'k' => ColorOperator::SetColorDeviceCMYK,
+            default => null,
+        };
+
+        if ($oneLetterMatch !== null && $previousChar !== '\\') {
+            return $oneLetterMatch;
         }
 
         return null;
