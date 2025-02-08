@@ -27,6 +27,14 @@ To start right away, run the following command in your composer project;
 composer require prinsfrank/pdfparser
 ```
 
+<details>
+    <summary>Installation without Composer</summary>
+    <p>If you don't want to install this package using Composer, or cannot due to some constraints, you can still download the contents of the latest release and use this package directly.</p>
+    <p>As you don't have Composer to handle autoloading for you, you'll need to register the custom autoloader from this project. To do so, simply add the following line at the top of your custom bootstrap script or the file you want to parse PDFs in:</p>
+    <code>require 'path/to/package/directory/.al-custom.php';</code>
+    <p>This needs to point to the <code>.al-custom.php</code> file in the directory that the contents of this package is in.</p>
+</details>
+
 ## Opening a PDF
 
 To open a PDF file, you'll first need to load it and retrieve a `Document` object. That can be done by either parsing a file directly, or parsing a PDF from a string variable.
