@@ -16,12 +16,16 @@ class Rectangle implements DictionaryValue {
     }
 
     #[Override]
-    public static function acceptsValue(string $value): bool {
-        return str_starts_with($value, '[') && str_ends_with($value, ']') && count(explode(' ', trim(rtrim(ltrim($value, '['), ']')))) === 4;
-    }
+    public static function fromValue(string $valueString): ?self {
+        if (!str_starts_with($valueString, '[') || !str_ends_with($valueString, ']')) {
+            return null;
+        }
 
-    #[Override]
-    public static function fromValue(string $valueString): self {
-        return new self(... array_map('floatval', explode(' ', trim(rtrim(ltrim($valueString, '['), ']')))));
+        $coords = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));
+        if (count($coords) !== 4) {
+            return null;
+        }
+
+        return new self(... array_map('floatval', $coords));
     }
 }

@@ -4,7 +4,6 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Boolean;
 
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
-use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 class BooleanValue implements DictionaryValue {
     public function __construct(
@@ -13,12 +12,7 @@ class BooleanValue implements DictionaryValue {
     }
 
     #[Override]
-    public static function acceptsValue(string $value): bool {
-        return $value === 'true' || $value === 'false';
-    }
-
-    #[Override]
-    public static function fromValue(string $valueString): self {
+    public static function fromValue(string $valueString): ?self {
         if ($valueString === 'true') {
             return new self(true);
         }
@@ -27,6 +21,6 @@ class BooleanValue implements DictionaryValue {
             return new self(false);
         }
 
-        throw new InvalidArgumentException(sprintf('"%s" is not a valid boolean value', $valueString));
+        return null;
     }
 }

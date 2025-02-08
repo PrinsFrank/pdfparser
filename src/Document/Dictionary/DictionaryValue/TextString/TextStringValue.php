@@ -22,11 +22,6 @@ class TextStringValue implements DictionaryValue {
     }
 
     #[Override]
-    public static function acceptsValue(string $value): bool {
-        return true;
-    }
-
-    #[Override]
     public static function fromValue(string $valueString): self {
         return new self($valueString);
     }

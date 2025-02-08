@@ -4,7 +4,6 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array;
 
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
-use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 class WValue implements DictionaryValue {
@@ -26,19 +25,14 @@ class WValue implements DictionaryValue {
     }
 
     #[Override]
-    public static function acceptsValue(string $value): bool {
-        return str_starts_with($value, '[') && str_ends_with($value, ']');
-    }
-
-    #[Override]
-    public static function fromValue(string $valueString): self {
-        if (!self::acceptsValue($valueString)) {
-            throw new InvalidDictionaryValueTypeFormatException('Invalid value for array: "' . $valueString . '", should start with "[" and end with "]".');
+    public static function fromValue(string $valueString): ?self {
+        if (!str_starts_with($valueString, '[') || !str_ends_with($valueString, ']')) {
+            return null;
         }
 
         $values = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));
         if (count($values) !== 3) {
-            throw new InvalidDictionaryValueTypeFormatException(sprintf('Expected exactly 3 integers, got %d', count($values)));
+            return null;
         }
 
         return new self((int) $values[0], (int) $values[1], (int) $values[2]);

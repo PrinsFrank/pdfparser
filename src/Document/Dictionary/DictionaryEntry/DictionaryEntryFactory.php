@@ -34,8 +34,9 @@ class DictionaryEntryFactory {
 
         if ((in_array(Dictionary::class, $allowedValueTypes, true) || in_array(ArrayValue::class, $allowedValueTypes, true))
             && is_string($value)
-            && preg_match('/^[0-9]+ [0-9]+ R$/', $value) === 1) {
-            return ReferenceValue::fromValue($value);
+            && preg_match('/^[0-9]+ [0-9]+ R$/', $value) === 1
+            && ($referenceValue = ReferenceValue::fromValue($value)) !== null) {
+            return $referenceValue;
         }
 
         foreach ($allowedValueTypes as $allowedValueType) {
@@ -52,11 +53,11 @@ class DictionaryEntryFactory {
                 continue;
             }
 
-            if (!is_string($value) || !$allowedValueType::acceptsValue($value)) {
+            if (!is_string($value) || ($valueObject = $allowedValueType::fromValue($value)) === null) {
                 continue;
             }
 
-            return $allowedValueType::fromValue($value);
+            return $valueObject;
         }
 
         if (in_array(TextStringValue::class, $allowedValueTypes, true) && is_string($value)) {

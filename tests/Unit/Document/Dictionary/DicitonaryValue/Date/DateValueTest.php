@@ -13,7 +13,7 @@ class DateValueTest extends TestCase {
     public function testFromValue(): void {
         static::assertEquals(
             DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2024-11-22 22:23:57', new DateTimeZone('+01:00')),
-            DateValue::fromValue('(D:20241122222357+01\'00\')')->value
+            DateValue::fromValue('(D:20241122222357+01\'00\')')?->value
         );
     }
 }

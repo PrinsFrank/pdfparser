@@ -5,7 +5,6 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference;
 
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
-use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 
 class ReferenceValue implements DictionaryValue {
     public function __construct(
@@ -15,29 +14,24 @@ class ReferenceValue implements DictionaryValue {
     }
 
     #[Override]
-    public static function acceptsValue(string $value): bool {
-        return preg_match('/^[0-9]+ [0-9]+ R$/', $value) === 1;
-    }
-
-    #[Override]
-    public static function fromValue(string $valueString): self {
+    public static function fromValue(string $valueString): ?self {
         $referenceParts = explode(' ', $valueString);
         if (count($referenceParts) !== 3) {
-            throw new InvalidDictionaryValueTypeFormatException('Invalid valueString, expected 3 parts: "' . $valueString . '"');
+            return null;
         }
 
         if ($referenceParts[2] !== 'R') {
-            throw new InvalidDictionaryValueTypeFormatException('Invalid valueString, should end with "R": "' . $valueString . '"');
+            return null;
         }
 
         $referenceObjectNumberAsInt = (int) $referenceParts[0];
         if ((string) $referenceObjectNumberAsInt !== $referenceParts[0]) {
-            throw new InvalidDictionaryValueTypeFormatException('Object reference is not a valid number: "' . $referenceParts[0] . '" in reference "' . $valueString . '"');
+            return null;
         }
 
         $referenceVersionNumberAsInt = (int) $referenceParts[1];
         if ((string) $referenceVersionNumberAsInt !== $referenceParts[1]) {
-            throw new InvalidDictionaryValueTypeFormatException('Object reference is not a valid number: "' . $referenceParts[0] . '" in reference "' . $valueString . '"');
+            return null;
         }
 
         return new self($referenceObjectNumberAsInt, $referenceVersionNumberAsInt);
