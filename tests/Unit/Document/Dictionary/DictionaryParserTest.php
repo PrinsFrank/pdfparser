@@ -79,7 +79,7 @@ class DictionaryParserTest extends TestCase {
 
     public function testObjectStream(): void {
         $stream = new InMemoryStream(
-    '<<
+            '<<
                 /DecodeParms
                         <<
                             /Columns 5
