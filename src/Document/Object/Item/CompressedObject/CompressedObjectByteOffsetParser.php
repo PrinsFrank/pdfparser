@@ -9,7 +9,6 @@ use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\InfiniteBuffer;
 use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectContent\CompressedObjectContentParser;
-use PrinsFrank\PdfParser\Exception\MarkerNotFoundException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\Stream;
@@ -17,11 +16,11 @@ use PrinsFrank\PdfParser\Stream\Stream;
 class CompressedObjectByteOffsetParser {
     public static function parse(Stream $stream, int $startOffsetObject, int $endOffsetObject, Dictionary $dictionary): CompressedObjectByteOffsets {
         $startStreamPos = $stream->getStartNextLineAfter(Marker::STREAM, $startOffsetObject, $endOffsetObject)
-            ?? throw new MarkerNotFoundException(Marker::STREAM->value);
+            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::STREAM->value));
         $endStreamPos = $stream->firstPos(Marker::END_STREAM, $startStreamPos, $endOffsetObject)
-            ?? throw new MarkerNotFoundException(Marker::END_STREAM->value);
+            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_STREAM->value));
         $eolPos = $stream->getEndOfCurrentLine($endStreamPos - 1, $endOffsetObject)
-            ?? throw new MarkerNotFoundException(WhitespaceCharacter::LINE_FEED->value);
+            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value));
         $content = CompressedObjectContentParser::parse($stream, $startStreamPos, $eolPos - $startStreamPos, $dictionary);
         $first = $dictionary->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');

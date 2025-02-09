@@ -15,7 +15,6 @@ use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectB
 use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectContent\CompressedObjectContentParser;
 use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
-use PrinsFrank\PdfParser\Exception\MarkerNotFoundException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
@@ -82,11 +81,11 @@ class UncompressedObject implements ObjectItem {
 
     public function getStreamContent(Stream $stream): string {
         $startStreamPos = $stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)
-            ?? throw new MarkerNotFoundException(Marker::STREAM->value);
+            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::STREAM->value));
         $endStreamPos = $stream->firstPos(Marker::END_STREAM, $startStreamPos, $this->endOffset)
-            ?? throw new MarkerNotFoundException(Marker::END_STREAM->value);
+            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_STREAM->value));
         $eolPos = $stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset)
-            ?? throw new MarkerNotFoundException(WhitespaceCharacter::LINE_FEED->value);
+            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value));
         $decodedBytes = CompressedObjectContentParser::parse(
             $stream,
             $startStreamPos,

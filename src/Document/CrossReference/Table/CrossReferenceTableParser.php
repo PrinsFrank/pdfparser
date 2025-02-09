@@ -9,7 +9,6 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
-use PrinsFrank\PdfParser\Exception\InvalidCrossReferenceLineException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
@@ -44,7 +43,7 @@ class CrossReferenceTableParser {
                     };
                     break;
                 default:
-                    throw new InvalidCrossReferenceLineException(sprintf('Invalid line "%s", 2 or 3 sections expected, %d found', substr(trim($line), 0, 30), count($sections)));
+                    throw new ParseFailureException(sprintf('Invalid line "%s", 2 or 3 sections expected, %d found', substr(trim($line), 0, 30), count($sections)));
             }
         }
 

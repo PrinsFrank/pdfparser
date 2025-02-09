@@ -6,14 +6,13 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Document\Version\VersionParser;
-use PrinsFrank\PdfParser\Exception\UnsupportedFileFormatException;
-use PrinsFrank\PdfParser\Exception\UnsupportedPdfVersionException;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
 #[CoversClass(VersionParser::class)]
 class VersionParserTest extends TestCase {
     public function testParseThrowsExceptionWhenNoVersionMarker(): void {
-        $this->expectException(UnsupportedFileFormatException::class);
+        $this->expectException(ParseFailureException::class);
         VersionParser::parse(
             new InMemoryStream(
                 'FOO'
@@ -22,7 +21,7 @@ class VersionParserTest extends TestCase {
     }
 
     public function testParseThrowsExceptionWhenInvalidVersion(): void {
-        $this->expectException(UnsupportedPdfVersionException::class);
+        $this->expectException(ParseFailureException::class);
         $this->expectExceptionMessage('9.9');
         VersionParser::parse(
             new InMemoryStream(

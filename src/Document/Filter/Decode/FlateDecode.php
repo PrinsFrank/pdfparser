@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Filter\Decode;
 
-use PrinsFrank\PdfParser\Exception\GzUncompressException;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
@@ -16,7 +15,7 @@ class FlateDecode {
 
         $decodedValue = @gzuncompress($value);
         if ($decodedValue === false) {
-            throw new GzUncompressException('Unable to gzuncompress value "' . substr(trim($value), 0, 30) . '..."');
+            throw new ParseFailureException('Unable to gzuncompress value "' . substr(trim($value), 0, 30) . '..."');
         }
 
         $decodedValue = bin2hex($decodedValue);

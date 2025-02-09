@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Generic\Parsing;
 
-use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 /** @deprecated */
@@ -43,18 +42,15 @@ class RollingCharBuffer {
         return $this;
     }
 
-    /** @throws BufferTooSmallException */
     public function getPreviousCharacter(int $nAgo = 1): ?string {
         if ($nAgo >= $this->length) {
-            throw new BufferTooSmallException('Buffer length of "' . $this->length . '" configured, but character "-' . $nAgo . '" requested');
+            throw new InvalidArgumentException('Buffer length of "' . $this->length . '" configured, but character "-' . $nAgo . '" requested');
         }
 
         return $this->buffer[($this->currentIndex - $nAgo) % $this->length] ?? null;
     }
 
     /**
-     * @throws BufferTooSmallException
-     *
      * @phpstan-assert non-empty-string $string
      */
     public function seenString(string $string): bool {
@@ -64,7 +60,7 @@ class RollingCharBuffer {
         }
 
         if ($strlen > $this->length) {
-            throw new BufferTooSmallException(sprintf('Buffer length of %d configured, but value with length %d requested', $this->length, strlen($string)));
+            throw new InvalidArgumentException(sprintf('Buffer length of %d configured, but value with length %d requested', $this->length, strlen($string)));
         }
 
         foreach (str_split($string) as $index => $char) {
@@ -77,10 +73,9 @@ class RollingCharBuffer {
         return true;
     }
 
-    /** @throws BufferTooSmallException */
     public function seenReverseString(string $string): bool {
         if (strlen($string) > $this->length) {
-            throw new BufferTooSmallException(sprintf('Buffer length of %d configured, but enum with length %d requested', $this->length, strlen($string)));
+            throw new InvalidArgumentException(sprintf('Buffer length of %d configured, but enum with length %d requested', $this->length, strlen($string)));
         }
 
         foreach (str_split($string) as $index => $char) {
