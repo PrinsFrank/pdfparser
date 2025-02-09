@@ -17,6 +17,7 @@ class ReferenceValueArray implements DictionaryValue {
     }
 
     #[Override]
+    /** @throws ParseFailureException */
     public static function fromValue(string $valueString): ?self {
         if (!str_starts_with($valueString, '[') || !str_ends_with($valueString, ']')) {
             return null;

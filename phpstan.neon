@@ -15,6 +15,19 @@ parameters:
     ignoreErrors:
         - identifier: property.uninitializedReadonly          # Used in several objects to cache parsed/decoded data
         - identifier: property.readOnlyAssignNotInConstructor # Used in several objects to cache parsed/decoded data
+    exceptions:
+        implicitThrows: false
+        reportUncheckedExceptionDeadCatch: true
+        uncheckedExceptionRegexes:
+            - '#^PHPUnit\\Framework\\#'
+        uncheckedExceptionClasses:
+            - 'PrinsFrank\PdfParser\Exception\PdfParserException'
+            - 'PrinsFrank\PdfParser\Exception\InvalidArgumentException'
+            - 'PrinsFrank\PdfParser\Exception\ParseFailureException'
+            - 'PrinsFrank\PdfParser\Exception\RuntimeException'
+        check:
+            missingCheckedExceptionInThrows: true
+            tooWideThrowType: true
 includes:
     - phar://phpstan.phar/conf/bleedingEdge.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon

@@ -15,6 +15,7 @@ class BFChar {
         return $characterCode === $this->sourceCode;
     }
 
+    /** @throws ParseFailureException */
     public function toUnicode(int $characterCode): ?string {
         if ($characterCode !== $this->sourceCode) {
             throw new ParseFailureException();

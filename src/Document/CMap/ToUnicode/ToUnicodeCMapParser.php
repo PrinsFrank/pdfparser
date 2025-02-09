@@ -3,9 +3,11 @@
 namespace PrinsFrank\PdfParser\Document\CMap\ToUnicode;
 
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 class ToUnicodeCMapParser {
+    /** @throws PdfParserException */
     public static function parse(Stream $stream, int $startOffset, int $nrOfBytes): ToUnicodeCMap {
         $beginCodeSpaceRangePos = $stream->firstPos(ToUnicodeCMapOperator::BeginCodeSpaceRange, $startOffset, $startOffset + $nrOfBytes)
             ?? throw new ParseFailureException(sprintf('Missing %s', ToUnicodeCMapOperator::BeginCodeSpaceRange->value));

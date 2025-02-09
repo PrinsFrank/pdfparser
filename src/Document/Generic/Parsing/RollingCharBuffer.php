@@ -5,7 +5,6 @@ namespace PrinsFrank\PdfParser\Document\Generic\Parsing;
 
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
-/** @deprecated */
 class RollingCharBuffer {
     /** @var int<1, max> $length */
     private int $length;
@@ -42,6 +41,7 @@ class RollingCharBuffer {
         return $this;
     }
 
+    /** @throws InvalidArgumentException */
     public function getPreviousCharacter(int $nAgo = 1): ?string {
         if ($nAgo >= $this->length) {
             throw new InvalidArgumentException('Buffer length of "' . $this->length . '" configured, but character "-' . $nAgo . '" requested');
@@ -50,7 +50,11 @@ class RollingCharBuffer {
         return $this->buffer[($this->currentIndex - $nAgo) % $this->length] ?? null;
     }
 
-    /** @phpstan-assert non-empty-string $string */
+    /**
+     * @phpstan-assert non-empty-string $string
+     *
+     * @throws InvalidArgumentException
+     */
     public function seenString(string $string): bool {
         $strlen = strlen($string);
         if ($strlen === 0) {
@@ -71,6 +75,7 @@ class RollingCharBuffer {
         return true;
     }
 
+    /** @throws InvalidArgumentException */
     public function seenReverseString(string $string): bool {
         if (strlen($string) > $this->length) {
             throw new InvalidArgumentException(sprintf('Buffer length of %d configured, but enum with length %d requested', $this->length, strlen($string)));

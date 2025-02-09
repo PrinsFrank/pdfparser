@@ -13,6 +13,7 @@ class TextStringValue implements DictionaryValue {
     ) {
     }
 
+    /** @throws ParseFailureException */
     public function getText(): string {
         if (str_starts_with($this->textStringValue, '(') && str_ends_with($this->textStringValue, ')')) {
             return substr($this->textStringValue, 1, -1);

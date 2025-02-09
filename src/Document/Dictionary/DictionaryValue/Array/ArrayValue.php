@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array;
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 class ArrayValue implements DictionaryValue {
@@ -16,6 +17,7 @@ class ArrayValue implements DictionaryValue {
     }
 
     #[Override]
+    /** @throws PdfParserException */
     public static function fromValue(string $valueString): null|self|ReferenceValueArray {
         if (!str_starts_with($valueString, '[') || !str_ends_with($valueString, ']')) {
             return null;

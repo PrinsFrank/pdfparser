@@ -3,6 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\CMap\ToUnicode;
 
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class ToUnicodeCMap {
     /** @var list<BFRange|BFChar> */
@@ -12,6 +13,7 @@ class ToUnicodeCMap {
      * @no-named-arguments
      *
      * @param int<1, max> $byteSize
+     * @throws InvalidArgumentException
      */
     public function __construct(
         public readonly int $codeSpaceStart,
@@ -25,6 +27,7 @@ class ToUnicodeCMap {
         }
     }
 
+    /** @throws PdfParserException */
     public function textToUnicode(string $characterGroup): string {
         return implode(
             '',
@@ -35,6 +38,7 @@ class ToUnicodeCMap {
         );
     }
 
+    /** @throws PdfParserException */
     protected function charToUnicode(int $characterCode): ?string {
         foreach ($this->bfCharRangeInfo as $bfCharRangeInfo) {
             if (!$bfCharRangeInfo->containsCharacterCode($characterCode)) {

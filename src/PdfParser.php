@@ -22,7 +22,10 @@ final class PdfParser {
         );
     }
 
-    /** @param bool $useInMemoryStream if set to false, a handle to the file itself will be used. This uses less memory, but will be significantly slower */
+    /**
+     * @param bool $useInMemoryStream if set to false, a handle to the file itself will be used. This uses less memory, but will be significantly slower
+     * @throws PdfParserException
+     */
     public function parseFile(string $filePath, bool $useInMemoryStream = true): Document {
         if ($useInMemoryStream) {
             $fileContent = file_get_contents($filePath);
@@ -38,7 +41,10 @@ final class PdfParser {
         return $this->parse($stream);
     }
 
-    /** @param bool $useFileCache if set to true, the file will be cached to a temporary file. This will use less memory, but will be significantly slower */
+    /**
+     * @param bool $useFileCache if set to true, the file will be cached to a temporary file. This will use less memory, but will be significantly slower
+     * @throws PdfParserException
+     */
     public function parseString(string $content, bool $useFileCache = false): Document {
         if ($useFileCache) {
             $stream = FileStream::fromString($content);

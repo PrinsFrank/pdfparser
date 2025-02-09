@@ -6,6 +6,7 @@ use Override;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class WinAnsi implements Encoding {
+    /** @throws ParseFailureException */
     #[Override]
     public static function textToUnicode(string $string): string {
         $string = iconv(

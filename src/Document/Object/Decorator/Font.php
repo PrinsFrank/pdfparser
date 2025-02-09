@@ -16,17 +16,20 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
 class Font extends DecoratedObject {
     private readonly ToUnicodeCMap|false $toUnicodeCMap;
 
+    /** @throws PdfParserException */
     public function getBaseFont(): ?string {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::BASE_FONT, TextStringValue::class)
             ?->textStringValue;
     }
 
+    /** @throws PdfParserException */
     public function getEncoding(): ?EncodingNameValue {
         $encodingType = $this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING);
         if ($encodingType === null || $encodingType === Dictionary::class) {
@@ -45,6 +48,7 @@ class Font extends DecoratedObject {
         throw new ParseFailureException(sprintf('Unrecognized encoding type %s', $encodingType));
     }
 
+    /** @throws PdfParserException */
     public function getToUnicodeCMap(): ?ToUnicodeCMap {
         if (isset($this->toUnicodeCMap)) {
             if ($this->toUnicodeCMap === false) {
@@ -73,30 +77,37 @@ class Font extends DecoratedObject {
         );
     }
 
+    /** @throws PdfParserException */
     public function getFirstChar(): ?int {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::FIRST_CHAR, IntegerValue::class)
             ?->value;
     }
 
+    /** @throws PdfParserException */
     public function getLastChar(): ?int {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::LAST_CHAR, IntegerValue::class)
             ?->value;
     }
 
-    /** @return array<mixed>|null */
+    /**
+     * @throws PdfParserException
+     * @return array<mixed>|null
+     */
     public function getWidths(): ?array {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::WIDTHS, ArrayValue::class)
             ?->value;
     }
 
+    /** @throws PdfParserException */
     public function getFontDescriptor(): ?ReferenceValue {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::FONT_DESCRIPTOR, ReferenceValue::class);
     }
 
+    /** @throws PdfParserException */
     public function toUnicode(string $characterGroup): string {
         $toUnicodeCMap = $this->getToUnicodeCMap();
         if ($toUnicodeCMap !== null) {

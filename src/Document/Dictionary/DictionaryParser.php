@@ -9,12 +9,15 @@ use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\LiteralStringEscapeCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 class DictionaryParser {
     /**
      * @phpstan-assert int<0, max> $startPos
      * @phpstan-assert int<1, max> $nrOfBytes
+     *
+     * @throws PdfParserException
      */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): Dictionary {
         $dictionaryArray = [];

@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 abstract class DecoratedObject {
     final public function __construct(
@@ -21,6 +22,7 @@ abstract class DecoratedObject {
         }
     }
 
+    /** @throws PdfParserException */
     public function getDictionary(): Dictionary {
         return $this->objectItem->getDictionary($this->document->stream);
     }

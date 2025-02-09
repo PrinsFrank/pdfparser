@@ -10,6 +10,7 @@ use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class TextObjectCollection {
     /** @var list<TextObject> */
@@ -22,6 +23,7 @@ class TextObjectCollection {
         $this->textObjects = $textObjects;
     }
 
+    /** @throws PdfParserException */
     public function getText(Document $document, Page $page): string {
         $text = '';
         $font = null;

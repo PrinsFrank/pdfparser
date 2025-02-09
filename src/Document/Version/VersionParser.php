@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 class VersionParser {
+    /** @throws ParseFailureException */
     public static function parse(Stream $stream): Version {
         if ($stream->read(0, Marker::VERSION->length()) !== Marker::VERSION->value) {
             throw new ParseFailureException('Unexpected start of file format. is this a pdf?');

@@ -5,9 +5,11 @@ namespace PrinsFrank\PdfParser\Document\Filter\Decode;
 
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 class FlateDecode {
+    /** @throws PdfParserException */
     public static function decode(string $value, LZWFlatePredictorValue $predictor, int $columns = 1): string {
         if ($columns < 1) {
             throw new InvalidArgumentException(sprintf('Nr of columns should be equal to or bigger than 1, %d given', $columns));

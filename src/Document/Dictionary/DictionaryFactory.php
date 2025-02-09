@@ -5,9 +5,13 @@ namespace PrinsFrank\PdfParser\Document\Dictionary;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntryFactory;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class DictionaryFactory {
-    /** @param array<string, mixed> $dictionaryArray */
+    /**
+     * @param array<string, mixed> $dictionaryArray
+     * @throws PdfParserException
+     */
     public static function fromArray(array $dictionaryArray): Dictionary {
         $dictionaryEntries = [];
         foreach ($dictionaryArray as $keyString => $value) {

@@ -5,11 +5,13 @@ namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class DecoratedObjectFactory {
     /**
      * @template T of DecoratedObject
      * @param class-string<T>|null $expectedDecoratorFQN
+     * @throws PdfParserException
      * @return ($expectedDecoratorFQN is null ? DecoratedObject : T)
      */
     public static function forItem(?ObjectItem $objectItem, Document $document, ?string $expectedDecoratorFQN): ?DecoratedObject {

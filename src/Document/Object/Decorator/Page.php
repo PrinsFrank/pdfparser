@@ -10,13 +10,16 @@ use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObj
 use PrinsFrank\PdfParser\Document\Text\TextObjectCollection;
 use PrinsFrank\PdfParser\Document\Text\TextParser;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class Page extends DecoratedObject {
+    /** @throws PdfParserException */
     public function getText(): string {
         return $this->getTextObjectCollection()
             ->getText($this->document, $this);
     }
 
+    /** @throws PdfParserException */
     public function getTextObjectCollection(): TextObjectCollection {
         return TextParser::parse(
             implode(
@@ -35,11 +38,13 @@ class Page extends DecoratedObject {
         );
     }
 
+    /** @throws PdfParserException */
     public function getResourceDictionary(): ?Dictionary {
         return $this->getDictionary()
             ->getSubDictionary($this->document, DictionaryKey::RESOURCES);
     }
 
+    /** @throws PdfParserException */
     public function getFontDictionary(): ?Dictionary {
         if (($pageFontDictionary = $this->getDictionary()->getSubDictionary($this->document, DictionaryKey::FONT)) !== null) {
             return $pageFontDictionary;

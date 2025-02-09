@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 class Catalog extends DecoratedObject {
@@ -15,6 +16,7 @@ class Catalog extends DecoratedObject {
         return TypeNameValue::CATALOG;
     }
 
+    /** @throws PdfParserException */
     public function getPagesRoot(): Pages {
         $catalogDictionary = $this->getDictionary();
         $pagesReference = $catalogDictionary->getValueForKey(DictionaryKey::PAGES, ReferenceValue::class)

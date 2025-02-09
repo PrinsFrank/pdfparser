@@ -4,10 +4,13 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Tests\Feature;
 
 use DateTimeImmutable;
+use Exception;
+use JsonException;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Version\Version;
+use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\PdfParser;
 
@@ -44,7 +47,11 @@ class ParsedResultTest extends TestCase {
         }
     }
 
-    /** @return iterable<mixed> */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     * @return iterable<mixed>
+     */
     public static function externalSamples(): iterable {
         $fileInfoContent = file_get_contents(dirname(__DIR__, 2) . self::SAMPLES_SOURCE . 'files.json');
         if ($fileInfoContent === false) {
@@ -60,7 +67,7 @@ class ParsedResultTest extends TestCase {
 
             yield $fileInfo->filename => [
                 dirname(__DIR__, 2) . self::SAMPLES_SOURCE . 'files/' . $fileInfo->filename,
-                Version::from($fileInfo->version),
+                Version::tryFrom($fileInfo->version) ?? throw new InvalidArgumentException('Invalid version'),
                 $fileInfo->title,
                 $fileInfo->producer,
                 $fileInfo->author,

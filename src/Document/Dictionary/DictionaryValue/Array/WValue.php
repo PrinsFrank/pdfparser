@@ -14,7 +14,10 @@ class WValue implements DictionaryValue {
     ) {
     }
 
-    /** @return int<1, max> */
+    /**
+     * @throws RuntimeException
+     * @return int<1, max>
+     */
     public function getTotalLengthInBytes(): int {
         $totalLength = $this->lengthRecord1InBytes + $this->lengthRecord2InBytes + $this->lengthRecord3InBytes;
         if ($totalLength < 1) {

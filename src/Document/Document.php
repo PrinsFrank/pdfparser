@@ -18,6 +18,7 @@ use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObj
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObjectParser;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
@@ -35,6 +36,7 @@ final class Document {
     ) {
     }
 
+    /** @throws PdfParserException */
     public function getInformationDictionary(): ?InformationDictionary {
         $infoReference = $this->crossReferenceSource->getReferenceForKey(DictionaryKey::INFO);
         if ($infoReference === null) {
@@ -44,6 +46,7 @@ final class Document {
         return $this->getObject($infoReference->objectNumber, InformationDictionary::class);
     }
 
+    /** @throws PdfParserException */
     public function getCatalog(): Catalog {
         $rootReference = $this->crossReferenceSource->getReferenceForKey(DictionaryKey::ROOT)
             ?? throw new ParseFailureException('Unable to locate root for document.');
@@ -59,6 +62,7 @@ final class Document {
     /**
      * @template T of DecoratedObject
      * @param class-string<T>|null $expectedDecoratorFQN
+     * @throws PdfParserException
      * @return ($expectedDecoratorFQN is null ? list<DecoratedObject> : list<T>)
      */
     public function getObjectsByDictionaryKey(Dictionary $dictionary, DictionaryKey $dictionaryKey, ?string $expectedDecoratorFQN = null): array {
@@ -78,6 +82,7 @@ final class Document {
     /**
      * @template T of DecoratedObject
      * @param class-string<T>|null $expectedDecoratorFQN
+     * @throws PdfParserException
      * @return ($expectedDecoratorFQN is null ? DecoratedObject : T)
      */
     public function getObject(int $objectNumber, ?string $expectedDecoratorFQN = null): ?DecoratedObject {
@@ -112,22 +117,30 @@ final class Document {
         );
     }
 
+    /** @throws PdfParserException */
     public function getPage(int $pageNumber): ?Page {
         return $this->getPages()[$pageNumber - 1] ?? null;
     }
 
+    /** @throws PdfParserException */
     public function getNumberOfPages(): int {
         return count($this->getPages());
     }
 
-    /** @return list<Page> */
+    /**
+     * @throws PdfParserException
+     * @return list<Page>
+     */
     public function getPages(): array {
         return $this->pages ??= $this->getCatalog()
             ->getPagesRoot()
             ->getPageItems();
     }
 
-    /** @param ?string $pageSeparator an optional string to put between text of different pages */
+    /**
+     * @param ?string $pageSeparator an optional string to put between text of different pages
+     * @throws PdfParserException
+     */
     public function getText(?string $pageSeparator = null): string {
         $text = '';
         foreach ($this->getPages() as $page) {

@@ -16,6 +16,8 @@ class CrossReferenceSubSection {
     /**
      * @phpstan-assert int<0, max> $nrOfEntries
      *
+     * @throws InvalidArgumentException
+     *
      * @no-named-arguments
      */
     public function __construct(
@@ -35,6 +37,7 @@ class CrossReferenceSubSection {
             && $objNumber < $this->firstObjectNumber + $this->nrOfEntries;
     }
 
+    /** @throws RuntimeException */
     public function getCrossReferenceEntry(int $objNumber): CrossReferenceEntryInUseObject|CrossReferenceEntryCompressed|null {
         if (self::containsObject($objNumber) === false) {
             return null;

@@ -3,6 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\CMap\ToUnicode;
 
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 class BFRange {
@@ -19,6 +20,7 @@ class BFRange {
             && $characterCode <= $this->sourceCodeEnd;
     }
 
+    /** @throws PdfParserException */
     public function toUnicode(int $characterCode): ?string {
         if (count($this->destinationString) === 1) {
             $destinationCodePoint = $this->destinationString[0] + $characterCode - $this->sourceCodeStart;

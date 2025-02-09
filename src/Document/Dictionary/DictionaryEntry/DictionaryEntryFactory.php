@@ -14,9 +14,13 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class DictionaryEntryFactory {
-    /** @param string|array<string, mixed> $dictionaryValue */
+    /**
+     * @param string|array<string, mixed> $dictionaryValue
+     * @throws PdfParserException
+     */
     public static function fromKeyValuePair(string $keyString, string|array $dictionaryValue): ?DictionaryEntry {
         $dictionaryKey = DictionaryKey::tryFromKeyString($keyString)
             ?? ExtendedDictionaryKey::fromKeyString($keyString);
@@ -24,7 +28,10 @@ class DictionaryEntryFactory {
         return new DictionaryEntry($dictionaryKey, self::getValue($dictionaryKey, $dictionaryValue));
     }
 
-    /** @param string|array<string, mixed> $value */
+    /**
+     * @param string|array<string, mixed> $value
+     * @throws PdfParserException
+     */
     protected static function getValue(DictionaryKey|ExtendedDictionaryKey $dictionaryKey, string|array $value): Dictionary|DictionaryValue|NameValue {
         $allowedValueTypes = $dictionaryKey->getValueTypes();
         if ((in_array(Dictionary::class, $allowedValueTypes, true) || in_array(ArrayValue::class, $allowedValueTypes, true))

@@ -10,9 +10,11 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 class CrossReferenceSourceParser {
+    /** @throws PdfParserException */
     public static function parse(Stream $stream): CrossReferenceSource {
         $eofMarkerPos = $stream->lastPos(Marker::EOF, 0)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::EOF->value));
