@@ -39,9 +39,10 @@ class CrossReferenceTableParser {
                     $nrOfEntries = (int) $sections[1];
                     break;
                 case 3:
-                    $crossReferenceEntries[] = match (CrossReferenceTableInUseOrFree::from(trim($sections[2]))) {
+                    $crossReferenceEntries[] = match (CrossReferenceTableInUseOrFree::tryFrom(trim($sections[2]))) {
                         CrossReferenceTableInUseOrFree::IN_USE => new CrossReferenceEntryInUseObject((int) $sections[0], (int) $sections[1]),
                         CrossReferenceTableInUseOrFree::FREE => new CrossReferenceEntryFreeObject((int) $sections[0], (int) $sections[1]),
+                        null => throw new ParseFailureException(sprintf('Unrecognized crossReference table record type %s', trim($sections[2])))
                     };
                     break;
                 default:

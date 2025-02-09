@@ -29,7 +29,11 @@ class FlateDecode {
                     throw new RuntimeException(sprintf('Expected at least 2 items per row, got %d', count($row)));
                 }
 
-                $rowAlgorithm = PNGFilterAlgorithm::from((int) $row[0]);
+                $rowAlgorithm = PNGFilterAlgorithm::tryFrom((int) $row[0]);
+                if ($rowAlgorithm === null) {
+                    throw new ParseFailureException(sprintf('Unrecognized row algorithm %d', (int) $row[0]));
+                }
+
                 if ($rowAlgorithm !== PNGFilterAlgorithm::Up) {
                     throw new ParseFailureException(sprintf('PNG filters other than "Up" are currently not supported, "%s" given', $rowAlgorithm->name));
                 }
