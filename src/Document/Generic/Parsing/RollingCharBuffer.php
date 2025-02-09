@@ -50,9 +50,7 @@ class RollingCharBuffer {
         return $this->buffer[($this->currentIndex - $nAgo) % $this->length] ?? null;
     }
 
-    /**
-     * @phpstan-assert non-empty-string $string
-     */
+    /** @phpstan-assert non-empty-string $string */
     public function seenString(string $string): bool {
         $strlen = strlen($string);
         if ($strlen === 0) {
