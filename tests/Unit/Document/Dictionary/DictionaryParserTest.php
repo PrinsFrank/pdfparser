@@ -28,6 +28,23 @@ use PrinsFrank\PdfParser\Stream\InMemoryStream;
 #[CoversClass(DictionaryParser::class)]
 class DictionaryParserTest extends TestCase {
     public function testParseCrossReference(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            15 0 obj
+            <<
+            /Type /XRef
+            /Index [0 16]
+            /Size 16
+            /W [1 2 1]
+            /Root 13 0 R
+            /Info 14 0 R
+            /ID [<F7F55EED423E47B1F3E311DE7CFCE2E5> <F7F55EED423E47B1F3E311DE7CFCE2E5>]
+            /Length 57
+            /Filter /FlateDecode
+            >>
+            stream
+            EOD,
+        );
         static::assertEquals(
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
@@ -40,50 +57,46 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(57)),
                 new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::FLATE_DECODE),
             ),
-            DictionaryParser::parse(
-                $stream = new InMemoryStream(
-                    <<<EOD
-                    15 0 obj
-                    <<
-                    /Type /XRef
-                    /Index [0 16]
-                    /Size 16
-                    /W [1 2 1]
-                    /Root 13 0 R
-                    /Info 14 0 R
-                    /ID [<F7F55EED423E47B1F3E311DE7CFCE2E5> <F7F55EED423E47B1F3E311DE7CFCE2E5>]
-                    /Length 57
-                    /Filter /FlateDecode
-                    >>
-                    stream
-                    EOD,
-                ),
-                0,
-                $stream->getSizeInBytes(),
-            )
+            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes())
         );
     }
 
     public function testParseCrossReferencePaddedArrayValues(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            <<
+            /Index [ 0 16 ]
+            >>
+            EOD,
+        );
         static::assertEquals(
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::INDEX, new ArrayValue([0, 16])),
             ),
-            DictionaryParser::parse(
-                $stream = new InMemoryStream(
-                    <<<EOD
-                    <<
-                    /Index [ 0 16 ]
-                    >>
-                    EOD,
-                ),
-                0,
-                $stream->getSizeInBytes(),
-            )
+            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes())
         );
     }
 
     public function testObjectStream(): void {
+        $stream = new InMemoryStream(
+    '<<
+                /DecodeParms
+                        <<
+                            /Columns 5
+                            /Predictor 12
+                        >>
+                /Filter/FlateDecode
+                /ID[<9A27A23F6A2546448EBB340FF38477BD><C5C4714E306446ABAE40FE784477D322>]
+                /Index[2460 1 4311 1 4317 2 4414 1 4717 21]
+                /Info 4318 0 R
+                /Length 106
+                /Prev 46153797
+                /Root 4320 0 R
+                /Size 4738
+                /Type/XRef
+                /W[1 4 0]
+            >>stream',
+        );
         static::assertEquals(
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::DECODE_PARMS, new Dictionary(
@@ -101,33 +114,12 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
                 new DictionaryEntry(DictionaryKey::W, new WValue(1, 4, 0)),
             ),
-            DictionaryParser::parse(
-                $stream = new InMemoryStream(
-                    '<<
-                        /DecodeParms
-                                <<
-                                    /Columns 5
-                                    /Predictor 12
-                                >>
-                        /Filter/FlateDecode
-                        /ID[<9A27A23F6A2546448EBB340FF38477BD><C5C4714E306446ABAE40FE784477D322>]
-                        /Index[2460 1 4311 1 4317 2 4414 1 4717 21]
-                        /Info 4318 0 R
-                        /Length 106
-                        /Prev 46153797
-                        /Root 4320 0 R
-                        /Size 4738
-                        /Type/XRef
-                        /W[1 4 0]
-                    >>stream',
-                ),
-                0,
-                $stream->getSizeInBytes(),
-            )
+            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes())
         );
     }
 
     public function testParseSingleLine(): void {
+        $stream = new InMemoryStream('<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode/ID[<9A27A23F6A2546448EBB340FF38477BD><C5C4714E306446ABAE40FE784477D322>]/Index[2460 1 4311 1 4317 2 4414 1 4717 21]/Info 4318 0 R/Length 106/Prev 46153797/Root 4320 0 R/Size 4738/Type/XRef/W[1 4 0]>>stream');
         static::assertEquals(
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::DECODE_PARMS, new Dictionary(
@@ -145,15 +137,29 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
                 new DictionaryEntry(DictionaryKey::W, new WValue(1, 4, 0)),
             ),
-            DictionaryParser::parse(
-                $stream = new InMemoryStream('<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode/ID[<9A27A23F6A2546448EBB340FF38477BD><C5C4714E306446ABAE40FE784477D322>]/Index[2460 1 4311 1 4317 2 4414 1 4717 21]/Info 4318 0 R/Length 106/Prev 46153797/Root 4320 0 R/Size 4738/Type/XRef/W[1 4 0]>>stream'),
-                0,
-                $stream->getSizeInBytes(),
-            )
+            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes())
         );
     }
 
     public function testParseFontInfo(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            <<
+            /Type /FontDescriptor
+            /FontName /TAIPAH+CMR10
+            /Flags 4
+            /FontBBox [-40 -250 1009 750]
+            /Ascent 694
+            /CapHeight 683
+            /Descent -194
+            /ItalicAngle 0
+            /StemV 69
+            /XHeight 431
+            /CharSet (/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two)
+            /FontFile 11 0 R
+            >>
+            EOD,
+        );
         static::assertEquals(
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FONT_DESCRIPTOR),
@@ -169,32 +175,23 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::CHAR_SET, new TextStringValue('(/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two)')),
                 new DictionaryEntry(DictionaryKey::FONT_FILE, new TextStringValue('11 0 R')),
             ),
-            DictionaryParser::parse(
-                $stream = new InMemoryStream(
-                    <<<EOD
-                    <<
-                    /Type /FontDescriptor
-                    /FontName /TAIPAH+CMR10
-                    /Flags 4
-                    /FontBBox [-40 -250 1009 750]
-                    /Ascent 694
-                    /CapHeight 683
-                    /Descent -194
-                    /ItalicAngle 0
-                    /StemV 69
-                    /XHeight 431
-                    /CharSet (/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two)
-                    /FontFile 11 0 R
-                    >>
-                    EOD,
-                ),
-                0,
-                $stream->getSizeInBytes(),
-            )
+            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
         );
     }
 
     public function testParseValuesEncapsulatedInParentheses(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            <<
+            /Producer (pdfTeX-1.40.18)
+            /Creator (TeX)
+            /CreationDate (D:20220506201153+02'00')
+            /ModDate (D:20220506201153+02'00')
+            /Trapped /False
+            /PTEX.Fullbanner (This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)
+            >>
+            EOD,
+        );
         static::assertNotFalse($creationModificationDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s P', '2022-05-06 20:11:53 +02:00'));
         static::assertEquals(
             new Dictionary(
@@ -205,47 +202,42 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TRAPPED, TrappedNameValue::FALSE),
                 new DictionaryEntry(DictionaryKey::PTEX_FULLBANNER, new TextStringValue('(This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)')),
             ),
-            DictionaryParser::parse(
-                $stream = new InMemoryStream(
-                    <<<EOD
-                    <<
-                    /Producer (pdfTeX-1.40.18)
-                    /Creator (TeX)
-                    /CreationDate (D:20220506201153+02'00')
-                    /ModDate (D:20220506201153+02'00')
-                    /Trapped /False
-                    /PTEX.Fullbanner (This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)
-                    >>
-                    EOD,
-                ),
-                0,
-                $stream->getSizeInBytes(),
-            )
+            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes())
         );
     }
 
     public function testIgnoreCommentedLines(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            <<
+            /Producer (pdfTeX-1.40.18)
+            %/Creator (TeX)
+            %  /Creator (TeX)
+            >>
+            EOD,
+        );
         static::assertEquals(
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::PRODUCER, new TextStringValue('(pdfTeX-1.40.18)')),
             ),
-            DictionaryParser::parse(
-                $stream = new InMemoryStream(
-                    <<<EOD
-                    <<
-                    /Producer (pdfTeX-1.40.18)
-                    %/Creator (TeX)
-                    %  /Creator (TeX)
-                    >>
-                    EOD,
-                ),
-                0,
-                $stream->getSizeInBytes(),
-            )
+            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes())
         );
     }
 
     public function testHandlesNumsNumberTree(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            <<
+            /OpenAction[3 0 R/Fit]
+            /PageMode/UseOutlines
+            /PageLabels<</Nums[0<</S/r>>12<</S/D>>]>>
+            /Names 13164 0 R
+            /Outlines 13165 0 R
+            /Pages 13221 0 R
+            /Type/Catalog
+            >>
+            EOD,
+        );
         static::assertEquals(
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::OPEN_ACTION, new ArrayValue([3, 0, 'R/Fit'])),
@@ -258,27 +250,26 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(13221, 0)),
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
             ),
-            DictionaryParser::parse(
-                $stream = new InMemoryStream(
-                    <<<EOD
-                    <<
-                    /OpenAction[3 0 R/Fit]
-                    /PageMode/UseOutlines
-                    /PageLabels<</Nums[0<</S/r>>12<</S/D>>]>>
-                    /Names 13164 0 R
-                    /Outlines 13165 0 R
-                    /Pages 13221 0 R
-                    /Type/Catalog
-                    >>
-                    EOD,
-                ),
-                0,
-                $stream->getSizeInBytes(),
-            )
+            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes())
         );
     }
 
     public function testHandlesGraphicStateSubDictionaries(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            <</Type /Page
+            /Resources <<
+                /ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+                /ExtGState <</G3 3 0 R>>
+                /Font <</F4 4 0 R>>
+            >>
+            /MediaBox [0 0 596 842]
+            /Contents 5 0 R
+            /StructParents 0
+            /Tabs /S
+            /Parent 6 0 R>>
+            EOD,
+        );
         static::assertEquals(
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
@@ -297,25 +288,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TABS, TabsNameValue::StructureOrder),
                 new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(6, 0)),
             ),
-            DictionaryParser::parse(
-                $stream = new InMemoryStream(
-                    <<<EOD
-                    <</Type /Page
-                    /Resources <<
-                        /ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
-                        /ExtGState <</G3 3 0 R>>
-                        /Font <</F4 4 0 R>>
-                    >>
-                    /MediaBox [0 0 596 842]
-                    /Contents 5 0 R
-                    /StructParents 0
-                    /Tabs /S
-                    /Parent 6 0 R>>
-                    EOD,
-                ),
-                0,
-                $stream->getSizeInBytes(),
-            )
+            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes())
         );
     }
 }

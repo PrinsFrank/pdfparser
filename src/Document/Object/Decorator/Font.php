@@ -66,11 +66,8 @@ class Font extends DecoratedObject {
             throw new ParseFailureException();
         }
 
-        return $this->toUnicodeCMap = ToUnicodeCMapParser::parse(
-            $stream = new InMemoryStream($toUnicodeObject->objectItem->getStreamContent($this->document->stream)),
-            0,
-            $stream->getSizeInBytes()
-        );
+        $stream = new InMemoryStream($toUnicodeObject->objectItem->getStreamContent($this->document->stream));
+        return $this->toUnicodeCMap = ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes());
     }
 
     public function getFirstChar(): ?int {
