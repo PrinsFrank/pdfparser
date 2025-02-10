@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Item\CompressedObject;
 
+/** @internal */
 class CompressedObjectByteOffsets {
     /** @param array<int, int> $objectNumberByteOffsets */
     public function __construct(

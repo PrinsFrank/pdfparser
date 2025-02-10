@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Filter\Decode;
 
+/** @internal */
 enum LZWFlatePredictorValue: int {
     case None = 1;
     case TIFFPredictor2 = 2;

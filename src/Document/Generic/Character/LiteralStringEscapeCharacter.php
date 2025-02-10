@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Generic\Character;
 
 /**
+ * @internal
+ *
  * @see Pdf 32000-1:2008 7.3.4.2 Table 3
  */
 enum LiteralStringEscapeCharacter: string {

@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Generic\Parsing;
 
 use Override;
 
+/** @internal */
 class InfiniteBuffer {
     private string $buffer = '';
 

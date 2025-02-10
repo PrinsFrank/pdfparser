@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference;
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
+/** @api */
 class ReferenceValue implements DictionaryValue {
     public function __construct(
         public readonly int $objectNumber,

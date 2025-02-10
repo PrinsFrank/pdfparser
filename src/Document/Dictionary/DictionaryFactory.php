@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntryFact
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
+/** @internal */
 class DictionaryFactory {
     /**
      * @param array<string, mixed> $dictionaryArray

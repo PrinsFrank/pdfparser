@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Text\OperatorString;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
+/** @internal */
 enum TextShowingOperator: string {
     case SHOW = 'Tj';
     case MOVE_SHOW = '\'';

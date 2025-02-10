@@ -12,6 +12,7 @@ use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
+/** @api */
 class TextObjectCollection {
     /** @var list<TextObject> */
     public readonly array $textObjects;

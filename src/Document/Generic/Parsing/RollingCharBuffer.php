@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Generic\Parsing;
 
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
+/** @internal */
 class RollingCharBuffer {
     /** @var int<1, max> $length */
     private int $length;

@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Text\OperatorString;
 
+/** @internal */
 enum ColorOperator: string {
     case SetName = 'CS';
     case SetNameNonStroking = 'cs';

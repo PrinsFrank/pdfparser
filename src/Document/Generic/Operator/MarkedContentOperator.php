@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Generic\Operator;
 
+/** @internal */
 enum MarkedContentOperator: string {
     case Tag = 'MD';
     case TagProperties = 'DP';

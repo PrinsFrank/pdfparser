@@ -6,6 +6,7 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
+/** @api */
 class WValue implements DictionaryValue {
     public function __construct(
         public readonly int $lengthRecord1InBytes,

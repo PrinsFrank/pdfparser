@@ -6,6 +6,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
+/** @internal */
 class BFRange {
     /** @param list<int> $destinationString */
     public function __construct(

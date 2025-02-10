@@ -14,6 +14,7 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 use PrinsFrank\PdfParser\Stream\Stream;
 
+/** @api */
 class CompressedObject implements ObjectItem {
     private readonly Dictionary $dictionary;
 

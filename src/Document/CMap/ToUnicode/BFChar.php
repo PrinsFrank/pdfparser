@@ -4,6 +4,7 @@ namespace PrinsFrank\PdfParser\Document\CMap\ToUnicode;
 
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
+/** @internal */
 class BFChar {
     public function __construct(
         public readonly int $sourceCode,

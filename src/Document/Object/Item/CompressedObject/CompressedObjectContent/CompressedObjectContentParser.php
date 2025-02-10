@@ -12,6 +12,7 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
+/** @internal */
 class CompressedObjectContentParser {
     /** @throws PdfParserException */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes, Dictionary $dictionary): string {

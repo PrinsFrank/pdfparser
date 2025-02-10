@@ -16,6 +16,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStri
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
+/** @internal */
 class DictionaryEntryFactory {
     /**
      * @param string|array<string, mixed> $dictionaryValue

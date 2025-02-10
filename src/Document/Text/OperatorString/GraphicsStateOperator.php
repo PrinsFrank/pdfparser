@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Text\OperatorString;
 
+/** @internal */
 enum GraphicsStateOperator: string {
     case SaveCurrentStateToStack = 'q';
     case RestoreMostRecentStateFromStack = 'Q';

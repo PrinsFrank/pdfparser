@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
+/** @internal */
 enum TextStateOperator: string {
     case CHAR_SIZE = 'Tc';
     case WORD_SPACE = 'Tw';

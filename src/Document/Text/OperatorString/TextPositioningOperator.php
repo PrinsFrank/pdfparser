@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Text\OperatorString;
 
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
+/** @internal */
 enum TextPositioningOperator: string {
     case MOVE_OFFSET = 'Td';
     case MOVE_OFFSET_LEADING = 'TD';

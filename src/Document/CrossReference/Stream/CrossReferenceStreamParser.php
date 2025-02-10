@@ -19,6 +19,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
+/** @internal */
 class CrossReferenceStreamParser {
     private const HEX_CHARS_IN_BYTE = 2;
 

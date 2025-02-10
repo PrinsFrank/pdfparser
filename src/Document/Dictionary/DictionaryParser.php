@@ -12,6 +12,7 @@ use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
+/** @internal */
 class DictionaryParser {
     /**
      * @phpstan-assert int<0, max> $startPos

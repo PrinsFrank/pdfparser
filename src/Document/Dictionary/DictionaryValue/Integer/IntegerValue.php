@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer;
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
+/** @api */
 class IntegerValue implements DictionaryValue {
     public function __construct(
         public readonly int $value

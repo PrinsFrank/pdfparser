@@ -13,10 +13,12 @@ class ExtendedDictionaryKey implements DictionaryKeyInterface {
     ) {
     }
 
+    /** @internal */
     public static function fromKeyString(string $keyString): self {
         return new self(rtrim(ltrim($keyString, '/'), "\n\t "));
     }
 
+    /** @api */
     #[Override]
     public function getValueTypes(): array {
         return [ReferenceValue::class, TextStringValue::class, Dictionary::class];

@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
+/** @api */
 class DateValue implements DictionaryValue {
     public function __construct(
         public readonly ?DateTimeImmutable $value

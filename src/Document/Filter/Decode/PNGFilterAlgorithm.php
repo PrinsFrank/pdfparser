@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Filter\Decode;
 
+/** @internal */
 enum PNGFilterAlgorithm: int {
     case None = 0;
     case Sub = 1;

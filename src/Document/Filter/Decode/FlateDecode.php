@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
+/** @internal */
 class FlateDecode {
     /** @throws PdfParserException */
     public static function decode(string $value, LZWFlatePredictorValue $predictor, int $columns = 1): string {

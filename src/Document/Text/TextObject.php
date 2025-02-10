@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Text;
 
+/** @internal */
 class TextObject {
     /** @var list<TextOperator> */
     public array $textOperators = [];

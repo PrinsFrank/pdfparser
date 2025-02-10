@@ -13,6 +13,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
+/** @internal */
 class CrossReferenceTableParser {
     /** @throws PdfParserException */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {

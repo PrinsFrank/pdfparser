@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
+/** @internal */
 class UncompressedObjectParser {
     public static function parseObject(
         CrossReferenceEntryInUseObject $crossReferenceEntry,

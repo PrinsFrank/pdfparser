@@ -7,6 +7,7 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
+/** @api */
 class TextStringValue implements DictionaryValue {
     public function __construct(
         public readonly string $textStringValue

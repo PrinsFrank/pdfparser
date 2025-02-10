@@ -7,7 +7,7 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class ToUnicodeCMap {
     /** @var list<BFRange|BFChar> */
-    public readonly array $bfCharRangeInfo;
+    private readonly array $bfCharRangeInfo;
 
     /**
      * @no-named-arguments

@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
+/** @internal */
 class VersionParser {
     /** @throws ParseFailureException */
     public static function parse(Stream $stream): Version {

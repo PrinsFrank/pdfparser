@@ -5,7 +5,11 @@ namespace PrinsFrank\PdfParser\Document\Version;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 
-/** @source 6. Version Designations */
+/**
+ * @internal
+ *
+ * @source 6. Version Designations
+ */
 enum Version: string implements NameValue {
     case V1_0 = '1.0';
     case V1_1 = '1.1';

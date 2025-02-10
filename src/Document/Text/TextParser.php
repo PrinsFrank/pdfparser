@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
 
+/** @internal */
 class TextParser {
     public static function parse(string $text): TextObjectCollection {
         $operandBuffer = '';

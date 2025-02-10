@@ -9,7 +9,7 @@ use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
-class InMemoryStream extends AbstractStream {
+final class InMemoryStream extends AbstractStream {
     public function __construct(
         private readonly string $content
     ) {

@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
+/** @api */
 class ArrayValue implements DictionaryValue {
     /** @param array<mixed> $value */
     public function __construct(

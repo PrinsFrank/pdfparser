@@ -7,6 +7,7 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
+/** @api */
 class ReferenceValueArray implements DictionaryValue {
     /** @var list<ReferenceValue> */
     public readonly array $referenceValues;

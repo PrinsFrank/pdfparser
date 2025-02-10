@@ -12,6 +12,7 @@ use PrinsFrank\PdfParser\Stream\FileStream;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 use PrinsFrank\PdfParser\Stream\Stream;
 
+/** @api */
 final class PdfParser {
     /** @throws PdfParserException */
     public function parse(Stream $stream): Document {

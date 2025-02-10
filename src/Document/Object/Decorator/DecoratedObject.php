@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
+/** @api */
 abstract class DecoratedObject {
     final public function __construct(
         public readonly ObjectItem $objectItem,

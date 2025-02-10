@@ -40,6 +40,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Version\Version;
 
+/** @api */
 enum DictionaryKey: string implements DictionaryKeyInterface {
     case A = 'A';
     case AA = 'AA';
@@ -639,10 +640,12 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
     case ZA_DB = 'ZaDb';
     case ZOOM = 'Zoom';
 
+    /** @internal */
     public static function tryFromKeyString(string $keyString): ?self {
         return self::tryFrom(rtrim(ltrim(trim($keyString), '/'), "\n\t "));
     }
 
+    /** @api */
     #[Override]
     public function getValueTypes(): array {
         return match ($this) {

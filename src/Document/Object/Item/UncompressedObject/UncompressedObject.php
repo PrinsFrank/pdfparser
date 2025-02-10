@@ -18,6 +18,7 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
+/** @api */
 class UncompressedObject implements ObjectItem {
     private readonly Dictionary $dictionary;
     private readonly CompressedObjectByteOffsets $byteOffsets;

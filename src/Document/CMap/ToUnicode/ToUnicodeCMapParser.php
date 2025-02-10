@@ -6,6 +6,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
+/** @internal */
 class ToUnicodeCMapParser {
     /** @throws PdfParserException */
     public static function parse(Stream $stream, int $startOffset, int $nrOfBytes): ToUnicodeCMap {

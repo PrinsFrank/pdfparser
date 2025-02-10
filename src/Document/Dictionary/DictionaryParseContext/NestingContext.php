@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryParseContext;
 
 use PrinsFrank\PdfParser\Document\Generic\Parsing\InfiniteBuffer;
 
+/** @internal */
 class NestingContext {
     private string $currentLevel;
 

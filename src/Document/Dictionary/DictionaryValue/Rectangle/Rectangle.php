@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle;
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
+/** @api */
 class Rectangle implements DictionaryValue {
     public function __construct(
         public readonly float $xTopLeft,
