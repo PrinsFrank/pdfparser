@@ -32,7 +32,7 @@ class TextStringValue implements DictionaryValue {
             return implode(
                 '',
                 array_map(
-                    fn (string $character) => mb_chr((int) hexdec($character)) ?? throw new ParseFailureException(),
+                    fn (string $character) => mb_chr((int) hexdec($character)),
                     str_split($string, 4)
                 )
             );
