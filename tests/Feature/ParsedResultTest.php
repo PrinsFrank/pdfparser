@@ -34,10 +34,10 @@ class ParsedResultTest extends TestCase {
         $document = (new PdfParser())->parseFile($pdfPath);
 
         static::assertSame($expectedVersion, $document->version);
-        //        static::assertSame($expectedTitle, $document->getInformationDictionary()?->getTitle());
-        //        static::assertSame($expectedProducer, $document->getInformationDictionary()?->getProducer());
-        //        static::assertSame($expectedAuthor, $document->getInformationDictionary()?->getAuthor());
-        //        static::assertSame($expectedCreator, $document->getInformationDictionary()?->getCreator());
+        static::assertSame($expectedTitle, $document->getInformationDictionary()?->getTitle());
+        static::assertSame($expectedProducer, $document->getInformationDictionary()?->getProducer());
+        static::assertSame($expectedAuthor, $document->getInformationDictionary()?->getAuthor());
+        static::assertSame($expectedCreator, $document->getInformationDictionary()?->getCreator());
         static::assertEquals($expectedCreationDate, $document->getInformationDictionary()?->getCreationDate());
         static::assertEquals($expectedModificationDate, $document->getInformationDictionary()?->getModificationDate());
         static::assertSame(count($expectedPages), $document->getNumberOfPages());
