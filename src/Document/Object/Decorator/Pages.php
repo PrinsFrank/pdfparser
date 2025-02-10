@@ -2,20 +2,13 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
-use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class Pages extends DecoratedObject {
-    #[Override]
-    protected function getTypeName(): ?TypeNameValue {
-        return TypeNameValue::PAGES;
-    }
-
     /**
      * @throws PdfParserException
      * @return list<Page>

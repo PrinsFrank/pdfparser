@@ -2,7 +2,6 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
-use Override;
 use PrinsFrank\PdfParser\Document\CMap\Registry\RegistryOrchestrator;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMap;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMapParser;
@@ -11,7 +10,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
@@ -131,10 +129,5 @@ class Font extends DecoratedObject {
         }
 
         throw new ParseFailureException('No ToUnicodeCMap or encoding information available for this font');
-    }
-
-    #[Override]
-    protected function getTypeName(): ?TypeNameValue {
-        return TypeNameValue::FONT;
     }
 }

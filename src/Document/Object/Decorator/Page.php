@@ -2,10 +2,8 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
-use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Text\TextObjectCollection;
 use PrinsFrank\PdfParser\Document\Text\TextParser;
@@ -60,10 +58,5 @@ class Page extends DecoratedObject {
 
         return $pagesParent->getResourceDictionary()
             ?->getSubDictionary($this->document, DictionaryKey::FONT);
-    }
-
-    #[Override]
-    protected function getTypeName(): ?TypeNameValue {
-        return TypeNameValue::PAGE;
     }
 }

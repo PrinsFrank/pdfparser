@@ -2,20 +2,13 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
-use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 class Catalog extends DecoratedObject {
-    #[Override]
-    protected function getTypeName(): ?TypeNameValue {
-        return TypeNameValue::CATALOG;
-    }
-
     /** @throws PdfParserException */
     public function getPagesRoot(): Pages {
         $catalogDictionary = $this->getDictionary();

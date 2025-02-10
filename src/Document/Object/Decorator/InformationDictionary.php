@@ -3,10 +3,8 @@
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
 use DateTimeImmutable;
-use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
@@ -51,10 +49,5 @@ class InformationDictionary extends DecoratedObject {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::MOD_DATE, DateValue::class)
             ?->value;
-    }
-
-    #[Override]
-    protected function getTypeName(): ?TypeNameValue {
-        return null;
     }
 }
