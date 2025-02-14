@@ -8,11 +8,11 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /** @internal */
 class BFRange {
-    /** @param list<int> $destinationString */
+    /** @param list<int> $destinationCodePoints */
     public function __construct(
-        public readonly int $sourceCodeStart,
-        public readonly int $sourceCodeEnd,
-        public readonly array $destinationString,
+        public readonly int   $sourceCodeStart,
+        public readonly int   $sourceCodeEnd,
+        public readonly array $destinationCodePoints,
     ) {
     }
 
@@ -23,11 +23,11 @@ class BFRange {
 
     /** @throws PdfParserException */
     public function toUnicode(int $characterCode): ?string {
-        if (count($this->destinationString) === 1) {
-            $destinationCodePoint = $this->destinationString[0] + $characterCode - $this->sourceCodeStart;
+        if (count($this->destinationCodePoints) === 1) {
+            $destinationCodePoint = $this->destinationCodePoints[0] + $characterCode - $this->sourceCodeStart;
         } else {
-            $destinationCodePoint = $this->destinationString[$characterCode - $this->sourceCodeStart]
-                ?? throw new RuntimeException(sprintf('Character code %d was not found in BFRange of length %d with start %d and end %d', $characterCode, count($this->destinationString), $this->sourceCodeStart, $this->sourceCodeEnd));
+            $destinationCodePoint = $this->destinationCodePoints[$characterCode - $this->sourceCodeStart]
+                ?? throw new RuntimeException(sprintf('Character code %d was not found in BFRange of length %d with start %d and end %d', $characterCode, count($this->destinationCodePoints), $this->sourceCodeStart, $this->sourceCodeEnd));
         }
 
         if ($destinationCodePoint <= 0x10FFFF) {

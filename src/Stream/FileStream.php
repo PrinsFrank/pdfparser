@@ -74,7 +74,7 @@ final class FileStream extends AbstractStream {
     #[Override]
     public function slice(int $startByteOffset, int $endByteOffset): string {
         if ($startByteOffset <= 0) {
-            throw new InvalidArgumentException(sprintf('$nrOfBytes must be greater than 0, %d given', $startByteOffset));
+            throw new InvalidArgumentException(sprintf('$startByteOffset must be greater than 0, %d given', $startByteOffset));
         }
 
         if ($endByteOffset - $startByteOffset < 1) {

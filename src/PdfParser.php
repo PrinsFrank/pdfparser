@@ -29,7 +29,7 @@ final class PdfParser {
      */
     public function parseFile(string $filePath, bool $useInMemoryStream = true): Document {
         if ($useInMemoryStream) {
-            $fileContent = file_get_contents($filePath);
+            $fileContent = @file_get_contents($filePath);
             if ($fileContent === false) {
                 throw new InvalidArgumentException(sprintf('Failed to open file at path "%s"', $filePath));
             }
