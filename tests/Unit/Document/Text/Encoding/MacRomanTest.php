@@ -8,7 +8,7 @@ use PrinsFrank\PdfParser\Document\Text\Encoding\MacRoman;
 
 #[CoversClass(MacRoman::class)]
 class MacRomanTest extends TestCase {
-    public function testTextToUnicode(): void {
-        static::assertSame('√û', MacRoman::textToUnicode('Þ'));
+    public function testTextToUnicodeDoesntConvertCharactersAlreadyInCorrectEncoding(): void {
+        static::assertSame('ö', MacRoman::textToUnicode('ö'));
     }
 }

@@ -9,10 +9,14 @@ class WinAnsi implements Encoding {
     /** @throws ParseFailureException */
     #[Override]
     public static function textToUnicode(string $string): string {
-        $string = iconv(
+        if (mb_detect_encoding($string, mb_detect_order(), true) === 'UTF-8') {
+            return $string;
+        }
+
+        $string = mb_convert_encoding(
+            $string,
+            'UTF-8',
             'Windows-1252',
-            'UTF-8//TRANSLIT',
-            $string
         );
 
         if ($string === false) {
