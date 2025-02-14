@@ -9,7 +9,7 @@ class MacRoman implements Encoding {
     /** @throws ParseFailureException */
     #[Override]
     public static function textToUnicode(string $string): string {
-        if (mb_detect_encoding($string, mb_detect_order(), true) === 'UTF-8') {
+        if (mb_detect_encoding($string, strict: true) === 'UTF-8') {
             return $string;
         }
 
