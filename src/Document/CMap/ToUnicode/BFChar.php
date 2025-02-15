@@ -8,7 +8,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 class BFChar {
     public function __construct(
         public readonly int $sourceCode,
-        public readonly int $destinationString,
+        public readonly string $destinationString,
     ) {
     }
 
@@ -22,13 +22,6 @@ class BFChar {
             throw new ParseFailureException(sprintf('This BFChar does not contain character code %d', $characterCode));
         }
 
-        $string = '';
-        $hexString = dechex($this->destinationString);
-        $hexString = str_pad($hexString, (int) ceil(strlen($hexString) / 4) * 4, '0', STR_PAD_LEFT);
-        foreach (str_split($hexString, 4) as $char) {
-            $string .= mb_chr((int) hexdec($char));
-        }
-
-        return $string;
+        return CodePoint::toString($this->destinationString);
     }
 }

@@ -10,14 +10,14 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 #[CoversClass(BFChar::class)]
 class BFCharTest extends TestCase {
     public function testContainsCharacterCode(): void {
-        $bfChar = new BFChar(0, 1);
+        $bfChar = new BFChar(0, '0000');
 
         static::assertTrue($bfChar->containsCharacterCode(0));
         static::assertFalse($bfChar->containsCharacterCode(1));
     }
 
     public function testToUnicodeThrowsExceptionWhenNotContainsCharacterCode(): void {
-        $bfChar = new BFChar(0, 1);
+        $bfChar = new BFChar(0, '0000');
 
         $this->expectException(ParseFailureException::class);
         $this->expectExceptionMessage('This BFChar does not contain character code 42');
@@ -27,7 +27,7 @@ class BFCharTest extends TestCase {
     public function testToUnicode(): void {
         static::assertSame(
             ' ',
-            (new BFChar(3, 32))->toUnicode(3),
+            (new BFChar(3, '0020'))->toUnicode(3),
         );
     }
 }

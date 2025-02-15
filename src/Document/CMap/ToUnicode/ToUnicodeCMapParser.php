@@ -35,7 +35,7 @@ class ToUnicodeCMapParser {
             }
 
             foreach ($matchesBFChar as $matchBFChar) {
-                $bfCharRangeInfo[$beginBFCharPos][] = new BFChar((int) hexdec(trim($matchBFChar['start'])), (int) hexdec(trim($matchBFChar['end'])));
+                $bfCharRangeInfo[$beginBFCharPos][] = new BFChar((int) hexdec(trim($matchBFChar['start'])), trim($matchBFChar['end']));
             }
             $lastPos = $endBFCharPos;
         }
@@ -53,7 +53,7 @@ class ToUnicodeCMapParser {
                     (int) hexdec(trim($matchBFRange['start'])),
                     (int) hexdec(trim($matchBFRange['end'])),
                     array_map(
-                        fn (string $value) => (int) hexdec(trim($value)),
+                        fn (string $value) => trim($value),
                         explode('><', rtrim(ltrim(str_replace(' ', '', $matchBFRange['targetString']), '[<'), '>]'))
                     )
                 );

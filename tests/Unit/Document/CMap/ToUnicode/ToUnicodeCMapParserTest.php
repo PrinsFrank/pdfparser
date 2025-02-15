@@ -47,9 +47,9 @@ class ToUnicodeCMapParserTest extends TestCase {
                 0x0000,
                 0xFFFF,
                 2,
-                new BFRange(0x0000, 0x005E, [0x0020]),
-                new BFRange(0x005F, 0x0061, [0x00660066, 0x00660069, 0x00660066006C]),
-                new BFChar(0x3A51, 0xD840DC3E),
+                new BFRange(0x0000, 0x005E, ['0020']),
+                new BFRange(0x005F, 0x0061, ['00660066', '00660069', '00660066006C']),
+                new BFChar(0x3A51, 'D840DC3E'),
             ),
             ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes())
         );

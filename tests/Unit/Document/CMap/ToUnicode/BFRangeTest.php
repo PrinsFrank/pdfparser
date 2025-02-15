@@ -18,10 +18,10 @@ class BFRangeTest extends TestCase {
     }
 
     public function testToUnicode(): void {
-        $bfRange = new BFRange(1675, 1699, [945]);
+        $bfRange = new BFRange(1675, 1699, ['03b1']);
         static::assertSame('α', $bfRange->toUnicode(1675));
 
-        $bfRange = new BFRange(4, 6, [3627867917]);
+        $bfRange = new BFRange(4, 6, ['d83cdf0d']);
         static::assertSame('🌍', $bfRange->toUnicode(4));
     }
 }

@@ -14,7 +14,7 @@ class Identity0 implements CMapResource {
             0x0000,
             0xFFFF,
             2,
-            new BFRange(0x0000, 0xFFFF, [0x0000])
+            new BFRange(0x0000, 0xFFFF, ['0000'])
         );
     }
 }
