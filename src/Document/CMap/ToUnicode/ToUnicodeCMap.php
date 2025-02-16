@@ -40,12 +40,19 @@ class ToUnicodeCMap {
 
     /** @throws PdfParserException */
     protected function charToUnicode(int $characterCode): ?string {
+        $char = null;
         foreach ($this->bfCharRangeInfo as $bfCharRangeInfo) {
             if (!$bfCharRangeInfo->containsCharacterCode($characterCode)) {
                 continue;
             }
 
-            return $bfCharRangeInfo->toUnicode($characterCode);
+            if (($char = $bfCharRangeInfo->toUnicode($characterCode)) !== "\0") { // Some characters map to NULL in one BFRange and to an actual character in another
+                return $char;
+            }
+        }
+
+        if ($char === "\0") {
+            return $char; // Only return NULL when it is the only character this is mapped to
         }
 
         if ($characterCode === 0) {
