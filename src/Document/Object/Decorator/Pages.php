@@ -23,6 +23,8 @@ class Pages extends DecoratedObject {
                 $kids = [...$kids, ...$kidObject->getPageItems()];
             } elseif ($kidObject instanceof Page) {
                 $kids[] = $kidObject;
+            } elseif ($kidObject instanceof GenericObject) {
+                $kids[] = new Page($kidObject->objectItem, $this->document);
             }
         }
 
