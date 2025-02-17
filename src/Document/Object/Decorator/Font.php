@@ -68,7 +68,7 @@ class Font extends DecoratedObject {
             throw new ParseFailureException();
         }
 
-        $stream = new InMemoryStream($toUnicodeObject->objectItem->getStreamContent($this->document));
+        $stream = new InMemoryStream($toUnicodeObject->objectItem->getContent($this->document));
         return $this->toUnicodeCMap = ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes());
     }
 

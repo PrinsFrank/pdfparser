@@ -26,4 +26,8 @@ abstract class DecoratedObject {
     public function getDictionary(): Dictionary {
         return $this->objectItem->getDictionary($this->document);
     }
+
+    public function getContent(): string {
+        return $this->objectItem->getContent($this->document);
+    }
 }

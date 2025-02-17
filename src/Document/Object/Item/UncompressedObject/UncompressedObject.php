@@ -80,7 +80,8 @@ class UncompressedObject implements ObjectItem {
         );
     }
 
-    public function getStreamContent(Document $document): string {
+    #[Override]
+    public function getContent(Document $document): string {
         $startStreamPos = $document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::STREAM->value));
         $endStreamPos = $document->stream->firstPos(Marker::END_STREAM, $startStreamPos, $this->endOffset)

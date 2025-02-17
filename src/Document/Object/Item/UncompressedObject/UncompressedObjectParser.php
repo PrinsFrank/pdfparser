@@ -10,11 +10,7 @@ use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @internal */
 class UncompressedObjectParser {
-    public static function parseObject(
-        CrossReferenceEntryInUseObject $crossReferenceEntry,
-        int                            $objectNumber,
-        Stream                 $stream,
-    ): UncompressedObject {
+    public static function parseObject(CrossReferenceEntryInUseObject $crossReferenceEntry, int $objectNumber, Stream $stream): UncompressedObject {
         $endObj = $stream->firstPos(Marker::END_OBJ, $crossReferenceEntry->byteOffsetInDecodedStream, $stream->getSizeInBytes()) ?? throw new ParseFailureException('Unable to locate end of object');
         $startObj = $stream->firstPos(Marker::OBJ, $crossReferenceEntry->byteOffsetInDecodedStream, $endObj) ?? throw new ParseFailureException('Unable to locate start of object');
         $objHeader = $stream->read($crossReferenceEntry->byteOffsetInDecodedStream, $startObj + Marker::OBJ->length() - $crossReferenceEntry->byteOffsetInDecodedStream);

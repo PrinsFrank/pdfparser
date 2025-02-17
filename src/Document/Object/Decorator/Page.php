@@ -4,10 +4,8 @@ namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Text\TextObjectCollection;
 use PrinsFrank\PdfParser\Document\Text\TextParser;
-use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class Page extends DecoratedObject {
@@ -23,13 +21,7 @@ class Page extends DecoratedObject {
             implode(
                 '',
                 array_map(
-                    function (DecoratedObject $decoratedObject) {
-                        if (!($objectItem = $decoratedObject->objectItem) instanceof UncompressedObject) {
-                            throw new ParseFailureException('Text in compressed objects are currently not supported');
-                        }
-
-                        return $objectItem->getStreamContent($this->document);
-                    },
+                    fn (DecoratedObject $decoratedObject) => $decoratedObject->objectItem->getContent($this->document),
                     $this->document->getObjectsByDictionaryKey($this->getDictionary(), DictionaryKey::CONTENTS),
                 ),
             ),
