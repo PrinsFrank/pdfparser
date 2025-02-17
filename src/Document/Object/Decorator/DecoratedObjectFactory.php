@@ -19,7 +19,7 @@ class DecoratedObjectFactory {
             return null;
         }
 
-        $typeNameValue = $objectItem->getDictionary($document->stream)->getType();
+        $typeNameValue = $objectItem->getDictionary($document)->getType();
         if ($expectedDecoratorFQN !== null && $typeNameValue !== null && $expectedDecoratorFQN !== $typeNameValue->getDecoratorFQN()) {
             throw new ParseFailureException(sprintf('Expected object of type %s, got %s', $expectedDecoratorFQN, $typeNameValue->getDecoratorFQN()));
         }

@@ -14,7 +14,7 @@ abstract class DecoratedObject {
         public readonly ObjectItem $objectItem,
         protected readonly Document $document
     ) {
-        $typeNameValue = $this->objectItem->getDictionary($document->stream)->getType();
+        $typeNameValue = $this->objectItem->getDictionary($document)->getType();
         if ($typeNameValue !== null && $typeNameValue->getDecoratorFQN() !== static::class) {
             throw new InvalidArgumentException(
                 sprintf('Object should have decorator %s, got %s', $typeNameValue->getDecoratorFQN(), static::class)
@@ -24,6 +24,6 @@ abstract class DecoratedObject {
 
     /** @throws PdfParserException */
     public function getDictionary(): Dictionary {
-        return $this->objectItem->getDictionary($this->document->stream);
+        return $this->objectItem->getDictionary($this->document);
     }
 }

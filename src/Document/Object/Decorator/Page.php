@@ -28,7 +28,7 @@ class Page extends DecoratedObject {
                             throw new ParseFailureException('Text in compressed objects are currently not supported');
                         }
 
-                        return $objectItem->getStreamContent($this->document->stream);
+                        return $objectItem->getStreamContent($this->document);
                     },
                     $this->document->getObjectsByDictionaryKey($this->getDictionary(), DictionaryKey::CONTENTS),
                 ),

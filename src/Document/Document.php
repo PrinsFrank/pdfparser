@@ -104,7 +104,7 @@ final class Document {
                 throw new RuntimeException('Parents for stream items shouldn\'t be stream items themselves');
             }
 
-            $objectItem = $parentObject->objectItem->getCompressedObject($objectNumber, $this->stream);
+            $objectItem = $parentObject->objectItem->getCompressedObject($objectNumber, $this);
         } else {
             $objectItem = UncompressedObjectParser::parseObject($crossReferenceEntry, $objectNumber, $this->stream);
         }

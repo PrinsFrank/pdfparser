@@ -7,12 +7,12 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
-use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @api */
 class CompressedObject implements ObjectItem {
@@ -30,17 +30,17 @@ class CompressedObject implements ObjectItem {
     }
 
     #[Override]
-    public function getDictionary(Stream $stream): Dictionary {
+    public function getDictionary(Document $document): Dictionary {
         if (isset($this->dictionary)) {
             return $this->dictionary;
         }
 
-        $first = $this->storedInObject->getDictionary($stream)->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
+        $first = $this->storedInObject->getDictionary($document)->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
 
         $objectContent = new InMemoryStream(
             substr(
-                $this->storedInObject->getStreamContent($stream),
+                $this->storedInObject->getStreamContent($document),
                 $first->value + $this->startByteOffsetInDecodedStream,
                 $this->endByteOffsetInDecodedStream !== null ? $this->endByteOffsetInDecodedStream - $this->startByteOffsetInDecodedStream : null
             )
