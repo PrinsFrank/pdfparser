@@ -28,7 +28,7 @@ body:
             label: When running this snippet
             render: PHP
             value: |
-                $document = PdfParser::parse(Stream::openFile('/path/to/file.pdf'));
+                $document = (new PdfParser())->parseFile('/path/to/file.pdf');
         validations:
             required: true
     -   type: textarea
