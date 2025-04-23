@@ -23,6 +23,7 @@ enum TypeNameValue: string implements NameValue {
     case _3_D_VIEW = '3DView';
     case ACTION = 'Action';
     case ANNOT = 'Annot';
+    case BACKGROUND = 'Background';
     case BEAD = 'Bead';
     case BORDER = 'Border';
     case C_I_D_FONT = 'CIDFont';
@@ -36,8 +37,14 @@ enum TypeNameValue: string implements NameValue {
     case COLLECTION_SORT = 'CollectionSort';
     case COLLECTION_SPLIT = 'CollectionSplit';
     case COLLECTION_SUB_ITEM = 'CollectionSubItem';
+    case CRYPT = 'Crypt';
+    case CRYPT_FILTER = 'CryptFilter';
+    case CRYPT_FILTER_DECODE_PARMS = 'CryptFilterDecodeParms';
+    case D_PART = 'DPart';
+    case D_PART_ROOT = 'DPartRoot';
     case DEVELOPER_EXTENSIONS = 'DeveloperExtensions';
     case DOC_TIME_STAMP = 'DocTimeStamp';
+    case DSS = 'DSS';
     case EMBEDDED_FILE = 'EmbeddedFile';
     case ENCODING = 'Encoding';
     case ENCRYPTED_PAYLOAD = 'EncryptedPayload';
@@ -46,12 +53,15 @@ enum TypeNameValue: string implements NameValue {
     case EXTENSIONS = 'Extensions';
     case F_W_PARAMS = 'FWParams';
     case FILE_SPEC = 'Filespec';
+    case FIXED_PRINT = 'FixedPrint';
     case FOLDER = 'Folder';
     case FONT = 'Font';
     case FONT_DESCRIPTOR = 'FontDescriptor';
     case GEO_G_C_S = 'GEOGCS';
     case GROUP = 'Group';
     case HALF_TONE = 'Halftone';
+    case INLINE = 'Inline';
+    case LAYOUT = 'Layout';
     case M_C_R = 'MCR';
     case MARK_INFO = 'MarkInfo';
     case MASK = 'Mask';
@@ -82,9 +92,11 @@ enum TypeNameValue: string implements NameValue {
     case PAGE = 'Page';
     case PAGE_LABEL = 'PageLabel';
     case PAGES = 'Pages';
+    case PAGINATION = 'Pagination';
     case PATTERN = 'Pattern';
     case PROJ_C_S = 'PROJCS';
     case PT_DATA = 'PtData';
+    case RENDITION = 'Rendition';
     case REQ_HANDLER = 'ReqHandler';
     case REQUIREMENT = 'Requirement';
     case RICH_MEDIA_ACTIVATION = 'RichMediaActivation';
@@ -100,6 +112,7 @@ enum TypeNameValue: string implements NameValue {
     case RICH_MEDIA_WINDOW = 'RichMediaWindow';
     case S_V = 'SV';
     case S_V_CERT = 'SVCert';
+    case SIG = 'Sig';
     case SIG_FIELD_LOCK = 'SigFieldLock';
     case SIG_REF = 'SigRef';
     case SLIDESHOW = 'Slideshow';
@@ -116,6 +129,7 @@ enum TypeNameValue: string implements NameValue {
     case TRANSFORM_PARAMS = 'TransformParams';
     case VIEWER_PREFERENCES = 'ViewerPreferences';
     case VIEWPORT = 'Viewport';
+    case VRI = 'VRI';
     case X_OBJECT = 'XObject';
     case X_REF = 'XRef';
 
