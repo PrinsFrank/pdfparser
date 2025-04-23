@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey;
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\WValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Boolean\BooleanValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
@@ -1217,7 +1218,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::VIEW_CLIP => [TextStringValue::class],
             self::VIEWER_PREFERENCES => [Dictionary::class],
             self::VOLUME => [IntegerValue::class, FloatValue::class],
-            self::VP => [Dictionary::class],
+            self::VP => [Dictionary::class, DictionaryArrayValue::class],
             self::W => [WValue::class, IntegerValue::class, FloatValue::class, ReferenceValue::class],
             self::W2 => [ArrayValue::class],
             self::WC => [Dictionary::class],
