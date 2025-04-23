@@ -245,7 +245,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
     case FONT_BBOX = 'FontBBox';
     case FONT_DESCRIPTOR = 'FontDescriptor';
     case FONT_FAMILY = 'FontFamily';
-    case FONT_FAXING = 'FontFauxing';
+    case FONT_FAUXING = 'FontFauxing';
     case FONT_FILE = 'FontFile';
     case FONT_FILE2 = 'FontFile2';
     case FONT_FILE3 = 'FontFile3';
@@ -357,7 +357,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
     case MATTE = 'Matte';
     case MAX_LEN = 'MaxLen';
     case MAX_WIDTH = 'MaxWidth';
-    case M_C_A_F = 'MCAF';
+    case MCAF = 'MCAF';
     case MD5 = 'MD5';
     case MDP = 'MDP';
     case MEASURE = 'Measure';
@@ -857,7 +857,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::FONT_BBOX => [Rectangle::class],
             self::FONT_DESCRIPTOR => [Dictionary::class],
             self::FONT_FAMILY => [TextStringValue::class],
-            self::FONT_FAXING => [DictionaryArrayValue::class],
+            self::FONT_FAUXING => [DictionaryArrayValue::class],
             self::FONT_FILE => [TextStringValue::class],
             self::FONT_FILE2 => [TextStringValue::class],
             self::FONT_FILE3 => [TextStringValue::class],
@@ -969,7 +969,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::MATTE => [ArrayValue::class],
             self::MAX_LEN => [IntegerValue::class],
             self::MAX_WIDTH => [IntegerValue::class, FloatValue::class],
-            self::M_C_A_F => [DictionaryArrayValue::class],
+            self::MCAF => [DictionaryArrayValue::class],
             self::MD5 => [TextStringValue::class],
             self::MDP => [Dictionary::class],
             self::MEASURE => [Dictionary::class],
