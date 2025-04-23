@@ -15,7 +15,7 @@ abstract class DecoratedObject {
         protected readonly Document $document
     ) {
         $typeNameValue = $this->objectItem->getDictionary($document)->getType();
-        if ($typeNameValue !== null && $typeNameValue->getDecoratorFQN() !== static::class) {
+        if ($typeNameValue !== null && !in_array($typeNameValue->getDecoratorFQN(), [static::class, GenericObject::class], true)) {
             throw new InvalidArgumentException(
                 sprintf('Object should have decorator %s, got %s', $typeNameValue->getDecoratorFQN(), static::class)
             );
