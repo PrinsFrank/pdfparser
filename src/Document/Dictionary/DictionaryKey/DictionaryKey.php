@@ -46,6 +46,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
     case A = 'A';
     case AA = 'AA';
     case AC = 'AC';
+    case AF = 'AF';
     case ACCURATE_SCREENS = 'AccurateScreens';
     case ACRO_FORM = 'AcroForm';
     case ACTION = 'Action';
@@ -244,6 +245,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
     case FONT_BBOX = 'FontBBox';
     case FONT_DESCRIPTOR = 'FontDescriptor';
     case FONT_FAMILY = 'FontFamily';
+    case FONT_FAXING = 'FontFauxing';
     case FONT_FILE = 'FontFile';
     case FONT_FILE2 = 'FontFile2';
     case FONT_FILE3 = 'FontFile3';
@@ -346,6 +348,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
     case LS = 'LS';
     case LW = 'LW';
     case M = 'M';
+    case MA = 'MA';
     case MAC = 'Mac';
     case MARK_INFO = 'MarkInfo';
     case MARKED = 'Marked';
@@ -354,6 +357,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
     case MATTE = 'Matte';
     case MAX_LEN = 'MaxLen';
     case MAX_WIDTH = 'MaxWidth';
+    case M_C_A_F = 'MCAF';
     case MD5 = 'MD5';
     case MDP = 'MDP';
     case MEASURE = 'Measure';
@@ -457,6 +461,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
     case PROP_BUILD = 'Prop_Build';
     case PROPERTIES = 'Properties';
     case PS = 'PS';
+    case PT_DATA = 'PtData';
     case PTEX_FULLBANNER = 'PTEX.Fullbanner';
     case PV = 'PV';
     case PZ = 'PZ';
@@ -504,6 +509,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
     case SHADING = 'Shading';
     case SHADING_TYPE = 'ShadingType';
     case SHOW_CONTROLS = 'ShowControls';
+    case SI = 'SI';
     case SIG_FLAGS = 'SigFlags';
     case SIGNATURE = 'Signature';
     case SIZE = 'Size';
@@ -650,9 +656,10 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
     #[Override]
     public function getValueTypes(): array {
         return match ($this) {
-            self::A => [Dictionary::class, BooleanValue::class, ArrayValue::class, IntegerValue::class, TextStringValue::class],
+            self::A => [Dictionary::class, BooleanValue::class, DictionaryArrayValue::class, IntegerValue::class, TextStringValue::class],
             self::AA, self::BS => [Dictionary::class],
             self::AC => [TextStringValue::class, ArrayValue::class],
+            self::AF => [DictionaryArrayValue::class],
             self::ACCURATE_SCREENS => [BooleanValue::class],
             self::ACRO_FORM => [Dictionary::class],
             self::ACTION => [TextStringValue::class],
@@ -665,17 +672,17 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::ALTERNATE => [ArrayValue::class, TextStringValue::class],
             self::ALTERNATE_IMAGES => [IntegerValue::class],
             self::ALTERNATE_PRESENTATIONS => [TextStringValue::class],
-            self::ALTERNATES => [ArrayValue::class],
+            self::ALTERNATES => [DictionaryArrayValue::class],
             self::AN => [Dictionary::class],
             self::ANGLE => [IntegerValue::class, FloatValue::class],
             self::ANNOTATION => [Dictionary::class],
             self::ANNOTATIONS => [IntegerValue::class],
-            self::ANNOTS => [ArrayValue::class],
+            self::ANNOTS => [ReferenceValue::class, DictionaryArrayValue::class],
             self::ANTI_ALIAS => [BooleanValue::class],
-            self::AP => [TextStringValue::class, Dictionary::class],
+            self::AP => [DictionaryArrayValue::class],
             self::APREF => [Dictionary::class],
             self::ART_BOX => [Rectangle::class],
-            self::AS => [ArrayValue::class, TextStringValue::class],
+            self::AS => [DictionaryArrayValue::class, TextStringValue::class],
             self::ASCENT => [IntegerValue::class, FloatValue::class],
             self::ASPECT => [ArrayValue::class],
             self::ATTESTATION => [TextStringValue::class],
@@ -728,7 +735,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::CHECK_SUM => [TextStringValue::class],
             self::CI => [Dictionary::class],
             self::CIDSET => [TextStringValue::class],
-            self::CIDSYSTEM_INFO => [Dictionary::class],
+            self::CIDSYSTEM_INFO => [Dictionary::class, DictionaryArrayValue::class],
             self::CIDTO_GIDMAP => [TextStringValue::class],
             self::CL => [ArrayValue::class],
             self::CLR_F => [IntegerValue::class],
@@ -744,7 +751,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::COLUMNS => [IntegerValue::class],
             self::COMPANY => [TextStringValue::class],
             self::COMPONENTS => [ArrayValue::class],
-            self::CONFIGS => [ArrayValue::class],
+            self::CONFIGS => [DictionaryArrayValue::class],
             self::CONTACT_INFO => [TextStringValue::class],
             self::CONTENT_TYPE_ID => [TextStringValue::class],
             self::CONTENTS => [ReferenceValue::class, ArrayValue::class, TextStringValue::class],
@@ -765,7 +772,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::DAMAGED_ROWS_BEFORE_ERROR => [IntegerValue::class],
             self::DATA => [TextStringValue::class],
             self::DECODE => [ArrayValue::class],
-            self::DECODE_PARMS => [Dictionary::class, ArrayValue::class],
+            self::DECODE_PARMS => [Dictionary::class, DictionaryArrayValue::class],
             self::DEFAULT => [Dictionary::class, TextStringValue::class],
             self::DEFAULT_FOR_PRINTING => [BooleanValue::class],
             self::DESC => [TextStringValue::class],
@@ -808,7 +815,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::EARLY_CHANGE => [IntegerValue::class],
             self::EF => [Dictionary::class, ArrayValue::class],
             self::EFF => [TextStringValue::class],
-            self::EMBEDDED_FDFS => [TextStringValue::class],
+            self::EMBEDDED_FDFS => [DictionaryArrayValue::class],
             self::EMBEDDED_FILES => [Dictionary::class],
             self::ENCODE => [ArrayValue::class],
             self::ENCODED_BYTE_ALIGN => [BooleanValue::class],
@@ -833,11 +840,11 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::FB => [BooleanValue::class],
             self::FC => [ArrayValue::class, TextStringValue::class],
             self::FD => [Dictionary::class, BooleanValue::class],
-            self::FDECODE_PARMS => [Dictionary::class, ArrayValue::class],
+            self::FDECODE_PARMS => [Dictionary::class, DictionaryArrayValue::class],
             self::FDF => [Dictionary::class],
             self::FF => [IntegerValue::class],
             self::FFILTER => [FilterNameValue::class, ArrayValue::class],
-            self::FIELDS => [ArrayValue::class],
+            self::FIELDS => [ReferenceValue::class, DictionaryArrayValue::class],
             self::FILTER => [FilterNameValue::class, ArrayValue::class],
             self::FIRST => [IntegerValue::class, Dictionary::class],
             self::FIRST_CHAR => [IntegerValue::class],
@@ -850,6 +857,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::FONT_BBOX => [Rectangle::class],
             self::FONT_DESCRIPTOR => [Dictionary::class],
             self::FONT_FAMILY => [TextStringValue::class],
+            self::FONT_FAXING => [DictionaryArrayValue::class],
             self::FONT_FILE => [TextStringValue::class],
             self::FONT_FILE2 => [TextStringValue::class],
             self::FONT_FILE3 => [TextStringValue::class],
@@ -917,7 +925,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::JAVA_SCRIPT_ACTIONS => [IntegerValue::class],
             self::JBIG2GLOBALS => [TextStringValue::class],
             self::JS => [TextStringValue::class],
-            self::K => [IntegerValue::class, BooleanValue::class, Dictionary::class],
+            self::K => [IntegerValue::class, BooleanValue::class, Dictionary::class, DictionaryArrayValue::class],
             self::KEY_USAGE => [ArrayValue::class],
             self::KEYWORDS => [TextStringValue::class],
             self::KIDS => [ReferenceValueArray::class],
@@ -952,6 +960,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::LS => [Dictionary::class],
             self::LW => [IntegerValue::class, FloatValue::class],
             self::M => [TextStringValue::class, DateValue::class, IntegerValue::class, ArrayValue::class],
+            self::MA => [DictionaryArrayValue::class],
             self::MAC => [TextStringValue::class, Dictionary::class],
             self::MARK_INFO => [Dictionary::class],
             self::MARKED => [BooleanValue::class],
@@ -960,6 +969,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::MATTE => [ArrayValue::class],
             self::MAX_LEN => [IntegerValue::class],
             self::MAX_WIDTH => [IntegerValue::class, FloatValue::class],
+            self::M_C_A_F => [DictionaryArrayValue::class],
             self::MD5 => [TextStringValue::class],
             self::MDP => [Dictionary::class],
             self::MEASURE => [Dictionary::class],
@@ -977,7 +987,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::MOVIE_ACTIONS => [IntegerValue::class],
             self::MS => [TextStringValue::class],
             self::MSG => [TextStringValue::class],
-            self::MU => [ArrayValue::class],
+            self::MU => [DictionaryArrayValue::class],
             self::N => [IntegerValue::class, FloatValue::class, TextStringValue::class, Dictionary::class],
             self::NA => [Dictionary::class, ArrayValue::class],
             self::NAME => [TextStringValue::class, TextStringValue::class],
@@ -985,19 +995,19 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::NEED_APPEARANCES => [BooleanValue::class],
             self::NEEDS_RENDERING => [BooleanValue::class],
             self::NEW_WINDOW => [BooleanValue::class],
-            self::NEXT => [Dictionary::class, ArrayValue::class],
+            self::NEXT => [Dictionary::class, DictionaryArrayValue::class],
             self::NM => [TextStringValue::class],
             self::NON_EMBEDDED_FONTS => [IntegerValue::class],
             self::NON_FULL_SCREEN_PAGE_MODE => [NonFullScreenPageModeNameValue::class],
             self::NP => [BooleanValue::class],
             self::NR => [BooleanValue::class],
-            self::NU => [ArrayValue::class],
+            self::NU => [DictionaryArrayValue::class],
             self::NUM_COPIES => [IntegerValue::class],
             self::NUMS => [ArrayValue::class],
             self::O => [TextStringValue::class, IntegerValue::class, FloatValue::class, Dictionary::class, ArrayValue::class, BooleanValue::class],
             self::OB => [TextStringValue::class],
             self::OC => [Dictionary::class],
-            self::OCGS => [Dictionary::class, ArrayValue::class],
+            self::OCGS => [DictionaryArrayValue::class],
             self::OCPROPERTIES => [Dictionary::class],
             self::OFF => [ArrayValue::class],
             self::OID => [ArrayValue::class],
@@ -1016,16 +1026,16 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::ORDERING => [TextStringValue::class],
             self::OS => [ArrayValue::class, IntegerValue::class, FloatValue::class],
             self::OUTLINES => [Dictionary::class],
-            self::OUTPUT_INTENTS => [ArrayValue::class],
+            self::OUTPUT_INTENTS => [DictionaryArrayValue::class],
             self::OVERLAY_TEXT => [TextStringValue::class],
-            self::P => [IntegerValue::class, TextStringValue::class, VisibilityPolicyNameValue::class, Dictionary::class, BooleanValue::class, ArrayValue::class],
+            self::P => [IntegerValue::class, TextStringValue::class, VisibilityPolicyNameValue::class, Dictionary::class, BooleanValue::class, ArrayValue::class, DictionaryArrayValue::class],
             self::PA => [Dictionary::class],
             self::PAGE => [IntegerValue::class, TextStringValue::class],
             self::PAGE_ELEMENT => [Dictionary::class],
             self::PAGE_LABELS => [TextStringValue::class, ArrayValue::class],
             self::PAGE_LAYOUT => [PageLayoutNameValue::class],
             self::PAGE_MODE => [PageModeNameValue::class],
-            self::PAGES => [Dictionary::class, TextStringValue::class, ArrayValue::class],
+            self::PAGES => [Dictionary::class, TextStringValue::class, DictionaryArrayValue::class],
             self::PAINT_TYPE => [IntegerValue::class],
             self::PARAMS => [Dictionary::class],
             self::PARENT => [Dictionary::class],
@@ -1063,6 +1073,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::PROP_BUILD => [Dictionary::class],
             self::PROPERTIES => [Dictionary::class],
             self::PS => [TextStringValue::class, IntegerValue::class, FloatValue::class],
+            self::PT_DATA => [DictionaryArrayValue::class],
             self::PTEX_FULLBANNER => [TextStringValue::class],
             self::PV => [Dictionary::class],
             self::PZ => [FloatValue::class],
@@ -1079,17 +1090,17 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::RECIPIENTS => [ArrayValue::class, TextStringValue::class],
             self::RECT => [Rectangle::class],
             self::REF => [Dictionary::class],
-            self::REFERENCE => [ArrayValue::class],
+            self::REFERENCE => [DictionaryArrayValue::class],
             self::REGISTRY => [TextStringValue::class],
             self::RENAME => [BooleanValue::class],
             self::RENDITIONS => [TextStringValue::class],
             self::REPEAT => [BooleanValue::class],
-            self::REQUIREMENTS => [ArrayValue::class],
+            self::REQUIREMENTS => [DictionaryArrayValue::class],
             self::RES_FORK => [TextStringValue::class],
             self::RESOURCE => [TextStringValue::class],
             self::RESOURCES => [Dictionary::class],
             self::RF => [Dictionary::class],
-            self::RH => [ArrayValue::class],
+            self::RH => [Dictionary::class, DictionaryArrayValue::class],
             self::RI => [RenderingIntentNameValue::class, TextStringValue::class],
             self::RIGHTS_WATCHMARK => [TextStringValue::class],
             self::RM => [Dictionary::class],
@@ -1110,6 +1121,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::SHADING => [Dictionary::class, TextStringValue::class],
             self::SHADING_TYPE => [IntegerValue::class],
             self::SHOW_CONTROLS => [BooleanValue::class],
+            self::SI => [DictionaryArrayValue::class],
             self::SIG_FLAGS => [IntegerValue::class],
             self::SIGNATURE => [ArrayValue::class],
             self::SIZE => [IntegerValue::class, ArrayValue::class],
@@ -1142,7 +1154,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::SUB_FILTER => [TextStringValue::class, ArrayValue::class],
             self::SUBJ => [TextStringValue::class],
             self::SUBJECT => [ArrayValue::class, TextStringValue::class],
-            self::SUBJECT_DN => [ArrayValue::class],
+            self::SUBJECT_DN => [DictionaryArrayValue::class],
             self::SUBTYPE => [SubtypeNameValue::class, TextStringValue::class],
             self::SUPPLEMENT => [IntegerValue::class],
             self::SUSPECTS => [BooleanValue::class],
@@ -1150,17 +1162,17 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::SW => [TextStringValue::class],
             self::SY => [TextStringValue::class],
             self::SYNCHRONOUS => [BooleanValue::class],
-            self::T => [Dictionary::class, TextStringValue::class, ArrayValue::class, BooleanValue::class],
+            self::T => [Dictionary::class, TextStringValue::class, DictionaryArrayValue::class, BooleanValue::class],
             self::TA => [Dictionary::class],
             self::TABS => [TabsNameValue::class],
             self::TARGET => [TextStringValue::class],
             self::TB => [BooleanValue::class],
             self::TC => [TextStringValue::class],
             self::TEMPLATE_INSTANTIATED => [TextStringValue::class],
-            self::TEMPLATES => [TextStringValue::class, ArrayValue::class],
+            self::TEMPLATES => [TextStringValue::class, DictionaryArrayValue::class],
             self::TEXT => [TextStringValue::class],
             self::TF => [TextStringValue::class],
-            self::THREADS => [ArrayValue::class],
+            self::THREADS => [DictionaryArrayValue::class],
             self::THREE_DA => [Dictionary::class, TextStringValue::class],
             self::THREE_DB => [Rectangle::class],
             self::THREE_DD => [TextStringValue::class],
@@ -1207,7 +1219,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::USER_PROPERTIES => [BooleanValue::class],
             self::USER_UNIT => [FloatValue::class],
             self::V => [IntegerValue::class, FloatValue::class, BooleanValue::class, Dictionary::class, TextStringValue::class, ArrayValue::class],
-            self::VA => [ArrayValue::class],
+            self::VA => [DictionaryArrayValue::class],
             self::VE => [ArrayValue::class],
             self::VERIKET_CLASSIFICATION => [TextStringValue::class],
             self::VERSION => [Version::class],
