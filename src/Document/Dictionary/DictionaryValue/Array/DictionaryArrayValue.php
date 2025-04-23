@@ -30,7 +30,11 @@ class DictionaryArrayValue implements DictionaryValue {
 
         $dictionaries = [];
         foreach ($values as $value) {
-            $dictionaries[] = DictionaryParser::parse(($subDictionary = new InMemoryStream($value)), 0, $subDictionary->getSizeInBytes());
+            try {
+                $dictionaries[] = DictionaryParser::parse(($subDictionary = new InMemoryStream($value)), 0, $subDictionary->getSizeInBytes());
+            } catch (PdfParserException) {
+                return null;
+            }
         }
 
         return new self($dictionaries);
