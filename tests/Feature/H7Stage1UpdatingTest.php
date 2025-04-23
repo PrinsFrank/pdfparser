@@ -20,10 +20,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Annot;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Outlines;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Pages;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
@@ -108,7 +106,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj2 = $document->getObject(2);
         static::assertEquals(
-            new Outlines(
+            new GenericObject(
                 new UncompressedObject(
                     2,
                     0,
@@ -225,7 +223,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj8 = $document->getObject(8);
         static::assertEquals(
-            new Annot(
+            new GenericObject(
                 new UncompressedObject(
                     8,
                     0,
@@ -248,7 +246,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj9 = $document->getObject(9);
         static::assertEquals(
-            new Annot(
+            new GenericObject(
                 new UncompressedObject(
                     9,
                     0,
@@ -271,7 +269,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj10 = $document->getObject(10);
         static::assertEquals(
-            new Annot(
+            new GenericObject(
                 new UncompressedObject(
                     10,
                     0,
@@ -294,7 +292,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj11 = $document->getObject(11);
         static::assertEquals(
-            new Annot(
+            new GenericObject(
                 new UncompressedObject(
                     11,
                     0,
