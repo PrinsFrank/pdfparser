@@ -27,11 +27,7 @@ class DictionaryParser {
         $arrayNestingLevel = 0;
         foreach ($stream->chars($startPos, $nrOfBytes) as $char) {
             $rollingCharBuffer->next($char);
-            if ($nestingContext->getContext() === DictionaryParseContext::COMMENT) {
-                if ($char === WhitespaceCharacter::LINE_FEED->value) {
-                    $nestingContext->setContext(DictionaryParseContext::DICTIONARY);
-                }
-            } elseif ($char === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
+            if ($char === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
                 if ($nestingContext->getContext() === DictionaryParseContext::KEY) {
                     $nestingContext->removeFromKeyBuffer();
                 }
@@ -52,7 +48,7 @@ class DictionaryParser {
                 } elseif ($nestingContext->getContext() === DictionaryParseContext::KEY || $nestingContext->getContext() === DictionaryParseContext::KEY_VALUE_SEPARATOR) {
                     $nestingContext->setContext(DictionaryParseContext::VALUE);
                 }
-            } elseif ($char === LiteralStringEscapeCharacter::LINE_FEED->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
+            } elseif ($char === WhitespaceCharacter::LINE_FEED->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
                 if ($nestingContext->getContext() === DictionaryParseContext::KEY) {
                     $nestingContext->setContext(DictionaryParseContext::VALUE);
                 } elseif ($nestingContext->getContext() === DictionaryParseContext::VALUE) {
