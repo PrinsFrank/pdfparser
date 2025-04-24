@@ -216,12 +216,16 @@ class DictionaryParserTest extends TestCase {
             /Producer (pdfTeX-1.40.18)
             %/Creator (TeX)
             %  /Creator (TeX)
+            /Foo (Bar)
+            /Bar (% this is not a comment but a string literal)
             >>
             EOD,
         );
         static::assertEquals(
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::PRODUCER, new TextStringValue('(pdfTeX-1.40.18)')),
+                new DictionaryEntry(new ExtendedDictionaryKey('Foo'), new TextStringValue('(Bar)')),
+                new DictionaryEntry(new ExtendedDictionaryKey('Bar'), new TextStringValue('(% this is not a comment but a string literal)')),
             ),
             DictionaryParser::parse($stream, 0, $stream->getSizeInBytes())
         );

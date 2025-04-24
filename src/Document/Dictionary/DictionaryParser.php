@@ -27,7 +27,11 @@ class DictionaryParser {
         $arrayNestingLevel = 0;
         foreach ($stream->chars($startPos, $nrOfBytes) as $char) {
             $rollingCharBuffer->next($char);
-            if ($char === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
+            if ($nestingContext->getContext() === DictionaryParseContext::COMMENT) {
+                if ($char === WhitespaceCharacter::LINE_FEED->value) {
+                    $nestingContext->setContext(DictionaryParseContext::DICTIONARY);
+                }
+            } elseif ($char === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
                 if ($nestingContext->getContext() === DictionaryParseContext::KEY) {
                     $nestingContext->removeFromKeyBuffer();
                 }
@@ -72,7 +76,7 @@ class DictionaryParser {
                 }
             } elseif (trim($char) !== '' && $nestingContext->getContext() === DictionaryParseContext::KEY_VALUE_SEPARATOR) {
                 $nestingContext->setContext(DictionaryParseContext::VALUE);
-            } elseif ($char === DelimiterCharacter::PERCENT_SIGN->value && $rollingCharBuffer->getPreviousCharacter() !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value) {
+            } elseif ($char === DelimiterCharacter::PERCENT_SIGN->value && $rollingCharBuffer->getPreviousCharacter() !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_PARENTHESES) {
                 $nestingContext->setContext(DictionaryParseContext::COMMENT);
             }
 
