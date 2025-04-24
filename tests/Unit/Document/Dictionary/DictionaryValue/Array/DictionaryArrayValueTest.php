@@ -44,7 +44,7 @@ class DictionaryArrayValueTest extends TestCase {
                         new DictionaryEntry(new ExtendedDictionaryKey('OutputConditionIdentifier'), new TextStringValue('(sRGB)')),
                         new DictionaryEntry(new ExtendedDictionaryKey('RegistryName'), new TextStringValue('(http://www.color.org)')),
                         new DictionaryEntry(DictionaryKey::INFO, new TextStringValue('(Creator: HP     Manufacturer:IEC    Model:sRGB)')),
-                        new DictionaryEntry(new ExtendedDictionaryKey('DestOutputProfile'), new ReferenceValue(361, 0) ),
+                        new DictionaryEntry(new ExtendedDictionaryKey('DestOutputProfile'), new ReferenceValue(361, 0)),
                     )
                 ]
             ),
