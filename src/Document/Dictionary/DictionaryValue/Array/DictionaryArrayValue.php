@@ -20,23 +20,20 @@ class DictionaryArrayValue implements DictionaryValue {
     #[Override]
     /** @throws PdfParserException */
     public static function fromValue(string $valueString): ?self {
-        if (!str_starts_with($valueString, '[') || !str_ends_with($valueString, ']')) {
+        $valueStringWithoutSpaces = str_replace(' ', '', $valueString);
+        if (!str_starts_with($valueStringWithoutSpaces, '[<<') || !str_ends_with($valueStringWithoutSpaces, '>>]')) {
             return null;
         }
 
-        $valueString = preg_replace('/(<[^>]*>)(?=<[^>]*>)/', '$1 $2', $valueString)
-            ?? throw new RuntimeException('An error occurred while sanitizing array value');
-        $values = explode(' ', rtrim(ltrim($valueString, '[ '), ' ]'));
-
-        $dictionaries = [];
-        foreach ($values as $value) {
-            try {
-                $dictionaries[] = DictionaryParser::parse(($subDictionary = new InMemoryStream($value)), 0, $subDictionary->getSizeInBytes());
-            } catch (PdfParserException) {
-                return null;
-            }
+        $dictionaryEntries = [];
+        $valueString = preg_replace('/(<<[^>]*>>)(?=<<[^>]*>>)/', '$1 $2', $valueString)
+            ?? throw new RuntimeException('An error occurred while sanitizing dictionary array value');
+        foreach (explode('>> <<', substr($valueString, 3, -3)) as $dictionaryValueString) {
+            $dictionaryEntries[] = $dictionaryValueString === ''
+                ? new Dictionary()
+                : DictionaryParser::parse($memoryStream = new InMemoryStream('<<' . $dictionaryValueString . '>>'), 0, $memoryStream->getSizeInBytes());
         }
 
-        return new self($dictionaries);
+        return new self($dictionaryEntries);
     }
 }
