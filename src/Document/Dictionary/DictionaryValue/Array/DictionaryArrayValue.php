@@ -11,16 +11,20 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
 class DictionaryArrayValue implements DictionaryValue {
-    /** @param list<Dictionary> $dictionaries */
+    /** @var list<Dictionary> */
+    public readonly array $dictionaries;
+
+    /** @no-named-arguments */
     public function __construct(
-        public readonly array $dictionaries,
+        Dictionary... $dictionaries,
     ) {
+        $this->dictionaries = $dictionaries;
     }
 
     #[Override]
     /** @throws PdfParserException */
     public static function fromValue(string $valueString): ?self {
-        $valueStringWithoutSpaces = str_replace(' ', '', $valueString);
+        $valueStringWithoutSpaces = str_replace([' ', "\r", "\n"], '', $valueString);
         if (!str_starts_with($valueStringWithoutSpaces, '[<<') || !str_ends_with($valueStringWithoutSpaces, '>>]')) {
             return null;
         }
@@ -34,6 +38,6 @@ class DictionaryArrayValue implements DictionaryValue {
                 : DictionaryParser::parse($memoryStream = new InMemoryStream('<<' . $dictionaryValueString . '>>'), 0, $memoryStream->getSizeInBytes());
         }
 
-        return new self($dictionaryEntries);
+        return new self(... $dictionaryEntries);
     }
 }

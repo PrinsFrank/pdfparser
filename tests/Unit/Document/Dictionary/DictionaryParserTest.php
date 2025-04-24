@@ -12,9 +12,11 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\WValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EventNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\FilterNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\PageModeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TabsNameValue;
@@ -22,6 +24,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TrappedNameVal
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
@@ -289,6 +292,98 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(6, 0)),
             ),
             DictionaryParser::parse($stream, 0, $stream->getSizeInBytes())
+        );
+    }
+
+    public function testHandlesNestedArrays(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+                <<
+                    /OCProperties <<
+                        /D <<
+                            /AS [
+                                <<
+                                    /Category [/Print]
+                                    /Event/Print
+                                    /OCGs [939 0 R 419 0 R]
+                                >>
+                                <<
+                                    /Category [/View]
+                                    /Event/View
+                                    /OCGs[939 0 R 419 0 R]
+                                >>
+                            ]
+                            /BaseState/OFF
+                            /ON[419 0 R]
+                            /Order[]
+                            /RBGroups[]
+                        >>
+                        /OCGs[939 0 R 419 0 R]
+                    >>
+                >>
+            EOD
+        );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(
+                    DictionaryKey::OCPROPERTIES,
+                    new Dictionary(
+                        new DictionaryEntry(
+                            DictionaryKey::D,
+                            new Dictionary(
+                                new DictionaryEntry(
+                                    DictionaryKey::AS,
+                                    new DictionaryArrayValue(
+                                        new Dictionary(
+                                            new DictionaryEntry(
+                                                DictionaryKey::CATEGORY,
+                                                new ArrayValue(['/View'])
+                                            ),
+                                            new DictionaryEntry(
+                                                DictionaryKey::EVENT,
+                                                EventNameValue::View
+                                            ),
+                                            new DictionaryEntry(
+                                                DictionaryKey::OCGS,
+                                                new ReferenceValueArray(
+                                                    new ReferenceValue(939, 0),
+                                                    new ReferenceValue(419, 0),
+                                                )
+                                            ),
+                                        ),
+                                    )
+                                ),
+                                new DictionaryEntry(
+                                    DictionaryKey::BASE_STATE,
+                                    new TextStringValue('/OFF')
+                                ),
+                                new DictionaryEntry(
+                                    DictionaryKey::ON,
+                                    new ReferenceValueArray(
+                                        new ReferenceValue(419, 0),
+                                    )
+                                ),
+                                new DictionaryEntry(
+                                    DictionaryKey::ORDER,
+                                    new ArrayValue([])
+                                ),
+                                new DictionaryEntry(
+                                    DictionaryKey::RBGROUPS,
+                                    new ArrayValue([])
+                                ),
+                            )
+                        ),
+                        new DictionaryEntry(
+                            DictionaryKey::OCGS,
+                            new ReferenceValueArray(
+                                new ReferenceValue(939, 0),
+                                new ReferenceValue(419, 0),
+                            )
+                        )
+                    )
+                )
+            ),
+            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
         );
     }
 }

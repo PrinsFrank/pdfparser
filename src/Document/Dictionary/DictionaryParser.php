@@ -24,6 +24,7 @@ class DictionaryParser {
         $dictionaryArray = [];
         $rollingCharBuffer = new RollingCharBuffer(6);
         $nestingContext = (new NestingContext())->setContext(DictionaryParseContext::ROOT);
+        $arrayNestingLevel = 0;
         foreach ($stream->chars($startPos, $nrOfBytes) as $char) {
             $rollingCharBuffer->next($char);
             if ($char === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
@@ -38,7 +39,7 @@ class DictionaryParser {
                 $nestingContext->removeFromValueBuffer();
                 self::flush($dictionaryArray, $nestingContext);
                 $nestingContext->decrementNesting()->flush();
-            } elseif ($char === DelimiterCharacter::SOLIDUS->value && $rollingCharBuffer->getPreviousCharacter() !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value) {
+            } elseif ($char === DelimiterCharacter::SOLIDUS->value && $rollingCharBuffer->getPreviousCharacter() !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
                 if ($nestingContext->getContext() === DictionaryParseContext::DICTIONARY) {
                     $nestingContext->setContext(DictionaryParseContext::KEY);
                 } elseif ($nestingContext->getContext() === DictionaryParseContext::VALUE) {
@@ -47,7 +48,7 @@ class DictionaryParser {
                 } elseif ($nestingContext->getContext() === DictionaryParseContext::KEY || $nestingContext->getContext() === DictionaryParseContext::KEY_VALUE_SEPARATOR) {
                     $nestingContext->setContext(DictionaryParseContext::VALUE);
                 }
-            } elseif ($char === LiteralStringEscapeCharacter::LINE_FEED->value) {
+            } elseif ($char === LiteralStringEscapeCharacter::LINE_FEED->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
                 if ($nestingContext->getContext() === DictionaryParseContext::KEY) {
                     $nestingContext->setContext(DictionaryParseContext::VALUE);
                 } elseif ($nestingContext->getContext() === DictionaryParseContext::VALUE) {
@@ -61,10 +62,14 @@ class DictionaryParser {
                 $nestingContext->setContext(DictionaryParseContext::VALUE_IN_PARENTHESES);
             } elseif ($char === DelimiterCharacter::RIGHT_PARENTHESIS->value && $rollingCharBuffer->getPreviousCharacter() !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $nestingContext->getContext() === DictionaryParseContext::VALUE_IN_PARENTHESES) {
                 $nestingContext->setContext(DictionaryParseContext::VALUE);
-            } elseif ($char === DelimiterCharacter::LEFT_SQUARE_BRACKET->value && (in_array($nestingContext->getContext(), [DictionaryParseContext::KEY, DictionaryParseContext::KEY_VALUE_SEPARATOR, DictionaryParseContext::VALUE], true))) {
+            } elseif ($char === DelimiterCharacter::LEFT_SQUARE_BRACKET->value && (in_array($nestingContext->getContext(), [DictionaryParseContext::KEY, DictionaryParseContext::KEY_VALUE_SEPARATOR, DictionaryParseContext::VALUE, DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS], true))) {
                 $nestingContext->setContext(DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS);
+                $arrayNestingLevel++;
             } elseif ($char === DelimiterCharacter::RIGHT_SQUARE_BRACKET->value && $nestingContext->getContext() === DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
-                $nestingContext->setContext(DictionaryParseContext::VALUE);
+                $arrayNestingLevel--;
+                if ($arrayNestingLevel === 0) {
+                    $nestingContext->setContext(DictionaryParseContext::VALUE);
+                }
             } elseif (trim($char) !== '' && $nestingContext->getContext() === DictionaryParseContext::KEY_VALUE_SEPARATOR) {
                 $nestingContext->setContext(DictionaryParseContext::VALUE);
             } elseif ($char === DelimiterCharacter::PERCENT_SIGN->value && $rollingCharBuffer->getPreviousCharacter() !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value) {
