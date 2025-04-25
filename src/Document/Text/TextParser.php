@@ -14,16 +14,24 @@ class TextParser {
     public static function parse(string $text): TextObjectCollection {
         $operandBuffer = '';
         $textObjects = [];
-        $inValue = false;
         $textObject = new TextObject();
+        $inArrayLevel = $inStringLevel = $inStringLiteralLevel = 0;
         $previousChar = $secondToLastChar = $thirdToLastChar = null;
         foreach (mb_str_split($text) as $char) {
             $operandBuffer .= $char;
-            if (in_array($char, ['[', '<', '('], true) && $previousChar !== '\\') {
-                $inValue = true;
-            } elseif ($inValue) {
-                if (in_array($char, [']', '>', ')'], true) && $previousChar !== '\\') {
-                    $inValue = false;
+            if ($char === '[' && $previousChar !== '\\') {
+                $inArrayLevel++;
+            } elseif ($char === '<' && $previousChar !== '\\') {
+                $inStringLevel++;
+            } elseif ($char === '(' && $previousChar !== '\\') {
+                $inStringLiteralLevel++;
+            } elseif ($inStringLevel > 0 || $inStringLiteralLevel > 0 || $inArrayLevel > 0) {
+                if ($inStringLevel > 0 && $char === '>' && $previousChar !== '\\') {
+                    $inStringLevel--;
+                } elseif ($inStringLiteralLevel > 0 && $char === ')' && $previousChar !== '\\') {
+                    $inStringLiteralLevel--;
+                } elseif ($inArrayLevel > 0 && $char === ']' && $previousChar !== '\\') {
+                    $inArrayLevel--;
                 }
             } elseif ($char === 'T' && $previousChar === 'B') { // TextObjectOperator::BEGIN
                 $operandBuffer = '';
