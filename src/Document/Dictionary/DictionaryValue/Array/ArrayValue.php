@@ -24,14 +24,14 @@ class ArrayValue implements DictionaryValue {
             return null;
         }
 
-        $array = [];
         $valueString = preg_replace('/(<[^>]*>)(?=<[^>]*>)/', '$1 $2', $valueString)
             ?? throw new RuntimeException('An error occurred while sanitizing array value');
-        $values = explode(' ', rtrim(ltrim($valueString, '[ '), ' ]'));
+        $values = explode(' ', str_replace("\n", ' ', rtrim(ltrim($valueString, '[ '), ' ]')));
         if (count($values) % 3 === 0 && array_key_exists(2, $values) && $values[2] === 'R') {
             return ReferenceValueArray::fromValue($valueString);
         }
 
+        $array = [];
         foreach ($values as $value) {
             if (str_starts_with($value, '[') && str_ends_with($value, ']')) {
                 $array[] = self::fromValue($value);
