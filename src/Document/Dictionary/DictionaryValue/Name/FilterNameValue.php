@@ -21,6 +21,11 @@ enum FilterNameValue: string implements NameValue {
     case DCT_DECODE = 'DCTDecode'; // Grayscale or color image data encoded in JPEG baseline format
     case JBX_DECODE = 'JPXDecode';
     case CRYPT = 'Crypt';
+    case ADOBE_PPK_LITE = 'Adobe.PPKLite';
+    case ADOBE_PUB_SEC = 'Adobe.PubSec';
+    case ENTRUST_PPKEF = 'Entrust.PPKEF';
+    case CICI_SIGN_IT = 'CIC.SignIt';
+    case VERISIGN_PPKVS = 'Verisign.PPKVS';
 
     public function decode(string $content, ?Dictionary $decodeParams): string {
         return match($this) {
