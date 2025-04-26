@@ -55,7 +55,9 @@ class FlateDecode {
                 $decodedValue .= implode('', array_slice($hexTable[$rowIndex], 1));
             }
 
-            $decodedValue = hex2bin($decodedValue);
+            if (($decodedValue = hex2bin($decodedValue)) === false) {
+                throw new ParseFailureException('Unable to hex2bin value "' . substr(trim($value), 0, 30) . '..."');
+            }
         }
 
         return $decodedValue;
