@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Text;
 
 use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
-use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Document\Text\Positioning\PositionedTextElement;
+use PrinsFrank\PdfParser\Document\Text\Positioning\TextMatrix;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 /** @api */
@@ -24,36 +24,42 @@ class TextObjectCollection {
         $this->textObjects = $textObjects;
     }
 
-    /** @throws PdfParserException */
-    public function getText(Document $document, Page $page): string {
-        $text = '';
-        $font = null;
+    /** @return list<PositionedTextElement> */
+    public function getPositionedTextElements(): array {
+        $positionedTextElements = [];
+        $textState = null; // See table 103, Tf operator for initial value
         foreach ($this->textObjects as $textObject) {
-            $textObjectText = '';
+            $textMatrix = new TextMatrix(1, 0, 0, 1, 0, 0); // See Table 106, Tm operator for initial value in text object
             foreach ($textObject->textOperators as $textOperator) {
-                if ($textOperator->operator instanceof TextPositioningOperator) {
-                    $textObjectText .= $textOperator->operator->display($textOperator->operands);
+                if ($textOperator->operator instanceof TextStateOperator) {
+                    $textState = $textOperator->operator->getNewTextState($textOperator->operands, $textState);
+                } elseif ($textOperator->operator instanceof TextPositioningOperator) {
+                    $textState = $textOperator->operator->getNewTextState($textOperator->operands, $textState);
+                    $textMatrix = $textOperator->operator->getNewTextMatrix($textOperator->operands, $textMatrix, $textState);
                 } elseif ($textOperator->operator instanceof TextShowingOperator) {
-                    if ($font === null) {
-                        throw new ParseFailureException('A font should be selected before being used');
-                    }
-
-                    $textObjectText .= $textOperator->operator->displayOperands($textOperator->operands, $font);
-                } elseif ($textOperator->operator === TextStateOperator::FONT_SIZE) {
-                    if (($fontDictionary = $page->getFontDictionary()) === null) {
-                        throw new ParseFailureException('No font dictionary available');
-                    }
-
-                    $font = $fontDictionary->getObjectForReference($document, $fontReference = $textOperator->operator->getFontReference($textOperator->operands), Font::class)
-                        ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $fontReference->value));
+                    $textState = $textOperator->operator->getNewTextState($textOperator->operands, $textState);
+                    $textMatrix = $textOperator->operator->getNewTextMatrix($textOperator->operands, $textMatrix);
+                    $positionedTextElements[] = new PositionedTextElement($textOperator->operands, $textMatrix, $textState);
                 }
-            }
-
-            if (trim($textObjectText) !== '') {
-                $text .= ' ' . trim($textObjectText);
             }
         }
 
-        return preg_replace('/\h+([.,!?])/', '$1', str_replace('  ', ' ', trim($text))) ?? throw new ParseFailureException();
+        return $positionedTextElements;
+    }
+
+    /** @throws PdfParserException */
+    public function getText(Document $document, Page $page): string {
+        $positionedTextElements = $this->getPositionedTextElements();
+        usort(
+            $positionedTextElements,
+            fn (PositionedTextElement $a, PositionedTextElement $b) => ($a->textMatrix->scaleY * $a->textMatrix->scaleX) + $a->textMatrix->scaleY <=> ($b->textMatrix->scaleY * $b->textMatrix->scaleX) + $b->textMatrix->scaleY,
+        );
+
+        $text = '';
+        foreach ($positionedTextElements as $positionedTextElement) {
+            $text .= $positionedTextElement->getText($document, $page->getFontDictionary());
+        }
+
+        return $text;
     }
 }

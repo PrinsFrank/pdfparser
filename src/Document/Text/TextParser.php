@@ -79,7 +79,7 @@ class TextParser {
             'T*' => TextPositioningOperator::NEXT_LINE,
             'Tj' => TextShowingOperator::SHOW,
             'TJ' => TextShowingOperator::SHOW_ARRAY,
-            'Tc' => TextStateOperator::CHAR_SIZE,
+            'Tc' => TextStateOperator::CHAR_SPACE,
             'Tw' => TextStateOperator::WORD_SPACE,
             'Tz' => TextStateOperator::SCALE,
             'TL' => TextStateOperator::LEADING,
