@@ -68,7 +68,7 @@ class TextParser {
             'scn' => ColorOperator::SetColorParams,
             default => null,
         };
-        if ($threeLetterMatch !== null && $thirdToLastChar !== '\\') {
+        if ($threeLetterMatch !== null && !in_array($thirdToLastChar, ['\\', '/'], true)) {
             return $threeLetterMatch;
         }
 
@@ -97,7 +97,7 @@ class TextParser {
             'rg' => ColorOperator::SetColorDeviceRGB,
             default => null,
         };
-        if ($twoLetterMatch !== null && $secondToLastChar !== '\\') {
+        if ($twoLetterMatch !== null && !in_array($secondToLastChar, ['\\', '/'], true)) {
             return $twoLetterMatch;
         }
 
@@ -119,7 +119,7 @@ class TextParser {
             default => null,
         };
 
-        if ($oneLetterMatch !== null && $previousChar !== '\\') {
+        if ($oneLetterMatch !== null && !in_array($previousChar, ['\\', '/'], true)) {
             return $oneLetterMatch;
         }
 
