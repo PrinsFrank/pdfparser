@@ -15,12 +15,29 @@ class ToUnicodeCMapParser {
         $beginCodeSpaceRangePos += strlen(ToUnicodeCMapOperator::BeginCodeSpaceRange->value);
         $endCodeSpaceRangePos = $stream->firstPos(ToUnicodeCMapOperator::EndCodeSpaceRange, $beginCodeSpaceRangePos, $startOffset + $nrOfBytes)
             ?? throw new ParseFailureException();
-        if (preg_match('/^\s*<(?P<start>[0-9a-fA-F ]+)>\s*<(?P<end>[0-9a-fA-F ]+)>\s*$/', $stream->read($beginCodeSpaceRangePos, $endCodeSpaceRangePos - $beginCodeSpaceRangePos), $matchesSpaceRange) !== 1) {
-            throw new ParseFailureException('Unrecognized codespacerange format');
-        }
+        $codeSpaceRangeSectionString = $stream->read($beginCodeSpaceRangePos, $endCodeSpaceRangePos - $beginCodeSpaceRangePos);
+        $codeSpaceRanges = [];
+        $byteSize = null;
+        foreach (explode("\n", $codeSpaceRangeSectionString) as $codeSpaceRangeSectionStringLine) {
+            if (trim($codeSpaceRangeSectionStringLine) === '') {
+                continue;
+            }
 
-        if (strlen($matchesSpaceRange['start']) !== strlen($matchesSpaceRange['end'])) {
-            throw new ParseFailureException(sprintf('Start(%s) and end(%s) of codespacerange don\'t have the same number of bytes', $matchesSpaceRange['start'], $matchesSpaceRange['end']));
+            if (preg_match('/^\s*<(?P<start>[0-9a-fA-F ]+)>\s*<(?P<end>[0-9a-fA-F ]+)>\s*$/', $codeSpaceRangeSectionStringLine, $matchesSpaceRange) !== 1) {
+                throw new ParseFailureException('Unrecognized codespacerange format');
+            }
+
+            if (strlen($matchesSpaceRange['start']) !== strlen($matchesSpaceRange['end'])) {
+                throw new ParseFailureException(sprintf('Start(%s) and end(%s) of codespacerange don\'t have the same number of bytes', $matchesSpaceRange['start'], $matchesSpaceRange['end']));
+            }
+
+            $byteSizeRange = strlen(trim($matchesSpaceRange['start'])) / 2;
+            if ($byteSize !== null && $byteSizeRange !== $byteSize) {
+                throw new ParseFailureException(sprintf('Byte size of codespaceranges is inconsistent, expected %d, got %d', $byteSize, $byteSizeRange));
+            }
+
+            $byteSize = $byteSizeRange;
+            $codeSpaceRanges[] = new CodeSpaceRange((int) hexdec($matchesSpaceRange['start']), (int) hexdec($matchesSpaceRange['end']));
         }
 
         /** @var array<int, list<BFRange|BFChar>> $bfCharRangeInfo where the first index is used to track the position of the element in the CMap */
@@ -63,9 +80,8 @@ class ToUnicodeCMapParser {
 
         ksort($bfCharRangeInfo); // Make sure that Char and Range are in order they occur in the CMap
         return new ToUnicodeCMap(
-            (int) hexdec(trim($matchesSpaceRange['start'])),
-            (int) hexdec(trim($matchesSpaceRange['end'])),
-            ($byteSize = (strlen(trim($matchesSpaceRange['start'])) / 2)) >= 1 && is_int($byteSize) ? $byteSize : throw new ParseFailureException(sprintf('Byte size should be an integer of 1 or higher, got %s', $byteSize)),
+            $codeSpaceRanges,
+            is_int($byteSize) && $byteSize > 0 ? $byteSize : 2,
             ...array_merge(...$bfCharRangeInfo)
         );
     }

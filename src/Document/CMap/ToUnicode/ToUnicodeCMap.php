@@ -12,12 +12,12 @@ class ToUnicodeCMap {
     /**
      * @no-named-arguments
      *
+     * @param list<CodeSpaceRange> $codeSpaceRanges
      * @param int<1, max> $byteSize
      * @throws InvalidArgumentException
      */
     public function __construct(
-        public readonly int $codeSpaceStart,
-        public readonly int $codeSpaceEnd,
+        public readonly array $codeSpaceRanges,
         public readonly int $byteSize,
         BFRange|BFChar ...$bfCharRangeInfo,
     ) {

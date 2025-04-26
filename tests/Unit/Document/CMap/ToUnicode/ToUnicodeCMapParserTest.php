@@ -6,6 +6,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\BFChar;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\BFRange;
+use PrinsFrank\PdfParser\Document\CMap\ToUnicode\CodeSpaceRange;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMap;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMapParser;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
@@ -44,12 +45,31 @@ class ToUnicodeCMapParserTest extends TestCase {
         );
         static::assertEquals(
             new ToUnicodeCMap(
-                0x0000,
-                0xFFFF,
+                [new CodeSpaceRange(0x0000, 0xFFFF)],
                 2,
                 new BFRange(0x0000, 0x005E, ['0020']),
                 new BFRange(0x005F, 0x0061, ['00660066', '00660069', '00660066006C']),
                 new BFChar(0x3A51, 'D840DC3E'),
+            ),
+            ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes())
+        );
+    }
+
+    public function testParseToUnicodeCMapWithMultipleCodeSpaceRanges(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            begincmap
+            1 begincodespacerange
+            < 0000 > < BBBB >
+            < DDDD > < FFFF >
+            endcodespacerange
+            endcmap
+            EOD
+        );
+        static::assertEquals(
+            new ToUnicodeCMap(
+                [new CodeSpaceRange(0x0000, 0xBBBB), new CodeSpaceRange(0xDDDD, 0xFFFF)],
+                2,
             ),
             ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes())
         );
