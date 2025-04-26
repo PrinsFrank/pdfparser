@@ -88,26 +88,12 @@ class UncompressedObject implements ObjectItem {
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_STREAM->value));
         $eolPos = $document->stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value));
-        $decodedBytes = CompressedObjectContentParser::parse(
+
+        return CompressedObjectContentParser::parseBinary(
             $document->stream,
             $startStreamPos,
             $eolPos - $startStreamPos,
             $this->getDictionary($document),
         );
-
-        if (strlen($decodedBytes) % 2 === 0 && ctype_xdigit($decodedBytes)) {
-            return implode(
-                '',
-                array_map(
-                    fn (string $char) => mb_chr((int)hexdec($char)),
-                    str_split(
-                        $decodedBytes,
-                        2
-                    )
-                )
-            );
-        }
-
-        return $decodedBytes;
     }
 }

@@ -24,7 +24,7 @@ class CompressedObjectByteOffsetParser {
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_STREAM->value));
         $eolPos = $stream->getEndOfCurrentLine($endStreamPos - 1, $endOffsetObject)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value));
-        $content = CompressedObjectContentParser::parse($stream, $startStreamPos, $eolPos - $startStreamPos, $dictionary);
+        $content = bin2hex(CompressedObjectContentParser::parseBinary($stream, $startStreamPos, $eolPos - $startStreamPos, $dictionary));
         $first = $dictionary->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
         $buffer = new InfiniteBuffer();

@@ -10,8 +10,11 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /** @internal */
 class FlateDecode {
-    /** @throws PdfParserException */
-    public static function decode(string $value, LZWFlatePredictorValue $predictor, int $columns = 1): string {
+    /**
+     * @throws PdfParserException
+     * @return string in binary format
+     */
+    public static function decodeBinary(string $value, LZWFlatePredictorValue $predictor, int $columns = 1): string {
         if ($columns < 1) {
             throw new InvalidArgumentException(sprintf('Nr of columns should be equal to or bigger than 1, %d given', $columns));
         }
@@ -21,9 +24,8 @@ class FlateDecode {
             throw new ParseFailureException('Unable to gzuncompress value "' . substr(trim($value), 0, 30) . '..."');
         }
 
-        $decodedValue = bin2hex($decodedValue);
         if ($predictor !== LZWFlatePredictorValue::None) {
-            $hexTable = array_map(fn (string $row) => str_split($row, 2), str_split($decodedValue, ($columns + 1) * 2));
+            $hexTable = array_map(fn (string $row) => str_split($row, 2), str_split(bin2hex($decodedValue), ($columns + 1) * 2));
             $decodedValue = '';
             foreach ($hexTable as $rowIndex => $row) {
                 if (!is_array($row) || !array_is_list($row) || count($row) < 2) {
@@ -52,6 +54,8 @@ class FlateDecode {
 
                 $decodedValue .= implode('', array_slice($hexTable[$rowIndex], 1));
             }
+
+            $decodedValue = hex2bin($decodedValue);
         }
 
         return $decodedValue;

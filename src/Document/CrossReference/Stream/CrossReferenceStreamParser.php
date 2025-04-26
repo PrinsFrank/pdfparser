@@ -46,7 +46,7 @@ class CrossReferenceStreamParser {
         }
 
         $entries = [];
-        $hexContent = CompressedObjectContentParser::parse($stream, $startStream, $endStream - $startStream - 1, $dictionary);
+        $hexContent = bin2hex(CompressedObjectContentParser::parseBinary($stream, $startStream, $endStream - $startStream - 1, $dictionary));
         foreach (str_split($hexContent, $wValue->getTotalLengthInBytes() * self::HEX_CHARS_IN_BYTE) as $referenceRow) {
             $field1 = hexdec(substr($referenceRow, 0, $wValue->lengthRecord1InBytes * self::HEX_CHARS_IN_BYTE));
             $field2 = hexdec(substr($referenceRow, $wValue->lengthRecord1InBytes * self::HEX_CHARS_IN_BYTE, $wValue->lengthRecord2InBytes * self::HEX_CHARS_IN_BYTE));

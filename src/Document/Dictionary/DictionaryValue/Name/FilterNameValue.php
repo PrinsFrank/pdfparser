@@ -27,10 +27,11 @@ enum FilterNameValue: string implements NameValue {
     case CICI_SIGN_IT = 'CIC.SignIt';
     case VERISIGN_PPKVS = 'Verisign.PPKVS';
 
-    public function decode(string $content, ?Dictionary $decodeParams): string {
+    /** @return string in binary format */
+    public function decodeBinary(string $content, ?Dictionary $decodeParams): string {
         return match($this) {
-            self::DCT_DECODE => $content, // Dont decode JPEG content
-            self::FLATE_DECODE => FlateDecode::decode(
+            self::DCT_DECODE => $content, // Don't decode JPEG content
+            self::FLATE_DECODE => FlateDecode::decodeBinary(
                 $content,
                 $decodeParams !== null && ($predictorValue = LZWFlatePredictorValue::tryFrom((int) $decodeParams->getValueForKey(DictionaryKey::PREDICTOR, IntegerValue::class)?->value)) !== null
                     ? $predictorValue

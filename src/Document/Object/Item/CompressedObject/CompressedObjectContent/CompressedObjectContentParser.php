@@ -14,25 +14,28 @@ use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @internal */
 class CompressedObjectContentParser {
-    /** @throws PdfParserException */
-    public static function parse(Stream $stream, int $startPos, int $nrOfBytes, Dictionary $dictionary): string {
-        $streamContent = $stream->read($startPos, $nrOfBytes);
+    /**
+     * @throws PdfParserException
+     * @return string in binary format
+     */
+    public static function parseBinary(Stream $stream, int $startPos, int $nrOfBytes, Dictionary $dictionary): string {
+        $binaryStreamContent = $stream->read($startPos, $nrOfBytes);
         if (($filterType = $dictionary->getTypeForKey(DictionaryKey::FILTER)) === FilterNameValue::class) {
-            $streamContent = ($dictionary->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class) ?? throw new ParseFailureException())
-                ->decode($streamContent, $dictionary->getValueForKey(DictionaryKey::DECODE_PARMS, Dictionary::class));
+            $binaryStreamContent = ($dictionary->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class) ?? throw new ParseFailureException())
+                ->decodeBinary($binaryStreamContent, $dictionary->getValueForKey(DictionaryKey::DECODE_PARMS, Dictionary::class));
         } elseif ($filterType === ArrayValue::class) {
             foreach ($dictionary->getValueForKey(DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new ParseFailureException() as $filterValue) {
                 if (is_string($filterValue) === false || ($filter = FilterNameValue::tryFrom(ltrim($filterValue, '/'))) === null) {
                     throw new ParseFailureException();
                 }
 
-                $streamContent = $filter
-                    ->decode($streamContent, $dictionary->getValueForKey(DictionaryKey::DECODE_PARMS, Dictionary::class));
+                $binaryStreamContent = $filter
+                    ->decodeBinary($binaryStreamContent, $dictionary->getValueForKey(DictionaryKey::DECODE_PARMS, Dictionary::class));
             }
         } elseif ($filterType !== null) {
             throw new RuntimeException(sprintf('Expected filter to be a FilterNameValue or ArrayValue, got %s', $filterType));
         }
 
-        return $streamContent;
+        return $binaryStreamContent;
     }
 }
