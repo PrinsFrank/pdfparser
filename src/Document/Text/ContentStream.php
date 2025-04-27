@@ -13,7 +13,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 /** @api */
-class TextObjectCollection {
+class ContentStream {
     /** @var list<TextObject> */
     public readonly array $textObjects;
 
@@ -30,21 +30,21 @@ class TextObjectCollection {
         $font = null;
         foreach ($this->textObjects as $textObject) {
             $textObjectText = '';
-            foreach ($textObject->textOperators as $textOperator) {
-                if ($textOperator->operator instanceof TextPositioningOperator) {
-                    $textObjectText .= $textOperator->operator->display($textOperator->operands);
-                } elseif ($textOperator->operator instanceof TextShowingOperator) {
+            foreach ($textObject->contentStreamCommands as $contentStreamCommand) {
+                if ($contentStreamCommand->operator instanceof TextPositioningOperator) {
+                    $textObjectText .= $contentStreamCommand->operator->display($contentStreamCommand->operands);
+                } elseif ($contentStreamCommand->operator instanceof TextShowingOperator) {
                     if ($font === null) {
                         throw new ParseFailureException('A font should be selected before being used');
                     }
 
-                    $textObjectText .= $textOperator->operator->displayOperands($textOperator->operands, $font);
-                } elseif ($textOperator->operator === TextStateOperator::FONT_SIZE) {
+                    $textObjectText .= $contentStreamCommand->operator->displayOperands($contentStreamCommand->operands, $font);
+                } elseif ($contentStreamCommand->operator === TextStateOperator::FONT_SIZE) {
                     if (($fontDictionary = $page->getFontDictionary()) === null) {
                         throw new ParseFailureException('No font dictionary available');
                     }
 
-                    $font = $fontDictionary->getObjectForReference($document, $fontReference = $textOperator->operator->getFontReference($textOperator->operands), Font::class)
+                    $font = $fontDictionary->getObjectForReference($document, $fontReference = $contentStreamCommand->operator->getFontReference($contentStreamCommand->operands), Font::class)
                         ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $fontReference->value));
                 }
             }

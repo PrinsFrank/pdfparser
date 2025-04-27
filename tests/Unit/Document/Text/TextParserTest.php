@@ -12,22 +12,22 @@ use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
 use PrinsFrank\PdfParser\Document\Text\TextObject;
-use PrinsFrank\PdfParser\Document\Text\TextObjectCollection;
-use PrinsFrank\PdfParser\Document\Text\TextOperator;
-use PrinsFrank\PdfParser\Document\Text\TextParser;
+use PrinsFrank\PdfParser\Document\Text\ContentStream;
+use PrinsFrank\PdfParser\Document\Text\ContentStreamCommand;
+use PrinsFrank\PdfParser\Document\Text\ContentStreamParser;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
-#[CoversClass(TextParser::class)]
+#[CoversClass(ContentStreamParser::class)]
 class TextParserTest extends TestCase {
     public function testParseText(): void {
         static::assertEquals(
-            new TextObjectCollection(
+            new ContentStream(
                 (new TextObject())
-                    ->addTextOperator(new TextOperator(TextStateOperator::FONT_SIZE, '/F1 24'))
-                    ->addTextOperator(new TextOperator(TextPositioningOperator::MOVE_OFFSET, '100 100'))
-                    ->addTextOperator(new TextOperator(TextShowingOperator::SHOW, '( Hello World )'))
+                    ->addContentStreamCommand(new ContentStreamCommand(TextStateOperator::FONT_SIZE, '/F1 24'))
+                    ->addContentStreamCommand(new ContentStreamCommand(TextPositioningOperator::MOVE_OFFSET, '100 100'))
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '( Hello World )'))
             ),
-            TextParser::parse(
+            ContentStreamParser::parse(
                 <<<EOD
                 BT
                 /F1 24 Tf
@@ -44,9 +44,9 @@ class TextParserTest extends TestCase {
         static::assertSame(
             $enumCase,
             match (strlen($enumCase->value)) {
-                1 => TextParser::getOperator($enumCase->value, null, null, null),
-                2 => TextParser::getOperator(substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), null, null),
-                3 => TextParser::getOperator(substr($enumCase->value, 2, 1), substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), null),
+                1 => ContentStreamParser::getOperator($enumCase->value, null, null, null),
+                2 => ContentStreamParser::getOperator(substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), null, null),
+                3 => ContentStreamParser::getOperator(substr($enumCase->value, 2, 1), substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), null),
             }
         );
     }
@@ -66,16 +66,16 @@ class TextParserTest extends TestCase {
                     ColorOperator::SetColorDeviceRGB => ColorOperator::SetColorSpace,
                 },
                 match (strlen($enumCase->value)) {
-                    1 => TextParser::getOperator($enumCase->value, '\\', null, null),
-                    2 => TextParser::getOperator(substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), '\\', null),
+                    1 => ContentStreamParser::getOperator($enumCase->value, '\\', null, null),
+                    2 => ContentStreamParser::getOperator(substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), '\\', null),
                 }
             );
         } else {
             static::assertNull(
                 match (strlen($enumCase->value)) {
-                    1 => TextParser::getOperator($enumCase->value, '\\', null, null),
-                    2 => TextParser::getOperator(substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), '\\', null),
-                    3 => TextParser::getOperator(substr($enumCase->value, 2, 1), substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), '\\'),
+                    1 => ContentStreamParser::getOperator($enumCase->value, '\\', null, null),
+                    2 => ContentStreamParser::getOperator(substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), '\\', null),
+                    3 => ContentStreamParser::getOperator(substr($enumCase->value, 2, 1), substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), '\\'),
                 }
             );
         }

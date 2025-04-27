@@ -10,7 +10,7 @@ use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
 
 /** @internal */
-class TextOperator {
+class ContentStreamCommand {
     public function __construct(
         public readonly TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator $operator,
         public readonly string $operands

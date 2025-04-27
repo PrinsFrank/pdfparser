@@ -5,16 +5,16 @@ namespace PrinsFrank\PdfParser\Document\Text;
 
 /** @internal */
 class TextObject {
-    /** @var list<TextOperator> */
-    public array $textOperators = [];
+    /** @var list<ContentStreamCommand> */
+    public array $contentStreamCommands = [];
 
-    public function addTextOperator(TextOperator $textOperator): self {
-        $this->textOperators[] = $textOperator;
+    public function addContentStreamCommand(ContentStreamCommand $textOperator): self {
+        $this->contentStreamCommands[] = $textOperator;
 
         return $this;
     }
 
     public function isEmpty(): bool {
-        return $this->textOperators === [];
+        return $this->contentStreamCommands === [];
     }
 }
