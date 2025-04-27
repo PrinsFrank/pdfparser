@@ -8,9 +8,11 @@ use PrinsFrank\PdfParser\Document\Text\OperatorString\GraphicsStateOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @internal */
 class ContentStreamParser {
+    /** @throws ParseFailureException */
     public static function parse(string $contentStream): ContentStream {
         $operandBuffer = '';
         $content = [];
@@ -37,6 +39,10 @@ class ContentStreamParser {
                 $textObject = new TextObject();
             } elseif ($char === 'T' && $previousChar === 'E') { // TextObjectOperator::END
                 $operandBuffer = '';
+                if ($textObject === null) {
+                    throw new ParseFailureException('Encountered TextObjectOperator::END without preceding TextObjectOperator::BEGIN');
+                }
+
                 $content[] = $textObject;
                 $textObject = null;
             } elseif ($char === 'C'
