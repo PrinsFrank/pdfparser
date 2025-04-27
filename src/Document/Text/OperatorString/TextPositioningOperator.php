@@ -45,7 +45,7 @@ enum TextPositioningOperator: string {
             $textMatrix->shearY,
             $textMatrix->scaleY,
             0,
-            -1 * ($textState->leading ?? 0),
+            $textMatrix->offsetY,
         );
     }
 

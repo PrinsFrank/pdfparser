@@ -24,6 +24,7 @@ class PositionedTextElement {
 
         $font = $fontDictionary->getObjectForReference($document, $this->textState->fontName, Font::class)
             ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $this->textState->fontName->value));
+        $string = '';
         foreach ($matches as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
                 $chars = str_replace(['\(', '\)', '\n', '\r'], ['(', ')', "\n", "\r"], substr($match['chars'], 1, -1));

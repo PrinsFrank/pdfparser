@@ -41,7 +41,4 @@ enum TextShowingOperator: string {
     public function getNewTextMatrix(string $operands, TextMatrix $textMatrix): TextMatrix {
         return $textMatrix;
     }
-
-    public function displayOperands(string $operands, ?Font $font): string {
-    }
 }

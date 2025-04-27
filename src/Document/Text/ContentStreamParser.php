@@ -10,11 +10,11 @@ use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
 
 /** @internal */
-class TextParser {
-    public static function parse(string $text): TextObjectCollection {
+class ContentStreamParser {
+    public static function parse(string $text): ContentStream {
         $operandBuffer = '';
-        $textObjects = [];
-        $textObject = new TextObject();
+        $content = [];
+        $textObject = null;
         $inArrayLevel = $inStringLevel = $inStringLiteralLevel = 0;
         $previousChar = $secondToLastChar = $thirdToLastChar = null;
         foreach (mb_str_split($text) as $char) {
@@ -36,15 +36,20 @@ class TextParser {
             } elseif ($char === 'T' && $previousChar === 'B') { // TextObjectOperator::BEGIN
                 $operandBuffer = '';
                 $textObject = new TextObject();
-                $textObjects[] = $textObject;
             } elseif ($char === 'T' && $previousChar === 'E') { // TextObjectOperator::END
                 $operandBuffer = '';
-                $textObject = new TextObject();
+                $content[] = $textObject;
+                $textObject = null;
             } elseif ($char === 'C'
                 && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
                 $operandBuffer = '';
             } elseif (($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null) {
-                $textObject->addTextOperator(new TextOperator($operator, trim(substr($operandBuffer, 0, -strlen($operator->value)))));
+                $command = new ContentStreamCommand($operator, trim(substr($operandBuffer, 0, -strlen($operator->value))));
+                if ($textObject !== null) {
+                    $textObject->addCommand($command);
+                } else {
+                    $content[] = $command;
+                }
                 $operandBuffer = '';
             }
 
@@ -53,9 +58,7 @@ class TextParser {
             $previousChar = $char;
         }
 
-        return new TextObjectCollection(
-            ...array_filter($textObjects, fn (TextObject $textObject) => $textObject->isEmpty() === false)
-        );
+        return new ContentStream(...$content);
     }
 
     /**

@@ -6,7 +6,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\TextObject;
-use PrinsFrank\PdfParser\Document\Text\TextOperator;
+use PrinsFrank\PdfParser\Document\Text\ContentStreamCommand;
 
 #[CoversClass(TextObject::class)]
 class TextObjectTest extends TestCase {
@@ -14,7 +14,7 @@ class TextObjectTest extends TestCase {
         $textObject = new TextObject();
         static::assertTrue($textObject->isEmpty());
 
-        $textObject->addTextOperator(new TextOperator(TextShowingOperator::SHOW, ''));
+        $textObject->addCommand(new ContentStreamCommand(TextShowingOperator::SHOW, ''));
         static::assertFalse($textObject->isEmpty());
     }
 }

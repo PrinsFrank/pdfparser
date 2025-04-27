@@ -8,10 +8,10 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey
 use PrinsFrank\PdfParser\Document\Text\Positioning\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\Text\Positioning\TextMatrix;
 use PrinsFrank\PdfParser\Document\Text\Positioning\TextState;
-use PrinsFrank\PdfParser\Document\Text\TextObjectCollection;
-use PrinsFrank\PdfParser\Document\Text\TextParser;
+use PrinsFrank\PdfParser\Document\Text\ContentStream;
+use PrinsFrank\PdfParser\Document\Text\ContentStreamParser;
 
-#[CoversClass(TextObjectCollection::class)]
+#[CoversClass(ContentStream::class)]
 class TextObjectCollectionTest  extends TestCase {
     public function testGetPositionedTextElements(): void {
         $textObjectString = <<<EOD
@@ -126,32 +126,32 @@ class TextObjectCollectionTest  extends TestCase {
         EOD;
         static::assertEquals(
             [
-                new PositionedTextElement('<0024>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0025>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0026>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0027>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0028>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0029>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<002A>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<002B>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<002C>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<002D>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<002E>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<002F>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, 1, 0, 0), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0024>', new TextMatrix(1, 0, 0, -1, 0, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0025>', new TextMatrix(1, 0, 0, -1, 9.7756042, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0026>', new TextMatrix(1, 0, 0, -1, 19.5512084, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, -1, 30.135483, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0027>', new TextMatrix(1, 0, 0, -1, 0.0, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0028>', new TextMatrix(1, 0, 0, -1, 10.5842743, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0029>', new TextMatrix(1, 0, 0, -1, 20.3598785, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, -1, 29.3125, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, -1, 0.0, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, -1, 48.0, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<002A>', new TextMatrix(1, 0, 0, -1, 96.0, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<002B>', new TextMatrix(1, 0, 0, -1, 107.4001007, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<002C>', new TextMatrix(1, 0, 0, -1, 117.984375, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, -1, 122.056351, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, -1, 126.1283267, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, -1, 130.2003024, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, -1, 134.2722781, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, -1, 138.3442538, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, -1, 142.4162295, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<002D>', new TextMatrix(1, 0, 0, -1, 146.488205, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<002E>', new TextMatrix(1, 0, 0, -1, 153.81633, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<002F>', new TextMatrix(1, 0, 0, -1, 163.5919342, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, -1, 171.74304, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0003>', new TextMatrix(1, 0, 0, -1, 0.0, -12.79752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
             ],
-            TextParser::parse($textObjectString)->getPositionedTextElements(),
+            ContentStreamParser::parse($textObjectString)->getPositionedTextElements(),
         );
     }
 }
