@@ -18,7 +18,7 @@ use PrinsFrank\PdfParser\Document\Text\ContentStreamParser;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 #[CoversClass(ContentStreamParser::class)]
-class TextParserTest extends TestCase {
+class ContentStreamParserTest extends TestCase {
     public function testParseText(): void {
         static::assertEquals(
             new ContentStream(
