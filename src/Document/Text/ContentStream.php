@@ -14,23 +14,27 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 /** @api */
 class ContentStream {
-    /** @var list<TextObject> */
-    public readonly array $textObjects;
+    /** @var list<TextObject|ContentStreamCommand> */
+    public readonly array $content;
 
     /** @no-named-arguments */
     public function __construct(
-        TextObject... $textObjects
+        TextObject|ContentStreamCommand... $content
     ) {
-        $this->textObjects = $textObjects;
+        $this->content = $content;
     }
 
     /** @throws PdfParserException */
     public function getText(Document $document, Page $page): string {
         $text = '';
         $font = null;
-        foreach ($this->textObjects as $textObject) {
+        foreach ($this->content as $content) {
             $textObjectText = '';
-            foreach ($textObject->contentStreamCommands as $contentStreamCommand) {
+            if (!$content instanceof TextObject) {
+                continue;
+            }
+
+            foreach ($content->contentStreamCommands as $contentStreamCommand) {
                 if ($contentStreamCommand->operator instanceof TextPositioningOperator) {
                     $textObjectText .= $contentStreamCommand->operator->display($contentStreamCommand->operands);
                 } elseif ($contentStreamCommand->operator instanceof TextShowingOperator) {
