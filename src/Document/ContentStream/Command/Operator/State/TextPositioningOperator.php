@@ -3,19 +3,19 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 
-use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextMatrix;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 
 /** @internal */
-enum TextPositioningOperator: string implements InteractsWithTextMatrix, InteractsWithTextState {
+enum TextPositioningOperator: string implements InteractsWithTransformationMatrix, InteractsWithTextState {
     case MOVE_OFFSET = 'Td';
     case MOVE_OFFSET_LEADING = 'TD';
     case SET_MATRIX = 'Tm';
     case NEXT_LINE = 'T*';
 
-    public function applyToTextMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix {
+    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix {
         if ($this === self::MOVE_OFFSET || $this === self::MOVE_OFFSET_LEADING) {
             $offsets = explode(' ', trim($operands));
             if (count($offsets) !== 2) {
@@ -38,7 +38,16 @@ enum TextPositioningOperator: string implements InteractsWithTextMatrix, Interac
                 throw new \RuntimeException();
             }
 
-            return new TransformationMatrix((float) $matrix[0], (float) $matrix[1], (float) $matrix[2], (float) $matrix[3], (float) $matrix[4], (float) $matrix[5]);
+            return $transformationMatrix->multiplyWith(
+                new TransformationMatrix(
+                    (float) $matrix[0],
+                    (float) $matrix[1],
+                    (float) $matrix[2],
+                    (float) $matrix[3],
+                    (float) $matrix[4],
+                    (float) $matrix[5],
+                )
+            );
         }
 
         return new TransformationMatrix(

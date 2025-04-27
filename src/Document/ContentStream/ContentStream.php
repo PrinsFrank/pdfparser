@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\ContentStream;
 
 use PrinsFrank\PdfParser\Document\ContentStream\Command\ContentStreamCommand;
-use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextMatrix;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\ProducesPositionedTextElements;
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
@@ -30,15 +30,28 @@ class ContentStream {
     public function getPositionedTextElements(): array {
         $positionedTextElements = [];
         $textState = null; // See table 103, Tf operator for initial value
+        $transformationMatrix = new TransformationMatrix(1, 0, 0, 1, 0, 0); // See Table 106, Tm operator for initial value in text object
         foreach ($this->content as $content) {
-            $textMatrix = new TransformationMatrix(1, 0, 0, 1, 0, 0); // See Table 106, Tm operator for initial value in text object
-            foreach (($content instanceof ContentStreamCommand ? [$content] : $content->contentStreamCommands) as $contentStreamCommand) {
+            if ($content instanceof ContentStreamCommand) {
+                if ($content->operator instanceof InteractsWithTextState) {
+                    $textState = $content->operator->applyToTextState($content->operands, $textState);
+                }
+
+                if ($content->operator instanceof InteractsWithTransformationMatrix) {
+                    $transformationMatrix = $content->operator->applyToTransformationMatrix($content->operands, $transformationMatrix);
+                }
+
+                continue;
+            }
+
+            $textMatrix = clone $transformationMatrix;
+            foreach ($content->contentStreamCommands as $contentStreamCommand) {
                 if ($contentStreamCommand->operator instanceof InteractsWithTextState) {
                     $textState = $contentStreamCommand->operator->applyToTextState($contentStreamCommand->operands, $textState);
                 }
 
-                if ($contentStreamCommand->operator instanceof InteractsWithTextMatrix) {
-                    $textMatrix = $contentStreamCommand->operator->applyToTextMatrix($contentStreamCommand->operands, $textMatrix);
+                if ($contentStreamCommand->operator instanceof InteractsWithTransformationMatrix) {
+                    $textMatrix = $contentStreamCommand->operator->applyToTransformationMatrix($contentStreamCommand->operands, $textMatrix);
                 }
 
                 if ($contentStreamCommand->operator instanceof ProducesPositionedTextElements
@@ -56,17 +69,26 @@ class ContentStream {
         $positionedTextElements = $this->getPositionedTextElements();
         usort(
             $positionedTextElements,
-            static function (PositionedTextElement $a, PositionedTextElement $b) {
-                if ($a->transformationMatrix->scaleY * $a->transformationMatrix->offsetY !== $b->transformationMatrix->scaleY * $b->transformationMatrix->offsetY) {
-                    return $a->transformationMatrix->scaleY * $a->transformationMatrix->offsetY <=> $b->transformationMatrix->scaleY * $b->transformationMatrix->offsetY;
+            static function (PositionedTextElement $a, PositionedTextElement $b): int {
+                if ($b->transformationMatrix->offsetY !== $a->transformationMatrix->offsetY) {
+                    return $a->transformationMatrix->scaleY < 0 && $b->transformationMatrix->scaleY < 0
+                        ? $a->transformationMatrix->offsetY <=> $b->transformationMatrix->offsetY
+                        : $b->transformationMatrix->offsetY <=> $a->transformationMatrix->offsetY;
                 }
 
-                return $a->transformationMatrix->scaleX * $a->transformationMatrix->offsetX <=> $b->transformationMatrix->scaleX * $b->transformationMatrix->offsetX;
+                return $a->transformationMatrix->offsetX <=> $b->transformationMatrix->offsetX;
             }
         );
 
         $text = '';
+        $previousOffsetY = null;
         foreach ($positionedTextElements as $positionedTextElement) {
+            $currentOffsetY = $positionedTextElement->transformationMatrix->scaleY * $positionedTextElement->transformationMatrix->offsetY;
+            if ($previousOffsetY !== null && $previousOffsetY !== $currentOffsetY) {
+                $text .= "\n";
+            }
+
+            $previousOffsetY = $currentOffsetY;
             $text .= $positionedTextElement->getText($document, $page->getFontDictionary());
         }
 

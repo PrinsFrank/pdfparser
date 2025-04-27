@@ -12,4 +12,16 @@ class TransformationMatrix {
         public readonly float $offsetY, // f
     ) {
     }
+
+    /** Please note that a concatenated transformation matrix of AB !== BA */
+    public function multiplyWith(self $other): self {
+        return new self(
+            $this->scaleX * $other->scaleX + $this->shearX * $other->shearY,
+            $this->scaleX * $other->shearX + $this->shearX * $other->scaleY,
+            $this->shearY * $other->scaleX + $this->scaleY * $other->shearY,
+            $this->shearY * $other->shearX + $this->scaleY * $other->scaleY,
+            $this->offsetX * $other->scaleX + $this->offsetY * $other->shearY + $other->offsetX,
+            $this->offsetX * $other->shearX + $this->offsetY * $other->scaleY + $other->offsetY,
+        );
+    }
 }

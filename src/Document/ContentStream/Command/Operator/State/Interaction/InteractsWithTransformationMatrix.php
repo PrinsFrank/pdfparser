@@ -4,6 +4,6 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Int
 
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 
-interface InteractsWithTextMatrix {
-    public function applyToTextMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix;
+interface InteractsWithTransformationMatrix {
+    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix;
 }

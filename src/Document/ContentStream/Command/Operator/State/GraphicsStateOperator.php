@@ -2,11 +2,12 @@
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 
-use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextMatrix;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @internal */
-enum GraphicsStateOperator: string implements InteractsWithTextMatrix {
+enum GraphicsStateOperator: string implements InteractsWithTransformationMatrix {
     case SaveCurrentStateToStack = 'q';
     case RestoreMostRecentStateFromStack = 'Q';
     case ModifyCurrentTransformationMatrix = 'cm';
@@ -19,8 +20,27 @@ enum GraphicsStateOperator: string implements InteractsWithTextMatrix {
     case SetFlatness = 'i';
     case SetDictName = 'gs';
 
-    public function applyToTextMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix
-    {
-        // TODO: Implement applyToTextMatrix() method.
+    /** @throws ParseFailureException */
+    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix {
+        if ($this === self::ModifyCurrentTransformationMatrix) {
+            $matrix = explode(' ', trim($operands));
+            if (count($matrix) !== 6) {
+                throw new ParseFailureException();
+            }
+
+            return $transformationMatrix
+                ->multiplyWith(
+                    new TransformationMatrix(
+                        (float) $matrix[0],
+                        (float) $matrix[1],
+                        (float) $matrix[2],
+                        (float) $matrix[3],
+                        (float) $matrix[4],
+                        (float) $matrix[5],
+                    )
+                );
+        }
+
+        return $transformationMatrix;
     }
 }
