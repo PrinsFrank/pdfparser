@@ -4,9 +4,9 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\Text\OperatorString;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextStateOperator;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
-use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\TextStateOperator;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 #[CoversClass(TextStateOperator::class)]

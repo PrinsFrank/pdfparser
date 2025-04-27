@@ -4,7 +4,7 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\Text\OperatorString;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\TextShowingOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextShowingOperator;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 #[CoversClass(TextShowingOperator::class)]

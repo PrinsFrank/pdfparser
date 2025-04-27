@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\ContentStream;
 
 use PrinsFrank\PdfParser\Document\ContentStream\Command\ContentStreamCommand;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextPositioningOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextShowingOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextStateOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
-use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\TextPositioningOperator;
-use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\TextShowingOperator;
-use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\TextStateOperator;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;

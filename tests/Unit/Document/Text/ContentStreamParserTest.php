@@ -7,14 +7,14 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\ContentStreamCommand;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\ColorOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\GraphicsStateOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextPositioningOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextShowingOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextStateOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
-use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\ColorOperator;
-use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\GraphicsStateOperator;
-use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\TextPositioningOperator;
-use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\TextShowingOperator;
-use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\TextStateOperator;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 #[CoversClass(ContentStreamParser::class)]
