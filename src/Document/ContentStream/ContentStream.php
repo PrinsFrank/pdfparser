@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\ContentStream;
 
 use PrinsFrank\PdfParser\Document\ContentStream\Command\ContentStreamCommand;
-use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextPositioningOperator;
-use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextShowingOperator;
-use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextStateOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextMatrix;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\ProducesPositionedTextElements;
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextMatrix;
 use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
-use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 /** @api */
@@ -26,40 +26,50 @@ class ContentStream {
         $this->content = $content;
     }
 
-    /** @throws PdfParserException */
-    public function getText(Document $document, Page $page): string {
-        $text = '';
-        $font = null;
+    /** @return list<PositionedTextElement> */
+    public function getPositionedTextElements(): array {
+        $positionedTextElements = [];
+        $textState = null; // See table 103, Tf operator for initial value
         foreach ($this->content as $content) {
-            $textObjectText = '';
-            if (!$content instanceof TextObject) {
-                continue;
-            }
-
-            foreach ($content->contentStreamCommands as $contentStreamCommand) {
-                if ($contentStreamCommand->operator instanceof TextPositioningOperator) {
-                    $textObjectText .= $contentStreamCommand->operator->display($contentStreamCommand->operands);
-                } elseif ($contentStreamCommand->operator instanceof TextShowingOperator) {
-                    if ($font === null) {
-                        throw new ParseFailureException('A font should be selected before being used');
-                    }
-
-                    $textObjectText .= $contentStreamCommand->operator->displayOperands($contentStreamCommand->operands, $font);
-                } elseif ($contentStreamCommand->operator === TextStateOperator::FONT_SIZE) {
-                    if (($fontDictionary = $page->getFontDictionary()) === null) {
-                        throw new ParseFailureException('No font dictionary available');
-                    }
-
-                    $font = $fontDictionary->getObjectForReference($document, $fontReference = $contentStreamCommand->operator->getFontReference($contentStreamCommand->operands), Font::class)
-                        ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $fontReference->value));
+            $textMatrix = new TextMatrix(1, 0, 0, 1, 0, 0); // See Table 106, Tm operator for initial value in text object
+            foreach (($content instanceof ContentStreamCommand ? [$content] : $content->contentStreamCommands) as $contentStreamCommand) {
+                if ($contentStreamCommand->operator instanceof InteractsWithTextState) {
+                    $textState = $contentStreamCommand->operator->applyToTextState($contentStreamCommand->operands, $textState);
                 }
-            }
 
-            if (trim($textObjectText) !== '') {
-                $text .= ' ' . trim($textObjectText);
+                if ($contentStreamCommand->operator instanceof InteractsWithTextMatrix) {
+                    $textMatrix = $contentStreamCommand->operator->applyToTextMatrix($contentStreamCommand->operands, $textMatrix);
+                }
+
+                if ($contentStreamCommand->operator instanceof ProducesPositionedTextElements
+                    && ($positionedTextElement = $contentStreamCommand->operator->getPositionedTextElement($contentStreamCommand->operands, $textMatrix, $textState)) !== null) {
+                    $positionedTextElements[] = $positionedTextElement;
+                }
             }
         }
 
-        return preg_replace('/\h+([.,!?])/', '$1', str_replace('  ', ' ', trim($text))) ?? throw new ParseFailureException();
+        return $positionedTextElements;
+    }
+
+    /** @throws PdfParserException */
+    public function getText(Document $document, Page $page): string {
+        $positionedTextElements = $this->getPositionedTextElements();
+        usort(
+            $positionedTextElements,
+            static function (PositionedTextElement $a, PositionedTextElement $b) {
+                if ($a->textMatrix->scaleY * $a->textMatrix->offsetY !== $b->textMatrix->scaleY * $b->textMatrix->offsetY) {
+                    return $a->textMatrix->scaleY * $a->textMatrix->offsetY <=> $b->textMatrix->scaleY * $b->textMatrix->offsetY;
+                }
+
+                return $a->textMatrix->scaleX * $a->textMatrix->offsetX <=> $b->textMatrix->scaleX * $b->textMatrix->offsetX;
+            }
+        );
+
+        $text = '';
+        foreach ($positionedTextElements as $positionedTextElement) {
+            $text .= $positionedTextElement->getText($document, $page->getFontDictionary());
+        }
+
+        return $text;
     }
 }
