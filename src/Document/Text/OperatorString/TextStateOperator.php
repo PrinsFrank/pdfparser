@@ -9,7 +9,7 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 /** @internal */
 enum TextStateOperator: string {
-    case CHAR_SIZE = 'Tc';
+    case CHAR_SPACE = 'Tc';
     case WORD_SPACE = 'Tw';
     case SCALE = 'Tz';
     case LEADING = 'TL';
