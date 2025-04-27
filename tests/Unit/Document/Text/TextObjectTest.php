@@ -4,9 +4,9 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\Text;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
-use PrinsFrank\PdfParser\Document\Text\TextObject;
-use PrinsFrank\PdfParser\Document\Text\ContentStreamCommand;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\ContentStreamCommand;
+use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
+use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\TextShowingOperator;
 
 #[CoversClass(TextObject::class)]
 class TextObjectTest extends TestCase {

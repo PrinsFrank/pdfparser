@@ -4,7 +4,7 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\Text\Encoding;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Document\Text\Encoding\WinAnsi;
+use PrinsFrank\PdfParser\Document\Encoding\WinAnsi;
 
 #[CoversClass(WinAnsi::class)]
 class WinAnsiTest extends TestCase {

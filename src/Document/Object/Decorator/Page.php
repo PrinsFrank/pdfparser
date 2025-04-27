@@ -4,8 +4,8 @@ namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Text\ContentStream;
-use PrinsFrank\PdfParser\Document\Text\ContentStreamParser;
+use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
+use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class Page extends DecoratedObject {

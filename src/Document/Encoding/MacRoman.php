@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Text\Encoding;
+namespace PrinsFrank\PdfParser\Document\Encoding;
 
 use Override;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;

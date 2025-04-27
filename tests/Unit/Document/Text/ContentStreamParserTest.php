@@ -6,15 +6,15 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\Text;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Document\Text\OperatorString\ColorOperator;
-use PrinsFrank\PdfParser\Document\Text\OperatorString\GraphicsStateOperator;
-use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
-use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
-use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
-use PrinsFrank\PdfParser\Document\Text\TextObject;
-use PrinsFrank\PdfParser\Document\Text\ContentStream;
-use PrinsFrank\PdfParser\Document\Text\ContentStreamCommand;
-use PrinsFrank\PdfParser\Document\Text\ContentStreamParser;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\ContentStreamCommand;
+use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
+use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
+use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
+use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\ColorOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\GraphicsStateOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\TextPositioningOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\TextShowingOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\OperatorString\TextStateOperator;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 #[CoversClass(ContentStreamParser::class)]

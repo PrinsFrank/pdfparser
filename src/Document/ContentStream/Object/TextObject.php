@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Text;
+namespace PrinsFrank\PdfParser\Document\ContentStream\Object;
+
+use PrinsFrank\PdfParser\Document\ContentStream\Command\ContentStreamCommand;
 
 /** @internal */
 class TextObject {
