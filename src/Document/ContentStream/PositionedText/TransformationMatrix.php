@@ -2,7 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
-class TextMatrix {
+class TransformationMatrix {
     public function __construct(
         public readonly float $scaleX,  // a
         public readonly float $shearX,  // b

@@ -6,7 +6,7 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\ProducesPositionedTextElements;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
-use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextMatrix;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 
 /** @internal */
@@ -38,7 +38,7 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
         return $textState;
     }
 
-    public function getPositionedTextElement(string $operands, TextMatrix $textMatrix, TextState $textState): ?PositionedTextElement {
-        return new PositionedTextElement($operands, $textMatrix, $textState);
+    public function getPositionedTextElement(string $operands, TransformationMatrix $transformationMatrix, TextState $textState): ?PositionedTextElement {
+        return new PositionedTextElement($operands, $transformationMatrix, $textState);
     }
 }

@@ -2,8 +2,11 @@
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextMatrix;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
+
 /** @internal */
-enum GraphicsStateOperator: string {
+enum GraphicsStateOperator: string implements InteractsWithTextMatrix {
     case SaveCurrentStateToStack = 'q';
     case RestoreMostRecentStateFromStack = 'Q';
     case ModifyCurrentTransformationMatrix = 'cm';
@@ -15,4 +18,9 @@ enum GraphicsStateOperator: string {
     case SetIntent = 'ri';
     case SetFlatness = 'i';
     case SetDictName = 'gs';
+
+    public function applyToTextMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix
+    {
+        // TODO: Implement applyToTextMatrix() method.
+    }
 }

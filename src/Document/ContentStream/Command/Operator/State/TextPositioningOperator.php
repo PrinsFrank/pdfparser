@@ -5,7 +5,7 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
-use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextMatrix;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 
 /** @internal */
@@ -15,20 +15,20 @@ enum TextPositioningOperator: string implements InteractsWithTextMatrix, Interac
     case SET_MATRIX = 'Tm';
     case NEXT_LINE = 'T*';
 
-    public function applyToTextMatrix(string $operands, TextMatrix $currentTextMatrix): TextMatrix {
+    public function applyToTextMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix {
         if ($this === self::MOVE_OFFSET || $this === self::MOVE_OFFSET_LEADING) {
             $offsets = explode(' ', trim($operands));
             if (count($offsets) !== 2) {
                 throw new \RuntimeException();
             }
 
-            return new TextMatrix(
-                $currentTextMatrix->scaleX,
-                $currentTextMatrix->shearX,
-                $currentTextMatrix->shearY,
-                $currentTextMatrix->scaleY,
-                $currentTextMatrix->offsetX + (float) $offsets[0],
-                $currentTextMatrix->offsetY + (float) $offsets[1],
+            return new TransformationMatrix(
+                $transformationMatrix->scaleX,
+                $transformationMatrix->shearX,
+                $transformationMatrix->shearY,
+                $transformationMatrix->scaleY,
+                $transformationMatrix->offsetX + (float) $offsets[0],
+                $transformationMatrix->offsetY + (float) $offsets[1],
             );
         }
 
@@ -38,16 +38,16 @@ enum TextPositioningOperator: string implements InteractsWithTextMatrix, Interac
                 throw new \RuntimeException();
             }
 
-            return new TextMatrix((float) $matrix[0], (float) $matrix[1], (float) $matrix[2], (float) $matrix[3], (float) $matrix[4], (float) $matrix[5]);
+            return new TransformationMatrix((float) $matrix[0], (float) $matrix[1], (float) $matrix[2], (float) $matrix[3], (float) $matrix[4], (float) $matrix[5]);
         }
 
-        return new TextMatrix(
-            $currentTextMatrix->scaleX,
-            $currentTextMatrix->shearX,
-            $currentTextMatrix->shearY,
-            $currentTextMatrix->scaleY,
+        return new TransformationMatrix(
+            $transformationMatrix->scaleX,
+            $transformationMatrix->shearX,
+            $transformationMatrix->shearY,
+            $transformationMatrix->scaleY,
             0,
-            $currentTextMatrix->offsetY,
+            $transformationMatrix->offsetY,
         );
     }
 

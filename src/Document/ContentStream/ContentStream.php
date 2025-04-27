@@ -9,7 +9,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interacti
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\ProducesPositionedTextElements;
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
-use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextMatrix;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -31,7 +31,7 @@ class ContentStream {
         $positionedTextElements = [];
         $textState = null; // See table 103, Tf operator for initial value
         foreach ($this->content as $content) {
-            $textMatrix = new TextMatrix(1, 0, 0, 1, 0, 0); // See Table 106, Tm operator for initial value in text object
+            $textMatrix = new TransformationMatrix(1, 0, 0, 1, 0, 0); // See Table 106, Tm operator for initial value in text object
             foreach (($content instanceof ContentStreamCommand ? [$content] : $content->contentStreamCommands) as $contentStreamCommand) {
                 if ($contentStreamCommand->operator instanceof InteractsWithTextState) {
                     $textState = $contentStreamCommand->operator->applyToTextState($contentStreamCommand->operands, $textState);
@@ -57,11 +57,11 @@ class ContentStream {
         usort(
             $positionedTextElements,
             static function (PositionedTextElement $a, PositionedTextElement $b) {
-                if ($a->textMatrix->scaleY * $a->textMatrix->offsetY !== $b->textMatrix->scaleY * $b->textMatrix->offsetY) {
-                    return $a->textMatrix->scaleY * $a->textMatrix->offsetY <=> $b->textMatrix->scaleY * $b->textMatrix->offsetY;
+                if ($a->transformationMatrix->scaleY * $a->transformationMatrix->offsetY !== $b->transformationMatrix->scaleY * $b->transformationMatrix->offsetY) {
+                    return $a->transformationMatrix->scaleY * $a->transformationMatrix->offsetY <=> $b->transformationMatrix->scaleY * $b->transformationMatrix->offsetY;
                 }
 
-                return $a->textMatrix->scaleX * $a->textMatrix->offsetX <=> $b->textMatrix->scaleX * $b->textMatrix->offsetX;
+                return $a->transformationMatrix->scaleX * $a->transformationMatrix->offsetX <=> $b->transformationMatrix->scaleX * $b->transformationMatrix->offsetX;
             }
         );
 
