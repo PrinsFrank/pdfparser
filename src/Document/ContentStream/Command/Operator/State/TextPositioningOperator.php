@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interacti
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @internal */
 enum TextPositioningOperator: string implements InteractsWithTransformationMatrix, InteractsWithTextState {
@@ -19,44 +20,34 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
         if ($this === self::MOVE_OFFSET || $this === self::MOVE_OFFSET_LEADING) {
             $offsets = explode(' ', trim($operands));
             if (count($offsets) !== 2) {
-                throw new \RuntimeException();
+                throw new ParseFailureException();
             }
 
-            return new TransformationMatrix(
-                $transformationMatrix->scaleX,
-                $transformationMatrix->shearX,
-                $transformationMatrix->shearY,
-                $transformationMatrix->scaleY,
-                $transformationMatrix->offsetX + (float) $offsets[0],
-                $transformationMatrix->offsetY + (float) $offsets[1],
+            return $transformationMatrix->multiplyWith(
+                new TransformationMatrix(1, 0, 0, 1, (float) $offsets[0], (float) $offsets[1])
             );
         }
 
         if ($this === self::SET_MATRIX) {
             $matrix = explode(' ', trim($operands));
             if (count($matrix) !== 6) {
-                throw new \RuntimeException();
+                throw new ParseFailureException();
             }
 
             return $transformationMatrix->multiplyWith(
-                new TransformationMatrix(
-                    (float) $matrix[0],
-                    (float) $matrix[1],
-                    (float) $matrix[2],
-                    (float) $matrix[3],
-                    (float) $matrix[4],
-                    (float) $matrix[5],
-                )
+                new TransformationMatrix((float) $matrix[0], (float) $matrix[1], (float) $matrix[2], (float) $matrix[3], (float) $matrix[4], (float) $matrix[5],)
             );
         }
 
-        return new TransformationMatrix(
-            $transformationMatrix->scaleX,
-            $transformationMatrix->shearX,
-            $transformationMatrix->shearY,
-            $transformationMatrix->scaleY,
-            0,
-            $transformationMatrix->offsetY,
+        return $transformationMatrix->multiplyWith(
+            new TransformationMatrix(
+                $transformationMatrix->scaleX,
+                $transformationMatrix->shearX,
+                $transformationMatrix->shearY,
+                $transformationMatrix->scaleY,
+                0,
+                $transformationMatrix->offsetY,
+            )
         );
     }
 
