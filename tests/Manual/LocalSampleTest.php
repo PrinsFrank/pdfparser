@@ -16,7 +16,6 @@ class LocalSampleTest extends TestCase {
             ->parseFile($path);
 
         var_dump($document->getText());
-        $this->addToAssertionCount(1);
     }
 
     /** @return iterable<string, array{0: string}> */

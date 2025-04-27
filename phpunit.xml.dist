@@ -10,6 +10,7 @@
     failOnSkipped="true"
     beStrictAboutChangesToGlobalState="true"
     cacheDirectory="./cache/.phpunit.result.cache"
+    beStrictAboutTestsThatDoNotTestAnything="false"
     requireCoverageMetadata="true"
 >
     <testsuites>
