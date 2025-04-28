@@ -54,9 +54,8 @@ class ContentStream {
                     $textMatrix = $contentStreamCommand->operator->applyToTransformationMatrix($contentStreamCommand->operands, $textMatrix);
                 }
 
-                if ($contentStreamCommand->operator instanceof ProducesPositionedTextElements
-                    && ($positionedTextElement = $contentStreamCommand->operator->getPositionedTextElement($contentStreamCommand->operands, $textMatrix, $transformationMatrix, $textState)) !== null) {
-                    $positionedTextElements[] = $positionedTextElement;
+                if ($contentStreamCommand->operator instanceof ProducesPositionedTextElements) {
+                    $positionedTextElements[] = $contentStreamCommand->operator->getPositionedTextElement($contentStreamCommand->operands, $textMatrix, $transformationMatrix, $textState);
                 }
             }
         }

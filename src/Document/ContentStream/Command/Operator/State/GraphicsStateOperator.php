@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 
+use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -21,6 +22,7 @@ enum GraphicsStateOperator: string implements InteractsWithTransformationMatrix 
     case SetDictName = 'gs';
 
     /** @throws ParseFailureException */
+    #[Override]
     public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix {
         if ($this === self::ModifyCurrentTransformationMatrix) {
             $matrix = explode(' ', trim($operands));

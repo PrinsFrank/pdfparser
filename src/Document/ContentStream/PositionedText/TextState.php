@@ -8,8 +8,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey
 class TextState {
     /** @param int<0, 100> $scale */
     public function __construct(
-        public readonly DictionaryKey|ExtendedDictionaryKey $fontName, // Tf
-        public readonly float $fontSize,    // Tfs
+        public readonly DictionaryKey|ExtendedDictionaryKey|null $fontName, // Tf
+        public readonly ?float $fontSize,    // Tfs
         public float $charSpace = 0,      // Tc
         public float $wordSpace = 0,      // Tw
         public int $scale = 100,          // Th

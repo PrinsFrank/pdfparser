@@ -11,19 +11,22 @@ class PositionedTextElement {
     public function __construct(
         public readonly string               $rawTextContent,
         public readonly TransformationMatrix $absoluteMatrix,
-        public readonly TextState            $textState,
+        public readonly ?TextState           $textState,
     ) {
     }
 
-    public function getText(Document $document, Dictionary $fontDictionary): string {
+    public function getText(Document $document, ?Dictionary $fontDictionary): string {
         if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $this->rawTextContent, $matches, PREG_SET_ORDER)) === false) {
             throw new ParseFailureException(sprintf('Error with regex'));
         } elseif ($result === 0) {
             throw new ParseFailureException(sprintf('Operands "%s" is not in a recognized format', $this->rawTextContent));
         }
 
-        $font = $fontDictionary->getObjectForReference($document, $this->textState->fontName, Font::class)
-            ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $this->textState->fontName->value));
+        $font = null;
+        if ($this->textState !== null && ($fontName = $this->textState->fontName) !== null) {
+            $font = $fontDictionary?->getObjectForReference($document, $fontName, Font::class)
+                ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $fontName->value));
+        }
         $string = '';
         foreach ($matches as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 
+use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
@@ -16,6 +17,8 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
     case SET_MATRIX = 'Tm';
     case NEXT_LINE = 'T*';
 
+    /** @throws ParseFailureException */
+    #[Override]
     public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix {
         if ($this === self::MOVE_OFFSET || $this === self::MOVE_OFFSET_LEADING) {
             $offsets = explode(' ', trim($operands));
@@ -45,16 +48,18 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
         return $transformationMatrix;
     }
 
+    /** @throws ParseFailureException */
+    #[Override]
     public function applyToTextState(string $operands, ?TextState $textState): ?TextState {
         if ($this === self::MOVE_OFFSET_LEADING) {
             $offsets = explode(' ', trim($operands));
             if (count($offsets) !== 2) {
-                throw new \RuntimeException();
+                throw new ParseFailureException();
             }
 
             return new TextState(
-                $textState->fontName,
-                $textState->fontSize,
+                $textState->fontName ?? null,
+                $textState->fontSize ?? null,
                 $textState->charSpace ?? 0,
                 $textState->wordSpace ?? 0,
                 $textState->scale ?? 100,

@@ -7,5 +7,5 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMat
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 
 interface ProducesPositionedTextElements {
-    public function getPositionedTextElement(string $operands, TransformationMatrix $textMatrix, TransformationMatrix $globalTransformationMatrix, TextState $textState): ?PositionedTextElement;
+    public function getPositionedTextElement(string $operands, TransformationMatrix $textMatrix, TransformationMatrix $globalTransformationMatrix, ?TextState $textState): PositionedTextElement;
 }

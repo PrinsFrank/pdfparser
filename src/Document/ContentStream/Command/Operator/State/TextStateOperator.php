@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 
+use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @internal */
 enum TextStateOperator: string implements InteractsWithTextState {
@@ -19,11 +21,13 @@ enum TextStateOperator: string implements InteractsWithTextState {
     case RENDER = 'Tr';
     case RISE = 'Ts';
 
-    public function applyToTextState(string $operands, ?TextState $textState): ?TextState {
+    /** @throws ParseFailureException|InvalidArgumentException */
+    #[Override]
+    public function applyToTextState(string $operands, ?TextState $textState): TextState {
         if ($this === self::CHAR_SPACE) {
             return new TextState(
-                $textState->fontName,
-                $textState->fontSize,
+                $textState->fontName ?? null,
+                $textState->fontSize ?? null,
                 (float) $operands,
                 $textState->wordSpace ?? 0,
                 $textState->scale ?? 100,
@@ -35,8 +39,8 @@ enum TextStateOperator: string implements InteractsWithTextState {
 
         if ($this === self::WORD_SPACE) {
             return new TextState(
-                $textState->fontName,
-                $textState->fontSize,
+                $textState->fontName ?? null,
+                $textState->fontSize ?? null,
                 $textState->charSpace ?? 0,
                 (float) $operands,
                 $textState->scale ?? 100,
@@ -47,12 +51,17 @@ enum TextStateOperator: string implements InteractsWithTextState {
         }
 
         if ($this === self::SCALE) {
+            $scale = (int) $operands;
+            if ($scale < 0 || $scale > 100) {
+                throw new ParseFailureException();
+            }
+
             return new TextState(
-                $textState->fontName,
-                $textState->fontSize,
+                $textState->fontName ?? null,
+                $textState->fontSize ?? null,
                 $textState->charSpace ?? 0,
                 $textState->wordSpace ?? 0,
-                (int) $operands,
+                $scale,
                 $textState->leading ?? 0,
                 $textState->render ?? 0,
                 $textState->rise ?? 0,
@@ -61,8 +70,8 @@ enum TextStateOperator: string implements InteractsWithTextState {
 
         if ($this === self::LEADING) {
             return new TextState(
-                $textState->fontName,
-                $textState->fontSize,
+                $textState->fontName ?? null,
+                $textState->fontSize ?? null,
                 $textState->charSpace ?? 0,
                 $textState->wordSpace ?? 0,
                 $textState->scale ?? 100,
@@ -91,8 +100,8 @@ enum TextStateOperator: string implements InteractsWithTextState {
 
         if ($this === self::RENDER) {
             return new TextState(
-                $textState->fontName,
-                $textState->fontSize,
+                $textState->fontName ?? null,
+                $textState->fontSize ?? null,
                 $textState->charSpace ?? 0,
                 $textState->wordSpace ?? 0,
                 $textState->scale ?? 100,
@@ -103,8 +112,8 @@ enum TextStateOperator: string implements InteractsWithTextState {
         }
 
         return new TextState(
-            $textState->fontName,
-            $textState->fontSize,
+            $textState->fontName ?? null,
+            $textState->fontSize ?? null,
             $textState->charSpace ?? 0,
             $textState->wordSpace ?? 0,
             $textState->scale ?? 100,

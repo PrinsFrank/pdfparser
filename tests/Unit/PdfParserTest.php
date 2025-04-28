@@ -12,7 +12,7 @@ class PdfParserTest extends TestCase {
     public function testParseStringInMemory(): void {
         static::assertNotFalse($fileContent = file_get_contents(dirname(__DIR__) . '/Feature/samples/h3-simple-string.pdf'));
         static::assertSame(
-            'Hello World',
+            ' Hello World ',
             (new PdfParser())
                 ->parseString(
                     $fileContent
@@ -23,7 +23,7 @@ class PdfParserTest extends TestCase {
     public function testParseStringWithFileCache(): void {
         static::assertNotFalse($fileContent = file_get_contents(dirname(__DIR__) . '/Feature/samples/h3-simple-string.pdf'));
         static::assertSame(
-            'Hello World',
+            ' Hello World ',
             (new PdfParser())
                 ->parseString(
                     $fileContent,
@@ -34,7 +34,7 @@ class PdfParserTest extends TestCase {
 
     public function testParseFileInMemory(): void {
         static::assertSame(
-            'Hello World',
+            ' Hello World ',
             (new PdfParser())
                 ->parseFile(
                     dirname(__DIR__) . '/Feature/samples/h3-simple-string.pdf'
@@ -45,7 +45,7 @@ class PdfParserTest extends TestCase {
 
     public function testParseFileWithoutMemoryStream(): void {
         static::assertSame(
-            'Hello World',
+            ' Hello World ',
             (new PdfParser())
                 ->parseFile(
                     dirname(__DIR__) . '/Feature/samples/h3-simple-string.pdf',
