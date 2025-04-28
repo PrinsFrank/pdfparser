@@ -13,7 +13,7 @@ class TransformationMatrix {
     ) {
     }
 
-    /** Please note that a concatenated transformation matrix of AB !== BA */
+    /** Please note that a concatenated transformation matrix of A B !== B A */
     public function multiplyWith(self $other): self {
         return new self(
             $this->scaleX * $other->scaleX + $this->shearX * $other->shearY,
