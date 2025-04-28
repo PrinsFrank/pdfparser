@@ -23,8 +23,13 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
                 throw new ParseFailureException();
             }
 
-            return $transformationMatrix->multiplyWith(
-                new TransformationMatrix(1, 0, 0, 1, (float) $offsets[0], (float) $offsets[1])
+            return new TransformationMatrix(
+                $transformationMatrix->scaleX,
+                $transformationMatrix->shearX,
+                $transformationMatrix->shearY,
+                $transformationMatrix->scaleY,
+                $transformationMatrix->offsetX + (float) $offsets[0],
+                $transformationMatrix->offsetY + (float) $offsets[1]
             );
         }
 
@@ -34,21 +39,10 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
                 throw new ParseFailureException();
             }
 
-            return $transformationMatrix->multiplyWith(
-                new TransformationMatrix((float) $matrix[0], (float) $matrix[1], (float) $matrix[2], (float) $matrix[3], (float) $matrix[4], (float) $matrix[5],)
-            );
+            return new TransformationMatrix((float) $matrix[0], (float) $matrix[1], (float) $matrix[2], (float) $matrix[3], (float) $matrix[4], (float) $matrix[5]);
         }
 
-        return $transformationMatrix->multiplyWith(
-            new TransformationMatrix(
-                $transformationMatrix->scaleX,
-                $transformationMatrix->shearX,
-                $transformationMatrix->shearY,
-                $transformationMatrix->scaleY,
-                0,
-                $transformationMatrix->offsetY,
-            )
-        );
+        return $transformationMatrix;
     }
 
     public function applyToTextState(string $operands, ?TextState $textState): ?TextState {
