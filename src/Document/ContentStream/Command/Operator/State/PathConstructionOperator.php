@@ -1,8 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Path\Operator;
+namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 
-/** @internal */
+/**
+ * @internal
+ *
+ * @specification Table 58 - Path construction operators
+ */
 enum PathConstructionOperator: string {
     case MOVE = 'm';
     case LINE = 'l';

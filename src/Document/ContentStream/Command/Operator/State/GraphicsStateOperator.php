@@ -7,7 +7,11 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interacti
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
-/** @internal */
+/**
+ * @internal
+ *
+ * @specification table 56 - Graphics state operators
+ */
 enum GraphicsStateOperator: string implements InteractsWithTransformationMatrix {
     case SaveCurrentStateToStack = 'q';
     case RestoreMostRecentStateFromStack = 'Q';

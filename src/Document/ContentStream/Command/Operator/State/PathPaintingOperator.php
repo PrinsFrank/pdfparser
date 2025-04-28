@@ -1,8 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Path\Operator;
+namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 
-/** @internal */
+/**
+ * @internal
+ *
+ * @specification Table 59 - Path-painting operators
+ */
 enum PathPaintingOperator: string {
     case STROKE = 'S';
     case CLOSE_STROKE = 's';
