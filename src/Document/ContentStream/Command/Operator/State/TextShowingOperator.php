@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interacti
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @internal */
 enum TextShowingOperator: string implements InteractsWithTextState, ProducesPositionedTextElements {
@@ -16,11 +17,12 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
     case MOVE_SHOW_SPACING = '"';
     case SHOW_ARRAY = 'TJ';
 
+    /** @throws ParseFailureException */
     public function applyToTextState(string $operands, ?TextState $textState): ?TextState {
         if ($this === self::MOVE_SHOW_SPACING) {
             $spacing = explode(' ', trim($operands));
             if (count($spacing) !== 2) {
-                throw new \RuntimeException();
+                throw new ParseFailureException();
             }
 
             return new TextState(
@@ -38,7 +40,11 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
         return $textState;
     }
 
-    public function getPositionedTextElement(string $operands, TransformationMatrix $transformationMatrix, TextState $textState): ?PositionedTextElement {
-        return new PositionedTextElement($operands, $transformationMatrix, $textState);
+    public function getPositionedTextElement(string $operands, TransformationMatrix $textMatrix, TransformationMatrix $globalTransformationMatrix, TextState $textState): ?PositionedTextElement {
+        return new PositionedTextElement(
+            $operands,
+            $globalTransformationMatrix->multiplyWith($textMatrix),
+            $textState
+        );
     }
 }

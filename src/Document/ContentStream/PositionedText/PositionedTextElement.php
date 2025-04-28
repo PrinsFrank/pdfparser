@@ -10,7 +10,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 class PositionedTextElement {
     public function __construct(
         public readonly string               $rawTextContent,
-        public readonly TransformationMatrix $transformationMatrix,
+        public readonly TransformationMatrix $absoluteMatrix,
         public readonly TextState            $textState,
     ) {
     }

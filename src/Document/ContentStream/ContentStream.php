@@ -44,7 +44,7 @@ class ContentStream {
                 continue;
             }
 
-            $textMatrix = clone $transformationMatrix;
+            $textMatrix = new TransformationMatrix(1, 0, 0, 1, 0, 0); // See Table 106, Tm operator for initial value in text object
             foreach ($content->contentStreamCommands as $contentStreamCommand) {
                 if ($contentStreamCommand->operator instanceof InteractsWithTextState) {
                     $textState = $contentStreamCommand->operator->applyToTextState($contentStreamCommand->operands, $textState);
@@ -55,7 +55,7 @@ class ContentStream {
                 }
 
                 if ($contentStreamCommand->operator instanceof ProducesPositionedTextElements
-                    && ($positionedTextElement = $contentStreamCommand->operator->getPositionedTextElement($contentStreamCommand->operands, $textMatrix, $textState)) !== null) {
+                    && ($positionedTextElement = $contentStreamCommand->operator->getPositionedTextElement($contentStreamCommand->operands, $textMatrix, $transformationMatrix, $textState)) !== null) {
                     $positionedTextElements[] = $positionedTextElement;
                 }
             }
