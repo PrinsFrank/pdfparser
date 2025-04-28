@@ -70,20 +70,18 @@ class ContentStream {
         usort(
             $positionedTextElements,
             static function (PositionedTextElement $a, PositionedTextElement $b): int {
-                if ($b->transformationMatrix->offsetY !== $a->transformationMatrix->offsetY) {
-                    return $a->transformationMatrix->scaleY < 0 && $b->transformationMatrix->scaleY < 0
-                        ? $a->transformationMatrix->offsetY <=> $b->transformationMatrix->offsetY
-                        : $b->transformationMatrix->offsetY <=> $a->transformationMatrix->offsetY;
+                if (($differenceY = $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY) !== 0) {
+                    return $differenceY;
                 }
 
-                return $a->transformationMatrix->offsetX <=> $b->transformationMatrix->offsetX;
+                return $a->absoluteMatrix->offsetX <=> $b->absoluteMatrix->offsetX;
             }
         );
 
         $text = '';
         $previousOffsetY = null;
         foreach ($positionedTextElements as $positionedTextElement) {
-            $currentOffsetY = $positionedTextElement->transformationMatrix->scaleY * $positionedTextElement->transformationMatrix->offsetY;
+            $currentOffsetY = $positionedTextElement->absoluteMatrix->offsetY;
             if ($previousOffsetY !== null && $previousOffsetY !== $currentOffsetY) {
                 $text .= "\n";
             }
