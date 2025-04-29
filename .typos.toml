@@ -1,5 +1,11 @@
+[files]
+extend-exclude = [
+    ".git/",
+]
+ignore-hidden = false
+
 [default.extend-words]
-"Flate" = "Flate"
-"Fo" = "Fo"
-"Parms" = "Parms"
-"Paeth" = "Paeth"
+"flate" = "flate"
+"fo" = "fo"
+"paeth" = "paeth"
+"parms" = "parms"
