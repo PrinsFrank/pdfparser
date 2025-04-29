@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\ContentStream;
 
 use PrinsFrank\PdfParser\Document\ContentStream\Command\ContentStreamCommand;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\GraphicsStateOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\ProducesPositionedTextElements;
@@ -12,6 +13,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextEle
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 /** @api */
@@ -28,23 +30,24 @@ class ContentStream {
 
     /** @return list<PositionedTextElement> */
     public function getPositionedTextElements(): array {
-        $positionedTextElements = [];
+        $positionedTextElements = $transformationStateStack = [];
         $textState = null; // See table 103, Tf operator for initial value
-        $transformationMatrix = new TransformationMatrix(1, 0, 0, 1, 0, 0); // See Table 106, Tm operator for initial value in text object
+        $transformationMatrix = new TransformationMatrix(1, 0, 0, 1, 0, 0); // Identity matrix
         foreach ($this->content as $content) {
             if ($content instanceof ContentStreamCommand) {
-                if ($content->operator instanceof InteractsWithTextState) {
-                    $textState = $content->operator->applyToTextState($content->operands, $textState);
-                }
-
-                if ($content->operator instanceof InteractsWithTransformationMatrix) {
+                if ($content->operator === GraphicsStateOperator::SaveCurrentStateToStack) {
+                    $transformationStateStack[] = clone $transformationMatrix;;
+                } else if ($content->operator === GraphicsStateOperator::RestoreMostRecentStateFromStack) {
+                    $transformationMatrix = array_pop($transformationStateStack)
+                        ?? throw new ParseFailureException();
+                } elseif ($content->operator instanceof InteractsWithTransformationMatrix) {
                     $transformationMatrix = $content->operator->applyToTransformationMatrix($content->operands, $transformationMatrix);
                 }
 
                 continue;
             }
 
-            $textMatrix = new TransformationMatrix(1, 0, 0, 1, 0, 0); // See Table 106, Tm operator for initial value in text object
+            $textMatrix = new TransformationMatrix(1, 0, 0, 1, 0, 0); // Identity matrix, See Table 106, Tm operator for initial value in text object
             foreach ($content->contentStreamCommands as $contentStreamCommand) {
                 if ($contentStreamCommand->operator instanceof InteractsWithTextState) {
                     $textState = $contentStreamCommand->operator->applyToTextState($contentStreamCommand->operands, $textState);
