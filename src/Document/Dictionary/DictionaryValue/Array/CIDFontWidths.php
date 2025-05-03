@@ -18,7 +18,7 @@ class CIDFontWidths implements DictionaryValue {
         $this->widths = $widths;
     }
 
-    public function getWidthForCharacterCode(int $characterCode): ?float {
+    public function getWidthForCharacter(int $characterCode): ?float {
         foreach ($this->widths as $widthItem) {
             if (($widthForCharacterCode = $widthItem->getWidthForCharacterCode($characterCode)) !== null) {
                 return $widthForCharacterCode;

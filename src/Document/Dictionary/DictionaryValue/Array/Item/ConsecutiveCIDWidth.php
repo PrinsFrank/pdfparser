@@ -11,6 +11,10 @@ class ConsecutiveCIDWidth {
     }
 
     public function getWidthForCharacterCode(int $characterCode): ?float {
-        return $this->widths[$characterCode - $this->cidStart] ?? null;
+        if (array_key_exists($characterCode - $this->cidStart, $this->widths) === false) {
+            return null;
+        }
+
+        return $this->widths[$characterCode - $this->cidStart] / 1000;
     }
 }

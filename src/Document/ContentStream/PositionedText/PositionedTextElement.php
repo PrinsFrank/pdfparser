@@ -15,18 +15,13 @@ class PositionedTextElement {
     ) {
     }
 
-    public function getText(Document $document, ?Dictionary $fontDictionary): string {
+    public function getText(?Font $font): string {
         if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $this->rawTextContent, $matches, PREG_SET_ORDER)) === false) {
             throw new ParseFailureException(sprintf('Error with regex'));
         } elseif ($result === 0) {
             throw new ParseFailureException(sprintf('Operands "%s" is not in a recognized format', $this->rawTextContent));
         }
 
-        $font = null;
-        if ($this->textState !== null && ($fontName = $this->textState->fontName) !== null) {
-            $font = $fontDictionary?->getObjectForReference($document, $fontName, Font::class)
-                ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $fontName->value));
-        }
         $string = '';
         foreach ($matches as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
@@ -54,5 +49,34 @@ class PositionedTextElement {
         }
 
         return $string;
+    }
+
+    /** @return list<int> */
+    public function getCodePoints(): array {
+        $codePoints = [];
+        if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $this->rawTextContent, $matches, PREG_SET_ORDER)) === false) {
+            throw new ParseFailureException(sprintf('Error with regex'));
+        } elseif ($result === 0) {
+            throw new ParseFailureException(sprintf('Operands "%s" is not in a recognized format', $this->rawTextContent));
+        }
+
+        foreach ($matches as $match) {
+            if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
+                $chars = str_replace(['\(', '\)', '\n', '\r'], ['(', ')', "\n", "\r"], substr($match['chars'], 1, -1));
+                $chars = preg_replace_callback('/\\\\([0-7]{3})/', fn (array $matches) => mb_chr((int) octdec($matches[1])), $chars)
+                    ?? throw new ParseFailureException();
+                foreach (mb_str_split($chars) as $char) {
+                    $codePoints[] = ord($char);
+                }
+            } elseif (str_starts_with($match['chars'], '<') && str_ends_with($match['chars'], '>')) {
+                foreach (str_split(substr($match['chars'], 1, -1), 4) as $char) {
+                    $codePoints[] = hexdec($char);
+                }
+            } else {
+                throw new ParseFailureException(sprintf('Unrecognized character group format "%s"', $match['chars']));
+            }
+        }
+
+        return $codePoints;
     }
 }

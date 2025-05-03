@@ -15,6 +15,6 @@ class RangeCIDWidth {
             return null;
         }
 
-        return $this->width;
+        return $this->width / 1000;
     }
 }
