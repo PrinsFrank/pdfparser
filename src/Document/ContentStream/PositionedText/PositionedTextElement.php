@@ -2,12 +2,13 @@
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
-use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class PositionedTextElement {
+    private readonly string $text;
+
     public function __construct(
         public readonly string               $rawTextContent,
         public readonly TransformationMatrix $absoluteMatrix,
@@ -15,18 +16,17 @@ class PositionedTextElement {
     ) {
     }
 
-    public function getText(Document $document, ?Dictionary $fontDictionary): string {
+    public function getText(Document $document, ?Font $font): string {
+        if (isset($this->text)) {
+            return $this->text;
+        }
+
         if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $this->rawTextContent, $matches, PREG_SET_ORDER)) === false) {
             throw new ParseFailureException(sprintf('Error with regex'));
         } elseif ($result === 0) {
             throw new ParseFailureException(sprintf('Operands "%s" is not in a recognized format', $this->rawTextContent));
         }
 
-        $font = null;
-        if ($this->textState !== null && ($fontName = $this->textState->fontName) !== null) {
-            $font = $fontDictionary?->getObjectForReference($document, $fontName, Font::class)
-                ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $fontName->value));
-        }
         $string = '';
         foreach ($matches as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
@@ -53,6 +53,12 @@ class PositionedTextElement {
             }
         }
 
-        return $string;
+        return $this->text = $string;
+    }
+
+    public function getEndOffsetX(Document $document, ?Font $font, float $fontSize): float {
+        $nrOfCharacters = mb_strlen($this->getText($document, $font));
+
+        return $this->absoluteMatrix->offsetX + ($nrOfCharacters * $fontSize * 0.55);
     }
 }

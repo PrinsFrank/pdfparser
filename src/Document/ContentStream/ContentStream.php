@@ -12,6 +12,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -81,13 +82,25 @@ class ContentStream {
         );
 
         $text = '';
-        $previousPositionedTextElement = null;
+        $previousPositionedTextElement = $font = null;
         foreach ($positionedTextElements as $positionedTextElement) {
-            if ($previousPositionedTextElement !== null && $previousPositionedTextElement->absoluteMatrix->offsetY !== $positionedTextElement->absoluteMatrix->offsetY) {
-                $text .= "\n";
+            if ($positionedTextElement->textState !== null && ($fontName = $positionedTextElement->textState->fontName) !== null) {
+                $font = $page->getFontDictionary()->getObjectForReference($document, $fontName, Font::class)
+                    ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $fontName->value));
             }
 
-            $text .= $positionedTextElement->getText($document, $page->getFontDictionary());
+            if ($previousPositionedTextElement !== null) {
+                if ($previousPositionedTextElement->absoluteMatrix->offsetY !== $positionedTextElement->absoluteMatrix->offsetY) {
+                    $text .= "\n";
+                }
+
+                echo 'OffsetX: ' . $positionedTextElement->absoluteMatrix->offsetX . 'End of previous element offsetX' . $previousPositionedTextElement->getEndOffsetX($document, $font, $previousPositionedTextElement->textState->fontSize) . 'Threshold: ' . (($previousPositionedTextElement->textState->fontSize ?? 10) * 0.25) . PHP_EOL;
+                if ($positionedTextElement->absoluteMatrix->offsetX - $previousPositionedTextElement->getEndOffsetX($document, $font, $previousPositionedTextElement->textState->fontSize) > ($previousPositionedTextElement->textState->fontSize ?? 10) * 0.25) {
+                    $text .= " ";
+                }
+            }
+
+            $text .= $positionedTextElement->getText($document, $font);
             $previousPositionedTextElement = $positionedTextElement;
         }
 

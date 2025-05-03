@@ -13,6 +13,57 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey
 
 #[CoversClass(ContentStream::class)]
 class ContentStreamTest extends TestCase {
+    public function testGetPositionedTextElementsWithTextWidths(): void {
+        $textObjectString = <<<EOD
+            1 0 0 -1 0 842 cm
+            q
+            .75 0 0 .75 0 0 cm
+            1 1 1 RG 1 1 1 rg
+            /G3 gs
+            0 0 794 1123 re
+            f
+            Q
+            q
+            .75 0 0 .75 72 72 cm
+            0 0 0 RG 0 0 0 rg
+            /G3 gs
+            BT
+            /F4 14.666667 Tf
+            1 0 0 -1 0 .47981739 Tm
+            0 -13.2773438 Td <002B> Tj
+            10.5842743 0 Td <0048> Tj
+            8.1511078 0 Td <004F> Tj
+            3.2561493 0 Td <004F> Tj
+            3.2561493 0 Td <0052> Tj
+            ET
+            BT
+            /F4 14.666667 Tf
+            1 0 0 -1 37.470764 .47981739 Tm
+            0 -13.2773438 Td <005A> Tj
+            10.5842743 0 Td <0052> Tj
+            8.1511078 0 Td <0055> Tj
+            4.8806458 0 Td <004F> Tj
+            3.2561493 0 Td <0047> Tj
+            ET
+            Q
+        EOD;
+        static::assertEquals(
+            [
+                new PositionedTextElement('<002B>', new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, -716.29752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0048>', new TransformationMatrix(0.75, 0, 0, 0.75, 82.5842743, -716.29752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<004F>', new TransformationMatrix(0.75, 0, 0, 0.75, 90.73538210000001, -716.29752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<004F>', new TransformationMatrix(0.75, 0, 0, 0.75, 93.9915314, -716.29752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0052>', new TransformationMatrix(0.75, 0, 0, 0.75, 97.2476807, -716.29752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<005A>', new TransformationMatrix(0.75, 0, 0, 0.75, 109.470764, -716.29752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0052>', new TransformationMatrix(0.75, 0, 0, 0.75, 120.0550383, -716.29752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0055>', new TransformationMatrix(0.75, 0, 0, 0.75, 128.2061461, -716.29752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<004F>', new TransformationMatrix(0.75, 0, 0, 0.75, 133.0867919, -716.29752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement('<0047>', new TransformationMatrix(0.75, 0, 0, 0.75, 136.3429412, -716.29752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+            ],
+            ContentStreamParser::parse($textObjectString)->getPositionedTextElements(),
+        );
+    }
+
     public function testGetPositionedTextElements(): void {
         $textObjectString = <<<EOD
             1 0 0 -1 0 842 cm
