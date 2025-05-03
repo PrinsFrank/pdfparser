@@ -125,14 +125,15 @@ class Font extends DecoratedObject {
         }
 
         if ($valueType === ReferenceValue::class) {
+            $descendantFontsReference = $this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValue::class) ?? throw new ParseFailureException();
             return [
-                $this->document->getObject($this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValue::class)->objectNumber, Font::class)
-                    ?? throw new ParseFailureException(sprintf('Descendant font with number %d could not be found', $this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValue::class)->objectNumber)),
+                $this->document->getObject($descendantFontsReference->objectNumber, Font::class)
+                    ?? throw new ParseFailureException(sprintf('Descendant font with number %d could not be found', $descendantFontsReference->objectNumber)),
             ];
         }
 
         if ($valueType === DictionaryArrayValue::class) {
-            return $this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, DictionaryArrayValue::class)->dictionaries;
+            return $this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, DictionaryArrayValue::class)->dictionaries ?? throw new ParseFailureException();
         }
 
         $descendantFonts = [];
@@ -160,11 +161,11 @@ class Font extends DecoratedObject {
 
         foreach ($this->getDescendantFonts() as $descendantFont) {
             if ($descendantFont instanceof Dictionary && $descendantFont->getTypeForKey(DictionaryKey::W) === ReferenceValue::class) {
-                $descendantFont = $this->document->getObject($descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class)->objectNumber, Font::class);
+                $descendantFont = $this->document->getObject($descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class)->objectNumber ?? throw new ParseFailureException(), Font::class) ?? throw new ParseFailureException();
             }
 
-            if ($descendantFont instanceof Font && ($descendantFontDefaultWidth = $descendantFont->getDefaultWidth()) !== null) {
-                return $descendantFontDefaultWidth;
+            if ($descendantFont instanceof Font) {
+                return $descendantFont->getDefaultWidth();
             }
         }
 
@@ -175,7 +176,8 @@ class Font extends DecoratedObject {
     public function getWidths(): CIDFontWidths|FontWidths|null {
         if ($this->isCIDFont()) {
             if ($this->getDictionary()->getTypeForKey(DictionaryKey::W) === CrossReferenceStreamByteSizes::class) {
-                $byteSizes = $this->getDictionary()->getValueForKey(DictionaryKey::W, CrossReferenceStreamByteSizes::class); // TODO: fix misinterpretation
+                $byteSizes = $this->getDictionary()->getValueForKey(DictionaryKey::W, CrossReferenceStreamByteSizes::class) ?? throw new ParseFailureException(); // TODO: fix misinterpretation
+
                 return new CIDFontWidths(new RangeCIDWidth($byteSizes->lengthRecord1InBytes, $byteSizes->lengthRecord2InBytes, $byteSizes->lengthRecord3InBytes));
             }
 
@@ -184,7 +186,7 @@ class Font extends DecoratedObject {
 
         foreach ($this->getDescendantFonts() as $descendantFont) {
             if ($descendantFont instanceof Dictionary && $descendantFont->getTypeForKey(DictionaryKey::W) === ReferenceValue::class) {
-                $descendantFont = $this->document->getObject($descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class)->objectNumber, Font::class);
+                $descendantFont = $this->document->getObject($descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class)->objectNumber ?? throw new ParseFailureException(), Font::class) ?? throw new ParseFailureException();
             }
 
             if ($descendantFont instanceof Font && ($widthsDescendantFont = $descendantFont->getWidths()) !== null) {
@@ -193,10 +195,10 @@ class Font extends DecoratedObject {
         }
 
         if ($this->getDictionary()->getTypeForKey(DictionaryKey::WIDTHS) === ReferenceValue::class) {
-            $object = $this->document->getObject($this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ReferenceValue::class)->objectNumber, Font::class)
-                ?? throw new ParseFailureException(sprintf('Width dictionary with number %d could not be found', $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ReferenceValue::class)->objectNumber));
+            $object = $this->document->getObject(($widthsReference = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ReferenceValue::class))->objectNumber ?? throw new ParseFailureException(), Font::class)
+                ?? throw new ParseFailureException(sprintf('Width dictionary with number %d could not be found', $widthsReference->objectNumber));
             $widthsArray = explode(' ', ltrim(rtrim(trim($object->getContent()), ']'), '['));
-        } else if (($widthsArray = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ArrayValue::class)?->value) === null) {
+        } elseif (($widthsArray = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ArrayValue::class)?->value) === null) {
             return null;
         }
 
@@ -206,9 +208,14 @@ class Font extends DecoratedObject {
 
         return new FontWidths(
             $firstChar,
-            array_map(
-                fn (mixed $width): float => is_numeric($width) ? (float) $width : throw new InvalidArgumentException(sprintf('"%s" is not a valid width', $width)),
-                array_filter($widthsArray),
+            array_values(
+                array_map(
+                    fn (mixed $width): float => is_numeric($width) ? (float) $width : throw new InvalidArgumentException(sprintf('"%s" is not a valid width', json_encode($width))),
+                    array_filter(
+                        $widthsArray,
+                        fn (mixed $item) => $item !== '',
+                    ),
+                ),
             ),
         );
     }

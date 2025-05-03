@@ -84,8 +84,10 @@ class UncompressedObject implements ObjectItem {
     public function getContent(Document $document): string {
         if (($startStreamPos = $document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)) === null
             || ($endStreamPos = $document->stream->firstPos(Marker::END_STREAM, $startStreamPos, $this->endOffset)) === null) {
+            $startMarkerLen = strlen(sprintf('%d %d obj', $this->objectNumber, $this->generationNumber));
+
             return $document->stream->read(
-                $this->startOffset + ($startMarkerLen = strlen(sprintf('%d %d obj', $this->objectNumber, $this->generationNumber))),
+                $this->startOffset + $startMarkerLen,
                 $this->endOffset - $this->startOffset - $startMarkerLen - strlen(Marker::END_STREAM->value),
             );
         }
