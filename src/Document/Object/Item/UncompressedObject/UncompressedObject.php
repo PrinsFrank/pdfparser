@@ -82,17 +82,19 @@ class UncompressedObject implements ObjectItem {
 
     #[Override]
     public function getContent(Document $document): string {
-        $startStreamPos = $document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)
-            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::STREAM->value));
-        $endStreamPos = $document->stream->firstPos(Marker::END_STREAM, $startStreamPos, $this->endOffset)
-            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_STREAM->value));
-        $eolPos = $document->stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset)
-            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value));
+        if (($startStreamPos = $document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)) === null
+            || ($endStreamPos = $document->stream->firstPos(Marker::END_STREAM, $startStreamPos, $this->endOffset)) === null) {
+            return $document->stream->read(
+                $this->startOffset + ($startMarkerLen = strlen(sprintf('%d %d obj', $this->objectNumber, $this->generationNumber))),
+                $this->endOffset - $this->startOffset - $startMarkerLen - strlen(Marker::END_STREAM->value),
+            );
+        }
 
         return CompressedObjectContentParser::parseBinary(
             $document->stream,
             $startStreamPos,
-            $eolPos - $startStreamPos,
+            ($document->stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset)
+            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value))) - $startStreamPos,
             $this->getDictionary($document),
         );
     }

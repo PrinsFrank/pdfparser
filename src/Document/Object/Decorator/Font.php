@@ -11,6 +11,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CIDFontWidths;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CrossReferenceStreamByteSizes;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\Item\RangeCIDWidth;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
@@ -114,8 +117,24 @@ class Font extends DecoratedObject {
         return $totalCharacterWidth;
     }
 
-    /** @return list<Font> */
+    /** @return list<Font|Dictionary> */
     public function getDescendantFonts(): array {
+        $valueType = $this->getDictionary()->getTypeForKey(DictionaryKey::DESCENDANT_FONTS);
+        if ($valueType === null) {
+            return [];
+        }
+
+        if ($valueType === ReferenceValue::class) {
+            return [
+                $this->document->getObject($this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValue::class)->objectNumber, Font::class)
+                    ?? throw new ParseFailureException(sprintf('Descendant font with number %d could not be found', $this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValue::class)->objectNumber)),
+            ];
+        }
+
+        if ($valueType === DictionaryArrayValue::class) {
+            return $this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, DictionaryArrayValue::class)->dictionaries;
+        }
+
         $descendantFonts = [];
         foreach ($this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
             $descendantFonts[] = $this->document->getObject($referenceValue->objectNumber, Font::class)
@@ -140,36 +159,56 @@ class Font extends DecoratedObject {
         }
 
         foreach ($this->getDescendantFonts() as $descendantFont) {
-            if (($descendantFontDefaultWidth = $descendantFont->getDefaultWidth()) !== null) {
+            if ($descendantFont instanceof Dictionary && $descendantFont->getTypeForKey(DictionaryKey::W) === ReferenceValue::class) {
+                $descendantFont = $this->document->getObject($descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class)->objectNumber, Font::class);
+            }
+
+            if ($descendantFont instanceof Font && ($descendantFontDefaultWidth = $descendantFont->getDefaultWidth()) !== null) {
                 return $descendantFontDefaultWidth;
             }
         }
 
-        throw new ParseFailureException('Default width not available for non-CID font');
+        return 1000;
     }
 
     /** @throws PdfParserException */
     public function getWidths(): CIDFontWidths|FontWidths|null {
         if ($this->isCIDFont()) {
+            if ($this->getDictionary()->getTypeForKey(DictionaryKey::W) === CrossReferenceStreamByteSizes::class) {
+                $byteSizes = $this->getDictionary()->getValueForKey(DictionaryKey::W, CrossReferenceStreamByteSizes::class); // TODO: fix misinterpretation
+                return new CIDFontWidths(new RangeCIDWidth($byteSizes->lengthRecord1InBytes, $byteSizes->lengthRecord2InBytes, $byteSizes->lengthRecord3InBytes));
+            }
+
             return $this->getDictionary()->getValueForKey(DictionaryKey::W, CIDFontWidths::class);
         }
 
         foreach ($this->getDescendantFonts() as $descendantFont) {
-            if (($widthsDescendantFont = $descendantFont->getWidths()) !== null) {
+            if ($descendantFont instanceof Dictionary && $descendantFont->getTypeForKey(DictionaryKey::W) === ReferenceValue::class) {
+                $descendantFont = $this->document->getObject($descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class)->objectNumber, Font::class);
+            }
+
+            if ($descendantFont instanceof Font && ($widthsDescendantFont = $descendantFont->getWidths()) !== null) {
                 return $widthsDescendantFont;
             }
         }
 
-        $widthsArray = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ArrayValue::class)?->value;
-        if ($widthsArray === null || ($firstChar = $this->getFirstChar()) === null) {
+        if ($this->getDictionary()->getTypeForKey(DictionaryKey::WIDTHS) === ReferenceValue::class) {
+            $object = $this->document->getObject($this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ReferenceValue::class)->objectNumber, Font::class)
+                ?? throw new ParseFailureException(sprintf('Width dictionary with number %d could not be found', $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ReferenceValue::class)->objectNumber));
+            $widthsArray = explode(' ', ltrim(rtrim(trim($object->getContent()), ']'), '['));
+        } else if (($widthsArray = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ArrayValue::class)?->value) === null) {
+            return null;
+        }
+
+        if (($firstChar = $this->getFirstChar()) === null) {
             return null;
         }
 
         return new FontWidths(
             $firstChar,
             array_map(
-                fn (mixed $width): float => is_string($width) && (string)($widthAsFloat = (float) $width) === $width ? $widthAsFloat : throw new InvalidArgumentException(),
-                $widthsArray,
+                fn (mixed $width): float => is_numeric($width) ? (float) $width : throw new InvalidArgumentException(sprintf('"%s" is not a valid width', $width)),
+                array_filter($widthsArray),
             ),
         );
     }
