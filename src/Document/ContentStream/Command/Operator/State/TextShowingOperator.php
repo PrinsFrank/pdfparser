@@ -43,7 +43,7 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
     }
 
     #[Override]
-    public function getPositionedTextElement(string $operands, TransformationMatrix $textMatrix, TransformationMatrix $globalTransformationMatrix, ?TextState $textState): PositionedTextElement {
+    public function getPositionedTextElement(string $operands, TransformationMatrix $textMatrix, TransformationMatrix $globalTransformationMatrix, TextState $textState): PositionedTextElement {
         return new PositionedTextElement(
             $operands,
             $globalTransformationMatrix->multiplyWith($textMatrix),

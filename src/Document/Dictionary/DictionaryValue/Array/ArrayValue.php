@@ -11,7 +11,7 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /** @api */
 class ArrayValue implements DictionaryValue {
-    /** @param array<mixed> $value */
+    /** @param list<mixed> $value */
     public function __construct(
         public readonly array $value
     ) {

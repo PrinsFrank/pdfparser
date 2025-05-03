@@ -5,6 +5,8 @@ namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 use PrinsFrank\PdfParser\Document\CMap\Registry\RegistryOrchestrator;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMap;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMapParser;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
@@ -91,7 +93,7 @@ class Font extends DecoratedObject {
             ?->value;
     }
 
-    public function getWidthForChar(int $characterCode, float $fontSize, float $horizontalTextScaling, float $characterSpacing): ?float {
+    public function getWidthForChar(int $characterCode, TextState $textState, TransformationMatrix $transformationMatrix): float {
         $fontWidths = $this->getWidths();
         if ($fontWidths !== null && ($charWidth = $fontWidths->getWidthForCharacter($characterCode)) !== null) {
             $characterWidth = $charWidth;
@@ -99,14 +101,14 @@ class Font extends DecoratedObject {
             $characterWidth = $this->getDefaultWidth();
         }
 
-        return ($characterWidth * $fontSize + $characterSpacing) * $horizontalTextScaling;
+        return ($characterWidth * ($textState->fontSize ?? 10) + $textState->charSpace) * $transformationMatrix->scaleX;
     }
 
     /** @param list<int> $chars */
-    public function getWidthForChars(array $chars, float $fontSize, float $horizontalTextScaling, float $characterSpacing): ?float {
+    public function getWidthForChars(array $chars, TextState $textState, TransformationMatrix $transformationMatrix): float {
         $totalCharacterWidth = 0;
         foreach ($chars as $char) {
-            $totalCharacterWidth += $this->getWidthForChar($char, $fontSize, $horizontalTextScaling, $characterSpacing);
+            $totalCharacterWidth += $this->getWidthForChar($char, $textState, $transformationMatrix);
         }
 
         return $totalCharacterWidth;
@@ -116,7 +118,8 @@ class Font extends DecoratedObject {
     public function getDescendantFonts(): array {
         $descendantFonts = [];
         foreach ($this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
-            $descendantFonts[] = $this->document->getObject($referenceValue->objectNumber);
+            $descendantFonts[] = $this->document->getObject($referenceValue->objectNumber, Font::class)
+                ?? throw new ParseFailureException(sprintf('Descendant font with number %d could not be found', $referenceValue->objectNumber));
         }
 
         return $descendantFonts;
@@ -165,7 +168,7 @@ class Font extends DecoratedObject {
         return new FontWidths(
             $firstChar,
             array_map(
-                fn (string $width) => (string)($widthAsFloat = (float) $width) === $width ? $widthAsFloat : throw new InvalidArgumentException(),
+                fn (mixed $width): float => is_string($width) && (string)($widthAsFloat = (float) $width) === $width ? $widthAsFloat : throw new InvalidArgumentException(),
                 $widthsArray,
             ),
         );

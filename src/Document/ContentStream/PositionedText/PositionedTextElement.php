@@ -2,8 +2,6 @@
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
-use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
-use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
@@ -11,7 +9,7 @@ class PositionedTextElement {
     public function __construct(
         public readonly string               $rawTextContent,
         public readonly TransformationMatrix $absoluteMatrix,
-        public readonly ?TextState           $textState,
+        public readonly TextState            $textState,
     ) {
     }
 
@@ -70,7 +68,7 @@ class PositionedTextElement {
                 }
             } elseif (str_starts_with($match['chars'], '<') && str_ends_with($match['chars'], '>')) {
                 foreach (str_split(substr($match['chars'], 1, -1), 4) as $char) {
-                    $codePoints[] = hexdec($char);
+                    $codePoints[] = is_int($codePoint = hexdec($char)) ? $codePoint : throw new ParseFailureException();
                 }
             } else {
                 throw new ParseFailureException(sprintf('Unrecognized character group format "%s"', $match['chars']));
