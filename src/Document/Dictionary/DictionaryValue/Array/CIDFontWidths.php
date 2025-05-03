@@ -55,7 +55,7 @@ class CIDFontWidths implements DictionaryValue {
                 return null;
             }
 
-            $widths[] = new RangeCIDWidth($startingCID, $endCID, $width);;
+            $widths[] = new RangeCIDWidth($startingCID, $endCID, $width);
         }
 
         return new self(... $widths);
