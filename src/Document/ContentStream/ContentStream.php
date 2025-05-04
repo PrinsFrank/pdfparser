@@ -94,7 +94,7 @@ class ContentStream {
             if ($previousPositionedTextElement !== null) {
                 if ($previousPositionedTextElement->absoluteMatrix->offsetY !== $positionedTextElement->absoluteMatrix->offsetY) {
                     $text .= "\n";
-                } elseif (($positionedTextElement->absoluteMatrix->offsetX - $previousPositionedTextElement->absoluteMatrix->offsetX - $font->getWidthForChars($previousPositionedTextElement->getCodePoints(), $previousPositionedTextElement->textState, $previousPositionedTextElement->absoluteMatrix)) >= ($previousPositionedTextElement->textState->fontSize ?? 10) * $previousPositionedTextElement->absoluteMatrix->scaleX * 0.30) {
+                } elseif (($positionedTextElement->absoluteMatrix->offsetX - $previousPositionedTextElement->absoluteMatrix->offsetX - $font->getWidthForChars($previousPositionedTextElement->getCodePoints(), $previousPositionedTextElement->textState, $previousPositionedTextElement->absoluteMatrix)) >= ($previousPositionedTextElement->textState->fontSize ?? 10) * $previousPositionedTextElement->absoluteMatrix->scaleX * 0.40) {
                     $text .= ' ';
                 }
             }

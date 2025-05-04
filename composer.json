@@ -23,7 +23,7 @@
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-strict-rules": "^2",
         "phpunit/phpunit": "^11.5",
-        "prinsfrank/pdf-samples": "0.0.8"
+        "prinsfrank/pdf-samples": "^0.0.9"
     },
     "scripts": {
         "cs": "php-cs-fixer fix --allow-risky=yes --dry-run",
