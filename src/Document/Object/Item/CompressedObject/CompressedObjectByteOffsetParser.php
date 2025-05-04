@@ -20,11 +20,17 @@ class CompressedObjectByteOffsetParser {
     public static function parse(Stream $stream, int $startOffsetObject, int $endOffsetObject, Dictionary $dictionary): CompressedObjectByteOffsets {
         $startStreamPos = $stream->getStartNextLineAfter(Marker::STREAM, $startOffsetObject, $endOffsetObject)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::STREAM->value));
-        $endStreamPos = $stream->firstPos(Marker::END_STREAM, $startStreamPos, $endOffsetObject)
-            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_STREAM->value));
-        $eolPos = $stream->getEndOfCurrentLine($endStreamPos - 1, $endOffsetObject)
-            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value));
-        $content = bin2hex(CompressedObjectContentParser::parseBinary($stream, $startStreamPos, $eolPos - $startStreamPos, $dictionary));
+        if ($dictionary->getTypeForKey(DictionaryKey::LENGTH) === IntegerValue::class) {
+            $length = $dictionary->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)->value;
+        } else {
+            $endStreamPos = $stream->firstPos(Marker::END_STREAM, $startStreamPos, $endOffsetObject)
+                ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_STREAM->value));
+            $eolPos = $stream->getEndOfCurrentLine($endStreamPos - 1, $endOffsetObject)
+                ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value));
+            $length = $eolPos - $startStreamPos;
+        }
+
+        $content = bin2hex(CompressedObjectContentParser::parseBinary($stream, $startStreamPos, $length, $dictionary));
         $first = $dictionary->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
         $buffer = new InfiniteBuffer();
