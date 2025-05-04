@@ -14,6 +14,54 @@ class InMemoryStreamTest extends TestCase {
         static::assertSame(3, (new InMemoryStream('foo'))->getSizeInBytes());
     }
 
+    public function testReadThrowsExceptionWithNegativeBytes(): void {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$nrOfBytes must be greater than 0, -1 given');
+        (new InMemoryStream('foo'))
+            ->read(0, -1);
+    }
+
+    public function testRead(): void {
+        static::assertSame('foo', (new InMemoryStream('foo'))->read(0, 3));
+        static::assertSame('o', (new InMemoryStream('foo'))->read(2, 1));
+    }
+
+    public function testSliceThrowsExceptionOnInvalidStartByteOffset(): void {
+        $stream = new InMemoryStream('foobar');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$startByteOffset must be greater than 0, -1 given');
+        $stream->slice(-1, 2);
+    }
+
+    public function testSliceThrowsExceptionOnInvalidEndByteOffset(): void {
+        $stream = new InMemoryStream('foobar');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('End byte offset 2 should be bigger than start byte offset 2');
+        $stream->slice(2, 2);
+    }
+
+    public function testSlice(): void {
+        $stream = new InMemoryStream('foobar');
+        static::assertSame('ob', $stream->slice(2, 4));
+    }
+
+    public function testCharsThrowsExceptionOnInvalidFromValue(): void {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$from must be greater than zero, -1 given');
+        iterator_to_array((new InMemoryStream('foobar'))->chars(-1, 2));
+    }
+
+    public function testCharsThrowsExceptionOnInvalidNrOfBytesValue(): void {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$nrOfBytes to read must be greater than zero, -2 given');
+        iterator_to_array((new InMemoryStream('foobar'))->chars(0, -2));
+    }
+
+    public function testChars(): void {
+        $stream = new InMemoryStream('foobar');
+        static::assertSame(['o', 'b'], iterator_to_array($stream->chars(2, 2)));
+    }
+
     public function testFirstPos(): void {
         $stream = new InMemoryStream('123objxref');
         static::assertSame(
@@ -42,36 +90,5 @@ class InMemoryStreamTest extends TestCase {
         static::assertNull(
             $stream->lastPos(Marker::TRAILER, 0)
         );
-    }
-
-    public function testSlice(): void {
-        $stream = new InMemoryStream('foobar');
-        static::assertSame('ob', $stream->slice(2, 4));
-    }
-
-    public function testSliceThrowsExceptionOnInvalidStartByteOffset(): void {
-        $stream = new InMemoryStream('foobar');
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('$startByteOffset must be greater than 0, -1 given');
-        $stream->slice(-1, 2);
-    }
-
-    public function testSliceThrowsExceptionOnInvalidEndByteOffset(): void {
-        $stream = new InMemoryStream('foobar');
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('End byte offset 2 should be bigger than start byte offset 2');
-        $stream->slice(2, 2);
-    }
-
-    public function testChars(): void {
-        $stream = new InMemoryStream('foobar');
-        static::assertSame(['o', 'b'], iterator_to_array($stream->chars(2, 2)));
-    }
-
-    public function testReadBytesThrowsExceptionWithNegativeBytes(): void {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('$nrOfBytes must be greater than 0, -1 given');
-        (new InMemoryStream('foo'))
-            ->read(0, -1);
     }
 }

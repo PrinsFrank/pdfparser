@@ -45,11 +45,11 @@ final class InMemoryStream extends AbstractStream {
     #[Override]
     public function chars(int $from, int $nrOfBytes): iterable {
         if ($from < 0) {
-            throw new InvalidArgumentException(sprintf('StartOffset should be greater than zero, %d given', $from));
+            throw new InvalidArgumentException(sprintf('$from must be greater than zero, %d given', $from));
         }
 
         if ($nrOfBytes <= 0) {
-            throw new InvalidArgumentException(sprintf('$nrOfBytes to read must be greater than 0, %d given', $nrOfBytes));
+            throw new InvalidArgumentException(sprintf('$nrOfBytes to read must be greater than zero, %d given', $nrOfBytes));
         }
 
         foreach (str_split(substr($this->content, $from, $nrOfBytes)) as $char) {
