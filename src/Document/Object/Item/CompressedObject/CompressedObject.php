@@ -38,12 +38,13 @@ class CompressedObject implements ObjectItem {
             return $this->dictionary;
         }
 
-        $objectContent = new InMemoryStream($this->getContent($document));
-        if (($objectSize = $objectContent->getSizeInBytes()) === 0) {
+        $objectContent = trim($this->getContent($document));
+        if ($objectContent === '' || !str_starts_with($objectContent, '<<') || !str_ends_with($objectContent, '>>')) {
             return $this->dictionary = new Dictionary();
         }
 
-        return $this->dictionary = DictionaryParser::parse($objectContent, 0, $objectSize);
+        $inMemoryStream = new InMemoryStream($objectContent);
+        return $this->dictionary = DictionaryParser::parse($inMemoryStream, 0, $inMemoryStream->getSizeInBytes());
     }
 
     #[Override]
