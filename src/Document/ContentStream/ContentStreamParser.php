@@ -91,8 +91,8 @@ class ContentStreamParser {
             'scn' => ColorOperator::SetColorParams,
             default => null,
         };
-        if ($threeLetterMatch !== null && !in_array($thirdToLastChar, ['\\', '/'], true)) {
-            return $threeLetterMatch;
+        if ($threeLetterMatch !== null) {
+            return in_array($thirdToLastChar, ['\\', '/'], true) ? null : $threeLetterMatch;
         }
 
         $twoLetterMatch = match ($previousChar . $currentChar) {
@@ -137,8 +137,8 @@ class ContentStreamParser {
             'Do' => XObjectOperator::Paint,
             default => null,
         };
-        if ($twoLetterMatch !== null && !in_array($secondToLastChar, ['\\', '/'], true)) {
-            return $twoLetterMatch;
+        if ($twoLetterMatch !== null) {
+            return in_array($secondToLastChar, ['\\', '/'], true) ? null : $twoLetterMatch;
         }
 
         $oneLetterMatch = match ($currentChar) {
@@ -172,8 +172,8 @@ class ContentStreamParser {
             default => null,
         };
 
-        if ($oneLetterMatch !== null && !in_array($previousChar, ['\\', '/'], true)) {
-            return $oneLetterMatch;
+        if ($oneLetterMatch !== null) {
+            return in_array($previousChar, ['\\', '/'], true) ? null : $oneLetterMatch;
         }
 
         return null;

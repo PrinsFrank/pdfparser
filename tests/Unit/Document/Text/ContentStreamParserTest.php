@@ -48,6 +48,22 @@ class ContentStreamParserTest extends TestCase {
         );
     }
 
+    public function testParseTextWithOperatorInTextOperand(): void {
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextStateOperator::FONT_SIZE, '/Tc1.0 1'))
+            ),
+            ContentStreamParser::parse(
+                <<<EOD
+                BT
+                /Tc1.0 1 Tf
+                ET
+                EOD
+            )
+        );
+    }
+
     #[DataProvider('provideOperators')]
     public function testGetOperator(CompatibilityOperator|InlineImageOperator|MarkedContentOperator|TextObjectOperator|ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator $enumCase): void {
         static::assertSame(
