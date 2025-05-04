@@ -17,6 +17,7 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObjectParser;
 use PrinsFrank\PdfParser\Document\Version\Version;
+use PrinsFrank\PdfParser\Exception\NotImplementedException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
@@ -35,6 +36,9 @@ final class Document {
         public readonly Version              $version,
         public readonly CrossReferenceSource $crossReferenceSource,
     ) {
+        if ($this->isEncrypted()) {
+            throw new NotImplementedException('Encrypted documents are not supported yet');
+        }
     }
 
     /** @throws PdfParserException */
@@ -45,6 +49,10 @@ final class Document {
         }
 
         return $this->getObject($infoReference->objectNumber, InformationDictionary::class);
+    }
+
+    public function isEncrypted(): bool {
+        return $this->crossReferenceSource->getReferenceForKey(DictionaryKey::ENCRYPT) !== null;
     }
 
     /** @throws PdfParserException */
