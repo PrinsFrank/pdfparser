@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
+use PrinsFrank\PdfParser\Document\Generic\Character\LiteralStringEscapeCharacter;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
@@ -23,9 +24,7 @@ class PositionedTextElement {
         $string = '';
         foreach ($matches as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
-                $chars = str_replace(['\(', '\)', '\n', '\r'], ['(', ')', "\n", "\r"], substr($match['chars'], 1, -1));
-                $chars = preg_replace_callback('/\\\\([0-7]{3})/', fn (array $matches) => mb_chr((int) octdec($matches[1])), $chars)
-                    ?? throw new ParseFailureException();
+                $chars = LiteralStringEscapeCharacter::unescapeCharacters(substr($match['chars'], 1, -1));
                 if ($font !== null && ($encoding = $font->getEncoding()) !== null) {
                     $chars = $encoding->decodeString($chars);
                 }
