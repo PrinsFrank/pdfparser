@@ -82,6 +82,26 @@ class Font extends DecoratedObject {
         return $this->toUnicodeCMap = ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes());
     }
 
+    public function getToUnicodeCMapDescendantFont(): ?ToUnicodeCMap {
+        foreach ($this->getDescendantFonts() as $descendantFont) {
+            $fontDictionary = $descendantFont instanceof Dictionary ? $descendantFont : $descendantFont->getDictionary();
+
+            if (($CIDSystemInfo = $fontDictionary->getValueForKey(DictionaryKey::CIDSYSTEM_INFO, Dictionary::class)) !== null) {
+                $fontResource = RegistryOrchestrator::getForRegistryOrderingSupplement(
+                    $CIDSystemInfo->getValueForKey(DictionaryKey::REGISTRY, TextStringValue::class) ?? throw new ParseFailureException(),
+                    $CIDSystemInfo->getValueForKey(DictionaryKey::ORDERING, TextStringValue::class) ?? throw new ParseFailureException(),
+                    $CIDSystemInfo->getValueForKey(DictionaryKey::SUPPLEMENT, IntegerValue::class) ?? throw new ParseFailureException(),
+                );
+
+                if ($fontResource !== null) {
+                    return $fontResource->getToUnicodeCMap();
+                }
+            }
+        }
+
+        return null;
+    }
+
     /** @throws PdfParserException */
     public function getFirstChar(): ?int {
         return $this->getDictionary()
@@ -224,34 +244,5 @@ class Font extends DecoratedObject {
     public function getFontDescriptor(): ?ReferenceValue {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::FONT_DESCRIPTOR, ReferenceValue::class);
-    }
-
-    /** @throws PdfParserException */
-    public function toUnicode(string $characterGroup): string {
-        $toUnicodeCMap = $this->getToUnicodeCMap();
-        if ($toUnicodeCMap !== null) {
-            return $toUnicodeCMap->textToUnicode($characterGroup);
-        }
-
-        $descendantFonts = $this->getDictionary()->getObjectsForReference($this->document, DictionaryKey::DESCENDANT_FONTS, Font::class);
-        foreach ($descendantFonts as $descendantFont) {
-            if (($CIDSystemInfo = $descendantFont->getDictionary()->getValueForKey(DictionaryKey::CIDSYSTEM_INFO, Dictionary::class)) !== null) {
-                $fontResource = RegistryOrchestrator::getForRegistryOrderingSupplement(
-                    $CIDSystemInfo->getValueForKey(DictionaryKey::REGISTRY, TextStringValue::class) ?? throw new ParseFailureException(),
-                    $CIDSystemInfo->getValueForKey(DictionaryKey::ORDERING, TextStringValue::class) ?? throw new ParseFailureException(),
-                    $CIDSystemInfo->getValueForKey(DictionaryKey::SUPPLEMENT, IntegerValue::class) ?? throw new ParseFailureException(),
-                );
-
-                if ($fontResource !== null) {
-                    return $fontResource->getToUnicodeCMap()->textToUnicode($characterGroup);
-                }
-            }
-        }
-
-        if (($encoding = $this->getEncoding()) !== null) {
-            return $encoding->decodeString(implode('', array_map(fn (string $character) => mb_chr((int) hexdec($character)), str_split($characterGroup, 2))));
-        }
-
-        throw new ParseFailureException('No ToUnicodeCMap or encoding information available for this font');
     }
 }

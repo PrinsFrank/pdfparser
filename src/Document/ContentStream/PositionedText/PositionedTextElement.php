@@ -25,8 +25,10 @@ class PositionedTextElement {
         foreach ($matches as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
                 $chars = LiteralStringEscapeCharacter::unescapeCharacters(substr($match['chars'], 1, -1));
-                if ($font !== null && ($encoding = $font->getEncoding()) !== null) {
+                if (($encoding = $font?->getEncoding()) !== null) {
                     $chars = $encoding->decodeString($chars);
+                } elseif (($toUnicodeCMap = $font?->getToUnicodeCMap() ?? $font?->getToUnicodeCMapDescendantFont()) !== null) {
+                    $chars = $toUnicodeCMap->textToUnicode(bin2hex($chars));
                 }
 
                 $string .= $chars;
@@ -35,7 +37,14 @@ class PositionedTextElement {
                     throw new ParseFailureException('No font available');
                 }
 
-                $string .= $font->toUnicode(substr($match['chars'], 1, -1));
+                $chars = substr($match['chars'], 1, -1);
+                if (($toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont()) !== null) {
+                    $string .= $toUnicodeCMap->textToUnicode($chars);
+                } elseif (($encoding = $font->getEncoding()) !== null) {
+                    $string .= $encoding->decodeString(implode('', array_map(fn (string $character) => mb_chr((int) hexdec($character)), str_split($chars, 2))));
+                } else {
+                    throw new ParseFailureException('Unable to use CMap or decode string to retrieve characters for text object');
+                }
             } else {
                 throw new ParseFailureException(sprintf('Unrecognized character group format "%s"', $match['chars']));
             }
