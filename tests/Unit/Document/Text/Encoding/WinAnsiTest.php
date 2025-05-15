@@ -10,6 +10,7 @@ use PrinsFrank\PdfParser\Document\Encoding\WinAnsi;
 class WinAnsiTest extends TestCase {
     public function testToUnicode(): void {
         $string = mb_convert_encoding('transakèní', 'Windows-1252');
+        static::assertNotFalse($string);
         static::assertEquals('transakèní', WinAnsi::textToUnicode($string));
     }
 

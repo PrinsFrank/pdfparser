@@ -35,7 +35,7 @@ class DateValue implements DictionaryValue {
 
         if (!str_starts_with($valueString, 'D:')) {
             $valueString = mb_convert_encoding($valueString, 'UTF-8', 'UTF-16');
-            if (!str_starts_with($valueString, 'D:')) {
+            if ($valueString === false || !str_starts_with($valueString, 'D:')) {
                 return null;
             }
         }

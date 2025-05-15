@@ -7,5 +7,6 @@ ignore-hidden = false
 [default.extend-words]
 "flate" = "flate"
 "fo" = "fo"
+"hel" = "hel"
 "paeth" = "paeth"
 "parms" = "parms"
