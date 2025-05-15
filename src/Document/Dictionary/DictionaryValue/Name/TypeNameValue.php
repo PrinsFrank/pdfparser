@@ -97,6 +97,7 @@ enum TypeNameValue: string implements NameValue {
     case PROJ_C_S = 'PROJCS';
     case PT_DATA = 'PtData';
     case RENDITION = 'Rendition';
+    case RESOURCE = 'Resource';
     case REQ_HANDLER = 'ReqHandler';
     case REQUIREMENT = 'Requirement';
     case RICH_MEDIA_ACTIVATION = 'RichMediaActivation';
