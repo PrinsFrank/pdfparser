@@ -154,4 +154,22 @@ class ContentStreamTest extends TestCase {
             ContentStreamParser::parse($textObjectString)->getPositionedTextElements(),
         );
     }
+
+    public function testGetPositionedTextElementsWithTextStateOutsideTextObject(): void {
+        $textObjectString = <<<EOD
+        0 J
+        /F1 7 Tf
+        BT
+        ([Hello) Tj
+        (World]) Tj
+        ET
+        EOD;
+        static::assertEquals(
+            [
+                new PositionedTextElement('([Hello)', new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState(new ExtendedDictionaryKey('F1'), 7)),
+                new PositionedTextElement('(World])', new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState(new ExtendedDictionaryKey('F1'), 7)),
+            ],
+            ContentStreamParser::parse($textObjectString)->getPositionedTextElements(),
+        );
+    }
 }

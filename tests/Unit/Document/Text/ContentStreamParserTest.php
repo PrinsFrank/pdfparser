@@ -64,6 +64,28 @@ class ContentStreamParserTest extends TestCase {
         );
     }
 
+    public function testParseWithContentOutsideOfTextObject(): void {
+        static::assertEquals(
+            new ContentStream(
+                new ContentStreamCommand(GraphicsStateOperator::SetLineCap, '0'),
+                new ContentStreamCommand(TextStateOperator::FONT_SIZE, '/F1 7'),
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hello)'))
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(World)'))
+            ),
+            ContentStreamParser::parse(
+                <<<EOD
+                0 J
+                /F1 7 Tf
+                BT
+                (Hello) Tj
+                (World) Tj
+                ET
+                EOD
+            )
+        );
+    }
+
     public function testParseWithMultibyteEscapedStringLiteralDelimiterInStringLiteral(): void {
         static::assertEquals(
             new ContentStream(
