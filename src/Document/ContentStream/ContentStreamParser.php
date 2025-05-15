@@ -27,21 +27,24 @@ class ContentStreamParser {
     public static function parse(string $contentStream): ContentStream {
         $operandBuffer = '';
         $content = [];
-        $inArrayLevel = $inStringLevel = $inStringLiteralLevel = 0;
+        $inStringLiteral = false;
+        $inArrayLevel = $inStringLevel = 0;
         $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = null;
         foreach (($characters = str_split($contentStream)) as $index => $char) {
             $operandBuffer .= $char;
-            if ($char === '[' && $previousChar !== '\\') {
+            if ($inStringLiteral === true) {
+                if ($char === ')' && $previousChar !== '\\') {
+                    $inStringLiteral = false;
+                }
+            } elseif ($char === '[' && $previousChar !== '\\') {
                 $inArrayLevel++;
             } elseif ($char === '<' && $previousChar !== '\\') {
                 $inStringLevel++;
             } elseif ($char === '(' && $previousChar !== '\\') {
-                $inStringLiteralLevel++;
-            } elseif ($inStringLevel > 0 || $inStringLiteralLevel > 0 || $inArrayLevel > 0) {
+                $inStringLiteral = true;
+            } elseif ($inStringLevel > 0 || $inArrayLevel > 0) {
                 if ($inStringLevel > 0 && $char === '>' && $previousChar !== '\\') {
                     $inStringLevel--;
-                } elseif ($inStringLiteralLevel > 0 && $char === ')' && $previousChar !== '\\') {
-                    $inStringLiteralLevel--;
                 } elseif ($inArrayLevel > 0 && $char === ']' && $previousChar !== '\\') {
                     $inArrayLevel--;
                 }

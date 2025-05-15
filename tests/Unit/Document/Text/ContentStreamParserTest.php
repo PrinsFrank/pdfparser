@@ -28,7 +28,7 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 #[CoversClass(ContentStreamParser::class)]
 class ContentStreamParserTest extends TestCase {
-    public function testParseText(): void {
+    public function testParse(): void {
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -48,7 +48,73 @@ class ContentStreamParserTest extends TestCase {
         );
     }
 
-    public function testParseTextWithOperatorInTextOperand(): void {
+    public function testParseWithArrayDelimiterInStringLiteral(): void {
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '([Hello)'))
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(World])'))
+            ),
+            ContentStreamParser::parse(
+                <<<EOD
+                BT
+                ([Hello) Tj
+                (World]) Tj
+                ET
+                EOD
+            )
+        );
+    }
+
+    public function testParseWithEscapedStringLiteralDelimiterInStringLiteral(): void {
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hel\)lo)'))
+            ),
+            ContentStreamParser::parse(
+                <<<EOD
+                BT
+                (Hel\)lo) Tj
+                ET
+                EOD
+            )
+        );
+    }
+
+    public function testParseShowArraySyntax(): void {
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW_ARRAY, '[(F)-1(O)32(O)]'))
+            ),
+            ContentStreamParser::parse(
+                <<<EOD
+                BT
+                [(F)-1(O)32(O)] TJ
+                ET
+                EOD
+            )
+        );
+    }
+
+    public function testParseShowArraySyntaxWithArrayDelimiterInStringLiteral(): void {
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW_ARRAY, '[(F)-1([O)32(O])]'))
+            ),
+            ContentStreamParser::parse(
+                <<<EOD
+                BT
+                [(F)-1([O)32(O])] TJ
+                ET
+                EOD
+            )
+        );
+    }
+
+    public function testParseWithOperatorInTextOperand(): void {
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
