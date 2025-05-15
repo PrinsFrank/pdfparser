@@ -64,6 +64,30 @@ class ContentStreamParserTest extends TestCase {
         );
     }
 
+    public function testParseWithMultibyteEscapedStringLiteralDelimiterInStringLiteral(): void {
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hel' . chr(233) . '\)lo)'))
+            ),
+            ContentStreamParser::parse('BT (Hel' . chr(233) .'\)lo) Tj ET')
+        );
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hel' . chr(233) . chr(108) . '\)lo)'))
+            ),
+            ContentStreamParser::parse('BT (Hel' . chr(233) . chr(108) .'\)lo) Tj ET')
+        );
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hel' . chr(233) . chr(108) . chr(58) . '\)lo)'))
+            ),
+            ContentStreamParser::parse('BT (Hel' . chr(233) . chr(108) . chr(58) .'\)lo) Tj ET')
+        );
+    }
+
     #[DataProvider('provideOperators')]
     public function testGetOperator(CompatibilityOperator|InlineImageOperator|MarkedContentOperator|TextObjectOperator|ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator $enumCase): void {
         static::assertSame(

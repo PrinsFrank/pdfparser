@@ -29,7 +29,7 @@ class ContentStreamParser {
         $content = [];
         $inArrayLevel = $inStringLevel = $inStringLiteralLevel = 0;
         $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = null;
-        foreach (($characters = mb_str_split($contentStream)) as $index => $char) {
+        foreach (($characters = str_split($contentStream)) as $index => $char) {
             $operandBuffer .= $char;
             if ($char === '[' && $previousChar !== '\\') {
                 $inArrayLevel++;
