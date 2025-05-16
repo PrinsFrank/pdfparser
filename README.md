@@ -154,3 +154,22 @@ foreach ($document->getPages() as $index => $page) {
 There is also a `getText` method available on the Document to retrieve all text at once without even having to retrieve pages.
 
 There are also methods available to get the underlying textObjectCollection using `$page->getTextObjectCollection()`, the resource dictionary for a page using `$page->getResourceDictionary()` and the font dictionary using `$page->getFontDictionary()`.
+
+### Decorated `XObject` objects
+
+Images and forms are stored in XObjects. These can be retrieved on a page-by-page basis using `$page->getXObjects()`. If you are only interested in images, you can retrieve all image XObjects by calling `$page->getImages()`.
+
+For XObjects, there are some additional methods: `getWidth` returns the width of the object in pixels if available, `getHeight()` the height in pixels, and `getLength()` the length in bytes. To determine the subtype, there are two methods available: `isImage()` and `isForm`. If the XObject is an image, `getImageType()` will return the image type.
+
+To extract all images on a page and store them on your machine, you could do something like this:
+
+```php
+/** @var \PrinsFrank\PdfParser\Document\Document $document */
+foreach ($document->getImages() as $index => $image) {
+    if (($imageFileExtension = $image->getImageType()?->getFileExtension()) === null) {
+        continue; // You could still save the file with a default file extension like 'jpg', but it is not clear what kind of image this is.
+    }
+
+    file_put_contents(sprintf('%s/image_%d.%s', __DIR__, $index, $imageFileExtension), $image->getContent());
+}
+```

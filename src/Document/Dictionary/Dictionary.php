@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
@@ -120,5 +121,14 @@ class Dictionary {
         }
 
         return $this->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
+    }
+
+    public function getSubType(): ?SubtypeNameValue {
+        if ($this->getTypeForKey(DictionaryKey::SUBTYPE) === Dictionary::class) {
+            return $this->getValueForKey(DictionaryKey::SUBTYPE, Dictionary::class)
+                ?->getValueForKey(DictionaryKey::SUBTYPE, SubtypeNameValue::class);
+        }
+
+        return $this->getValueForKey(DictionaryKey::SUBTYPE, SubtypeNameValue::class);
     }
 }

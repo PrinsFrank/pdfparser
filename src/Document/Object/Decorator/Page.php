@@ -6,6 +6,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class Page extends DecoratedObject {
@@ -32,6 +35,41 @@ class Page extends DecoratedObject {
     public function getResourceDictionary(): ?Dictionary {
         return $this->getDictionary()
             ->getSubDictionary($this->document, DictionaryKey::RESOURCES);
+    }
+
+    /** @throws PdfParserException */
+    public function getXObjectsDictionary(): ?Dictionary {
+        return $this->getResourceDictionary()
+            ?->getSubDictionary($this->document, DictionaryKey::XOBJECT);
+    }
+
+    /**
+     * @throws PdfParserException
+     * @return list<XObject>
+     */
+    public function getXObjects(): array {
+        $xObjects = [];
+        foreach ($this->getXObjectsDictionary()->dictionaryEntries ?? [] as $xObjectDictionaryEntry) {
+            if (!$xObjectDictionaryEntry->value instanceof ReferenceValue) {
+                throw new InvalidArgumentException(sprintf('XObjects should be references, got %s', get_class($xObjectDictionaryEntry->value)));
+            }
+
+            $xObjects[] = $this->document->getObject($xObjectDictionaryEntry->value->objectNumber, XObject::class)
+                ?? throw new ParseFailureException(sprintf('Unable to locate object with nr %d', $xObjectDictionaryEntry->value->objectNumber));
+        }
+
+        return $xObjects;
+    }
+
+    /**
+     * @throws PdfParserException
+     * @return list<XObject>
+     */
+    public function getImages(): array {
+        return array_values(array_filter(
+            $this->getXObjects(),
+            fn (XObject $XObject) => $XObject->isImage(),
+        ));
     }
 
     /** @throws PdfParserException */

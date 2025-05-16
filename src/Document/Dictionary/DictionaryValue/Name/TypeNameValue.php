@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Pages;
+use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
 
 enum TypeNameValue: string implements NameValue {
     case _3_D = '3D';
@@ -141,6 +142,7 @@ enum TypeNameValue: string implements NameValue {
             TypeNameValue::FONT => Font::class,
             TypeNameValue::PAGE => Page::class,
             TypeNameValue::PAGES => Pages::class,
+            TypeNameValue::X_OBJECT => XObject::class,
             default => GenericObject::class,
         };
     }

@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Filter\Decode\FlateDecode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\LZWFlatePredictorValue;
+use PrinsFrank\PdfParser\Document\Image\ImageType;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 enum FilterNameValue: string implements NameValue {
@@ -39,6 +40,18 @@ enum FilterNameValue: string implements NameValue {
                 $decodeParams?->getValueForKey(DictionaryKey::COLUMNS, IntegerValue::class)->value ?? 1
             ),
             default => throw new ParseFailureException('Content "' . $content . '" cannot be decoded for filter "' . $this->name . '"')
+        };
+    }
+
+    public function getImageType(): ?ImageType {
+        return match ($this) {
+            self::LZW_DECODE => ImageType::TIFF,
+            self::FLATE_DECODE => ImageType::PNG,
+            self::RUN_LENGTH_DECODE => ImageType::RAW,
+            self::CCITT_FAX_DECODE => ImageType::TIFF_FAX,
+            self::DCT_DECODE => ImageType::JPEG,
+            self::JBX_DECODE => ImageType::JPEG2000,
+            default => null,
         };
     }
 }
