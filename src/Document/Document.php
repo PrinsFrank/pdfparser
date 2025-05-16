@@ -156,8 +156,8 @@ final class Document {
     }
 
     /**
-     * @return list<XObject>
      * @throws PdfParserException
+     * @return list<XObject>
      */
     public function getImages(): array {
         $images = [];
