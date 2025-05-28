@@ -11,7 +11,7 @@ use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
-final class FileStream extends AbstractStream {
+class FileStream extends AbstractStream {
     /** @var resource */
     private readonly mixed $handle;
 

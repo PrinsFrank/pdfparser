@@ -25,7 +25,7 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @api */
-final class Document {
+class Document {
     /** @var list<Page> */
     private readonly array $pages;
 
