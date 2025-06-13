@@ -19,14 +19,11 @@ class CrossReferenceTableParser {
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {
         $startTrailerPos = $stream->firstPos(Marker::TRAILER, $startPos, $startPos + $nrOfBytes)
             ?? throw new ParseFailureException('Unable to locate trailer for crossReferenceTable');
-        $startDictionaryPos = $stream->firstPos(WhitespaceCharacter::LINE_FEED, $startTrailerPos, $startPos + $nrOfBytes)
-            ?? $stream->firstPos(WhitespaceCharacter::CARRIAGE_RETURN, $startTrailerPos, $startPos + $nrOfBytes)
-            ?? throw new ParseFailureException(sprintf('Expected a newline after %s, got none', Marker::TRAILER->value));
-        $dictionary = DictionaryParser::parse($stream, $startDictionaryPos, $nrOfBytes - ($startDictionaryPos - $startPos));
+        $dictionary = DictionaryParser::parse($stream, $startTrailerPos + Marker::TRAILER->length(), $nrOfBytes - ($startTrailerPos + Marker::TRAILER->length() - $startPos));
 
         $objectNumber = $nrOfEntries = null;
         $crossReferenceSubSections = $crossReferenceEntries = [];
-        $content = trim($stream->read($startPos, $startDictionaryPos - $startPos - strlen(Marker::TRAILER->value . PHP_EOL)));
+        $content = trim($stream->read($startPos, $startTrailerPos - $startPos));
         $content = str_replace([WhitespaceCharacter::CARRIAGE_RETURN->value, WhitespaceCharacter::LINE_FEED->value . WhitespaceCharacter::LINE_FEED->value], WhitespaceCharacter::LINE_FEED->value, $content);
         foreach (explode(WhitespaceCharacter::LINE_FEED->value, $content) as $line) {
             $sections = explode(WhitespaceCharacter::SPACE->value, trim($line));
