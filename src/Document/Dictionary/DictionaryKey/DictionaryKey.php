@@ -17,6 +17,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\AuthEventNameV
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\BlendModeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\BorderStyleNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\CFMNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\CIEColorSpaceNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\DeviceColorSpaceNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\DirectionNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EventNameValue;
@@ -29,6 +31,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\PageLayoutName
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\PageModeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\PaperHandlingNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\RenderingIntentNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SpecialColorSpaceNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TabsNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TransitionStyleNameValue;
@@ -745,7 +748,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::CO => [ArrayValue::class, TextStringValue::class, IntegerValue::class, FloatValue::class],
             self::CO_ => [TextStringValue::class],
             self::COLLECTION => [Dictionary::class],
-            self::COLOR_SPACE => [Dictionary::class, ArrayValue::class, TextStringValue::class],
+            self::COLOR_SPACE => [DeviceColorSpaceNameValue::class, CIEColorSpaceNameValue::class, SpecialColorSpaceNameValue::class, Dictionary::class, ArrayValue::class],
             self::COLOR_TRANSFORM => [IntegerValue::class],
             self::COLORANTS => [Dictionary::class],
             self::COLORS => [IntegerValue::class],

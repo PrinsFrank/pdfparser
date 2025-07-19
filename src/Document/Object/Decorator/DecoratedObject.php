@@ -12,7 +12,7 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 abstract class DecoratedObject {
     final public function __construct(
         public readonly ObjectItem $objectItem,
-        protected readonly Document $document
+        public readonly Document $document
     ) {
         $typeNameValue = $this->objectItem->getDictionary($document)->getType();
         if ($typeNameValue !== null && !in_array($typeNameValue->getDecoratorFQN(), [static::class, GenericObject::class], true)) {

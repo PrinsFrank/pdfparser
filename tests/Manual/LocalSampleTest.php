@@ -11,6 +11,17 @@ use PrinsFrank\PdfParser\PdfParser;
 #[CoversNothing]
 class LocalSampleTest extends TestCase {
     #[DataProvider('samples')]
+    public function testImages(string $path): void {
+        $document = (new PdfParser())
+            ->parseFile($path);
+
+        foreach ($document->getImages() as $index => $image) {
+            $image->getContent();
+            // file_put_contents(sprintf('%s/img_%d.%s', __DIR__, $index, $image->getImageType()->getFileExtension()), $image->getContent());
+        }
+    }
+
+    #[DataProvider('samples')]
     public function testGetText(string $path): void {
         $document = (new PdfParser())
             ->parseFile($path);

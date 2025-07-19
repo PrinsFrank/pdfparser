@@ -15,6 +15,7 @@
     },
     "require": {
         "php": "^8.1",
+        "ext-gd": "*",
         "ext-iconv": "*",
         "ext-zlib": "*"
     },
