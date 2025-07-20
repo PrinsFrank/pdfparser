@@ -9,6 +9,8 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class RasterizedImage {
     /**
+     * @internal
+     *
      * @param int<1, max> $width
      * @param int<1, max> $height
      * @throws ParseFailureException

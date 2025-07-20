@@ -66,12 +66,12 @@ class XObject extends DecoratedObject {
             ?->getImageType();
     }
 
-    public function getBitsPerComponent(): ?int {
+    private function getBitsPerComponent(): ?int {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::BITS_PER_COMPONENT, IntegerValue::class)?->value;
     }
 
-    public function getColorSpace(): DeviceColorSpaceNameValue|CIEColorSpaceNameValue|SpecialColorSpaceNameValue|null {
+    private function getColorSpace(): DeviceColorSpaceNameValue|CIEColorSpaceNameValue|SpecialColorSpaceNameValue|null {
         if (($type = $this->getDictionary()->getTypeForKey(DictionaryKey::COLOR_SPACE)) === null) {
             return null;
         }
