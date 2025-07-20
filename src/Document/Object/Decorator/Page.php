@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
@@ -12,6 +13,15 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class Page extends DecoratedObject {
+    /**
+     * @throws PdfParserException
+     * @return list<PositionedTextElement>
+     */
+    public function getPositionedTextElements(): array {
+        return $this->getContentStream()
+            ->getPositionedTextElements();
+    }
+
     /** @throws PdfParserException */
     public function getText(): string {
         return $this->getContentStream()

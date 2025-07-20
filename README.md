@@ -153,7 +153,7 @@ foreach ($document->getPages() as $index => $page) {
 
 There is also a `getText` method available on the Document to retrieve all text at once without even having to retrieve pages.
 
-There are also methods available to get the underlying textObjectCollection using `$page->getTextObjectCollection()`, the resource dictionary for a page using `$page->getResourceDictionary()` and the font dictionary using `$page->getFontDictionary()`.
+There are also methods available to get the underlying positioned Text Elements using `$page->getPositionedTextElements()`, the resource dictionary for a page using `$page->getResourceDictionary()` and the font dictionary using `$page->getFontDictionary()`.
 
 ### Decorated `XObject` objects
 

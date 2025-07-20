@@ -12,7 +12,6 @@ use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -66,12 +65,6 @@ class ContentStream {
             }
         }
 
-        return $positionedTextElements;
-    }
-
-    /** @throws PdfParserException */
-    public function getText(Document $document, Page $page): string {
-        $positionedTextElements = $this->getPositionedTextElements();
         usort(
             $positionedTextElements,
             static function (PositionedTextElement $a, PositionedTextElement $b): int {
@@ -83,25 +76,23 @@ class ContentStream {
             }
         );
 
+        return $positionedTextElements;
+    }
+
+    /** @throws PdfParserException */
+    public function getText(Document $document, Page $page): string {
         $text = '';
         $previousPositionedTextElement = null;
-        foreach ($positionedTextElements as $positionedTextElement) {
-            if ($positionedTextElement->textState->fontName === null) {
-                throw new ParseFailureException('Unable to locate font for text element');
-            }
-
-            $font = $page->getFontDictionary()?->getObjectForReference($document, $positionedTextElement->textState->fontName, Font::class)
-                ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $positionedTextElement->textState->fontName->value));
-
+        foreach ($this->getPositionedTextElements() as $positionedTextElement) {
             if ($previousPositionedTextElement !== null) {
                 if ($previousPositionedTextElement->absoluteMatrix->offsetY !== $positionedTextElement->absoluteMatrix->offsetY) {
                     $text .= "\n";
-                } elseif (($positionedTextElement->absoluteMatrix->offsetX - $previousPositionedTextElement->absoluteMatrix->offsetX - $font->getWidthForChars($previousPositionedTextElement->getCodePoints(), $previousPositionedTextElement->textState, $previousPositionedTextElement->absoluteMatrix)) >= ($previousPositionedTextElement->textState->fontSize ?? 10) * $previousPositionedTextElement->absoluteMatrix->scaleX * 0.40) {
+                } elseif (($positionedTextElement->absoluteMatrix->offsetX - $previousPositionedTextElement->absoluteMatrix->offsetX - $positionedTextElement->getFont($document, $page)->getWidthForChars($previousPositionedTextElement->getCodePoints(), $previousPositionedTextElement->textState, $previousPositionedTextElement->absoluteMatrix)) >= ($previousPositionedTextElement->textState->fontSize ?? 10) * $previousPositionedTextElement->absoluteMatrix->scaleX * 0.40) {
                     $text .= ' ';
                 }
             }
 
-            $text .= $positionedTextElement->getText($font);
+            $text .= $positionedTextElement->getText($document, $page);
             $previousPositionedTextElement = $positionedTextElement;
         }
 
