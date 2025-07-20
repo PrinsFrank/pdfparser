@@ -2,9 +2,8 @@
 
 namespace PrinsFrank\PdfParser\Document\Image;
 
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\CIEColorSpaceNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\DeviceColorSpaceNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SpecialColorSpaceNameValue;
+use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpace;
+use PrinsFrank\PdfParser\Document\Image\ColorSpace\Components;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class RasterizedImage {
@@ -15,7 +14,7 @@ class RasterizedImage {
      * @param int<1, max> $height
      * @throws ParseFailureException
      */
-    public static function toPNG(CIEColorSpaceNameValue|DeviceColorSpaceNameValue|SpecialColorSpaceNameValue $colorSpace, int $width, int $height, int $bitsPerComponent, string $content): string {
+    public static function toPNG(ColorSpace $colorSpace, int $width, int $height, int $bitsPerComponent, string $content): string {
         if ($bitsPerComponent !== 8) {
             throw new ParseFailureException('Unsupported BitsPerComponent');
         }
@@ -28,10 +27,10 @@ class RasterizedImage {
         $pixelIndex = 0;
         for ($y = 0; $y < $height; $y++) {
             for ($x = 0; $x < $width; $x++) {
-                $color = match ($colorSpace) {
-                    DeviceColorSpaceNameValue::DeviceRGB => imagecolorallocate($image, ord($content[$pixelIndex++]), ord($content[$pixelIndex++]), ord($content[$pixelIndex++])),
-                    DeviceColorSpaceNameValue::DeviceGray => imagecolorallocate($image, $value = ord($content[$pixelIndex++]), $value, $value),
-                    default => throw new ParseFailureException('Unsupported colorspace: ' . $colorSpace->value),
+                $color = match ($colorSpace->getComponents()) {
+                    Components::RGB => imagecolorallocate($image, ord($content[$pixelIndex++]), ord($content[$pixelIndex++]), ord($content[$pixelIndex++])),
+                    Components::Gray => imagecolorallocate($image, $value = ord($content[$pixelIndex++]), $value, $value),
+                    default => throw new ParseFailureException('Unsupported components: ' . $colorSpace->getComponents()->name),
                 };
 
                 if ($color === false) {
