@@ -20,7 +20,7 @@ enum FilterNameValue: string implements NameValue {
     case CCITT_FAX_DECODE = 'CCITTFaxDecode';
     case JBIG2_DECODE = 'JBIG2Decode';
     case DCT_DECODE = 'DCTDecode'; // Grayscale or color image data encoded in JPEG baseline format
-    case JBX_DECODE = 'JPXDecode';
+    case JPX_DECODE = 'JPXDecode';
     case CRYPT = 'Crypt';
     case ADOBE_PPK_LITE = 'Adobe.PPKLite';
     case ADOBE_PUB_SEC = 'Adobe.PubSec';
@@ -31,6 +31,7 @@ enum FilterNameValue: string implements NameValue {
     /** @return string in binary format */
     public function decodeBinary(string $content, ?Dictionary $decodeParams): string {
         return match($this) {
+            self::JPX_DECODE,
             self::DCT_DECODE => $content, // Don't decode JPEG content
             self::FLATE_DECODE => FlateDecode::decodeBinary(
                 $content,
@@ -50,7 +51,7 @@ enum FilterNameValue: string implements NameValue {
             self::RUN_LENGTH_DECODE => ImageType::RAW,
             self::CCITT_FAX_DECODE => ImageType::TIFF_FAX,
             self::DCT_DECODE => ImageType::JPEG,
-            self::JBX_DECODE => ImageType::JPEG2000,
+            self::JPX_DECODE => ImageType::JPEG2000,
             default => null,
         };
     }
