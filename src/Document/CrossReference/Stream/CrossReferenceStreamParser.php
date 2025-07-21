@@ -40,13 +40,17 @@ class CrossReferenceStreamParser {
         $startStream = $stream->getStartNextLineAfter(Marker::STREAM, $startPos, $startPos + $nrOfBytes)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::STREAM->value));
 
-        $endStream = $stream->firstPos(Marker::END_STREAM, $startStream, $startPos + $nrOfBytes);
-        if ($endStream === null || $endStream > ($startPos + $nrOfBytes)) {
-            throw new ParseFailureException(sprintf('Expected end of stream content marked by %s, none found', Marker::END_STREAM->value));
+        if (($length = $dictionary->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)?->value) === null) {
+            $endStream = $stream->firstPos(Marker::END_STREAM, $startStream, $startPos + $nrOfBytes);
+            if ($endStream === null || $endStream > ($startPos + $nrOfBytes)) {
+                throw new ParseFailureException(sprintf('Expected end of stream content marked by %s, none found', Marker::END_STREAM->value));
+            }
+
+            $length = $endStream - $startStream - 1;
         }
 
         $entries = [];
-        $hexContent = bin2hex(CompressedObjectContentParser::parseBinary($stream, $startStream, $endStream - $startStream - 1, $dictionary));
+        $hexContent = bin2hex(CompressedObjectContentParser::parseBinary($stream, $startStream, $length, $dictionary));
         foreach (str_split($hexContent, $wValue->getTotalLengthInBytes() * self::HEX_CHARS_IN_BYTE) as $referenceRow) {
             $field1 = hexdec(substr($referenceRow, 0, $wValue->lengthRecord1InBytes * self::HEX_CHARS_IN_BYTE));
             $field2 = hexdec(substr($referenceRow, $wValue->lengthRecord1InBytes * self::HEX_CHARS_IN_BYTE, $wValue->lengthRecord2InBytes * self::HEX_CHARS_IN_BYTE));
