@@ -390,4 +390,33 @@ class DictionaryParserTest extends TestCase {
             DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
         );
     }
+
+    public function testHandlesValueOnNewLine(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            << /Filter
+            /DCTDecode >>
+            EOD
+        );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::DCT_DECODE),
+            ),
+            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+        );
+
+        // Note the extra space after the /Filter
+        $stream = new InMemoryStream(
+            <<<EOD
+            << /Filter
+            /DCTDecode >>
+            EOD
+        );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::DCT_DECODE),
+            ),
+            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+        );
+    }
 }

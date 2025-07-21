@@ -50,7 +50,7 @@ class DictionaryParser {
                 }
             } elseif ($char === WhitespaceCharacter::LINE_FEED->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
                 if ($nestingContext->getContext() === DictionaryParseContext::KEY) {
-                    $nestingContext->setContext(DictionaryParseContext::VALUE);
+                    $nestingContext->setContext(DictionaryParseContext::KEY_VALUE_SEPARATOR);
                 } elseif ($nestingContext->getContext() === DictionaryParseContext::VALUE) {
                     self::flush($dictionaryArray, $nestingContext);
                 } elseif ($nestingContext->getContext() === DictionaryParseContext::COMMENT) {
