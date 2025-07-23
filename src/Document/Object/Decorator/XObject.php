@@ -65,9 +65,29 @@ class XObject extends DecoratedObject {
             throw new RuntimeException('Unable to retrieve image type for XObjects that is not an image');
         }
 
-        return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class)
-            ?->getImageType();
+        $filterValueType = $this->getDictionary()->getTypeForKey(DictionaryKey::FILTER);
+        if ($filterValueType === null) {
+            return null;
+        }
+
+        if ($filterValueType === FilterNameValue::class) {
+            return $this->getDictionary()->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class)?->getImageType();
+        }
+
+        if ($filterValueType === ArrayValue::class) {
+            foreach ($this->getDictionary()->getValueForKey(DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new RuntimeException() as $filterValue) {
+                if (!is_string($filterValue)) {
+                    throw new ParseFailureException(sprintf('Expected a string for filter value, got "%s"', json_encode($filterValue)));
+                }
+
+                $filterValue = FilterNameValue::tryFrom(ltrim($filterValue, '/')) ?? throw new ParseFailureException(sprintf('Unsupported filter value "%s"', $filterValue));
+                if ($filterValue->getImageType() !== null) {
+                    return $filterValue->getImageType();
+                }
+            }
+        }
+
+        throw new ParseFailureException(sprintf('Unsupported filter value type %s', $filterValueType));
     }
 
     private function getBitsPerComponent(): ?int {
