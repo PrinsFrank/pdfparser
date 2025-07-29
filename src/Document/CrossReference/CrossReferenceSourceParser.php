@@ -39,7 +39,7 @@ class CrossReferenceSourceParser {
         $eolPosByteOffset = $stream->getEndOfCurrentLine($byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes())
             ?? throw new ParseFailureException('Expected a newline after byte offset for last cross reference stream');
 
-        $isTable = $stream->read($byteOffsetLastCrossReferenceSection, $eolPosByteOffset - $byteOffsetLastCrossReferenceSection) === Marker::XREF->value;
+        $isTable = trim($stream->read($byteOffsetLastCrossReferenceSection, $eolPosByteOffset - $byteOffsetLastCrossReferenceSection)) === Marker::XREF->value;
         $endCrossReferenceSection = $isTable
             ? ($stream->firstPos(Marker::START_XREF, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::START_XREF->value)))
             : ($stream->firstPos(Marker::END_OBJ, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_OBJ->value)));
