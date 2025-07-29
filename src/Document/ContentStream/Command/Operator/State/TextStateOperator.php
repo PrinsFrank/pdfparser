@@ -51,9 +51,8 @@ enum TextStateOperator: string implements InteractsWithTextState {
         }
 
         if ($this === self::SCALE) {
-            $scale = (int) $operands;
-            if ($scale < 0 || $scale > 100) {
-                throw new ParseFailureException();
+            if (trim($operands) !== (string)($scale = (int) $operands)) {
+                throw new ParseFailureException(sprintf('Invalid scale operand "%s" for scale operator', $operands));
             }
 
             return new TextState(
@@ -82,7 +81,7 @@ enum TextStateOperator: string implements InteractsWithTextState {
         }
 
         if ($this === self::FONT_SIZE) {
-            if (preg_match('/^\/(?<fontReference>[A-Za-z_0-9\.\-]+)\s+(?<FontSize>[0-9]+(\.[0-9]+)?)$/', $operands, $matches) !== 1) {
+            if (preg_match('/^\/(?<fontReference>[A-Za-z_0-9\.\-]+)\s+(?<FontSize>-?[0-9]+(\.[0-9]+)?)$/', $operands, $matches) !== 1) {
                 throw new InvalidArgumentException(sprintf('Invalid font operand "%s" for Tf operator', substr($operands, 0, 200)));
             }
 

@@ -6,7 +6,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 
 class TextState {
-    /** @param int<0, 100> $scale */
     public function __construct(
         public readonly DictionaryKey|ExtendedDictionaryKey|null $fontName, // Tf
         public readonly ?float $fontSize,    // Tfs
