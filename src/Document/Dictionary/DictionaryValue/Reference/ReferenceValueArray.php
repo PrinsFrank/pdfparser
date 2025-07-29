@@ -24,7 +24,8 @@ class ReferenceValueArray implements DictionaryValue {
             return null;
         }
 
-        $valueString = str_replace(["\r", "\n", '  '], ' ', $valueString);
+        $valueString = preg_replace('/\s+/', ' ', $valueString)
+            ?? throw new ParseFailureException('An unexpected error occurred while sanitizing reference value array');
         $referenceParts = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));
         $nrOfReferenceParts = count($referenceParts);
         if ($nrOfReferenceParts % 3 !== 0) {
@@ -34,8 +35,10 @@ class ReferenceValueArray implements DictionaryValue {
         $referenceValues = [];
         for ($i = 0; $i < $nrOfReferenceParts; $i += 3) {
             /** @phpstan-ignore offsetAccess.notFound, offsetAccess.notFound, offsetAccess.notFound */
-            $referenceValues[] = ReferenceValue::fromValue($referenceParts[$i] . ' ' . $referenceParts[$i + 1] . ' ' . $referenceParts[$i + 2])
-                ?? throw new ParseFailureException();
+            $string = $referenceParts[$i] . ' ' . $referenceParts[$i + 1] . ' ' . $referenceParts[$i + 2];
+
+            $referenceValues[] = ReferenceValue::fromValue($string)
+                ?? throw new ParseFailureException(sprintf('Could not parse reference value "%s" at index %d in "%s"', $string, $i, $valueString));
         }
 
         return new self(... $referenceValues);
