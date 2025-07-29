@@ -31,7 +31,7 @@ enum GraphicsStateOperator: string implements InteractsWithTransformationMatrix 
         if ($this === self::ModifyCurrentTransformationMatrix) {
             $matrix = explode(' ', trim($operands));
             if (count($matrix) !== 6) {
-                throw new ParseFailureException();
+                throw new ParseFailureException(sprintf('Expected 6 values for matrix transformation, got %d: "%s"', count($matrix), $operands));
             }
 
             return $transformationMatrix
