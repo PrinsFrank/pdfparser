@@ -6,7 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
-use PrinsFrank\PdfParser\Document\Filter\Decode\CCITFaxDecode;
+use PrinsFrank\PdfParser\Document\Filter\Decode\CCITTFaxDecode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\FlateDecode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\LZWFlatePredictorValue;
 use PrinsFrank\PdfParser\Document\Image\ImageType;
@@ -31,7 +31,7 @@ enum FilterNameValue: string implements NameValue {
 
     /** @return string in binary format */
     public function decodeBinary(string $content, ?Dictionary $dictionary): string {
-        $decodeParams = $dictionary->getValueForKey(DictionaryKey::DECODE_PARMS, Dictionary::class);
+        $decodeParams = $dictionary?->getValueForKey(DictionaryKey::DECODE_PARMS, Dictionary::class);
 
         return match($this) {
             self::JPX_DECODE,
@@ -42,6 +42,16 @@ enum FilterNameValue: string implements NameValue {
                     ? $predictorValue
                     : LZWFlatePredictorValue::None,
                 $decodeParams?->getValueForKey(DictionaryKey::COLUMNS, IntegerValue::class)->value ?? 1
+            ),
+            self::CCITT_FAX_DECODE => CCITTFaxDecode::addHeaderAndIFD(
+                $content,
+                $decodeParams?->getValueForKey(DictionaryKey::COLUMNS, IntegerValue::class)->value
+                    ?? throw new ParseFailureException('Missing columns'),
+                $decodeParams->getValueForKey(DictionaryKey::ROWS, IntegerValue::class)->value
+                    ?? $dictionary->getValueForKey(DictionaryKey::HEIGHT, IntegerValue::class)->value
+                    ?? throw new ParseFailureException('Missing rows'),
+                $decodeParams->getValueForKey(DictionaryKey::K, IntegerValue::class)->value
+                    ?? throw new ParseFailureException('Missing K'),
             ),
             default => throw new ParseFailureException('Content "' . $content . '" cannot be decoded for filter "' . $this->name . '"')
         };
