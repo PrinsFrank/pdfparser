@@ -22,7 +22,7 @@ class CompressedObjectContentParser {
         $binaryStreamContent = $stream->read($startPos, $nrOfBytes);
         if (($filterType = $dictionary->getTypeForKey(DictionaryKey::FILTER)) === FilterNameValue::class) {
             $binaryStreamContent = ($dictionary->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class) ?? throw new ParseFailureException())
-                ->decodeBinary($binaryStreamContent, $dictionary->getValueForKey(DictionaryKey::DECODE_PARMS, Dictionary::class));
+                ->decodeBinary($binaryStreamContent, $dictionary);
         } elseif ($filterType === ArrayValue::class) {
             foreach ($dictionary->getValueForKey(DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new ParseFailureException() as $filterValue) {
                 if (is_string($filterValue) === false || ($filter = FilterNameValue::tryFrom(ltrim($filterValue, '/'))) === null) {
@@ -30,7 +30,7 @@ class CompressedObjectContentParser {
                 }
 
                 $binaryStreamContent = $filter
-                    ->decodeBinary($binaryStreamContent, $dictionary->getValueForKey(DictionaryKey::DECODE_PARMS, Dictionary::class));
+                    ->decodeBinary($binaryStreamContent, $dictionary);
             }
         } elseif ($filterType !== null) {
             throw new RuntimeException(sprintf('Expected filter to be a FilterNameValue or ArrayValue, got %s', $filterType));

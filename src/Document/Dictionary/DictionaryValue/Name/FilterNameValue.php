@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Filter\Decode\CCITFaxDecode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\FlateDecode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\LZWFlatePredictorValue;
 use PrinsFrank\PdfParser\Document\Image\ImageType;
@@ -29,7 +30,9 @@ enum FilterNameValue: string implements NameValue {
     case VERISIGN_PPKVS = 'Verisign.PPKVS';
 
     /** @return string in binary format */
-    public function decodeBinary(string $content, ?Dictionary $decodeParams): string {
+    public function decodeBinary(string $content, ?Dictionary $dictionary): string {
+        $decodeParams = $dictionary->getValueForKey(DictionaryKey::DECODE_PARMS, Dictionary::class);
+
         return match($this) {
             self::JPX_DECODE,
             self::DCT_DECODE => $content, // Don't decode JPEG content
