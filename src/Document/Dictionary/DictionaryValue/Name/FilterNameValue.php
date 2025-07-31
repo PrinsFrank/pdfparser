@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Filter\Decode\CCITTFaxDecode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\FlateDecode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\LZWFlatePredictorValue;
@@ -29,9 +30,8 @@ enum FilterNameValue: string implements NameValue {
     case CICI_SIGN_IT = 'CIC.SignIt';
     case VERISIGN_PPKVS = 'Verisign.PPKVS';
 
-    /** @return string in binary format */
-    public function decodeBinary(string $content, ?Dictionary $dictionary): string {
-        $decodeParams = $dictionary?->getValueForKey(DictionaryKey::DECODE_PARMS, Dictionary::class);
+    public function decodeBinary(string $content, ?Dictionary $dictionary, ?Document $document): string {
+        $decodeParams = $dictionary?->getSubDictionary($document, DictionaryKey::DECODE_PARMS);
 
         return match($this) {
             self::JPX_DECODE,

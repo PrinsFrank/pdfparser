@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
@@ -61,7 +62,7 @@ class Dictionary {
         return null;
     }
 
-    public function getSubDictionary(Document $document, DictionaryKey $dictionaryKey): ?Dictionary {
+    public function getSubDictionary(?Document $document, DictionaryKey $dictionaryKey): ?Dictionary {
         $subDictionaryType = $this->getTypeForKey($dictionaryKey);
         if ($subDictionaryType === null) {
             return null;
@@ -71,7 +72,15 @@ class Dictionary {
             return $this->getValueForKey($dictionaryKey, Dictionary::class) ?? throw new RuntimeException();
         }
 
+        if ($subDictionaryType === DictionaryArrayValue::class) {
+            return ($this->getValueForKey($dictionaryKey, DictionaryArrayValue::class) ?? throw new RuntimeException())->toSingleDictionary();
+        }
+
         if ($subDictionaryType === ReferenceValue::class) {
+            if ($document === null) {
+                throw new ParseFailureException('Document is required to get subDictionary for reference');
+            }
+
             return ($this->getObjectForReference($document, $dictionaryKey) ?? throw new ParseFailureException())
                 ->getDictionary();
         }

@@ -93,7 +93,7 @@ class UncompressedObject implements ObjectItem {
         }
 
         return CompressedObjectContentParser::parseBinary(
-            $document->stream,
+            $document,
             $startStreamPos,
             ($document->stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value))) - $startStreamPos,

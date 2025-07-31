@@ -40,4 +40,15 @@ class DictionaryArrayValue implements DictionaryValue {
 
         return new self(... $dictionaryEntries);
     }
+
+    public function toSingleDictionary(): ?Dictionary {
+        $dictionaryEntries = [];
+        foreach ($this->dictionaries as $dictionary) {
+            foreach ($dictionary->dictionaryEntries as $dictionaryEntry) {
+                $dictionaryEntries[] = $dictionaryEntry;
+            }
+        }
+
+        return new Dictionary(... $dictionaryEntries);
+    }
 }
