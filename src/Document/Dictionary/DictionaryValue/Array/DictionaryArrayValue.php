@@ -25,7 +25,8 @@ class DictionaryArrayValue implements DictionaryValue {
     /** @throws PdfParserException */
     public static function fromValue(string $valueString): ?self {
         $valueStringWithoutSpaces = str_replace([' ', "\r", "\n"], '', $valueString);
-        if (!str_starts_with($valueStringWithoutSpaces, '[<<') || !str_ends_with($valueStringWithoutSpaces, '>>]')) {
+        if ((str_starts_with($valueStringWithoutSpaces, '[<<') === false && str_starts_with($valueStringWithoutSpaces, '[null') === false)
+            || (str_ends_with($valueStringWithoutSpaces, '>>]') === false && str_ends_with($valueStringWithoutSpaces, 'null]') === false)) {
             return null;
         }
 

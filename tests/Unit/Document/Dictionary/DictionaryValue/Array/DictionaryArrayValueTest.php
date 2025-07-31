@@ -21,6 +21,10 @@ class DictionaryArrayValueTest extends TestCase {
         static::assertNull(DictionaryArrayValue::fromValue('[]'));
         static::assertEquals(
             new DictionaryArrayValue(new Dictionary()),
+            DictionaryArrayValue::fromValue('[null]')
+        );
+        static::assertEquals(
+            new DictionaryArrayValue(new Dictionary()),
             DictionaryArrayValue::fromValue('[<<>>]')
         );
         static::assertEquals(
@@ -30,6 +34,14 @@ class DictionaryArrayValueTest extends TestCase {
         static::assertEquals(
             new DictionaryArrayValue(new Dictionary(), new Dictionary()),
             DictionaryArrayValue::fromValue('[<<>> <<>>]')
+        );
+        static::assertEquals(
+            new DictionaryArrayValue(new Dictionary(), new Dictionary()),
+            DictionaryArrayValue::fromValue('[null <<>> <<>>]')
+        );
+        static::assertEquals(
+            new DictionaryArrayValue(new Dictionary(), new Dictionary()),
+            DictionaryArrayValue::fromValue('[<<>> <<>> null]')
         );
         static::assertEquals(
             new DictionaryArrayValue(new Dictionary(new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(106))), new Dictionary(new DictionaryEntry(DictionaryKey::TITLE, new TextStringValue('(Foo)')))),
