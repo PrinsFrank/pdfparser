@@ -776,7 +776,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::DAMAGED_ROWS_BEFORE_ERROR => [IntegerValue::class],
             self::DATA => [TextStringValue::class],
             self::DECODE => [ArrayValue::class],
-            self::DECODE_PARMS => [Dictionary::class, DictionaryArrayValue::class, ArrayValue::class],
+            self::DECODE_PARMS => [Dictionary::class, DictionaryArrayValue::class],
             self::DEFAULT => [Dictionary::class, TextStringValue::class],
             self::DEFAULT_FOR_PRINTING => [BooleanValue::class],
             self::DESC => [TextStringValue::class],
