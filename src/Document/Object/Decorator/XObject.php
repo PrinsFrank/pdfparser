@@ -132,7 +132,7 @@ class XObject extends DecoratedObject {
     #[Override]
     public function getContent(): string {
         $content = parent::getContent();
-        if (!$this->isImage() || $this->getDictionary()->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class) !== FilterNameValue::FLATE_DECODE) {
+        if (!$this->isImage() || $this->getImageType() !== ImageType::PNG) {
             return $content;
         }
 
