@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\Item\Consecut
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\Item\RangeCIDWidth;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
+/** @see 9.7.4.3 Glyph metrics in CIDFonts */
 class CIDFontWidths implements DictionaryValue {
     /** @var list<ConsecutiveCIDWidth|RangeCIDWidth> */
     private readonly array $widths;
@@ -30,6 +31,7 @@ class CIDFontWidths implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
+        $valueString = str_replace("\n", ' ', $valueString);
         if (preg_match_all('/(?<startingCID>[0-9]+)\s*(?<CIDS>[0-9]+\s*[0-9.]+|\[[0-9. ]+\])/', $valueString, $matches, PREG_SET_ORDER) <= 0) {
             return null;
         }
