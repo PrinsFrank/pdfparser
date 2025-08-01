@@ -10,6 +10,7 @@ enum ImageType {
     case TIFF_FAX;
     case CUSTOM;
     case RAW;
+    case JBIG2;
 
     public function getFileExtension(): string {
         return match ($this) {
@@ -20,6 +21,7 @@ enum ImageType {
             self::TIFF_FAX => 'tiff',
             self::CUSTOM,
             self::RAW => 'raw',
+            self::JBIG2 => 'jbig2',
         };
     }
 }

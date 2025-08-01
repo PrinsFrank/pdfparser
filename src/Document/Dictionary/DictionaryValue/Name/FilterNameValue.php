@@ -35,6 +35,7 @@ enum FilterNameValue: string implements NameValue {
 
         return match($this) {
             self::JPX_DECODE,
+            self::JBIG2_DECODE,
             self::DCT_DECODE => $content, // Don't decode JPEG content
             self::FLATE_DECODE => FlateDecode::decodeBinary(
                 $content,
@@ -65,6 +66,7 @@ enum FilterNameValue: string implements NameValue {
             self::CCITT_FAX_DECODE => ImageType::TIFF_FAX,
             self::DCT_DECODE => ImageType::JPEG,
             self::JPX_DECODE => ImageType::JPEG2000,
+            self::JBIG2_DECODE => ImageType::JBIG2,
             default => null,
         };
     }
