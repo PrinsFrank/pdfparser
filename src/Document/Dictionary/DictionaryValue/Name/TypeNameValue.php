@@ -54,6 +54,7 @@ enum TypeNameValue: string implements NameValue {
     case EXTENSIONS = 'Extensions';
     case F_W_PARAMS = 'FWParams';
     case FILE_SPEC = 'Filespec';
+    case FILL_SIGN_DATA = 'FillSignData';
     case FIXED_PRINT = 'FixedPrint';
     case FOLDER = 'Folder';
     case FONT = 'Font';
