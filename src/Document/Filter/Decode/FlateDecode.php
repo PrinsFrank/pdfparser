@@ -24,27 +24,38 @@ class FlateDecode {
             throw new ParseFailureException('Unable to gzuncompress value "' . substr(trim($value), 0, 30) . '..."');
         }
 
-        if ($predictor !== LZWFlatePredictorValue::None) {
-            $hexTable = array_map(fn (string $row) => str_split($row, 2), str_split(bin2hex($decodedValue), ($columns + 1) * 2));
-            $decodedValue = '';
-            foreach ($hexTable as $rowIndex => $row) {
-                if (!is_array($row) || !array_is_list($row) || count($row) < 2) {
-                    throw new RuntimeException(sprintf('Expected at least 2 items per row, got %d', count($row)));
-                }
+        if ($predictor === LZWFlatePredictorValue::None) {
+            return $decodedValue;
+        }
 
-                $rowAlgorithm = PNGFilterAlgorithm::tryFrom((int) $row[0]);
-                if ($rowAlgorithm === null) {
-                    throw new ParseFailureException(sprintf('Unrecognized row algorithm %d', (int) $row[0]));
-                }
+        if ($predictor === LZWFlatePredictorValue::TIFFPredictor2) {
+            throw new ParseFailureException('Unsupported predictor ' . $predictor->value);
+        }
 
-                if ($rowAlgorithm !== PNGFilterAlgorithm::Up) {
-                    throw new ParseFailureException(sprintf('PNG filters other than "Up" are currently not supported, "%s" given', $rowAlgorithm->name));
-                }
+        $hexTable = array_map(fn (string $row) => str_split($row, 2), str_split(bin2hex($decodedValue), ($columns + 1) * 2));
+        $decodedValue = '';
+        foreach ($hexTable as $rowIndex => $row) {
+            if (!is_array($row) || !array_is_list($row) || count($row) < 2) {
+                throw new RuntimeException(sprintf('Expected at least 2 items per row, got %d', count($row)));
+            }
 
+            if (!is_int($algorithmNumber = hexdec($row[0]))) {
+                throw new ParseFailureException(sprintf('Expected algorithm number to be an integer, got %s', $algorithmNumber));
+            }
+
+            $rowAlgorithm = PNGPredictorAlgorithm::tryFrom($algorithmNumber)
+                ?? throw new ParseFailureException(sprintf('Unrecognized row algorithm %d', $algorithmNumber));
+            if ($rowAlgorithm === PNGPredictorAlgorithm::None) {
+                $decodedValue .= implode('', array_slice($row, 1));
+
+                continue;
+            }
+
+            if ($rowAlgorithm === PNGPredictorAlgorithm::Up) {
                 if ($rowIndex === 0) {
                     $decodedValue .= implode('', array_slice($row, 1));
 
-                    continue; // We can't do an up transform with the top row
+                    continue;
                 }
 
                 foreach ($row as $columnIndex => $columnValue) {
@@ -53,11 +64,13 @@ class FlateDecode {
                 }
 
                 $decodedValue .= implode('', array_slice($hexTable[$rowIndex], 1));
-            }
 
-            if (($decodedValue = hex2bin($decodedValue)) === false) {
-                throw new ParseFailureException('Unable to hex2bin value "' . substr(trim($value), 0, 30) . '..."');
+                continue;
             }
+        }
+
+        if (($decodedValue = hex2bin($decodedValue)) === false) {
+            throw new ParseFailureException('Unable to hex2bin value "' . substr(trim($value), 0, 30) . '..."');
         }
 
         return $decodedValue;

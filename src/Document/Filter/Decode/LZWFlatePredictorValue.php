@@ -12,4 +12,14 @@ enum LZWFlatePredictorValue: int {
     case PngAverage = 13;
     case PngPaeth = 14;
     case PngOptimum = 15;
+
+    /**
+     * The postprediction data for each PNG-predicted row shall begin with an explicit algorithm tag;
+     * therefore, different rows can be predicted with different algorithms to improve compression.
+     * TIFF Predictor 2 has no such identifier; the same algorithm applies to all rows.
+     */
+    public function hasRowAlgorithm(): bool {
+        return $this !== self::None
+            && $this !== self::TIFFPredictor2;
+    }
 }
