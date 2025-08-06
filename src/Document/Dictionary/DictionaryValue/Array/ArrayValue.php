@@ -26,7 +26,10 @@ class ArrayValue implements DictionaryValue {
 
         $valueString = preg_replace('/(<[^>]*>)(?=<[^>]*>)/', '$1 $2', $valueString)
             ?? throw new RuntimeException('An error occurred while sanitizing array value');
-        $values = explode(' ', str_replace("\n", ' ', rtrim(ltrim($valueString, '[ '), ' ]')));
+        $valueString = str_replace(['/', "\n"], [' /', ' '], rtrim(ltrim($valueString, '[ '), ' ]'));
+        $valueString = preg_replace('/\s+/', ' ', $valueString)
+            ?? throw new RuntimeException('An error occurred while removing duplicate spaces from array value');
+        $values = explode(' ', $valueString);
         if (count($values) % 3 === 0 && array_key_exists(2, $values) && $values[2] === 'R') {
             return ReferenceValueArray::fromValue($valueString);
         }

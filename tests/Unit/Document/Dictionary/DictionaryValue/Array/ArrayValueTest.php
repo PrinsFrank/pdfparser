@@ -28,6 +28,14 @@ class ArrayValueTest extends TestCase {
             ArrayValue::fromValue('[foo bar]'),
         );
         static::assertEquals(
+            new ArrayValue(['/foo', '/bar']),
+            ArrayValue::fromValue('[/foo/bar]'),
+        );
+        static::assertEquals(
+            new ArrayValue([3, 0, 'R', '/FitH', 'null']),
+            ArrayValue::fromValue('[3 0 R /FitH null]'),
+        );
+        static::assertEquals(
             new ArrayValue([42, 43, 44]),
             ArrayValue::fromValue(
                 <<<EOD
