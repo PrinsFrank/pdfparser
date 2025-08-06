@@ -28,9 +28,14 @@ class RasterizedImage {
         for ($y = 0; $y < $height; $y++) {
             for ($x = 0; $x < $width; $x++) {
                 $color = match ($colorSpace->getComponents()) {
-                    Components::RGB => imagecolorallocate($image, ord($content[$pixelIndex++]), ord($content[$pixelIndex++]), ord($content[$pixelIndex++])),
-                    Components::Gray => imagecolorallocate($image, $value = ord($content[$pixelIndex++]), $value, $value),
-                    default => throw new ParseFailureException('Unsupported components: ' . $colorSpace->getComponents()->name),
+                    Components::RGB => imagecolorallocate($image, ord($content[$pixelIndex]), ord($content[$pixelIndex + 1]), ord($content[$pixelIndex + 2])),
+                    Components::Gray => imagecolorallocate($image, $value = ord($content[$pixelIndex]), $value, $value),
+                    Components::CMYK => imagecolorallocate(
+                        $image,
+                        min(255, max(0, (int)(255 * (1 - (ord($content[$pixelIndex]) / 255)) * (1 - (ord($content[$pixelIndex + 3]) / 255))))),
+                        min(255, max(0, (int)(255 * (1 - (ord($content[$pixelIndex + 1]) / 255)) * (1 - (ord($content[$pixelIndex + 3]) / 255))))),
+                        min(255, max(0, (int)(255 * (1 - (ord($content[$pixelIndex + 2]) / 255)) * (1 - (ord($content[$pixelIndex + 3]) / 255))))),
+                    ),
                 };
 
                 if ($color === false) {
@@ -38,6 +43,7 @@ class RasterizedImage {
                 }
 
                 imagesetpixel($image, $x, $y, $color);
+                $pixelIndex += $colorSpace->getComponents()->value;
             }
         }
 
