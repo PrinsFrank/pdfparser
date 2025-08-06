@@ -29,6 +29,9 @@ enum GraphicsStateOperator: string implements InteractsWithTransformationMatrix 
     #[Override]
     public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix {
         if ($this === self::ModifyCurrentTransformationMatrix) {
+            $operands = preg_replace('/\s+/', ' ', $operands)
+                ?? throw new ParseFailureException('An error occurred while trying to remove duplicate spaces from the operands');
+
             $matrix = explode(' ', trim($operands));
             if (count($matrix) !== 6) {
                 throw new ParseFailureException(sprintf('Expected 6 values for matrix transformation, got %d: "%s"', count($matrix), $operands));
