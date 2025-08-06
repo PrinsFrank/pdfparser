@@ -27,7 +27,7 @@ class ContentStreamParser {
     public static function parse(string $contentStream): ContentStream {
         $operandBuffer = '';
         $content = [];
-        $inStringLiteral = false;
+        $inStringLiteral = $inResourceName = false;
         $inArrayLevel = $inStringLevel = 0;
         $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = null;
         foreach (($characters = str_split($contentStream)) as $index => $char) {
@@ -36,12 +36,18 @@ class ContentStreamParser {
                 if ($char === ')' && $previousChar !== '\\') {
                     $inStringLiteral = false;
                 }
+            } elseif ($inResourceName === true) {
+                if (in_array($char, [' ', '<', '(', '/'], true) && $previousChar !== '\\') {
+                    $inResourceName = false;
+                }
             } elseif ($char === '[' && $previousChar !== '\\') {
                 $inArrayLevel++;
             } elseif ($char === '<' && $previousChar !== '\\') {
                 $inStringLevel++;
             } elseif ($char === '(' && $previousChar !== '\\') {
                 $inStringLiteral = true;
+            } elseif ($char === '/' && $previousChar !== '\\') {
+                $inResourceName = true;
             } elseif ($inStringLevel > 0 || $inArrayLevel > 0) {
                 if ($inStringLevel > 0 && $char === '>' && $previousChar !== '\\') {
                     $inStringLevel--;
