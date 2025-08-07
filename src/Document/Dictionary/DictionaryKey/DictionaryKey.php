@@ -1015,7 +1015,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::OCPROPERTIES => [Dictionary::class],
             self::OFF => [ArrayValue::class],
             self::OID => [ArrayValue::class],
-            self::ON => [ArrayValue::class],
+            self::ON => [ReferenceValueArray::class, ArrayValue::class],
             self::ON_INSTANTIATE => [TextStringValue::class],
             self::OP => [BooleanValue::class, IntegerValue::class],
             self::OP_L => [TextStringValue::class],
