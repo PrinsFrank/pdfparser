@@ -247,7 +247,7 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
-                new DictionaryEntry(DictionaryKey::OPEN_ACTION, new ArrayValue([3, 0, 'R/Fit'])),
+                new DictionaryEntry(DictionaryKey::OPEN_ACTION, new ArrayValue([3, 0, 'R', '/Fit'])),
                 new DictionaryEntry(DictionaryKey::PAGE_MODE, PageModeNameValue::USE_OUTLINES),
                 new DictionaryEntry(DictionaryKey::PAGE_LABELS, new Dictionary(
                     new DictionaryEntry(DictionaryKey::NUMS, new TextStringValue('[0<</S/r>>12<</S/D>>]')),
