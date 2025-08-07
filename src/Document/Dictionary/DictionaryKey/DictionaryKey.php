@@ -1007,7 +1007,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::NR => [BooleanValue::class],
             self::NU => [DictionaryArrayValue::class],
             self::NUM_COPIES => [IntegerValue::class],
-            self::NUMS => [ArrayValue::class],
+            self::NUMS => [TextStringValue::class],
             self::O => [TextStringValue::class, IntegerValue::class, FloatValue::class, Dictionary::class, ArrayValue::class, BooleanValue::class],
             self::OB => [TextStringValue::class],
             self::OC => [Dictionary::class],

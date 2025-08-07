@@ -250,7 +250,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::OPEN_ACTION, new ArrayValue([3, 0, 'R/Fit'])),
                 new DictionaryEntry(DictionaryKey::PAGE_MODE, PageModeNameValue::USE_OUTLINES),
                 new DictionaryEntry(DictionaryKey::PAGE_LABELS, new Dictionary(
-                    new DictionaryEntry(DictionaryKey::NUMS, new ArrayValue(['0<</S/r>>12<</S/D>>'])),
+                    new DictionaryEntry(DictionaryKey::NUMS, new TextStringValue('[0<</S/r>>12<</S/D>>]')),
                 )),
                 new DictionaryEntry(DictionaryKey::NAMES, new ReferenceValue(13164, 0)),
                 new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(13165, 0)),
