@@ -33,7 +33,7 @@ interface Stream {
 
     public function getStartNextLineAfter(WhitespaceCharacter|Marker|DelimiterCharacter|ToUnicodeCMapOperator $needle, int $offsetFromStart, int $before): ?int;
 
-    public function getStartOfNextLine(int $byteOffset, int $before): ?int ;
+    public function getStartOfNextLine(int $byteOffset, int $before): ?int;
 
-    public function getEndOfCurrentLine(int $byteOffset, int $before): ?int ;
+    public function getEndOfCurrentLine(int $byteOffset, int $before): ?int;
 }
