@@ -217,7 +217,12 @@ class Font extends DecoratedObject {
         if ($this->getDictionary()->getTypeForKey(DictionaryKey::WIDTHS) === ReferenceValue::class) {
             $object = $this->document->getObject(($widthsReference = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ReferenceValue::class))->objectNumber ?? throw new ParseFailureException(), Font::class)
                 ?? throw new ParseFailureException(sprintf('Width dictionary with number %d could not be found', $widthsReference->objectNumber));
-            $widthsArray = explode(' ', ltrim(rtrim(trim($object->getContent()), ']'), '['));
+            $arrayValue = ArrayValue::fromValue($object->getContent());
+            if ($arrayValue instanceof ArrayValue === false) {
+                throw new ParseFailureException(sprintf('Width dictionary with number %d does not contain a valid array, "%s"', $widthsReference->objectNumber, substr($object->getContent(), 0, 100) . '...'));
+            }
+
+            $widthsArray = $arrayValue->value;
         } elseif (($widthsArray = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ArrayValue::class)?->value) === null) {
             return null;
         }
