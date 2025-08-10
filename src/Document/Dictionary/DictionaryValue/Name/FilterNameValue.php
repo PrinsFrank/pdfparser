@@ -54,7 +54,7 @@ enum FilterNameValue: string implements NameValue {
                 $decodeParams->getValueForKey(DictionaryKey::K, IntegerValue::class)->value
                     ?? throw new ParseFailureException('Missing K'),
             ),
-            default => throw new ParseFailureException('Content "' . $content . '" cannot be decoded for filter "' . $this->name . '"')
+            default => throw new ParseFailureException('Content "' . substr($content, 0, 100) . '..." cannot be decoded for filter "' . $this->name . '"')
         };
     }
 
