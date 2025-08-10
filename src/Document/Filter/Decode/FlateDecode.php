@@ -21,7 +21,15 @@ class FlateDecode {
 
         $decodedValue = @gzuncompress($value);
         if ($decodedValue === false) {
-            throw new ParseFailureException('Unable to gzuncompress value "' . substr(trim($value), 0, 30) . '..."');
+            if (($tmpFile = tempnam(sys_get_temp_dir(), 'gz')) === false) {
+                throw new RuntimeException('Unable to create temporary file');
+            }
+
+            file_put_contents($tmpFile, "\x1f\x8b\x08\x00\x00\x00\x00\x00" . $value);
+            $decodedValue = file_get_contents('compress.zlib://' . $tmpFile);
+            if (in_array($decodedValue, ['', false], true)) {
+                throw new ParseFailureException('Unable to gzuncompress value "' . substr(trim($value), 0, 30) . '..."');
+            }
         }
 
         if ($predictor === LZWFlatePredictorValue::None) {
