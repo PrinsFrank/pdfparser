@@ -93,9 +93,12 @@ class UncompressedObject implements ObjectItem {
             );
         }
 
-        $nextLineAfterStartObj = $document->stream->getStartNextLineAfter(Marker::OBJ, $this->startOffset, $this->endOffset);
-        $endObjPos = $document->stream->firstPos(Marker::END_OBJ, $nextLineAfterStartObj, $this->endOffset);
-        $eolObjContent = $document->stream->getEndOfCurrentLine($endObjPos - 2, $this->endOffset);
+        $nextLineAfterStartObj = $document->stream->getStartNextLineAfter(Marker::OBJ, $this->startOffset, $this->endOffset)
+            ?? throw new ParseFailureException(sprintf('Unable to locate newline after marker %s', Marker::OBJ->value));
+        $endObjPos = $document->stream->firstPos(Marker::END_OBJ, $nextLineAfterStartObj, $this->endOffset)
+            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_OBJ->value));
+        $eolObjContent = $document->stream->getEndOfCurrentLine($endObjPos - 2, $this->endOffset)
+            ?? throw new ParseFailureException(sprintf('Unable to locate newline after marker %s', Marker::END_OBJ->value));
         return $document->stream->read(
             $nextLineAfterStartObj,
             $eolObjContent - $nextLineAfterStartObj,
