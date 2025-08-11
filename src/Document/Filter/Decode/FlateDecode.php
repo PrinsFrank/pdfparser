@@ -27,6 +27,7 @@ class FlateDecode {
 
             file_put_contents($tmpFile, "\x1f\x8b\x08\x00\x00\x00\x00\x00" . $value);
             $decodedValue = file_get_contents('compress.zlib://' . $tmpFile);
+            unlink($tmpFile);
             if (in_array($decodedValue, ['', false], true)) {
                 throw new ParseFailureException('Unable to gzuncompress value "' . substr(trim($value), 0, 30) . '..."');
             }
