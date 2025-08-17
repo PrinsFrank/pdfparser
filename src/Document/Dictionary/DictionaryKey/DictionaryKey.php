@@ -31,6 +31,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\PageLayoutName
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\PageModeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\PaperHandlingNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\RenderingIntentNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SecurityHandlerNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SpecialColorSpaceNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TabsNameValue;
@@ -849,7 +850,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::FF => [IntegerValue::class],
             self::FFILTER => [FilterNameValue::class, ArrayValue::class],
             self::FIELDS => [ReferenceValue::class, ReferenceValueArray::class, DictionaryArrayValue::class],
-            self::FILTER => [FilterNameValue::class, ArrayValue::class],
+            self::FILTER => [FilterNameValue::class, SecurityHandlerNameValue::class, ArrayValue::class],
             self::FIRST => [IntegerValue::class, Dictionary::class],
             self::FIRST_CHAR => [IntegerValue::class],
             self::FIT_WINDOW => [BooleanValue::class],
