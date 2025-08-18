@@ -44,6 +44,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Security\SecurityAlgorithm;
+use PrinsFrank\PdfParser\Document\Security\StandardSecurityHandlerRevision;
 use PrinsFrank\PdfParser\Document\Version\Version;
 
 /** @api */
@@ -1084,7 +1086,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::PZ => [FloatValue::class],
             self::Q => [IntegerValue::class],
             self::QUAD_POINTS => [ArrayValue::class],
-            self::R => [IntegerValue::class, Rectangle::class, Dictionary::class, TextStringValue::class, ArrayValue::class],
+            self::R => [StandardSecurityHandlerRevision::class, Rectangle::class, Dictionary::class, TextStringValue::class, ArrayValue::class],
             self::RANGE => [ArrayValue::class],
             self::RATE => [IntegerValue::class, FloatValue::class],
             self::RBGROUPS => [ArrayValue::class],
@@ -1223,7 +1225,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::USER => [Dictionary::class],
             self::USER_PROPERTIES => [BooleanValue::class],
             self::USER_UNIT => [FloatValue::class],
-            self::V => [IntegerValue::class, FloatValue::class, BooleanValue::class, Dictionary::class, TextStringValue::class, ArrayValue::class],
+            self::V => [SecurityAlgorithm::class, FloatValue::class, BooleanValue::class, Dictionary::class, TextStringValue::class, ArrayValue::class],
             self::VA => [DictionaryArrayValue::class],
             self::VE => [ArrayValue::class],
             self::VERIKET_CLASSIFICATION => [TextStringValue::class],

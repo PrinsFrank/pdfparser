@@ -7,18 +7,24 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SecurityHandlerNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Document\Encryption\RC4;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObjectFactory;
+use PrinsFrank\PdfParser\Document\Object\Decorator\EncryptDictionary;
 use PrinsFrank\PdfParser\Document\Object\Decorator\InformationDictionary;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObjectParser;
 use PrinsFrank\PdfParser\Document\Security\Security;
+use PrinsFrank\PdfParser\Document\Security\StandardSecurity;
 use PrinsFrank\PdfParser\Document\Version\Version;
+use PrinsFrank\PdfParser\Exception\AuthenticationFailedException;
 use PrinsFrank\PdfParser\Exception\NotImplementedException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -37,10 +43,27 @@ class Document {
         public readonly Stream               $stream,
         public readonly Version              $version,
         public readonly CrossReferenceSource $crossReferenceSource,
-        public          Security             $security,
+        ?Security            $security,
     ) {
-        if ($this->isEncrypted()) {
-            throw new NotImplementedException('Encrypted documents are not supported yet');
+        if (($encryptDictionary = $this->getEncryptDictionary()) !== null) {
+            if (($securityHandler = $encryptDictionary->getSecurityHandler()) !== SecurityHandlerNameValue::Standard) {
+                throw new NotImplementedException(sprintf('Only standard security handler is currently supported, got %s', $securityHandler?->name ?? 'null'));
+            }
+
+            if ($security === null) {
+                $security = new StandardSecurity(null, null);
+            }
+
+            $fileEncryptionKey = $security->getFileEncryptionKey(
+                $encryptDictionary->getOwnerPasswordEntry() ?? throw new ParseFailureException(),
+                $encryptDictionary->getPValue() ?? throw new ParseFailureException(),
+                $this->crossReferenceSource->getValueForKey(DictionaryKey::ID, ArrayValue::class)->value[0] ?? throw new ParseFailureException(),
+                $encryptDictionary->getStandardSecurityHandlerRevision() ?? throw new ParseFailureException(),
+                $encryptDictionary->getLengthFileEncryptionKey() ?? throw new ParseFailureException(),
+            );
+            if (RC4::encrypt($fileEncryptionKey, StandardSecurity::PADDING_STRING) !== $encryptDictionary->getUserPasswordEntry()) {
+                throw new AuthenticationFailedException('Authentication failed, please supply valid credentials');
+            }
         }
     }
 
@@ -54,8 +77,13 @@ class Document {
         return $this->getObject($infoReference->objectNumber, InformationDictionary::class);
     }
 
-    public function isEncrypted(): bool {
-        return $this->crossReferenceSource->getReferenceForKey(DictionaryKey::ENCRYPT) !== null;
+    public function getEncryptDictionary(): ?EncryptDictionary {
+        $infoReference = $this->crossReferenceSource->getReferenceForKey(DictionaryKey::ENCRYPT);
+        if ($infoReference === null) {
+            return null;
+        }
+
+        return $this->getObject($infoReference->objectNumber, EncryptDictionary::class);
     }
 
     /** @throws PdfParserException */
