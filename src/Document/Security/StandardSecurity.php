@@ -35,7 +35,7 @@ class StandardSecurity implements Security {
             for ($i = 1; $i <= 19; $i++) {
                 $modifiedKey = $fileEncryptionKey;
                 for ($j = 0, $length = strlen($modifiedKey); $j < $length; $j++) {
-                    $modifiedKey[$j] = chr(ord($modifiedKey[$j]) ^ $i);
+                    $modifiedKey[$j] = $modifiedKey[$j] ^ chr($i);
                 }
 
                 $encryptedHash = RC4::encrypt($modifiedKey, $encryptedHash);
@@ -58,15 +58,12 @@ class StandardSecurity implements Security {
             true
         );
 
-        $securityHandlerRevision = $encryptDictionary->getStandardSecurityHandlerRevision();
-        if ($securityHandlerRevision !== StandardSecurityHandlerRevision::v2) {
-            for ($i = 1; $i <= 50; $i++) { // step h
-                $md5Hash = md5(substr($md5Hash, 0, $fileEncryptionKeyLengthInBytes), true);
-            }
+        if ($encryptDictionary->getStandardSecurityHandlerRevision() === StandardSecurityHandlerRevision::v2) {
+            return substr($md5Hash, 0, 5);
         }
 
-        if ($securityHandlerRevision === StandardSecurityHandlerRevision::v2) {
-            return substr($md5Hash, 0, 5);
+        for ($i = 1; $i <= 50; $i++) { // step h
+            $md5Hash = md5(substr($md5Hash, 0, $fileEncryptionKeyLengthInBytes), true);
         }
 
         return substr($md5Hash, 0, $fileEncryptionKeyLengthInBytes);
