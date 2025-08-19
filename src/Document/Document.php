@@ -54,15 +54,8 @@ class Document {
                 $security = new StandardSecurity(null, null);
             }
 
-            $fileEncryptionKey = $security->getFileEncryptionKey(
-                $encryptDictionary->getOwnerPasswordEntry() ?? throw new ParseFailureException(),
-                $encryptDictionary->getPValue() ?? throw new ParseFailureException(),
-                $this->crossReferenceSource->getValueForKey(DictionaryKey::ID, ArrayValue::class)->value[0] ?? throw new ParseFailureException(),
-                $encryptDictionary->getStandardSecurityHandlerRevision() ?? throw new ParseFailureException(),
-                $encryptDictionary->getLengthFileEncryptionKey() ?? throw new ParseFailureException(),
-            );
-            if (RC4::encrypt($fileEncryptionKey, StandardSecurity::PADDING_STRING) !== $encryptDictionary->getUserPasswordEntry()) {
-                throw new AuthenticationFailedException('Authentication failed, please supply valid credentials');
+            if (!$security->isUserPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId())) {
+                throw new AuthenticationFailedException('User password is invalid, please supply valid credentials');
             }
         }
     }

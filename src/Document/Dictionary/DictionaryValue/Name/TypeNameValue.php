@@ -39,6 +39,7 @@ enum TypeNameValue: string implements NameValue {
     case COLLECTION_SPLIT = 'CollectionSplit';
     case COLLECTION_SUB_ITEM = 'CollectionSubItem';
     case CRYPT = 'Crypt';
+    case CRYPT_ALGORITHM = 'CryptAlgorithm';
     case CRYPT_FILTER = 'CryptFilter';
     case CRYPT_FILTER_DECODE_PARMS = 'CryptFilterDecodeParms';
     case D_PART = 'DPart';
