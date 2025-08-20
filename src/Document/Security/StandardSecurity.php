@@ -21,12 +21,12 @@ class StandardSecurity implements Security {
 
     /** @see 7.6.4.4.3, 7.6.4.4.4 and 7.6.4.4.5 */
     public function isUserPasswordValid(EncryptDictionary $encryptDictionary, string $firstID): bool {
-        $ownerPasswordEntry = $encryptDictionary->getOwnerPasswordEntry();
+        $userPasswordEntry = $encryptDictionary->getUserPasswordEntry();
         $securityHandlerRevision = $encryptDictionary->getStandardSecurityHandlerRevision();
 
         $fileEncryptionKey = $this->getFileEncryptionKey($encryptDictionary, $firstID);
         if ($securityHandlerRevision === StandardSecurityHandlerRevision::v2) { // @see 7.6.4.4.3, step b
-            return RC4::encrypt($fileEncryptionKey, self::PADDING_STRING) === $ownerPasswordEntry;
+            return RC4::encrypt($fileEncryptionKey, self::PADDING_STRING) === $userPasswordEntry;
         }
 
         if (in_array($securityHandlerRevision, [StandardSecurityHandlerRevision::v3, StandardSecurityHandlerRevision::v4], true)) { // @see 7.6.4.4.4, step b through e
@@ -41,7 +41,7 @@ class StandardSecurity implements Security {
                 $encryptedHash = RC4::encrypt($modifiedKey, $encryptedHash);
             }
 
-            return $encryptedHash === substr($ownerPasswordEntry, 0, 16);
+            return $encryptedHash === substr($userPasswordEntry, 0, 16);
         }
 
         throw new NotSupportedException('Unsupported security handler revision: ' . $securityHandlerRevision->value);
