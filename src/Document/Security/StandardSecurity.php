@@ -26,7 +26,7 @@ class StandardSecurity implements Security {
 
         $fileEncryptionKey = $this->getFileEncryptionKey($encryptDictionary, $firstID);
         if ($securityHandlerRevision === StandardSecurityHandlerRevision::v2) { // @see 7.6.4.4.3, step b
-            return RC4::encrypt($fileEncryptionKey, self::PADDING_STRING) === $userPasswordEntry;
+            return hash_equals($userPasswordEntry, RC4::encrypt($fileEncryptionKey, self::PADDING_STRING));
         }
 
         if (in_array($securityHandlerRevision, [StandardSecurityHandlerRevision::v3, StandardSecurityHandlerRevision::v4], true)) { // @see 7.6.4.4.4, step b through e
@@ -41,7 +41,7 @@ class StandardSecurity implements Security {
                 $encryptedHash = RC4::encrypt($modifiedKey, $encryptedHash);
             }
 
-            return $encryptedHash === substr($userPasswordEntry, 0, 16);
+            return hash_equals(substr($userPasswordEntry, 0, 16), $encryptedHash);
         }
 
         throw new NotSupportedException('Unsupported security handler revision: ' . $securityHandlerRevision->value);
