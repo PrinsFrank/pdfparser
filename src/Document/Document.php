@@ -43,18 +43,14 @@ class Document {
         public readonly Stream               $stream,
         public readonly Version              $version,
         public readonly CrossReferenceSource $crossReferenceSource,
-        ?Security            $security,
+        ?StandardSecurity                    $security,
     ) {
         if (($encryptDictionary = $this->getEncryptDictionary()) !== null) {
             if (($securityHandler = $encryptDictionary->getSecurityHandler()) !== SecurityHandlerNameValue::Standard) {
                 throw new NotImplementedException(sprintf('Only standard security handler is currently supported, got %s', $securityHandler?->name ?? 'null'));
             }
 
-            if ($security === null) {
-                $security = new StandardSecurity(null, null);
-            }
-
-            if (!$security->isUserPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId())) {
+            if (($security ?? new StandardSecurity('123456'))->isUserPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false) {
                 throw new AuthenticationFailedException('User password is invalid, please supply valid credentials');
             }
         }

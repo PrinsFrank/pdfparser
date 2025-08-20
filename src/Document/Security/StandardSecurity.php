@@ -14,8 +14,8 @@ class StandardSecurity implements Security {
     private const PASSWORD_LENGTH = 32;
 
     public function __construct(
-        #[SensitiveParameter] private readonly ?string $userPassword,
-        #[SensitiveParameter] private readonly ?string $ownerPassword,
+        #[SensitiveParameter] private readonly ?string $userPassword = null,
+        #[SensitiveParameter] private readonly ?string $ownerPassword = null,
     ) {
     }
 
