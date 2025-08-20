@@ -37,14 +37,19 @@ class EncryptDictionary extends DecoratedObject {
             ?? throw new ParseFailureException();
 
         if (str_starts_with($textStringValue, '<') && str_ends_with($textStringValue, '>')) {
-            return hex2bin(substr($textStringValue, 1, -1));
+            $decodedValue = hex2bin(substr($textStringValue, 1, -1));
+        } elseif (str_starts_with($textStringValue, '(') && str_ends_with($textStringValue, ')')) {
+            $decodedValue = substr($textStringValue, 1, -1);
+        } else {
+            throw new ParseFailureException();
         }
 
-        if (str_starts_with($textStringValue, '(') && str_ends_with($textStringValue, ')')) {
-            return substr($textStringValue, 1, -1);
+        $decodedValue = str_pad($decodedValue, 32, "\x00");
+        if ($this->getStandardSecurityHandlerRevision()->value <= 4) {
+            return substr($decodedValue, 0, 32);
         }
 
-        throw new ParseFailureException();
+        return $decodedValue;
     }
 
     public function getUserPasswordEntry(): string {
@@ -54,14 +59,19 @@ class EncryptDictionary extends DecoratedObject {
             ?? throw new ParseFailureException();
 
         if (str_starts_with($textStringValue, '<') && str_ends_with($textStringValue, '>')) {
-            return hex2bin(substr($textStringValue, 1, -1));
+            $decodedValue = hex2bin(substr($textStringValue, 1, -1));
+        } elseif (str_starts_with($textStringValue, '(') && str_ends_with($textStringValue, ')')) {
+            $decodedValue = substr($textStringValue, 1, -1);
+        } else {
+            throw new ParseFailureException();
         }
 
-        if (str_starts_with($textStringValue, '(') && str_ends_with($textStringValue, ')')) {
-            return substr($textStringValue, 1, -1);
-        }
-
-        throw new ParseFailureException();
+        $expectedLength = $this->getStandardSecurityHandlerRevision() === StandardSecurityHandlerRevision::v2 ? 32 : 64;
+        return str_pad(
+            substr($decodedValue, 0, $expectedLength),
+            $expectedLength,
+            "\x00"
+        );
     }
 
     public function getPValue(): int {
