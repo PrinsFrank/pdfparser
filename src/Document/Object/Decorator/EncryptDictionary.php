@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStri
 use PrinsFrank\PdfParser\Document\Security\SecurityAlgorithm;
 use PrinsFrank\PdfParser\Document\Security\StandardSecurityHandlerRevision;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 class EncryptDictionary extends DecoratedObject {
     public function getSecurityHandler(): ?SecurityHandlerNameValue {
@@ -18,7 +19,7 @@ class EncryptDictionary extends DecoratedObject {
         }
 
         if ($filterType !== SecurityHandlerNameValue::class) {
-            throw new \RuntimeException('Unable to retrieve security handler for non-security handler dictionaries');
+            throw new RuntimeException('Unable to retrieve security handler for non-security handler dictionaries');
         }
 
         return $this->getDictionary()->getValueForKey(DictionaryKey::FILTER, SecurityHandlerNameValue::class);
@@ -33,11 +34,14 @@ class EncryptDictionary extends DecoratedObject {
     public function getOwnerPasswordEntry(): string {
         $textStringValue = $this->getDictionary()
             ->getValueForKey(DictionaryKey::O, TextStringValue::class)
-            ?->textStringValue
+            ->textStringValue
             ?? throw new ParseFailureException();
 
         if (str_starts_with($textStringValue, '<') && str_ends_with($textStringValue, '>')) {
             $decodedValue = hex2bin(substr($textStringValue, 1, -1));
+            if ($decodedValue === false) {
+                throw new ParseFailureException('Unable to decode owner password entry');
+            }
         } elseif (str_starts_with($textStringValue, '(') && str_ends_with($textStringValue, ')')) {
             $decodedValue = substr($textStringValue, 1, -1);
         } else {
@@ -55,11 +59,14 @@ class EncryptDictionary extends DecoratedObject {
     public function getUserPasswordEntry(): string {
         $textStringValue = $this->getDictionary()
             ->getValueForKey(DictionaryKey::U, TextStringValue::class)
-            ?->textStringValue
+            ->textStringValue
             ?? throw new ParseFailureException();
 
         if (str_starts_with($textStringValue, '<') && str_ends_with($textStringValue, '>')) {
             $decodedValue = hex2bin(substr($textStringValue, 1, -1));
+            if ($decodedValue === false) {
+                throw new ParseFailureException('Unable to decode user password entry');
+            }
         } elseif (str_starts_with($textStringValue, '(') && str_ends_with($textStringValue, ')')) {
             $decodedValue = substr($textStringValue, 1, -1);
         } else {
@@ -77,7 +84,7 @@ class EncryptDictionary extends DecoratedObject {
     public function getPValue(): int {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::P, IntegerValue::class)
-            ?->value
+            ->value
             ?? throw new ParseFailureException('Unable to retrieve p value');
     }
 

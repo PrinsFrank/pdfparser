@@ -5,7 +5,7 @@ namespace PrinsFrank\PdfParser;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSourceParser;
 use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Document\Security\Security;
+use PrinsFrank\PdfParser\Document\Security\StandardSecurity;
 use PrinsFrank\PdfParser\Document\Version\VersionParser;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -16,7 +16,7 @@ use PrinsFrank\PdfParser\Stream\Stream;
 /** @api */
 class PdfParser {
     /** @throws PdfParserException */
-    public function parse(Stream $stream, ?Security $security = null): Document {
+    public function parse(Stream $stream, ?StandardSecurity $security = null): Document {
         return new Document(
             $stream,
             VersionParser::parse($stream),
@@ -29,7 +29,7 @@ class PdfParser {
      * @param bool $useInMemoryStream if set to false, a handle to the file itself will be used. This uses less memory, but will be significantly slower
      * @throws PdfParserException
      */
-    public function parseFile(string $filePath, bool $useInMemoryStream = true, ?Security $security = null): Document {
+    public function parseFile(string $filePath, bool $useInMemoryStream = true, ?StandardSecurity $security = null): Document {
         if ($useInMemoryStream) {
             $fileContent = @file_get_contents($filePath);
             if ($fileContent === false) {
@@ -48,7 +48,7 @@ class PdfParser {
      * @param bool $useFileCache if set to true, the file will be cached to a temporary file. This will use less memory, but will be significantly slower
      * @throws PdfParserException
      */
-    public function parseString(string $content, bool $useFileCache = false, ?Security $security = null): Document {
+    public function parseString(string $content, bool $useFileCache = false, ?StandardSecurity $security = null): Document {
         if ($useFileCache) {
             $stream = FileStream::fromString($content);
         } else {

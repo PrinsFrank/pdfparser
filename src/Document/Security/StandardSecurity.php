@@ -2,20 +2,20 @@
 
 namespace PrinsFrank\PdfParser\Document\Security;
 
-use _PHPStan_ce257d9ac\Nette\NotSupportedException;
 use PrinsFrank\PdfParser\Document\Encryption\RC4;
 use PrinsFrank\PdfParser\Document\Object\Decorator\EncryptDictionary;
+use PrinsFrank\PdfParser\Exception\NotImplementedException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use SensitiveParameter;
 
-class StandardSecurity implements Security {
+class StandardSecurity {
     /** @see 7.6.4.3.2 a */
     public const PADDING_STRING = "\x28\xBF\x4E\x5E\x4E\x75\x8A\x41\x64\x00\x4E\x56\xFF\xFA\x01\x08\x2E\x2E\x00\xB6\xD0\x68\x3E\x80\x2F\x0C\xA9\xFE\x64\x53\x69\x7A";
     private const PASSWORD_LENGTH = 32;
 
     public function __construct(
-        #[SensitiveParameter] private readonly ?string $userPassword = null,
-        #[SensitiveParameter] private readonly ?string $ownerPassword = null,
+        #[SensitiveParameter] public readonly ?string $userPassword = null,
+        #[SensitiveParameter] public readonly ?string $ownerPassword = null,
     ) {
     }
 
@@ -44,12 +44,16 @@ class StandardSecurity implements Security {
             return hash_equals(substr($userPasswordEntry, 0, 16), $encryptedHash);
         }
 
-        throw new NotSupportedException('Unsupported security handler revision: ' . $securityHandlerRevision->value);
+        throw new NotImplementedException('Unsupported security handler revision: ' . $securityHandlerRevision->value);
     }
 
     /** @see 7.6.4.3.2 */
     public function getFileEncryptionKey(EncryptDictionary $encryptDictionary, string $firstIDValue): string {
-        $fileEncryptionKeyLengthInBytes = ($encryptDictionary->getLengthFileEncryptionKeyInBits() ?? throw new ParseFailureException()) / 8;
+        $fileEncryptionKeyLengthInBits = $encryptDictionary->getLengthFileEncryptionKeyInBits() ?? throw new ParseFailureException();
+        if ($fileEncryptionKeyLengthInBits % 8 !== 0 || !is_int($fileEncryptionKeyLengthInBytes = $fileEncryptionKeyLengthInBits / 8)) {
+            throw new ParseFailureException('Unsupported file encryption key length in bits: ' . $fileEncryptionKeyLengthInBits);
+        }
+
         $md5Hash = md5(
             $this->getPaddedUserPassword() // step a+b
             . $encryptDictionary->getOwnerPasswordEntry() // step c

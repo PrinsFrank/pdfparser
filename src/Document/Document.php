@@ -7,11 +7,8 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SecurityHandlerNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Encryption\RC4;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObjectFactory;
@@ -21,7 +18,6 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObjectParser;
-use PrinsFrank\PdfParser\Document\Security\Security;
 use PrinsFrank\PdfParser\Document\Security\StandardSecurity;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Exception\AuthenticationFailedException;
@@ -46,11 +42,11 @@ class Document {
         ?StandardSecurity                    $security,
     ) {
         if (($encryptDictionary = $this->getEncryptDictionary()) !== null) {
-            if (($securityHandler = $encryptDictionary->getSecurityHandler()) !== SecurityHandlerNameValue::Standard) {
-                throw new NotImplementedException(sprintf('Only standard security handler is currently supported, got %s', $securityHandler?->name ?? 'null'));
+            if ($encryptDictionary->getSecurityHandler() === null) {
+                throw new NotImplementedException('Empty security handler is not supported');
             }
 
-            if (($security ?? new StandardSecurity('123456'))->isUserPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false) {
+            if (($security ?? new StandardSecurity())->isUserPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false) {
                 throw new AuthenticationFailedException('User password is invalid, please supply valid credentials');
             }
         }

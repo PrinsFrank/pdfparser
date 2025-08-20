@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Security;
 
+use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
 /** @see 7.6.2, table 20, Key V */
@@ -13,6 +14,7 @@ enum SecurityAlgorithm: string implements DictionaryValue {
     case RC4_Or_AES_Key_length_128 = '4';
     case AES_Key_length_256 = '5';
 
+    #[Override]
     public static function fromValue(string $valueString): ?self {
         return self::tryFrom($valueString);
     }

@@ -59,15 +59,20 @@ class CrossReferenceSource {
 
     public function getFirstId(): string {
         $value = $this->getValueForKey(DictionaryKey::ID, ArrayValue::class)->value[0]
-            ?? throw new ParseFailureException();
+            ?? throw new ParseFailureException('Unable to retrieve first id from cross reference source');
         if (!is_string($value)) {
-            throw new ParseFailureException();
+            throw new ParseFailureException('First id is not a string');
         }
 
         if (!str_starts_with($value, '<') || !str_ends_with($value, '>')) {
-            throw new ParseFailureException();
+            throw new ParseFailureException('Unsupported first id format, expected "<hex>"');
         }
 
-        return hex2bin(substr($value, 1, -1));
+        $firstId = hex2bin(substr($value, 1, -1));
+        if ($firstId === false) {
+            throw new ParseFailureException('Unable to retrieve binary value from first id');
+        }
+
+        return $firstId;
     }
 }
