@@ -14,8 +14,8 @@ class StandardSecurity {
     private const PASSWORD_LENGTH = 32;
 
     public function __construct(
-        #[SensitiveParameter] public readonly ?string $userPassword = null,
-        #[SensitiveParameter] public readonly ?string $ownerPassword = null,
+        #[SensitiveParameter] private ?string $userPassword = null,
+        #[SensitiveParameter] private readonly ?string $ownerPassword = null,
     ) {
     }
 
@@ -24,7 +24,7 @@ class StandardSecurity {
         $userPasswordEntry = $encryptDictionary->getUserPasswordEntry();
         $securityHandlerRevision = $encryptDictionary->getStandardSecurityHandlerRevision();
 
-        $fileEncryptionKey = $this->getFileEncryptionKey($encryptDictionary, $firstID);
+        $fileEncryptionKey = $this->getUserFileEncryptionKey($encryptDictionary, $firstID);
         if ($securityHandlerRevision === StandardSecurityHandlerRevision::v2) { // @see 7.6.4.4.3, step b
             return hash_equals($userPasswordEntry, RC4::encrypt($fileEncryptionKey, self::PADDING_STRING));
         }
@@ -49,7 +49,7 @@ class StandardSecurity {
 
     /** @see 7.6.4.4.6 */
     public function isOwnerPasswordValid(EncryptDictionary $encryptDictionary, string $firstID): bool {
-        $fileEncryptionKey = $this->getFileEncryptionKey($encryptDictionary, $firstID);
+        $fileEncryptionKey = $this->getOwnerFileEncryptionKey($encryptDictionary, $firstID);
 
         $ownerPasswordEntry = $encryptDictionary->getOwnerPasswordEntry();
         if ($encryptDictionary->getStandardSecurityHandlerRevision() === StandardSecurityHandlerRevision::v2) {
@@ -66,11 +66,20 @@ class StandardSecurity {
             }
         }
 
-        return $this->isUserPasswordValid($encryptDictionary, $userPassword);
+        if ($this->userPassword !== null && $userPassword !== $this->userPassword) {
+            return false;
+        }
+
+        $this->userPassword = $userPassword;
+        return $this->isUserPasswordValid($encryptDictionary, $firstID);
     }
 
-    /** @see 7.6.4.3.2 */
-    public function getFileEncryptionKey(EncryptDictionary $encryptDictionary, string $firstIDValue): string {
+    /** @see 7.6.4.4.2 */
+    public function getUserFileEncryptionKey(EncryptDictionary $encryptDictionary, string $firstIDValue): string {
+        if (in_array($encryptDictionary->getStandardSecurityHandlerRevision(), [StandardSecurityHandlerRevision::v2, StandardSecurityHandlerRevision::v3, StandardSecurityHandlerRevision::v4], true) === false) {
+            throw new NotImplementedException('Unsupported security handler revision: ' . $encryptDictionary->getStandardSecurityHandlerRevision()->value);
+        }
+
         $fileEncryptionKeyLengthInBits = $encryptDictionary->getLengthFileEncryptionKeyInBits() ?? throw new ParseFailureException();
         if ($encryptDictionary->getSecurityAlgorithm() === SecurityAlgorithm::AES_Key_length_256) { // V = 4
             throw new NotImplementedException('AES-based stream decryption is not yet supported.');
@@ -101,9 +110,43 @@ class StandardSecurity {
         return substr($md5Hash, 0, $fileEncryptionKeyLengthInBytes);
     }
 
+    private function getOwnerFileEncryptionKey(EncryptDictionary $encryptDictionary, string $firstIDValue) {
+        if (in_array($encryptDictionary->getStandardSecurityHandlerRevision(), [StandardSecurityHandlerRevision::v2, StandardSecurityHandlerRevision::v3, StandardSecurityHandlerRevision::v4], true) === false) {
+            throw new NotImplementedException('Unsupported security handler revision: ' . $encryptDictionary->getStandardSecurityHandlerRevision()->value);
+        }
+
+        $fileEncryptionKeyLengthInBits = $encryptDictionary->getLengthFileEncryptionKeyInBits() ?? throw new ParseFailureException();
+        if ($encryptDictionary->getSecurityAlgorithm() === SecurityAlgorithm::AES_Key_length_256) { // V = 4
+            throw new NotImplementedException('AES-based stream decryption is not yet supported.');
+        }
+
+        if ($fileEncryptionKeyLengthInBits % 8 !== 0 || !is_int($fileEncryptionKeyLengthInBytes = $fileEncryptionKeyLengthInBits / 8)) {
+            throw new ParseFailureException('Unsupported file encryption key length in bits: ' . $fileEncryptionKeyLengthInBits);
+        }
+
+        $md5Hash = md5($this->getPaddedOwnerPassword(), true);
+        if ($encryptDictionary->getStandardSecurityHandlerRevision() !== StandardSecurityHandlerRevision::v2) {
+            for ($i = 1; $i <= 50; $i++) { // step c
+                $md5Hash = md5($md5Hash, true);
+            }
+        }
+
+        if ($encryptDictionary->getStandardSecurityHandlerRevision() === StandardSecurityHandlerRevision::v2) {
+            return substr($md5Hash, 0, 5);
+        }
+
+        return substr($md5Hash, 0, $fileEncryptionKeyLengthInBytes);
+    }
+
     /** @see 7.6.4.3.2 step a */
     public function getPaddedUserPassword(): string {
         return substr($this->userPassword ?? '', 0, self::PASSWORD_LENGTH)
             . substr(self::PADDING_STRING, 0, max(0, self::PASSWORD_LENGTH - strlen($this->userPassword ?? '')));
+    }
+
+    /** @see 7.6.4.3.2 step a */
+    public function getPaddedOwnerPassword(): string {
+        return substr($this->ownerPassword ?? $this->userPassword ?? '', 0, self::PASSWORD_LENGTH)
+            . substr(self::PADDING_STRING, 0, max(0, self::PASSWORD_LENGTH - strlen($this->ownerPassword ?? $this->userPassword ?? '')));
     }
 }

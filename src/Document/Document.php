@@ -39,20 +39,17 @@ class Document {
         public readonly Stream               $stream,
         public readonly Version              $version,
         public readonly CrossReferenceSource $crossReferenceSource,
-        ?StandardSecurity                    $security,
+        public ?StandardSecurity             $security,
     ) {
         if (($encryptDictionary = $this->getEncryptDictionary()) !== null) {
             if ($encryptDictionary->getSecurityHandler() === null) {
                 throw new NotImplementedException('Empty security handler is not supported');
             }
 
-            $security ??= new StandardSecurity();
-            if ($security->isUserPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId())) {
-                var_dump(123);exit;
-            } elseif ($security->isOwnerPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId())) {
-                var_dump(234);exit;
-            } else {
-                throw new AuthenticationFailedException('User and owner password are invalid, please supply valid credentials');
+            $this->security ??= new StandardSecurity('123456');
+            if ($this->security->isUserPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false
+                && $this->security->isOwnerPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false) {
+                throw new AuthenticationFailedException($security === null ? 'Document could not be encrypted using default credentials, please supply an owner or user password' : 'User and owner password are invalid, please supply valid credentials');
             }
         }
     }
