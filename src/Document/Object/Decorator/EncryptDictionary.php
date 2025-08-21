@@ -3,6 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Boolean\BooleanValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SecurityHandlerNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
@@ -97,5 +98,12 @@ class EncryptDictionary extends DecoratedObject {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::R, StandardSecurityHandlerRevision::class)
             ?? throw new ParseFailureException('Unable to retrieve standard security handler revision');
+    }
+
+    public function isMetadataEncrypted(): bool {
+        $encryptMetadata = $this->getDictionary()
+            ->getValueForKey(DictionaryKey::ENCRYPT_METADATA, BooleanValue::class);
+
+        return $encryptMetadata === null || $encryptMetadata->value; // If key is not present, assume encrypted metadata
     }
 }

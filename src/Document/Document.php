@@ -46,8 +46,13 @@ class Document {
                 throw new NotImplementedException('Empty security handler is not supported');
             }
 
-            if (($security ?? new StandardSecurity())->isUserPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false) {
-                throw new AuthenticationFailedException('User password is invalid, please supply valid credentials');
+            $security ??= new StandardSecurity();
+            if ($security->isUserPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId())) {
+                var_dump(123);exit;
+            } elseif ($security->isOwnerPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId())) {
+                var_dump(234);exit;
+            } else {
+                throw new AuthenticationFailedException('User and owner password are invalid, please supply valid credentials');
             }
         }
     }

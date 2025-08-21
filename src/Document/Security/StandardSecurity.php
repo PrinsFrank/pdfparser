@@ -47,21 +47,49 @@ class StandardSecurity {
         throw new NotImplementedException('Unsupported security handler revision: ' . $securityHandlerRevision->value);
     }
 
+    /** @see 7.6.4.4.6 */
+    public function isOwnerPasswordValid(EncryptDictionary $encryptDictionary, string $firstID): bool {
+        $fileEncryptionKey = $this->getFileEncryptionKey($encryptDictionary, $firstID);
+
+        $ownerPasswordEntry = $encryptDictionary->getOwnerPasswordEntry();
+        if ($encryptDictionary->getStandardSecurityHandlerRevision() === StandardSecurityHandlerRevision::v2) {
+            $userPassword = RC4::encrypt($fileEncryptionKey, $ownerPasswordEntry);
+        } else {
+            $userPassword = $ownerPasswordEntry;
+            for ($i = 19; $i >= 0; $i--) {
+                $modifiedKey = $fileEncryptionKey;
+                for ($j = 0, $length = strlen($modifiedKey); $j < $length; $j++) {
+                    $modifiedKey[$j] = $modifiedKey[$j] ^ chr($i);
+                }
+
+                $userPassword = RC4::encrypt($modifiedKey, $userPassword);
+            }
+        }
+
+        return $this->isUserPasswordValid($encryptDictionary, $userPassword);
+    }
+
     /** @see 7.6.4.3.2 */
     public function getFileEncryptionKey(EncryptDictionary $encryptDictionary, string $firstIDValue): string {
         $fileEncryptionKeyLengthInBits = $encryptDictionary->getLengthFileEncryptionKeyInBits() ?? throw new ParseFailureException();
+        if ($encryptDictionary->getSecurityAlgorithm() === SecurityAlgorithm::AES_Key_length_256) { // V = 4
+            throw new NotImplementedException('AES-based stream decryption is not yet supported.');
+        }
+
         if ($fileEncryptionKeyLengthInBits % 8 !== 0 || !is_int($fileEncryptionKeyLengthInBytes = $fileEncryptionKeyLengthInBits / 8)) {
             throw new ParseFailureException('Unsupported file encryption key length in bits: ' . $fileEncryptionKeyLengthInBits);
         }
 
-        $md5Hash = md5(
+        $hashedString =
             $this->getPaddedUserPassword() // step a+b
             . $encryptDictionary->getOwnerPasswordEntry() // step c
             . pack('V', $encryptDictionary->getPValue()) // step d
-            . $firstIDValue, // step e
-            true
-        );
+            . $firstIDValue; // step e
+        if ($encryptDictionary->getStandardSecurityHandlerRevision()->value >= 4 && $encryptDictionary->isMetadataEncrypted() === false) {
+            $hashedString .= "\xFF\xFF\xFF\xFF";
+        }
 
+        $md5Hash = md5($hashedString, true);
         if ($encryptDictionary->getStandardSecurityHandlerRevision() === StandardSecurityHandlerRevision::v2) {
             return substr($md5Hash, 0, 5);
         }
