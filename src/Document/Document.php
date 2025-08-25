@@ -46,10 +46,10 @@ class Document {
                 throw new NotImplementedException('Empty security handler is not supported');
             }
 
-            $this->security ??= new StandardSecurity('123456');
+            $this->security ??= new StandardSecurity();
             if ($this->security->isUserPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false
                 && $this->security->isOwnerPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false) {
-                throw new AuthenticationFailedException($security === null ? 'Document could not be encrypted using default credentials, please supply an owner or user password' : 'User and owner password are invalid, please supply valid credentials');
+                throw new AuthenticationFailedException($security === null ? 'Document could not be decrypted using default credentials, please supply an owner or user password' : 'User and owner password are invalid, please supply valid credentials');
             }
         }
     }
