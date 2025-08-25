@@ -8,9 +8,11 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** Can be both from a crossReferenceTable or a crossReferenceStream */
 class CrossReferenceSource {
@@ -53,5 +55,24 @@ class CrossReferenceSource {
         }
 
         return null;
+    }
+
+    public function getFirstId(): string {
+        $value = $this->getValueForKey(DictionaryKey::ID, ArrayValue::class)->value[0]
+            ?? throw new ParseFailureException('Unable to retrieve first id from cross reference source');
+        if (!is_string($value)) {
+            throw new ParseFailureException('First id is not a string');
+        }
+
+        if (!str_starts_with($value, '<') || !str_ends_with($value, '>')) {
+            throw new ParseFailureException('Unsupported first id format, expected "<hex>"');
+        }
+
+        $firstId = hex2bin(substr($value, 1, -1));
+        if ($firstId === false) {
+            throw new ParseFailureException('Unable to retrieve binary value from first id');
+        }
+
+        return $firstId;
     }
 }

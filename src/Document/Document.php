@@ -12,12 +12,15 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObjectFactory;
+use PrinsFrank\PdfParser\Document\Object\Decorator\EncryptDictionary;
 use PrinsFrank\PdfParser\Document\Object\Decorator\InformationDictionary;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObjectParser;
+use PrinsFrank\PdfParser\Document\Security\StandardSecurity;
 use PrinsFrank\PdfParser\Document\Version\Version;
+use PrinsFrank\PdfParser\Exception\AuthenticationFailedException;
 use PrinsFrank\PdfParser\Exception\NotImplementedException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -36,9 +39,18 @@ class Document {
         public readonly Stream               $stream,
         public readonly Version              $version,
         public readonly CrossReferenceSource $crossReferenceSource,
+        public ?StandardSecurity             $security,
     ) {
-        if ($this->isEncrypted()) {
-            throw new NotImplementedException('Encrypted documents are not supported yet');
+        if (($encryptDictionary = $this->getEncryptDictionary()) !== null) {
+            if ($encryptDictionary->getSecurityHandler() === null) {
+                throw new NotImplementedException('Empty security handler is not supported');
+            }
+
+            $this->security ??= new StandardSecurity();
+            if ($this->security->isUserPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false
+                && $this->security->isOwnerPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false) {
+                throw new AuthenticationFailedException($security === null ? 'Document could not be decrypted using default credentials, please supply an owner or user password' : 'User and owner password are invalid, please supply valid credentials');
+            }
         }
     }
 
@@ -52,8 +64,13 @@ class Document {
         return $this->getObject($infoReference->objectNumber, InformationDictionary::class);
     }
 
-    public function isEncrypted(): bool {
-        return $this->crossReferenceSource->getReferenceForKey(DictionaryKey::ENCRYPT) !== null;
+    public function getEncryptDictionary(): ?EncryptDictionary {
+        $infoReference = $this->crossReferenceSource->getReferenceForKey(DictionaryKey::ENCRYPT);
+        if ($infoReference === null) {
+            return null;
+        }
+
+        return $this->getObject($infoReference->objectNumber, EncryptDictionary::class);
     }
 
     /** @throws PdfParserException */
