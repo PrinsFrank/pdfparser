@@ -33,12 +33,13 @@ class StandardSecurity {
             $hash = md5(self::PADDING_STRING . $firstID, true);
             $encryptedHash = RC4::encrypt($fileEncryptionKey, $hash);
             for ($i = 1; $i <= 19; $i++) {
-                $modifiedKey = $fileEncryptionKey;
-                for ($j = 0, $length = strlen($modifiedKey); $j < $length; $j++) {
-                    $modifiedKey[$j] = $modifiedKey[$j] ^ chr($i);
-                }
-
-                $encryptedHash = RC4::encrypt($modifiedKey, $encryptedHash);
+                $encryptedHash = RC4::encrypt(
+                    implode('', array_map(
+                        fn($c) => chr(ord($c) ^ $i),
+                        str_split($fileEncryptionKey)
+                    )),
+                    $encryptedHash,
+                );
             }
 
             return hash_equals(substr($userPasswordEntry, 0, 16), $encryptedHash);
@@ -57,12 +58,13 @@ class StandardSecurity {
         } else {
             $userPassword = $ownerPasswordEntry;
             for ($i = 19; $i >= 0; $i--) {
-                $modifiedKey = $fileEncryptionKey;
-                for ($j = 0, $length = strlen($modifiedKey); $j < $length; $j++) {
-                    $modifiedKey[$j] = $modifiedKey[$j] ^ chr($i);
-                }
-
-                $userPassword = RC4::encrypt($modifiedKey, $userPassword);
+                $userPassword = RC4::encrypt(
+                    implode('', array_map(
+                        fn($c) => chr(ord($c) ^ $i),
+                        str_split($fileEncryptionKey)
+                    )),
+                    $userPassword,
+                );
             }
         }
 
