@@ -26,14 +26,14 @@ class StandardSecurity {
 
         $fileEncryptionKey = $this->getUserFileEncryptionKey($encryptDictionary, $firstID);
         if ($securityHandlerRevision === StandardSecurityHandlerRevision::v2) { // @see 7.6.4.4.3, step b
-            return hash_equals($userPasswordEntry, RC4::encrypt($fileEncryptionKey, self::PADDING_STRING));
+            return hash_equals($userPasswordEntry, RC4::crypt($fileEncryptionKey, self::PADDING_STRING));
         }
 
         if (in_array($securityHandlerRevision, [StandardSecurityHandlerRevision::v3, StandardSecurityHandlerRevision::v4], true)) { // @see 7.6.4.4.4, step b through e
             $hash = md5(self::PADDING_STRING . $firstID, true);
-            $encryptedHash = RC4::encrypt($fileEncryptionKey, $hash);
+            $encryptedHash = RC4::crypt($fileEncryptionKey, $hash);
             for ($i = 1; $i <= 19; $i++) {
-                $encryptedHash = RC4::encrypt(
+                $encryptedHash = RC4::crypt(
                     implode('', array_map(
                         fn ($c) => chr(ord($c) ^ $i),
                         str_split($fileEncryptionKey)
@@ -54,11 +54,11 @@ class StandardSecurity {
 
         $ownerPasswordEntry = $encryptDictionary->getOwnerPasswordEntry();
         if ($encryptDictionary->getStandardSecurityHandlerRevision() === StandardSecurityHandlerRevision::v2) {
-            $userPassword = RC4::encrypt($fileEncryptionKey, $ownerPasswordEntry);
+            $userPassword = RC4::crypt($fileEncryptionKey, $ownerPasswordEntry);
         } else {
             $userPassword = $ownerPasswordEntry;
             for ($i = 19; $i >= 0; $i--) {
-                $userPassword = RC4::encrypt(
+                $userPassword = RC4::crypt(
                     implode('', array_map(
                         fn ($c) => chr(ord($c) ^ $i),
                         str_split($fileEncryptionKey)

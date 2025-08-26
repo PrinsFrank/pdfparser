@@ -4,7 +4,7 @@ namespace PrinsFrank\PdfParser\Document\Encryption;
 
 /** @internal NEVER USE THIS FOR SECURITY, THIS IS AN INSECURE ALGORITHM */
 class RC4 {
-    public static function encrypt(string $key, string $data): string {
+    public static function crypt(string $key, string $data): string {
         $s = range(0, 255);
         $j = 0;
 
