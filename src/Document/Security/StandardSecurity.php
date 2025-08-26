@@ -35,7 +35,7 @@ class StandardSecurity {
             for ($i = 1; $i <= 19; $i++) {
                 $encryptedHash = RC4::encrypt(
                     implode('', array_map(
-                        fn($c) => chr(ord($c) ^ $i),
+                        fn ($c) => chr(ord($c) ^ $i),
                         str_split($fileEncryptionKey)
                     )),
                     $encryptedHash,
@@ -50,7 +50,7 @@ class StandardSecurity {
 
     /** @see 7.6.4.4.6 */
     public function isOwnerPasswordValid(EncryptDictionary $encryptDictionary, string $firstID): bool {
-        $fileEncryptionKey = $this->getOwnerFileEncryptionKey($encryptDictionary, $firstID);
+        $fileEncryptionKey = $this->getOwnerFileEncryptionKey($encryptDictionary);
 
         $ownerPasswordEntry = $encryptDictionary->getOwnerPasswordEntry();
         if ($encryptDictionary->getStandardSecurityHandlerRevision() === StandardSecurityHandlerRevision::v2) {
@@ -60,7 +60,7 @@ class StandardSecurity {
             for ($i = 19; $i >= 0; $i--) {
                 $userPassword = RC4::encrypt(
                     implode('', array_map(
-                        fn($c) => chr(ord($c) ^ $i),
+                        fn ($c) => chr(ord($c) ^ $i),
                         str_split($fileEncryptionKey)
                     )),
                     $userPassword,
@@ -112,7 +112,7 @@ class StandardSecurity {
         return substr($md5Hash, 0, $fileEncryptionKeyLengthInBytes);
     }
 
-    private function getOwnerFileEncryptionKey(EncryptDictionary $encryptDictionary, string $firstIDValue) {
+    private function getOwnerFileEncryptionKey(EncryptDictionary $encryptDictionary): string {
         if (in_array($encryptDictionary->getStandardSecurityHandlerRevision(), [StandardSecurityHandlerRevision::v2, StandardSecurityHandlerRevision::v3, StandardSecurityHandlerRevision::v4], true) === false) {
             throw new NotImplementedException('Unsupported security handler revision: ' . $encryptDictionary->getStandardSecurityHandlerRevision()->value);
         }

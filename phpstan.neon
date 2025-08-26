@@ -13,6 +13,7 @@ parameters:
     reportAnyTypeWideningInVarTag: true
     checkMissingOverrideMethodAttribute: true
     ignoreErrors:
+        - identifier: offsetAccess.notFound
         - identifier: property.uninitializedReadonly          # Used in several objects to cache parsed/decoded data
         - identifier: property.readOnlyAssignNotInConstructor # Used in several objects to cache parsed/decoded data
     exceptions:
@@ -25,6 +26,7 @@ parameters:
             - 'PrinsFrank\PdfParser\Exception\InvalidArgumentException'
             - 'PrinsFrank\PdfParser\Exception\ParseFailureException'
             - 'PrinsFrank\PdfParser\Exception\RuntimeException'
+            - 'DivisionByZeroError'
         check:
             missingCheckedExceptionInThrows: true
             tooWideThrowType: true
