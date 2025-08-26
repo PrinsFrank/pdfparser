@@ -15,7 +15,7 @@ jobs:
     uses: prinsfrank/CI-PHP/.github/workflows/quality.yml@main
     with:
       PHP_VERSION: '8.3'
-      PHP_VERSIONS: '["8.2", "8.3", "8.4"]'
+      PHP_VERSIONS: '["8.2", "8.3", "8.4", "8.5"]'
     secrets: inherit
 
   feature:
@@ -25,7 +25,7 @@ jobs:
       PHP_VERSION: '8.3'
     strategy:
       matrix:
-        php-version: ["8.2", "8.3", "8.4"]
+        php-version: ["8.2", "8.3", "8.4", "8.5"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
