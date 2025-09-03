@@ -40,7 +40,11 @@ class DateValue implements DictionaryValue {
             }
         }
 
-        $parsedDate = DateTimeImmutable::createFromFormat('\D\:YmdHisP', str_replace("'", '', $valueString));
+        if (preg_match("/^D:[0-9]{14}$/", str_replace("'", '', $valueString))) {
+            $parsedDate = DateTimeImmutable::createFromFormat('\D\:YmdHis', str_replace("'", '', $valueString));
+        } else {
+            $parsedDate = DateTimeImmutable::createFromFormat('\D\:YmdHisP', str_replace("'", '', $valueString));
+        }
         if ($parsedDate === false) {
             return null;
         }
