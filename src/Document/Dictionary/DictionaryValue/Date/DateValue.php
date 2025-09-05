@@ -17,16 +17,14 @@ class DateValue implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
-        if (str_starts_with($valueString, '<') && str_ends_with($valueString, '>')) {
-            $valueString = substr($valueString, 1, -1);
-            if (!ctype_xdigit($valueString) || strlen($valueString) % 2 !== 0) {
-                throw new InvalidArgumentException(sprintf('String "%s" is not hexadecimal', substr($valueString, 0, 10)));
+        // FEFF0044003A00320030003200300030003900330030003100350034003300300037005A
+        // UTF-16BE encoded string.
+        if (preg_match('/<FEFF([A-Z0-9]{68})>/', $valueString, $matches)) {
+            $bin = hex2bin($matches[1]);
+            if (substr($bin, 0, 2) === "\xFE\xFF") {
+                $bin = substr($bin, 2); // remove BOM
             }
-
-            $valueString = hex2bin($valueString);
-            if ($valueString === false) {
-                return null;
-            }
+            return self::fromValue(mb_convert_encoding($bin, 'UTF-8', 'UTF-16BE'));
         }
 
         if (str_starts_with($valueString, '(') && str_ends_with($valueString, ')')) {
@@ -34,15 +32,20 @@ class DateValue implements DictionaryValue {
         }
 
         if (!str_starts_with($valueString, 'D:')) {
-            $valueString = mb_convert_encoding($valueString, 'UTF-8', 'UTF-16');
+            $valueString = mb_convert_encoding($valueString, 'UTF-8', mb_detect_encoding($valueString));
             if ($valueString === false || !str_starts_with($valueString, 'D:')) {
                 return null;
             }
         }
 
-        if (preg_match("/^D:[0-9]{14}$/", str_replace("'", '', $valueString)) !== false) {
-            $parsedDate = DateTimeImmutable::createFromFormat('\D\:YmdHis', str_replace("'", '', $valueString));
-        } else {
+        $parsedDate = false;
+        if (preg_match("/^D:[0-9]{14}$/", $valueString) === 1) {
+            $parsedDate = DateTimeImmutable::createFromFormat('\D\:YmdHis', $valueString);
+        }
+        if (preg_match("/^D:[0-9]{14}Z$/", $valueString) === 1) {
+            $parsedDate = DateTimeImmutable::createFromFormat('\D\:YmdHisT', $valueString);
+        }
+        if (preg_match("/^D:[0-9]{14}[-+][0-9][0-9]'[0-9][0-9]'$/", $valueString) === 1) {
             $parsedDate = DateTimeImmutable::createFromFormat('\D\:YmdHisP', str_replace("'", '', $valueString));
         }
         if ($parsedDate === false) {

@@ -11,35 +11,53 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 #[CoversClass(DateValue::class)]
 class DateValueTest extends TestCase {
-    public function testFromValue(): void {
+    public function testFromValue(): void
+    {
         static::assertEquals(
             DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2024-11-22 22:23:57', new DateTimeZone('+01:00')),
             DateValue::fromValue('(D:20241122222357+01\'00\')')?->value
         );
-
+    }
+    public function testIllegalValue(): void
+    {
         static::assertNull(
             DateValue::fromValue('<ff>')
         );
+    }
+    public function testDateFormatLongZulu(): void
+    {
 
-        $dateTime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-01-01 12:00:00');
+        $dateTime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-01-01 12:00:00', new DateTimeZone('+00:00'));
         static::assertNotFalse($dateTime);
         static::assertEquals(
             new DateValue($dateTime),
             DateValue::fromValue('(D:20000101120000+00\'00\')')
         );
-
+    }
+    public function testDateFormatLongTZ(): void
+    {
         $dateTime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-01-01 12:00:00', new DateTimeZone('+02:00'));
         static::assertNotFalse($dateTime);
         static::assertEquals(
             new DateValue($dateTime),
             DateValue::fromValue('(D:20000101120000+02\'00\')')
         );
+    }
+    public function testDateFormatShort(): void
+    {
 
-        static::assertNull(
-            DateValue::fromValue('(D:2000010112000)')
+        $dateTime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-01-01 12:00:00');
+        static::assertNotFalse($dateTime);
+        static::assertEquals(
+            new DateValue($dateTime),
+            DateValue::fromValue('(D:20000101120000)')
         );
 
-        $dateTime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-09-30 15:43:07');
+    }
+
+    public function testHexString(): void
+    {
+        $dateTime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2020-09-30 15:43:07', new DateTimeZone('+00:00'));
         static::assertNotFalse($dateTime);
         static::assertEquals(
             new DateValue($dateTime),

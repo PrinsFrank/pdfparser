@@ -7,3 +7,5 @@ composer.lock
 
 # Cache folder
 /cache
+
+/.idea/
