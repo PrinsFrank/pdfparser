@@ -15,16 +15,27 @@ class DateValue implements DictionaryValue {
     ) {
     }
 
+    /***
+     * @param string $valueString
+     * @return self|null
+     * @throws InvalidArgumentException non-hex characters detected.
+     */
     #[Override]
     public static function fromValue(string $valueString): ?self {
         // FEFF0044003A00320030003200300030003900330030003100350034003300300037005A
         // UTF-16BE encoded string.
-        if (preg_match('/<FEFF([A-Z0-9]{68})>/', $valueString, $matches)) {
+        if (preg_match('/<FEFF([A-Z0-9]{68})>/', $valueString, $matches) !== false) {
             $bin = hex2bin($matches[1]);
-            if (substr($bin, 0, 2) === "\xFE\xFF") {
+            if ($bin === false) {
+                return null;
+            }
+            if (str_starts_with($bin, "\xFE\xFF") !== false) {
                 $bin = substr($bin, 2); // remove BOM
             }
+
             return self::fromValue(mb_convert_encoding($bin, 'UTF-8', 'UTF-16BE'));
+        } elseif (preg_match('/<(.*)>/', $valueString, $matches) !== false) {
+            throw new InvalidArgumentException("String \"{$matches[1]}\" is not hexadecimal");
         }
 
         if (str_starts_with($valueString, '(') && str_ends_with($valueString, ')')) {
@@ -32,7 +43,11 @@ class DateValue implements DictionaryValue {
         }
 
         if (!str_starts_with($valueString, 'D:')) {
-            $valueString = mb_convert_encoding($valueString, 'UTF-8', mb_detect_encoding($valueString));
+            $encoding = mb_detect_encoding($valueString);
+            if ($encoding === false) {
+                return null;
+            }
+            $valueString = mb_convert_encoding($valueString, 'UTF-8', $encoding);
             if ($valueString === false || !str_starts_with($valueString, 'D:')) {
                 return null;
             }
