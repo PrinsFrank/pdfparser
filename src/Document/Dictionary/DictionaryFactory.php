@@ -20,7 +20,7 @@ class DictionaryFactory {
                 throw new InvalidArgumentException(sprintf('values should be either strings or non-list array, %s given', gettype($value)));
             }
 
-            /** @var array<string, mixed>|string $value */
+            /** @var non-empty-array<string, mixed>|string $value */
             $dictionaryEntry = DictionaryEntryFactory::fromKeyValuePair($keyString, $value);
             if ($dictionaryEntry === null) {
                 continue;

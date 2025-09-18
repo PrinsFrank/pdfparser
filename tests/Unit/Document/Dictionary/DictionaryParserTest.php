@@ -27,6 +27,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
+use ValueError;
 
 #[CoversClass(DictionaryParser::class)]
 class DictionaryParserTest extends TestCase {
@@ -182,6 +183,7 @@ class DictionaryParserTest extends TestCase {
         );
     }
 
+    /** @throws ValueError */
     public function testParseValuesEncapsulatedInParentheses(): void {
         $stream = new InMemoryStream(
             <<<EOD

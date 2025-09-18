@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
+use ValueError;
 
 /** @api */
 class DateValue implements DictionaryValue {
@@ -40,7 +41,12 @@ class DateValue implements DictionaryValue {
             }
         }
 
-        $parsedDate = DateTimeImmutable::createFromFormat('\D\:YmdHisP', str_replace("'", '', $valueString));
+        try {
+            $parsedDate = DateTimeImmutable::createFromFormat('\D\:YmdHisP', str_replace("'", '', $valueString));
+        } catch (ValueError) {
+            return null;
+        }
+
         if ($parsedDate === false) {
             return null;
         }

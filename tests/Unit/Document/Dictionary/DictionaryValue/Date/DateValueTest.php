@@ -8,9 +8,11 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
+use ValueError;
 
 #[CoversClass(DateValue::class)]
 class DateValueTest extends TestCase {
+    /** @throws ValueError */
     public function testFromValue(): void {
         static::assertEquals(
             DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2024-11-22 22:23:57', new DateTimeZone('+01:00')),
