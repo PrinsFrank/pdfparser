@@ -44,7 +44,9 @@ class PositionedTextElement {
                     $chars = $encoding->decodeString($unescapedChars);
                 } elseif (($toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont()) !== null) {
                     $chars = $toUnicodeCMap->textToUnicode(bin2hex($unescapedChars));
-                } else {
+                } elseif (($fontDescriptor = $font->getFontDescriptor()) !== null && ($charSet = $fontDescriptor->getCharSet()) !== null && preg_match('/^\\\\\d{3}$/', substr($match['chars'], 1, -1)) === 1) {
+                    $chars = $charSet->getCharacterAtIndex((int) octdec(substr($match['chars'], 2, -1)));
+                }else {
                     $chars = $unescapedChars;
                 }
 

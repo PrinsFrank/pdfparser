@@ -257,8 +257,14 @@ class Font extends DecoratedObject {
     }
 
     /** @throws PdfParserException */
-    public function getFontDescriptor(): ?ReferenceValue {
-        return $this->getDictionary()
+    public function getFontDescriptor(): ?FontDescriptor {
+        $reference = $this->getDictionary()
             ->getValueForKey(DictionaryKey::FONT_DESCRIPTOR, ReferenceValue::class);
+        if ($reference === null) {
+            return null;
+        }
+
+        return $this->document
+            ->getObject($reference->objectNumber, FontDescriptor::class);
     }
 }
