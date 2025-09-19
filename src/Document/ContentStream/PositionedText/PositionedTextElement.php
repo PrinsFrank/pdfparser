@@ -40,6 +40,8 @@ class PositionedTextElement {
                 $unescapedChars = LiteralStringEscapeCharacter::unescapeCharacters(substr($match['chars'], 1, -1));
                 if (preg_match('/^\\\\\d{3}$/', substr($match['chars'], 1, -1)) === 1 && ($glyph = $font->getDifferences()?->getGlyph((int) octdec(substr($match['chars'], 2, -1)))) !== null) {
                     $chars = $glyph->getChar();
+                } elseif (strlen($unescapedChars) === 1 && ($glyph = $font->getDifferences()?->getGlyph(ord($unescapedChars))) !== null) {
+                    $chars = $glyph->getChar();
                 } elseif (($encoding = $font->getEncoding()) !== null) {
                     $chars = $encoding->decodeString($unescapedChars);
                 } elseif (($toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont()) !== null) {
