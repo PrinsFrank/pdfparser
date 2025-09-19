@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interacti
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /** @internal */
 enum TextPositioningOperator: string implements InteractsWithTransformationMatrix, InteractsWithTextState {
@@ -20,7 +21,7 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
     /** @throws ParseFailureException */
     #[Override]
     public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix {
-        $operands = preg_replace('/\s+/', ' ', $operands);
+        $operands = preg_replace('/\s+/', ' ', $operands) ?? throw new RuntimeException();
         if ($this === self::MOVE_OFFSET || $this === self::MOVE_OFFSET_LEADING) {
             $offsets = explode(' ', trim($operands));
             if (count($offsets) !== 2) {
