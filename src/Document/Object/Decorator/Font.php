@@ -13,6 +13,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CIDFontWidths;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CrossReferenceStreamByteSizes;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DifferencesArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\Item\RangeCIDWidth;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
@@ -37,10 +38,19 @@ class Font extends DecoratedObject {
             ?->textStringValue;
     }
 
+    public function getEncodingDictionary(): ?Dictionary {
+        if (in_array($this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING), [null, EncodingNameValue::class], true)) {
+            return null;
+        }
+
+        return $this->getDictionary()
+            ->getSubDictionary($this->document, DictionaryKey::ENCODING);
+    }
+
     /** @throws PdfParserException */
     public function getEncoding(): ?EncodingNameValue {
         $encodingType = $this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING);
-        if ($encodingType === null || $encodingType === Dictionary::class) {
+        if ($encodingType === null) {
             return null;
         }
 
@@ -48,12 +58,13 @@ class Font extends DecoratedObject {
             return $this->getDictionary()->getValueForKey(DictionaryKey::ENCODING, EncodingNameValue::class);
         }
 
-        if ($encodingType === ReferenceValue::class) {
-            return ($this->getDictionary()->getObjectForReference($this->document, DictionaryKey::ENCODING) ?? throw new ParseFailureException('Unable to locate object for encoding dictionary'))
-                ->getDictionary()->getValueForKey(DictionaryKey::BASE_ENCODING, EncodingNameValue::class);
-        }
+        return $this->getEncodingDictionary()
+            ?->getValueForKey(DictionaryKey::BASE_ENCODING, EncodingNameValue::class);
+    }
 
-        throw new ParseFailureException(sprintf('Unrecognized encoding type %s', $encodingType));
+    public function getDifferences(): ?DifferencesArrayValue {
+        return $this->getEncodingDictionary()
+            ?->getValueForKey(DictionaryKey::DIFFERENCES, DifferencesArrayValue::class);
     }
 
     /** @throws PdfParserException */

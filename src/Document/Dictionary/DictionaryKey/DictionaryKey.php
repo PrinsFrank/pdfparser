@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CIDFontWidths;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CrossReferenceStreamByteSizes;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DifferencesArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Boolean\BooleanValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Float\FloatValue;
@@ -794,7 +795,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::DEV_DEP_GS_TR => [IntegerValue::class],
             self::DEV_DEP_GS_UCR => [IntegerValue::class],
             self::DI => [IntegerValue::class, FloatValue::class, TextStringValue::class],
-            self::DIFFERENCES => [ArrayValue::class, TextStringValue::class],
+            self::DIFFERENCES => [DifferencesArrayValue::class, TextStringValue::class],
             self::DIGEST_METHOD => [ArrayValue::class, TextStringValue::class],
             self::DIRECTION => [DirectionNameValue::class],
             self::DIS => [TextStringValue::class],

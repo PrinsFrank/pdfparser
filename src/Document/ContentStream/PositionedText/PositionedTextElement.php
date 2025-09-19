@@ -37,11 +37,15 @@ class PositionedTextElement {
         $font = $this->getFont($document, $page);
         foreach ($matches as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
-                $chars = LiteralStringEscapeCharacter::unescapeCharacters(substr($match['chars'], 1, -1));
-                if (($encoding = $font->getEncoding()) !== null) {
-                    $chars = $encoding->decodeString($chars);
+                $unescapedChars = LiteralStringEscapeCharacter::unescapeCharacters(substr($match['chars'], 1, -1));
+                if (preg_match('/^\\\\\d{3}$/', substr($match['chars'], 1, -1)) === 1 && ($glyph = $font->getDifferences()?->getGlyph((int) octdec(substr($match['chars'], 2, -1)))) !== null) {
+                    $chars = $glyph->getChar();
+                } elseif (($encoding = $font->getEncoding()) !== null) {
+                    $chars = $encoding->decodeString($unescapedChars);
                 } elseif (($toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont()) !== null) {
-                    $chars = $toUnicodeCMap->textToUnicode(bin2hex($chars));
+                    $chars = $toUnicodeCMap->textToUnicode(bin2hex($unescapedChars));
+                } else {
+                    $chars = $unescapedChars;
                 }
 
                 $string .= $chars;
