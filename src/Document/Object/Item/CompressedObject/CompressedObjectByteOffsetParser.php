@@ -40,6 +40,11 @@ class CompressedObjectByteOffsetParser {
             $decodedChar = mb_chr((int) hexdec($char));
             if (WhitespaceCharacter::tryFrom($decodedChar) !== null) {
                 $numberInBuffer = $buffer->__toString();
+                if (trim($numberInBuffer) === '') {
+                    $buffer->flush();
+                    continue;
+                }
+
                 if ($numberInBuffer !== (string)(int) $numberInBuffer) {
                     throw new ParseFailureException(sprintf('Number "%s" in buffer is not a valid number', $numberInBuffer));
                 }
