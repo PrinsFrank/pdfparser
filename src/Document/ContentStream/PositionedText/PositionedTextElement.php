@@ -38,15 +38,15 @@ class PositionedTextElement {
         foreach ($matches as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
                 $unescapedChars = LiteralStringEscapeCharacter::unescapeCharacters(substr($match['chars'], 1, -1));
-                if (preg_match('/^\\\\\d{3}$/', substr($match['chars'], 1, -1)) === 1 && ($glyph = $font->getDifferences()?->getGlyph((int) octdec(substr($match['chars'], 2, -1)))) !== null) {
-                    $chars = $glyph->getChar();
+                if (($toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont()) !== null) {
+                    $chars = $toUnicodeCMap->textToUnicode(bin2hex($unescapedChars));
                 } elseif (($encoding = $font->getEncoding()) !== null) {
                     $chars = $encoding->decodeString($unescapedChars);
-                } elseif (($toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont()) !== null) {
-                    $chars = $toUnicodeCMap->textToUnicode(bin2hex($unescapedChars));
+                } elseif (preg_match('/^\\\\\d{3}$/', substr($match['chars'], 1, -1)) === 1 && ($glyph = $font->getDifferences()?->getGlyph((int) octdec(substr($match['chars'], 2, -1)))) !== null) {
+                    $chars = $glyph->getChar();
                 } elseif (($fontDescriptor = $font->getFontDescriptor()) !== null && ($charSet = $fontDescriptor->getCharSet()) !== null && preg_match('/^\\\\\d{3}$/', substr($match['chars'], 1, -1)) === 1) {
                     $chars = $charSet->getCharacterAtIndex((int) octdec(substr($match['chars'], 2, -1)));
-                }else {
+                } else {
                     $chars = $unescapedChars;
                 }
 
