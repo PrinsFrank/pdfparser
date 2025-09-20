@@ -20,7 +20,6 @@ use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObj
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObjectParser;
 use PrinsFrank\PdfParser\Document\Security\StandardSecurity;
 use PrinsFrank\PdfParser\Document\Version\Version;
-use PrinsFrank\PdfParser\Exception\AuthenticationFailedException;
 use PrinsFrank\PdfParser\Exception\NotImplementedException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -41,16 +40,8 @@ class Document {
         public readonly CrossReferenceSource $crossReferenceSource,
         public ?StandardSecurity             $security,
     ) {
-        if (($encryptDictionary = $this->getEncryptDictionary()) !== null) {
-            if ($encryptDictionary->getSecurityHandler() === null) {
-                throw new NotImplementedException('Empty security handler is not supported');
-            }
-
-            $this->security ??= new StandardSecurity();
-            if ($this->security->isUserPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false
-                && $this->security->isOwnerPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false) {
-                throw new AuthenticationFailedException($security === null ? 'Document could not be decrypted using default credentials, please supply an owner or user password' : 'User and owner password are invalid, please supply valid credentials');
-            }
+        if ($this->getEncryptDictionary() !== null) {
+            throw new NotImplementedException('Encrypted documents are not supported yet');
         }
     }
 
