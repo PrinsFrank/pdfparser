@@ -26,7 +26,12 @@ class ReferenceValueArray implements DictionaryValue {
 
         $valueString = preg_replace('/\s+/', ' ', $valueString)
             ?? throw new ParseFailureException('An unexpected error occurred while sanitizing reference value array');
-        $referenceParts = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));
+        $valueString = trim(rtrim(ltrim($valueString, '['), ']'));
+        if ($valueString === '') {
+            return new self();
+        }
+
+        $referenceParts = explode(' ', $valueString);
         $nrOfReferenceParts = count($referenceParts);
         if ($nrOfReferenceParts % 3 !== 0) {
             return null;

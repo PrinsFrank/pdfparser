@@ -13,7 +13,10 @@ class ReferenceValueArrayTest extends TestCase {
         static::assertNull(ReferenceValueArray::fromValue('42'));
         static::assertNull(ReferenceValueArray::fromValue('42 0'));
         static::assertNull(ReferenceValueArray::fromValue('42 0 R'));
-        static::assertNull(ReferenceValueArray::fromValue('[]'));
+        static::assertEquals(
+            new ReferenceValueArray(),
+            ReferenceValueArray::fromValue('[]')
+        );
         static::assertEquals(
             new ReferenceValueArray(
                 new ReferenceValue(42, 0)
