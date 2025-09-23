@@ -13,6 +13,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\Normalization\NameValueNormalizer;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
@@ -50,7 +51,7 @@ class DictionaryEntryFactory {
         foreach ($allowedValueTypes as $allowedValueType) {
             if (is_a($allowedValueType, BackedEnum::class, true)
                 && is_string($value)
-                && ($resolvedValue = $allowedValueType::tryFrom(trim(ltrim($value, '/')))) !== null) {
+                && ($resolvedValue = $allowedValueType::tryFrom(NameValueNormalizer::normalize($value))) !== null) {
                 return $resolvedValue;
             }
         }
