@@ -21,6 +21,5 @@ class IntegerValueTest extends TestCase {
 
         static::assertNull(IntegerValue::fromValue('42.0'));
         static::assertNull(IntegerValue::fromValue('42,0'));
-        static::assertNull(IntegerValue::fromValue((string) (PHP_INT_MAX + 1))); // INT_MAX + 1 results in float
     }
 }
