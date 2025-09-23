@@ -1172,7 +1172,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::SYNCHRONOUS => [BooleanValue::class],
             self::T => [Dictionary::class, TextStringValue::class, DictionaryArrayValue::class, BooleanValue::class],
             self::TA => [Dictionary::class],
-            self::TABS => [TabsNameValue::class],
+            self::TABS => [TabsNameValue::class, TextStringValue::class],
             self::TARGET => [TextStringValue::class],
             self::TB => [BooleanValue::class],
             self::TC => [TextStringValue::class],
