@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\FilterNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Encryption\RC4;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -41,6 +42,24 @@ class CompressedObjectContentParser {
 
                 $binaryStreamContent = $filter
                     ->decodeBinary($binaryStreamContent, $dictionary, ($context instanceof Document ? $context : null));
+            }
+        } elseif ($filterType === ReferenceValue::class) {
+            if (!$context instanceof Document) {
+                throw new ParseFailureException('Filter reference is only supported in a Document');
+            }
+
+            $filter = $dictionary->getObjectForReference($context, DictionaryKey::FILTER) ?? throw new ParseFailureException('Unable to retrieve filter object');
+            if (($filterArray = ArrayValue::fromValue($filter->getContent())) instanceof ArrayValue === false) {
+                throw new ParseFailureException('Filter object is not an array');
+            }
+
+            foreach ($filterArray->value as $filterValue) {
+                if (is_string($filterValue) === false || ($filter = FilterNameValue::tryFrom(ltrim($filterValue, '/'))) === null) {
+                    throw new ParseFailureException();
+                }
+
+                $binaryStreamContent = $filter
+                    ->decodeBinary($binaryStreamContent, $dictionary, $context);
             }
         } elseif ($filterType !== null) {
             throw new RuntimeException(sprintf('Expected filter to be a FilterNameValue or ArrayValue, got %s', $filterType));
