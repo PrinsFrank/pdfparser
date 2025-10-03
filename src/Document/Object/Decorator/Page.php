@@ -31,13 +31,7 @@ class Page extends DecoratedObject {
     /** @throws PdfParserException */
     public function getContentStream(): ContentStream {
         return ContentStreamParser::parse(
-            implode(
-                '',
-                array_map(
-                    fn (DecoratedObject $decoratedObject) => $decoratedObject->objectItem->getContent($this->document)->toString(),
-                    $this->document->getObjectsByDictionaryKey($this->getDictionary(), DictionaryKey::CONTENTS),
-                ),
-            ),
+            $this->document->getObjectsByDictionaryKey($this->getDictionary(), DictionaryKey::CONTENTS),
         );
     }
 
