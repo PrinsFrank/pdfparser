@@ -77,7 +77,7 @@ class XObject extends DecoratedObject {
         if ($filterValueType === ArrayValue::class) {
             foreach ($this->getDictionary()->getValueForKey(DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new RuntimeException() as $filterValue) {
                 if (!is_string($filterValue)) {
-                    throw new ParseFailureException(sprintf('Expected a string for filter value, got "%s"', json_encode($filterValue)));
+                    throw new ParseFailureException(sprintf('Expected a string for filter value, got "%s"', ($jsonEncoded = json_encode($filterValue)) !== false ? $jsonEncoded : 'Unknown'));
                 }
 
                 $filterValue = FilterNameValue::tryFrom(ltrim($filterValue, '/')) ?? throw new ParseFailureException(sprintf('Unsupported filter value "%s"', $filterValue));
@@ -120,7 +120,7 @@ class XObject extends DecoratedObject {
             }
 
             if (!is_int($objectNumber = $colorSpaceInfo->value[1])) {
-                throw new ParseFailureException(sprintf('Expected an integer for object number, got "%s"', json_encode($objectNumber)));
+                throw new ParseFailureException(sprintf('Expected an integer for object number, got "%s"', ($jsonEncoded = json_encode($objectNumber)) !== false ? $jsonEncoded : 'Unknown'));
             }
 
             return new ColorSpace($colorSpace, new LUT($this->document->getObject($objectNumber) ?? throw new ParseFailureException(sprintf('Unable to locate object %d', $colorSpaceInfo->value[1]))));

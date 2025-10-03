@@ -73,6 +73,6 @@ class DictionaryEntryFactory {
             return TextStringValue::fromValue($value);
         }
 
-        throw new ParseFailureException(sprintf('Value "%s" for dictionary key %s could not be parsed to a valid value type', is_array($value) ? json_encode($value) : $value, $dictionaryKey->value));
+        throw new ParseFailureException(sprintf('Value "%s" for dictionary key %s could not be parsed to a valid value type', is_array($value) ? 'array()' : $value, $dictionaryKey->value));
     }
 }

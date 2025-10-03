@@ -31,7 +31,10 @@ class ToUnicodeCMapParser {
                 throw new ParseFailureException(sprintf('Start(%s) and end(%s) of codespacerange don\'t have the same number of bytes', $matchesSpaceRange['start'], $matchesSpaceRange['end']));
             }
 
-            $byteSizeRange = strlen(trim($matchesSpaceRange['start'])) / 2;
+            if (($strlen = strlen($matchesSpaceRange['start'])) % 2 !== 0 || !is_int($byteSizeRange = $strlen / 2)) {
+                throw new ParseFailureException(sprintf('Codespaceranges must be an even number of hex digits, got %d', $strlen));
+            }
+
             if ($byteSize !== null && $byteSizeRange !== $byteSize) {
                 throw new ParseFailureException(sprintf('Byte size of codespaceranges is inconsistent, expected %d, got %d', $byteSize, $byteSizeRange));
             }
@@ -81,7 +84,7 @@ class ToUnicodeCMapParser {
         ksort($bfCharRangeInfo); // Make sure that Char and Range are in order they occur in the CMap
         return new ToUnicodeCMap(
             $codeSpaceRanges,
-            is_int($byteSize) && $byteSize > 0 ? $byteSize : 2,
+            $byteSize !== null ? $byteSize : 2,
             ...array_merge(...$bfCharRangeInfo)
         );
     }
