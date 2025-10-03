@@ -19,69 +19,75 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextState
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Type3FontOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\XObjectOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
+use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @internal */
 class ContentStreamParser {
-    /** @throws ParseFailureException */
-    public static function parse(string $contentStream): ContentStream {
+    /**
+     * @param list<DecoratedObject> $contentsObjects
+     * @throws ParseFailureException
+     */
+    public static function parse(array $contentsObjects): ContentStream {
         $operandBuffer = '';
         $content = [];
         $inStringLiteral = $inResourceName = false;
         $inArrayLevel = $inStringLevel = 0;
         $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = null;
-        foreach (($characters = str_split($contentStream)) as $index => $char) {
-            $operandBuffer .= $char;
-            if ($inStringLiteral === true) {
-                if ($char === ')' && $previousChar !== '\\') {
-                    $inStringLiteral = false;
-                }
-            } elseif ($inResourceName === true) {
-                if (in_array($char, [' ', '<', '(', '/'], true) && $previousChar !== '\\') {
-                    $inResourceName = false;
-                }
-            } elseif ($char === '[' && $previousChar !== '\\') {
-                $inArrayLevel++;
-            } elseif ($char === '<' && $previousChar !== '\\') {
-                $inStringLevel++;
-            } elseif ($char === '(' && $previousChar !== '\\') {
-                $inStringLiteral = true;
-            } elseif ($char === '/' && $previousChar !== '\\') {
-                $inResourceName = true;
-            } elseif ($inStringLevel > 0 || $inArrayLevel > 0) {
-                if ($inStringLevel > 0 && $char === '>' && $previousChar !== '\\') {
-                    $inStringLevel--;
-                } elseif ($inArrayLevel > 0 && $char === ']' && $previousChar !== '\\') {
-                    $inArrayLevel--;
-                }
-            } elseif ($char === 'T' && $previousChar === 'B') { // TextObjectOperator::BEGIN
-                $operandBuffer = '';
-                $textObject = new TextObject();
-            } elseif ($char === 'T' && $previousChar === 'E') { // TextObjectOperator::END
-                $operandBuffer = '';
-                if ($textObject === null) {
-                    throw new ParseFailureException('Encountered TextObjectOperator::END without preceding TextObjectOperator::BEGIN');
+        foreach ($contentsObjects as $contentsObject) {
+            foreach (($characters = str_split($contentsObject->getContent())) as $index => $char) {
+                $operandBuffer .= $char;
+                if ($inStringLiteral === true) {
+                    if ($char === ')' && $previousChar !== '\\') {
+                        $inStringLiteral = false;
+                    }
+                } elseif ($inResourceName === true) {
+                    if (in_array($char, [' ', '<', '(', '/'], true) && $previousChar !== '\\') {
+                        $inResourceName = false;
+                    }
+                } elseif ($char === '[' && $previousChar !== '\\') {
+                    $inArrayLevel++;
+                } elseif ($char === '<' && $previousChar !== '\\') {
+                    $inStringLevel++;
+                } elseif ($char === '(' && $previousChar !== '\\') {
+                    $inStringLiteral = true;
+                } elseif ($char === '/' && $previousChar !== '\\') {
+                    $inResourceName = true;
+                } elseif ($inStringLevel > 0 || $inArrayLevel > 0) {
+                    if ($inStringLevel > 0 && $char === '>' && $previousChar !== '\\') {
+                        $inStringLevel--;
+                    } elseif ($inArrayLevel > 0 && $char === ']' && $previousChar !== '\\') {
+                        $inArrayLevel--;
+                    }
+                } elseif ($char === 'T' && $previousChar === 'B') { // TextObjectOperator::BEGIN
+                    $operandBuffer = '';
+                    $textObject = new TextObject();
+                } elseif ($char === 'T' && $previousChar === 'E') { // TextObjectOperator::END
+                    $operandBuffer = '';
+                    if ($textObject === null) {
+                        throw new ParseFailureException('Encountered TextObjectOperator::END without preceding TextObjectOperator::BEGIN');
+                    }
+
+                    $content[] = $textObject;
+                    $textObject = null;
+                } elseif ($char === 'C'
+                    && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
+                    $operandBuffer = '';
+                } elseif (($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null
+                    && self::getOperator($characters[$index + 1] ?? '', $char, $previousChar, $secondToLastChar) === null) { // Skip the current hit if the next iteration is also a valid operator
+                    $command = new ContentStreamCommand($operator, trim(substr($operandBuffer, 0, -strlen($operator->value))));
+                    if ($textObject !== null) {
+                        $textObject->addContentStreamCommand($command);
+                    } else {
+                        $content[] = $command;
+                    }
+                    $operandBuffer = '';
                 }
 
-                $content[] = $textObject;
-                $textObject = null;
-            } elseif ($char === 'C'
-                && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
-                $operandBuffer = '';
-            } elseif (($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null
-                && self::getOperator($characters[$index + 1] ?? '', $char, $previousChar, $secondToLastChar) === null) { // Skip the current hit if the next iteration is also a valid operator
-                $command = new ContentStreamCommand($operator, trim(substr($operandBuffer, 0, -strlen($operator->value))));
-                if ($textObject !== null) {
-                    $textObject->addContentStreamCommand($command);
-                } else {
-                    $content[] = $command;
-                }
-                $operandBuffer = '';
+                $thirdToLastChar = $secondToLastChar;
+                $secondToLastChar = $previousChar;
+                $previousChar = $char;
             }
-
-            $thirdToLastChar = $secondToLastChar;
-            $secondToLastChar = $previousChar;
-            $previousChar = $char;
         }
 
         return new ContentStream(...$content);
