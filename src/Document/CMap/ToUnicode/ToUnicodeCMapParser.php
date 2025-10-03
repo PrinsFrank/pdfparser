@@ -23,7 +23,7 @@ class ToUnicodeCMapParser {
                 continue;
             }
 
-            if (preg_match('/^\s*<(?P<start>[0-9a-fA-F ]+)>\s*<(?P<end>[0-9a-fA-F ]+)>\s*$/', $codeSpaceRangeSectionStringLine, $matchesSpaceRange) !== 1) {
+            if (preg_match('/^\s*<\s*(?P<start>[0-9a-fA-F]+)\s*>\s*<\s*(?P<end>[0-9a-fA-F]+)\s*>\s*$/', $codeSpaceRangeSectionStringLine, $matchesSpaceRange) !== 1) {
                 throw new ParseFailureException('Unrecognized codespacerange format');
             }
 
