@@ -5,6 +5,8 @@ namespace PrinsFrank\PdfParser\Document\Image;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpace;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\Components;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Stream\FileStream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 class RasterizedImage {
     /**
@@ -14,7 +16,7 @@ class RasterizedImage {
      * @param int<1, max> $height
      * @throws ParseFailureException
      */
-    public static function toPNG(ColorSpace $colorSpace, int $width, int $height, int $bitsPerComponent, string $content): string {
+    public static function toPNG(ColorSpace $colorSpace, int $width, int $height, int $bitsPerComponent, Stream $content): Stream {
         if ($bitsPerComponent !== 8) {
             throw new ParseFailureException('Unsupported BitsPerComponent');
         }
@@ -28,13 +30,13 @@ class RasterizedImage {
         for ($y = 0; $y < $height; $y++) {
             for ($x = 0; $x < $width; $x++) {
                 $color = match ($colorSpace->getComponents()) {
-                    Components::RGB => imagecolorallocate($image, ord($content[$pixelIndex]), ord($content[$pixelIndex + 1]), ord($content[$pixelIndex + 2])),
-                    Components::Gray => imagecolorallocate($image, $value = ord($content[$pixelIndex]), $value, $value),
+                    Components::RGB => imagecolorallocate($image, ord($content->read($pixelIndex, 1)), ord($content->read($pixelIndex + 1, 1)), ord($content->read($pixelIndex + 2, 1))),
+                    Components::Gray => imagecolorallocate($image, $value = ord($content->read($pixelIndex, 1)), $value, $value),
                     Components::CMYK => imagecolorallocate(
                         $image,
-                        min(255, max(0, (int)(255 * (1 - (ord($content[$pixelIndex]) / 255)) * (1 - (ord($content[$pixelIndex + 3]) / 255))))),
-                        min(255, max(0, (int)(255 * (1 - (ord($content[$pixelIndex + 1]) / 255)) * (1 - (ord($content[$pixelIndex + 3]) / 255))))),
-                        min(255, max(0, (int)(255 * (1 - (ord($content[$pixelIndex + 2]) / 255)) * (1 - (ord($content[$pixelIndex + 3]) / 255))))),
+                        min(255, max(0, (int)(255 * (1 - (ord($content->read($pixelIndex, 1)) / 255)) * (1 - (ord($content->read($pixelIndex + 3, 1)) / 255))))),
+                        min(255, max(0, (int)(255 * (1 - (ord($content->read($pixelIndex + 1, 1)) / 255)) * (1 - (ord($content->read($pixelIndex + 3, 1)) / 255))))),
+                        min(255, max(0, (int)(255 * (1 - (ord($content->read($pixelIndex + 2, 1)) / 255)) * (1 - (ord($content->read($pixelIndex + 3, 1)) / 255))))),
                     ),
                 };
 
@@ -54,6 +56,6 @@ class RasterizedImage {
             throw new ParseFailureException('Unable to decode image');
         }
 
-        return $imageContent;
+        return FileStream::fromString($imageContent);
     }
 }
