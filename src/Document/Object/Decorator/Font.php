@@ -89,7 +89,7 @@ class Font extends DecoratedObject {
             throw new ParseFailureException();
         }
 
-        $stream = new InMemoryStream($toUnicodeObject->objectItem->getContent($this->document));
+        $stream = $toUnicodeObject->objectItem->getContent($this->document);
         return $this->toUnicodeCMap = ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes());
     }
 
@@ -228,9 +228,9 @@ class Font extends DecoratedObject {
         if ($this->getDictionary()->getTypeForKey(DictionaryKey::WIDTHS) === ReferenceValue::class) {
             $object = $this->document->getObject(($widthsReference = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ReferenceValue::class))->objectNumber ?? throw new ParseFailureException(), Font::class)
                 ?? throw new ParseFailureException(sprintf('Width dictionary with number %d could not be found', $widthsReference->objectNumber));
-            $arrayValue = ArrayValue::fromValue($object->getContent());
+            $arrayValue = ArrayValue::fromValue($object->getContent()->toString());
             if ($arrayValue instanceof ArrayValue === false) {
-                throw new ParseFailureException(sprintf('Width dictionary with number %d does not contain a valid array, "%s"', $widthsReference->objectNumber, substr($object->getContent(), 0, 100) . '...'));
+                throw new ParseFailureException(sprintf('Width dictionary with number %d does not contain a valid array, "%s"', $widthsReference->objectNumber, $object->getContent()->read(0, 100) . '...'));
             }
 
             $widthsArray = $arrayValue->value;

@@ -13,6 +13,8 @@ interface Stream {
     /** @phpstan-assert int<1, max> $nrOfBytes */
     public function read(int $from, int $nrOfBytes): string;
 
+    public function toString(): string;
+
     /**
      * @phpstan-assert int<0, max> $startByteOffset
      * @phpstan-assert int<0, max> $endByteOffset
