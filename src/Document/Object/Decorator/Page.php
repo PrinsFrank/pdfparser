@@ -34,7 +34,7 @@ class Page extends DecoratedObject {
             implode(
                 '',
                 array_map(
-                    fn (DecoratedObject $decoratedObject) => $decoratedObject->objectItem->getContent($this->document),
+                    fn (DecoratedObject $decoratedObject) => $decoratedObject->objectItem->getContent($this->document)->toString(),
                     $this->document->getObjectsByDictionaryKey($this->getDictionary(), DictionaryKey::CONTENTS),
                 ),
             ),

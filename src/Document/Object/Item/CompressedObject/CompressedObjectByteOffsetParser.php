@@ -30,7 +30,7 @@ class CompressedObjectByteOffsetParser {
             $length = $eolPos - $startStreamPos;
         }
 
-        $content = bin2hex(CompressedObjectContentParser::parseBinary($stream, $startStreamPos, $length, $dictionary));
+        $content = bin2hex(CompressedObjectContentParser::parseBinary($stream, $startStreamPos, $length, $dictionary)->toString());
         $first = $dictionary->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
         $buffer = new InfiniteBuffer();

@@ -57,4 +57,9 @@ abstract class AbstractStream implements Stream {
 
         return min($firstLineFeedPos, $firstCarriageReturnPos);
     }
+
+    #[Override]
+    public function toString(): string {
+        return $this->read(0, $this->getSizeInBytes());
+    }
 }

@@ -13,6 +13,7 @@ use PrinsFrank\PdfParser\Document\Encryption\RC4;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
+use PrinsFrank\PdfParser\Stream\FileStream;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @internal */
@@ -20,9 +21,9 @@ class CompressedObjectContentParser {
     /**
      * @param Stream|Document $context the document (or stream during parsing) that is currently being parsed
      * @throws PdfParserException
-     * @return string in binary format
+     * @return Stream with content in binary format
      */
-    public static function parseBinary(Stream|Document $context, int $startPos, int $nrOfBytes, Dictionary $dictionary): string {
+    public static function parseBinary(Stream|Document $context, int $startPos, int $nrOfBytes, Dictionary $dictionary): Stream {
         $binaryStreamContent = ($context instanceof Document ? $context->stream : $context)->read($startPos, $nrOfBytes);
         if ($context instanceof Document && $context->security !== null && ($encryptDictionary = $context->getEncryptDictionary()) !== null) {
             $binaryStreamContent = RC4::crypt(
@@ -49,7 +50,7 @@ class CompressedObjectContentParser {
             }
 
             $filter = $dictionary->getObjectForReference($context, DictionaryKey::FILTER) ?? throw new ParseFailureException('Unable to retrieve filter object');
-            if (($filterArray = ArrayValue::fromValue($filter->getContent())) instanceof ArrayValue === false) {
+            if (($filterArray = ArrayValue::fromValue($filter->getContent()->toString())) instanceof ArrayValue === false) {
                 throw new ParseFailureException('Filter object is not an array');
             }
 
@@ -65,6 +66,6 @@ class CompressedObjectContentParser {
             throw new RuntimeException(sprintf('Expected filter to be a FilterNameValue or ArrayValue, got %s', $filterType));
         }
 
-        return $binaryStreamContent;
+        return FileStream::fromString($binaryStreamContent);
     }
 }

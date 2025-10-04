@@ -17,6 +17,8 @@ use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectC
 use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Stream\FileStream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @api */
 class UncompressedObject implements ObjectItem {
@@ -81,7 +83,7 @@ class UncompressedObject implements ObjectItem {
     }
 
     #[Override]
-    public function getContent(Document $document): string {
+    public function getContent(Document $document): Stream {
         if (($startStreamPos = $document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)) !== null
             && ($endStreamPos = $document->stream->firstPos(Marker::END_STREAM, $startStreamPos, $this->endOffset)) !== null) {
             return CompressedObjectContentParser::parseBinary(
@@ -99,9 +101,12 @@ class UncompressedObject implements ObjectItem {
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_OBJ->value));
         $eolObjContent = $document->stream->getEndOfCurrentLine($endObjPos - 2, $this->endOffset)
             ?? throw new ParseFailureException(sprintf('Unable to locate newline after marker %s', Marker::END_OBJ->value));
-        return $document->stream->read(
-            $nextLineAfterStartObj,
-            $eolObjContent - $nextLineAfterStartObj,
+
+        return FileStream::fromString(
+            $document->stream->read(
+                $nextLineAfterStartObj,
+                $eolObjContent - $nextLineAfterStartObj,
+            )
         );
     }
 }

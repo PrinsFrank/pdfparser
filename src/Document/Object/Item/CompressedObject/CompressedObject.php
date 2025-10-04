@@ -15,7 +15,9 @@ use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObj
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
+use PrinsFrank\PdfParser\Stream\FileStream;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @api */
 class CompressedObject implements ObjectItem {
@@ -38,7 +40,7 @@ class CompressedObject implements ObjectItem {
             return $this->dictionary;
         }
 
-        $objectContent = trim($this->getContent($document));
+        $objectContent = trim($this->getContent($document)->toString());
         if ($objectContent === '' || !str_starts_with($objectContent, '<<') || !str_ends_with($objectContent, '>>')) {
             return $this->dictionary = new Dictionary();
         }
@@ -48,12 +50,12 @@ class CompressedObject implements ObjectItem {
     }
 
     #[Override]
-    public function getContent(Document $document): string {
+    public function getContent(Document $document): Stream {
         $first = $this->storedInObject->getDictionary($document)->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
 
         $content = substr(
-            $this->storedInObject->getContent($document),
+            $this->storedInObject->getContent($document)->toString(),
             $first->value + $this->startByteOffsetInDecodedStream,
             $this->endByteOffsetInDecodedStream !== null ? $this->endByteOffsetInDecodedStream - $this->startByteOffsetInDecodedStream : null
         );
@@ -63,12 +65,13 @@ class CompressedObject implements ObjectItem {
                 '',
                 array_map(
                     fn (ReferenceValue $referenceValue) => ($document->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException())
-                        ->getContent(),
+                        ->getContent()
+                        ->toString(),
                     $referenceValueArray->referenceValues,
                 )
             );
         }
 
-        return $content;
+        return FileStream::fromString($content);
     }
 }

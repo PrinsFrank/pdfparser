@@ -18,6 +18,7 @@ use PrinsFrank\PdfParser\Document\Image\ImageType;
 use PrinsFrank\PdfParser\Document\Image\RasterizedImage;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 class XObject extends DecoratedObject {
     public function isImage(): bool {
@@ -108,7 +109,7 @@ class XObject extends DecoratedObject {
             $colorSpaceObject = $this->getDictionary()->getObjectForReference($this->document, DictionaryKey::COLOR_SPACE)
                 ?? throw new ParseFailureException('Unable to retrieve colorspace object');
 
-            $colorSpaceInfo = ArrayValue::fromValue($colorSpaceObject->getContent());
+            $colorSpaceInfo = ArrayValue::fromValue($colorSpaceObject->getContent()->toString());
             if (!$colorSpaceInfo instanceof ArrayValue || !array_key_exists(0, $colorSpaceInfo->value) || !is_string($colorSpaceInfo->value[0])) {
                 throw new ParseFailureException('Expected an array for colorspace info');
             }
@@ -116,7 +117,7 @@ class XObject extends DecoratedObject {
             $colorSpaceName = substr($colorSpaceInfo->value[0], 1);
             $colorSpace = CIEColorSpaceNameValue::tryFrom($colorSpaceName) ?? DeviceColorSpaceNameValue::tryFrom($colorSpaceName) ?? SpecialColorSpaceNameValue::tryFrom($colorSpaceName) ?? throw new ParseFailureException(sprintf('Unsupported colorspace "%s"', $colorSpaceName));
             if (count($colorSpaceInfo->value) !== 4 || $colorSpaceInfo->value[3] !== 'R') {
-                throw new ParseFailureException(sprintf('Expected reference value for colorspace info, got "%s"', $colorSpaceObject->getContent()));
+                throw new ParseFailureException(sprintf('Expected reference value for colorspace info, got "%s"', $colorSpaceObject->getContent()->toString()));
             }
 
             if (!is_int($objectNumber = $colorSpaceInfo->value[1])) {
@@ -130,7 +131,7 @@ class XObject extends DecoratedObject {
     }
 
     #[Override]
-    public function getContent(): string {
+    public function getContent(): Stream {
         $content = parent::getContent();
         if (!$this->isImage() || $this->getImageType() !== ImageType::PNG) {
             return $content;
