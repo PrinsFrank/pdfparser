@@ -20,7 +20,7 @@ parameters:
         implicitThrows: false
         reportUncheckedExceptionDeadCatch: true
         uncheckedExceptionRegexes:
-            - '#^PHPUnit\\Framework\\#'
+            - '#^PHPUnit\\#'
         uncheckedExceptionClasses:
             - 'PrinsFrank\PdfParser\Exception\PdfParserException'
             - 'PrinsFrank\PdfParser\Exception\InvalidArgumentException'
