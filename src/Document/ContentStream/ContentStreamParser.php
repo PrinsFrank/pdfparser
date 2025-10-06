@@ -35,7 +35,7 @@ class ContentStreamParser {
         $inArrayLevel = $inStringLevel = 0;
         $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = null;
         foreach ($contentsObjects as $contentsObject) {
-            foreach (($characters = str_split($contentsObject->getContent())) as $index => $char) {
+            foreach (($contentStream = $contentsObject->getContent())->chars(0, $contentStream->getSizeInBytes()) as $index => $char) {
                 $operandBuffer .= $char;
                 if ($inStringLiteral === true) {
                     if ($char === ')' && $previousChar !== '\\') {
@@ -74,7 +74,7 @@ class ContentStreamParser {
                     && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
                     $operandBuffer = '';
                 } elseif (($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null
-                    && self::getOperator($characters[$index + 1] ?? '', $char, $previousChar, $secondToLastChar) === null) { // Skip the current hit if the next iteration is also a valid operator
+                    && (($nextChar = $contentStream->read($index + 1, 1)) === '' || self::getOperator($nextChar, $char, $previousChar, $secondToLastChar) === null)) { // Skip the current hit if the next iteration is also a valid operator
                     $command = new ContentStreamCommand($operator, trim(substr($operandBuffer, 0, -strlen($operator->value))));
                     if ($textObject !== null) {
                         $textObject->addContentStreamCommand($command);

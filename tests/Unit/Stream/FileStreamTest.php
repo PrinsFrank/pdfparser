@@ -61,6 +61,7 @@ class FileStreamTest extends TestCase {
 
     public function testChars(): void {
         $stream = FileStream::fromString('foobar');
+        static::assertSame(['f', 'o', 'o', 'b', 'a', 'r'], iterator_to_array($stream->chars(0, 6)));
         static::assertSame(['o', 'b'], iterator_to_array($stream->chars(2, 2)));
     }
 
