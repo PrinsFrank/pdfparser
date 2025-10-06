@@ -101,9 +101,9 @@ class FileStream extends AbstractStream {
             throw new InvalidArgumentException(sprintf('$nrOfBytes to read must be greater than 0, %d given', $nrOfBytes));
         }
 
-        fseek($this->handle, $from);
         $bytesRead = 0;
         while ($bytesRead < $nrOfBytes) {
+            fseek($this->handle, $from + $bytesRead);
             $bytes = fread($this->handle, 1);
             if ($bytes === false) {
                 throw new RuntimeException('Unable to read bytes from stream');
