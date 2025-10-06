@@ -24,31 +24,24 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\XObjectOp
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
+use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
+use PrinsFrank\PdfParser\Stream\FileStream;
 
 #[CoversClass(ContentStreamParser::class)]
 class ContentStreamParserTest extends TestCase {
     public function testParse(): void {
-        static::assertEquals(
-            new ContentStream(
-                (new TextObject())
-                    ->addContentStreamCommand(new ContentStreamCommand(TextStateOperator::FONT_SIZE, '/F1 24'))
-                    ->addContentStreamCommand(new ContentStreamCommand(TextPositioningOperator::MOVE_OFFSET, '100 100'))
-                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '( Hello World )'))
-            ),
-            ContentStreamParser::parse(
-                <<<EOD
+        $contentStream = FileStream::fromString(
+            <<<EOD
                 BT
                 /F1 24 Tf
                 100 100 Td
                 ( Hello World ) Tj
                 ET
-                EOD
-            )
+            EOD
         );
-    }
-
-    public function testParseWithOperatorOnNewLine(): void {
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -57,103 +50,147 @@ class ContentStreamParserTest extends TestCase {
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '( Hello World )'))
             ),
             ContentStreamParser::parse(
-                <<<EOD
-                BT
-                /F1 24
-                Tf
-                100 100
-                Td
-                ( Hello World )
-                Tj
-                ET
-                EOD
+                [$decoratedObject],
             )
         );
     }
 
+    public function testParseWithOperatorOnNewLine(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            BT
+            /F1 24
+            Tf
+            100 100
+            Td
+            ( Hello World )
+            Tj
+            ET
+            EOD
+        );
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextStateOperator::FONT_SIZE, '/F1 24'))
+                    ->addContentStreamCommand(new ContentStreamCommand(TextPositioningOperator::MOVE_OFFSET, '100 100'))
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '( Hello World )'))
+            ),
+            ContentStreamParser::parse([$decoratedObject])
+        );
+    }
+
     public function testParseWithArrayDelimiterInStringLiteral(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            BT
+            ([Hello) Tj
+            (World]) Tj
+            ET
+            EOD
+        );
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '([Hello)'))
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(World])'))
             ),
-            ContentStreamParser::parse(
-                <<<EOD
-                BT
-                ([Hello) Tj
-                (World]) Tj
-                ET
-                EOD
-            )
+            ContentStreamParser::parse([$decoratedObject])
         );
     }
 
     public function testParseWithEscapedStringLiteralDelimiterInStringLiteral(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            BT
+            (Hel\)lo) Tj
+            ET
+            EOD
+        );
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hel\)lo)'))
             ),
-            ContentStreamParser::parse(
-                <<<EOD
-                BT
-                (Hel\)lo) Tj
-                ET
-                EOD
-            )
+            ContentStreamParser::parse([$decoratedObject])
         );
     }
 
     public function testParseShowArraySyntax(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            BT
+            [(F)-1(O)32(O)] TJ
+            ET
+            EOD
+        );
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW_ARRAY, '[(F)-1(O)32(O)]'))
             ),
-            ContentStreamParser::parse(
-                <<<EOD
-                BT
-                [(F)-1(O)32(O)] TJ
-                ET
-                EOD
-            )
+            ContentStreamParser::parse([$decoratedObject])
         );
     }
 
     public function testParseShowArraySyntaxWithArrayDelimiterInStringLiteral(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            BT
+            [(F)-1([O)32(O])] TJ
+            ET
+            EOD
+        );
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW_ARRAY, '[(F)-1([O)32(O])]'))
             ),
-            ContentStreamParser::parse(
-                <<<EOD
-                BT
-                [(F)-1([O)32(O])] TJ
-                ET
-                EOD
-            )
+            ContentStreamParser::parse([$decoratedObject])
         );
     }
 
     public function testParseWithOperatorInTextOperand(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            BT
+            /Tc1.0 1 Tf
+            ET
+            EOD
+        );
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextStateOperator::FONT_SIZE, '/Tc1.0 1'))
             ),
-            ContentStreamParser::parse(
-                <<<EOD
-                BT
-                /Tc1.0 1 Tf
-                ET
-                EOD
-            )
+            ContentStreamParser::parse([$decoratedObject])
         );
     }
 
     public function testParseWithContentOutsideOfTextObject(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            0 J
+            /F1 7 Tf
+            BT
+            (Hello) Tj
+            (World) Tj
+            ET
+            EOD
+        );
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 new ContentStreamCommand(GraphicsStateOperator::SetLineCap, '0'),
@@ -162,56 +199,61 @@ class ContentStreamParserTest extends TestCase {
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hello)'))
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(World)'))
             ),
-            ContentStreamParser::parse(
-                <<<EOD
-                0 J
-                /F1 7 Tf
-                BT
-                (Hello) Tj
-                (World) Tj
-                ET
-                EOD
-            )
+            ContentStreamParser::parse([$decoratedObject])
         );
     }
 
     public function testParseWithMultibyteEscapedStringLiteralDelimiterInStringLiteral(): void {
+        $contentStream = FileStream::fromString('BT (Hel' . chr(233) . '\)lo) Tj ET');
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hel' . chr(233) . '\)lo)'))
             ),
-            ContentStreamParser::parse('BT (Hel' . chr(233) . '\)lo) Tj ET')
+            ContentStreamParser::parse([$decoratedObject])
         );
+
+        $contentStream = FileStream::fromString('BT (Hel' . chr(233) . chr(108) . '\)lo) Tj ET');
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hel' . chr(233) . chr(108) . '\)lo)'))
             ),
-            ContentStreamParser::parse('BT (Hel' . chr(233) . chr(108) . '\)lo) Tj ET')
+            ContentStreamParser::parse([$decoratedObject])
         );
+
+        $contentStream = FileStream::fromString('BT (Hel' . chr(233) . chr(108) . chr(58) . '\)lo) Tj ET');
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hel' . chr(233) . chr(108) . chr(58) . '\)lo)'))
             ),
-            ContentStreamParser::parse('BT (Hel' . chr(233) . chr(108) . chr(58) . '\)lo) Tj ET')
+            ContentStreamParser::parse([$decoratedObject])
         );
     }
 
     public function testParseWithOperatorInResourceName(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            BT
+            /Helvetica-2000805986 24 Tf
+            ET
+            EOD
+        );
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextStateOperator::FONT_SIZE, '/Helvetica-2000805986 24'))
             ),
-            ContentStreamParser::parse(
-                <<<EOD
-                BT
-                /Helvetica-2000805986 24 Tf
-                ET
-                EOD
-            )
+            ContentStreamParser::parse([$decoratedObject])
         );
     }
 

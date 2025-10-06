@@ -10,11 +10,13 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextEle
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
+use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
+use PrinsFrank\PdfParser\Stream\FileStream;
 
 #[CoversClass(ContentStream::class)]
 class ContentStreamTest extends TestCase {
     public function testGetPositionedTextElements(): void {
-        $textObjectString = <<<EOD
+        $contentStream = FileStream::fromString(<<<EOD
             1 0 0 -1 0 842 cm
             q
             .75 0 0 .75 0 0 cm
@@ -123,7 +125,9 @@ class ContentStreamTest extends TestCase {
             ET
             Q
             EMC
-        EOD;
+        EOD);
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             [
                 new PositionedTextElement('<0024>', new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, -716.29752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
@@ -151,25 +155,29 @@ class ContentStreamTest extends TestCase {
                 new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 243.74304, -745.3900554100001), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
                 new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, -759.93632041), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
             ],
-            ContentStreamParser::parse($textObjectString)->getPositionedTextElements(),
+            ContentStreamParser::parse([$decoratedObject])->getPositionedTextElements(),
         );
     }
 
     public function testGetPositionedTextElementsWithTextStateOutsideTextObject(): void {
-        $textObjectString = <<<EOD
-        0 J
-        /F1 7 Tf
-        BT
-        ([Hello) Tj
-        (World]) Tj
-        ET
-        EOD;
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            0 J
+            /F1 7 Tf
+            BT
+            ([Hello) Tj
+            (World]) Tj
+            ET
+            EOD
+        );
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             [
                 new PositionedTextElement('([Hello)', new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState(new ExtendedDictionaryKey('F1'), 7)),
                 new PositionedTextElement('(World])', new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState(new ExtendedDictionaryKey('F1'), 7)),
             ],
-            ContentStreamParser::parse($textObjectString)->getPositionedTextElements(),
+            ContentStreamParser::parse([$decoratedObject])->getPositionedTextElements(),
         );
     }
 }
