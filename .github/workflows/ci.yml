@@ -21,8 +21,6 @@ jobs:
   feature:
     name: PHP Tests - Feature
     runs-on: ubuntu-latest
-    env:
-      PHP_VERSION: '8.3'
     strategy:
       matrix:
         php-version: ["8.2", "8.3", "8.4", "8.5"]
@@ -41,3 +39,22 @@ jobs:
 
       - name: Run Feature tests
         run: composer run feature
+
+  samples:
+    name: PHP Tests - Samples
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          coverage: none
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+
+      - name: Run Samples tests
+        run: vendor/bin/phpunit tests/Samples/

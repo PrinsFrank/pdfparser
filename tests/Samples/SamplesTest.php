@@ -18,10 +18,6 @@ class SamplesTest extends TestCase {
     /** @throws TypeError|ValueError */
     #[DataProviderExternal(SampleProvider::class, 'samples')]
     public function testExternalSourcePDFs(FileInfo $fileInfo): void {
-        if ($fileInfo->password !== null) {
-            self::markTestSkipped('Password protected PDFs are not supported yet');
-        }
-
         $document = (new PdfParser())->parseFile($fileInfo->pdfPath);
         static::assertSame(Version::from(number_format($fileInfo->version / 10, 1)), $document->version);
         static::assertSame($fileInfo->title, $document->getInformationDictionary()?->getTitle());
