@@ -127,7 +127,7 @@ class ContentStreamTest extends TestCase {
             EMC
         EOD);
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             [
                 new PositionedTextElement('<0024>', new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, -716.29752641), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
@@ -171,7 +171,7 @@ class ContentStreamTest extends TestCase {
             EOD
         );
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             [
                 new PositionedTextElement('([Hello)', new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState(new ExtendedDictionaryKey('F1'), 7)),

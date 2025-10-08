@@ -41,7 +41,7 @@ class ContentStreamParserTest extends TestCase {
             EOD
         );
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -69,7 +69,7 @@ class ContentStreamParserTest extends TestCase {
             EOD
         );
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -91,7 +91,7 @@ class ContentStreamParserTest extends TestCase {
             EOD
         );
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -111,7 +111,7 @@ class ContentStreamParserTest extends TestCase {
             EOD
         );
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -130,7 +130,7 @@ class ContentStreamParserTest extends TestCase {
             EOD
         );
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -149,7 +149,7 @@ class ContentStreamParserTest extends TestCase {
             EOD
         );
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -168,7 +168,7 @@ class ContentStreamParserTest extends TestCase {
             EOD
         );
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -190,7 +190,7 @@ class ContentStreamParserTest extends TestCase {
             EOD
         );
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 new ContentStreamCommand(GraphicsStateOperator::SetLineCap, '0'),
@@ -206,7 +206,7 @@ class ContentStreamParserTest extends TestCase {
     public function testParseWithMultibyteEscapedStringLiteralDelimiterInStringLiteral(): void {
         $contentStream = FileStream::fromString('BT (Hel' . chr(233) . '\)lo) Tj ET');
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -217,7 +217,7 @@ class ContentStreamParserTest extends TestCase {
 
         $contentStream = FileStream::fromString('BT (Hel' . chr(233) . chr(108) . '\)lo) Tj ET');
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -228,7 +228,7 @@ class ContentStreamParserTest extends TestCase {
 
         $contentStream = FileStream::fromString('BT (Hel' . chr(233) . chr(108) . chr(58) . '\)lo) Tj ET');
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -247,7 +247,7 @@ class ContentStreamParserTest extends TestCase {
             EOD
         );
         $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())

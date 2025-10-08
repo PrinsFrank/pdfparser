@@ -35,7 +35,7 @@ class ContentStreamParser {
         $inArrayLevel = $inStringLevel = 0;
         $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = null;
         foreach ($contentsObjects as $contentsObject) {
-            foreach (($contentStream = $contentsObject->getContent())->chars(0, $contentStream->getSizeInBytes()) as $index => $char) {
+            foreach (($contentStream = $contentsObject->getStream())->chars(0, $contentStream->getSizeInBytes()) as $index => $char) {
                 $operandBuffer .= $char;
                 if ($inStringLiteral === true) {
                     if ($char === ')' && $previousChar !== '\\') {

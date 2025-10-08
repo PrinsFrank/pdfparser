@@ -65,7 +65,7 @@ class CompressedObject implements ObjectItem {
                 '',
                 array_map(
                     fn (ReferenceValue $referenceValue) => ($document->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException())
-                        ->getContent()
+                        ->getStream()
                         ->toString(),
                     $referenceValueArray->referenceValues,
                 )

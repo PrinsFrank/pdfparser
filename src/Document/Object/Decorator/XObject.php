@@ -109,7 +109,7 @@ class XObject extends DecoratedObject {
             $colorSpaceObject = $this->getDictionary()->getObjectForReference($this->document, DictionaryKey::COLOR_SPACE)
                 ?? throw new ParseFailureException('Unable to retrieve colorspace object');
 
-            $colorSpaceInfo = ArrayValue::fromValue($colorSpaceObject->getContent()->toString());
+            $colorSpaceInfo = ArrayValue::fromValue($colorSpaceObject->getStream()->toString());
             if (!$colorSpaceInfo instanceof ArrayValue || !array_key_exists(0, $colorSpaceInfo->value) || !is_string($colorSpaceInfo->value[0])) {
                 throw new ParseFailureException('Expected an array for colorspace info');
             }
@@ -117,7 +117,7 @@ class XObject extends DecoratedObject {
             $colorSpaceName = substr($colorSpaceInfo->value[0], 1);
             $colorSpace = CIEColorSpaceNameValue::tryFrom($colorSpaceName) ?? DeviceColorSpaceNameValue::tryFrom($colorSpaceName) ?? SpecialColorSpaceNameValue::tryFrom($colorSpaceName) ?? throw new ParseFailureException(sprintf('Unsupported colorspace "%s"', $colorSpaceName));
             if (count($colorSpaceInfo->value) !== 4 || $colorSpaceInfo->value[3] !== 'R') {
-                throw new ParseFailureException(sprintf('Expected reference value for colorspace info, got "%s"', $colorSpaceObject->getContent()->toString()));
+                throw new ParseFailureException(sprintf('Expected reference value for colorspace info, got "%s"', $colorSpaceObject->getStream()->toString()));
             }
 
             if (!is_int($objectNumber = $colorSpaceInfo->value[1])) {
@@ -131,8 +131,8 @@ class XObject extends DecoratedObject {
     }
 
     #[Override]
-    public function getContent(): Stream {
-        $content = parent::getContent();
+    public function getStream(): Stream {
+        $content = parent::getStream();
         if (!$this->isImage() || $this->getImageType() !== ImageType::PNG) {
             return $content;
         }
