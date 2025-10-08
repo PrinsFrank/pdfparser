@@ -1,81 +1,45 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Tests\Feature;
+namespace PrinsFrank\PdfParser\Tests\Samples;
 
-use DateTimeImmutable;
-use Exception;
-use JsonException;
 use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Version\Version;
-use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
-use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\PdfParser;
+use PrinsFrank\PdfSamples\FileInfo;
+use PrinsFrank\PdfSamples\SampleProvider;
+use TypeError;
+use ValueError;
 
 #[CoversNothing]
-class ParsedResultTest extends TestCase {
-    private const SAMPLES_SOURCE = '/vendor/prinsfrank/pdf-samples/';
+class SamplesTest extends TestCase {
+    /** @throws TypeError|ValueError */
+    #[DataProviderExternal(SampleProvider::class, 'samples')]
+    public function testExternalSourcePDFs(FileInfo $fileInfo): void {
+        if ($fileInfo->password !== null) {
+            self::markTestSkipped('Password protected PDFs are not supported yet');
+        }
 
-    /** @param list<object{content: string}> $expectedPages */
-    #[DataProvider('externalSamples')]
-    public function testExternalSourcePDFs(
-        string $pdfPath,
-        Version $expectedVersion,
-        ?string $expectedTitle,
-        ?string $expectedProducer,
-        ?string $expectedAuthor,
-        ?string $expectedCreator,
-        ?DateTimeImmutable $expectedCreationDate,
-        ?DateTimeImmutable $expectedModificationDate,
-        array $expectedPages
-    ): void {
-        $document = (new PdfParser())->parseFile($pdfPath);
-
-        static::assertSame($expectedVersion, $document->version);
-        static::assertSame($expectedTitle, $document->getInformationDictionary()?->getTitle());
-        static::assertSame($expectedProducer, $document->getInformationDictionary()?->getProducer());
-        static::assertSame($expectedAuthor, $document->getInformationDictionary()?->getAuthor());
-        static::assertSame($expectedCreator, $document->getInformationDictionary()?->getCreator());
-        static::assertEquals($expectedCreationDate, $document->getInformationDictionary()?->getCreationDate());
-        static::assertEquals($expectedModificationDate, $document->getInformationDictionary()?->getModificationDate());
-        static::assertSame(count($expectedPages), $document->getNumberOfPages());
-        foreach ($expectedPages as $index => $expectedPage) {
+        $document = (new PdfParser())->parseFile($fileInfo->pdfPath);
+        static::assertSame(Version::from(number_format($fileInfo->version / 10, 1)), $document->version);
+        static::assertSame($fileInfo->title, $document->getInformationDictionary()?->getTitle());
+        static::assertSame($fileInfo->producer, $document->getInformationDictionary()?->getProducer());
+        static::assertSame($fileInfo->author, $document->getInformationDictionary()?->getAuthor());
+        static::assertSame($fileInfo->creator, $document->getInformationDictionary()?->getCreator());
+        static::assertEquals($fileInfo->creationDate, $document->getInformationDictionary()?->getCreationDate());
+        static::assertEquals($fileInfo->modificationDate, $document->getInformationDictionary()?->getModificationDate());
+        static::assertSame(count($fileInfo->pages ?? []), $document->getNumberOfPages());
+        foreach ($fileInfo->pages ?? [] as $index => $expectedPage) {
             static::assertNotNull($page = $document->getPage($index + 1));
             static::assertSame($expectedPage->content, $page->getText());
-        }
-    }
-
-    /**
-     * @throws JsonException
-     * @throws Exception
-     * @return iterable<mixed>
-     */
-    public static function externalSamples(): iterable {
-        $fileInfoContent = file_get_contents(dirname(__DIR__, 2) . self::SAMPLES_SOURCE . 'files.json');
-        if ($fileInfoContent === false) {
-            throw new RuntimeException('Unable to load file information from samples source. Should a \'composer install\' be run?');
-        }
-
-        /** @var list<object{filename: string, password: ?string, version: string, title: ?string, producer: ?string, author: ?string, creator: ?string, creationDate: ?string, modificationDate: ?string, pages: list<object{content: string}>}> $fileInfoArray */
-        $fileInfoArray = json_decode($fileInfoContent, flags: JSON_THROW_ON_ERROR);
-        foreach ($fileInfoArray as $fileInfo) {
-            if ($fileInfo->password !== null) {
-                continue;
+            foreach ($expectedPage->imagePaths as $imageIndex => $imagePath) {
+                static::assertSame(
+                    file_get_contents($imagePath),
+                    $page->getImages()[$imageIndex]->getStream()->toString(),
+                );
             }
-
-            yield $fileInfo->filename => [
-                dirname(__DIR__, 2) . self::SAMPLES_SOURCE . 'files/' . $fileInfo->filename,
-                Version::tryFrom($fileInfo->version) ?? throw new InvalidArgumentException('Invalid version'),
-                $fileInfo->title,
-                $fileInfo->producer,
-                $fileInfo->author,
-                $fileInfo->creator,
-                $fileInfo->creationDate === null ? null : new DateTimeImmutable($fileInfo->creationDate),
-                $fileInfo->modificationDate === null ? null : new DateTimeImmutable($fileInfo->modificationDate),
-                $fileInfo->pages,
-            ];
         }
     }
 }
