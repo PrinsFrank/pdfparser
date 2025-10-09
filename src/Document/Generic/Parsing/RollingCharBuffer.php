@@ -66,14 +66,12 @@ class RollingCharBuffer {
             throw new InvalidArgumentException(sprintf('Buffer length of %d configured, but value with length %d requested', $this->length, strlen($string)));
         }
 
-        foreach (str_split($string) as $index => $char) {
-            $previousChar = $this->getPreviousCharacter($strlen - $index - 1);
-            if ($previousChar !== $char) {
-                return false;
-            }
+        $actualString = '';
+        for ($i = $strlen; $i > 0; $i--) {
+            $actualString .= $this->getPreviousCharacter($i - 1);
         }
 
-        return true;
+        return $string === $actualString;
     }
 
     /** @throws InvalidArgumentException */
