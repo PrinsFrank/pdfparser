@@ -29,14 +29,16 @@ class ContentStreamParser {
      * @throws ParseFailureException
      */
     public static function parse(array $contentsObjects): ContentStream {
-        $operandBuffer = '';
         $content = [];
         $inStringLiteral = $inResourceName = false;
         $inArrayLevel = $inStringLevel = 0;
-        $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = null;
+        $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = $previousContentStream = $startPreviousOperandIndex = null;
         foreach ($contentsObjects as $contentsObject) {
-            foreach (($contentStream = $contentsObject->getStream())->chars(0, $contentStream->getSizeInBytes()) as $index => $char) {
-                $operandBuffer .= $char;
+            $startCurrentOperandIndex = 0;
+            $contentStream = $contentsObject->getStream();
+            $contentStreamSize = $contentStream->getSizeInBytes();
+            for ($index = 0; $index < $contentStreamSize; $index++) {
+                $char = $contentStream->read($index, 1);
                 if ($inStringLiteral === true) {
                     if ($char === ')' && $previousChar !== '\\') {
                         $inStringLiteral = false;
@@ -60,10 +62,10 @@ class ContentStreamParser {
                         $inArrayLevel--;
                     }
                 } elseif ($char === 'T' && $previousChar === 'B') { // TextObjectOperator::BEGIN
-                    $operandBuffer = '';
+                    $startCurrentOperandIndex = $index + 1;
                     $textObject = new TextObject();
                 } elseif ($char === 'T' && $previousChar === 'E') { // TextObjectOperator::END
-                    $operandBuffer = '';
+                    $startCurrentOperandIndex = $index + 1;
                     if ($textObject === null) {
                         throw new ParseFailureException('Encountered TextObjectOperator::END without preceding TextObjectOperator::BEGIN');
                     }
@@ -72,22 +74,35 @@ class ContentStreamParser {
                     $textObject = null;
                 } elseif ($char === 'C'
                     && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
-                    $operandBuffer = '';
+                    $startCurrentOperandIndex = $index + 1;
                 } elseif (($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null
                     && (($nextChar = $contentStream->read($index + 1, 1)) === '' || self::getOperator($nextChar, $char, $previousChar, $secondToLastChar) === null)) { // Skip the current hit if the next iteration is also a valid operator
-                    $command = new ContentStreamCommand($operator, trim(substr($operandBuffer, 0, -strlen($operator->value))));
+                    $operands = '';
+                    if ($previousContentStream !== null && $startPreviousOperandIndex !== null && $startPreviousOperandIndex < $previousContentStream->getSizeInBytes()) {
+                        $operands .= $previousContentStream->read($startPreviousOperandIndex, $previousContentStream->getSizeInBytes() - $startPreviousOperandIndex);
+                        $startPreviousOperandIndex = null;
+                    }
+                    if (($operandLength = $index + 1 - $startCurrentOperandIndex - strlen($operator->value)) > 0) {
+                        $operands .= $contentStream->read($startCurrentOperandIndex, $operandLength);
+                    }
+
+                    $command = new ContentStreamCommand($operator, trim($operands));
                     if ($textObject !== null) {
                         $textObject->addContentStreamCommand($command);
                     } else {
                         $content[] = $command;
                     }
-                    $operandBuffer = '';
+
+                    $startCurrentOperandIndex = $index + 1;
                 }
 
                 $thirdToLastChar = $secondToLastChar;
                 $secondToLastChar = $previousChar;
                 $previousChar = $char;
             }
+
+            $previousContentStream = $contentStream;
+            $startPreviousOperandIndex = $startCurrentOperandIndex;
         }
 
         return new ContentStream(...$content);
