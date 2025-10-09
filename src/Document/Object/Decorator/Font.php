@@ -29,7 +29,7 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class Font extends DecoratedObject {
     private readonly ToUnicodeCMap|false $toUnicodeCMap;
-    private readonly CIDFontWidths|FontWidths|null $widths;
+    private readonly CIDFontWidths|FontWidths|false $widths;
 
     /** @throws PdfParserException */
     public function getBaseFont(): ?string {
@@ -206,6 +206,10 @@ class Font extends DecoratedObject {
     /** @throws PdfParserException */
     public function getWidths(): CIDFontWidths|FontWidths|null {
         if (isset($this->widths)) {
+            if ($this->widths === false) {
+                return null;
+            }
+
             return $this->widths;
         }
 
@@ -216,7 +220,8 @@ class Font extends DecoratedObject {
                 return $this->widths = new CIDFontWidths(new RangeCIDWidth($byteSizes->lengthRecord1InBytes, $byteSizes->lengthRecord2InBytes, $byteSizes->lengthRecord3InBytes));
             }
 
-            return $this->widths = $this->getDictionary()->getValueForKey(DictionaryKey::W, CIDFontWidths::class);
+            $this->widths = $this->getDictionary()->getValueForKey(DictionaryKey::W, CIDFontWidths::class) ?? false;
+            return $this->widths === false ? null : $this->widths;
         }
 
         foreach ($this->getDescendantFonts() as $descendantFont) {
@@ -239,11 +244,13 @@ class Font extends DecoratedObject {
 
             $widthsArray = $arrayValue->value;
         } elseif (($widthsArray = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ArrayValue::class)?->value) === null) {
-            return $this->widths = null;
+            $this->widths = false;
+            return null;
         }
 
         if (($firstChar = $this->getFirstChar()) === null) {
-            return $this->widths = null;
+            $this->widths = false;
+            return null;
         }
 
         return $this->widths = new FontWidths(
