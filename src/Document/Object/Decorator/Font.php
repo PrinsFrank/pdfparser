@@ -29,6 +29,7 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class Font extends DecoratedObject {
     private readonly ToUnicodeCMap|false $toUnicodeCMap;
+    private readonly CIDFontWidths|FontWidths|null $widths;
 
     /** @throws PdfParserException */
     public function getBaseFont(): ?string {
@@ -204,14 +205,18 @@ class Font extends DecoratedObject {
 
     /** @throws PdfParserException */
     public function getWidths(): CIDFontWidths|FontWidths|null {
+        if (isset($this->widths)) {
+            return $this->widths;
+        }
+
         if ($this->isCIDFont()) {
             if ($this->getDictionary()->getTypeForKey(DictionaryKey::W) === CrossReferenceStreamByteSizes::class) {
                 $byteSizes = $this->getDictionary()->getValueForKey(DictionaryKey::W, CrossReferenceStreamByteSizes::class) ?? throw new ParseFailureException(); // TODO: fix misinterpretation
 
-                return new CIDFontWidths(new RangeCIDWidth($byteSizes->lengthRecord1InBytes, $byteSizes->lengthRecord2InBytes, $byteSizes->lengthRecord3InBytes));
+                return $this->widths = new CIDFontWidths(new RangeCIDWidth($byteSizes->lengthRecord1InBytes, $byteSizes->lengthRecord2InBytes, $byteSizes->lengthRecord3InBytes));
             }
 
-            return $this->getDictionary()->getValueForKey(DictionaryKey::W, CIDFontWidths::class);
+            return $this->widths = $this->getDictionary()->getValueForKey(DictionaryKey::W, CIDFontWidths::class);
         }
 
         foreach ($this->getDescendantFonts() as $descendantFont) {
@@ -220,7 +225,7 @@ class Font extends DecoratedObject {
             }
 
             if ($descendantFont instanceof Font && ($widthsDescendantFont = $descendantFont->getWidths()) !== null) {
-                return $widthsDescendantFont;
+                return $this->widths = $widthsDescendantFont;
             }
         }
 
@@ -234,14 +239,14 @@ class Font extends DecoratedObject {
 
             $widthsArray = $arrayValue->value;
         } elseif (($widthsArray = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ArrayValue::class)?->value) === null) {
-            return null;
+            return $this->widths = null;
         }
 
         if (($firstChar = $this->getFirstChar()) === null) {
-            return null;
+            return $this->widths = null;
         }
 
-        return new FontWidths(
+        return $this->widths = new FontWidths(
             $firstChar,
             array_values(
                 array_map(
