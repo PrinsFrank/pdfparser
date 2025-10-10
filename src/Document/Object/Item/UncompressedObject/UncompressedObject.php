@@ -45,7 +45,7 @@ class UncompressedObject implements ObjectItem {
         }
 
         $endDictionaryPos = $document->stream->firstPos(Marker::STREAM, $startDictionaryPos, $this->endOffset)
-            ?? $document->stream->firstPos(Marker::END_OBJ, $startDictionaryPos, $this->endOffset)
+            ?? $document->stream->lastPos(Marker::END_OBJ, $document->stream->getSizeInBytes() - $this->endOffset)
             ?? throw new ParseFailureException('Unable to locate start of stream or end of current object');
 
         return $this->dictionary = DictionaryParser::parse($document->stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos);
@@ -85,7 +85,7 @@ class UncompressedObject implements ObjectItem {
     #[Override]
     public function getContent(Document $document): Stream {
         if (($startStreamPos = $document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)) !== null
-            && ($endStreamPos = $document->stream->firstPos(Marker::END_STREAM, $startStreamPos, $this->endOffset)) !== null) {
+            && ($endStreamPos = $document->stream->lastPos(Marker::END_STREAM, $document->stream->getSizeInBytes() - $this->endOffset)) !== null) {
             return CompressedObjectContentParser::parseBinary(
                 $document,
                 $startStreamPos,
@@ -97,7 +97,7 @@ class UncompressedObject implements ObjectItem {
 
         $nextLineAfterStartObj = $document->stream->getStartNextLineAfter(Marker::OBJ, $this->startOffset, $this->endOffset)
             ?? throw new ParseFailureException(sprintf('Unable to locate newline after marker %s', Marker::OBJ->value));
-        $endObjPos = $document->stream->firstPos(Marker::END_OBJ, $nextLineAfterStartObj, $this->endOffset)
+        $endObjPos = $document->stream->lastPos(Marker::END_OBJ, $document->stream->getSizeInBytes() - $this->endOffset)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_OBJ->value));
         $eolObjContent = $document->stream->getEndOfCurrentLine($endObjPos - 2, $this->endOffset)
             ?? throw new ParseFailureException(sprintf('Unable to locate newline after marker %s', Marker::END_OBJ->value));

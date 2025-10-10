@@ -23,7 +23,7 @@ class CompressedObjectByteOffsetParser {
         if ($dictionary->getTypeForKey(DictionaryKey::LENGTH) === IntegerValue::class && ($lengthInteger = $dictionary->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)) !== null) {
             $length = $lengthInteger->value;
         } else {
-            $endStreamPos = $stream->firstPos(Marker::END_STREAM, $startStreamPos, $endOffsetObject)
+            $endStreamPos = $stream->lastPos(Marker::END_STREAM, $stream->getSizeInBytes() - $endOffsetObject)
                 ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_STREAM->value));
             $eolPos = $stream->getEndOfCurrentLine($endStreamPos - 1, $endOffsetObject)
                 ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value));

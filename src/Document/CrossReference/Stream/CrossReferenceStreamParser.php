@@ -41,7 +41,7 @@ class CrossReferenceStreamParser {
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::STREAM->value));
 
         if (($length = $dictionary->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)?->value) === null) {
-            $endStream = $stream->firstPos(Marker::END_STREAM, $startStream, $startPos + $nrOfBytes);
+            $endStream = $stream->lastPos(Marker::END_STREAM, $stream->getSizeInBytes() - $startPos + $nrOfBytes);
             if ($endStream === null || $endStream > ($startPos + $nrOfBytes)) {
                 throw new ParseFailureException(sprintf('Expected end of stream content marked by %s, none found', Marker::END_STREAM->value));
             }
