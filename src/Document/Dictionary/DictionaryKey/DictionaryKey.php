@@ -667,7 +667,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::A => [Dictionary::class, BooleanValue::class, DictionaryArrayValue::class, IntegerValue::class, TextStringValue::class],
             self::AA, self::BS => [Dictionary::class],
             self::AC => [TextStringValue::class, ArrayValue::class],
-            self::AF => [DictionaryArrayValue::class],
+            self::AF => [DictionaryArrayValue::class, ReferenceValueArray::class],
             self::ACCURATE_SCREENS => [BooleanValue::class],
             self::ACRO_FORM => [Dictionary::class],
             self::ACTION => [TextStringValue::class],
