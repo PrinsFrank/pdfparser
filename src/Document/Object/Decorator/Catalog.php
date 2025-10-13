@@ -16,4 +16,10 @@ class Catalog extends DecoratedObject {
         return $this->document->getObject($pagesReference->objectNumber, Pages::class)
             ?? throw new ParseFailureException(sprintf('Unable to retrieve pages root object with number %d', $pagesReference->objectNumber));
     }
+
+    /** @return list<FileSpecification> */
+    public function getFileSpecifications(): array {
+        return $this->getDictionary()
+            ->getObjectsForReference($this->document, DictionaryKey::AF, FileSpecification::class);
+    }
 }

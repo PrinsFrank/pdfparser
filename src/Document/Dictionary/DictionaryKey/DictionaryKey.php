@@ -821,7 +821,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::E => [BooleanValue::class, Dictionary::class, TextStringValue::class],
             self::EA => [BooleanValue::class],
             self::EARLY_CHANGE => [IntegerValue::class],
-            self::EF => [Dictionary::class, ArrayValue::class],
+            self::EF => [Dictionary::class, ReferenceValue::class],
             self::EFF => [TextStringValue::class],
             self::EMBEDDED_FDFS => [DictionaryArrayValue::class],
             self::EMBEDDED_FILES => [Dictionary::class],

@@ -106,7 +106,7 @@ class Dictionary {
     /**
      * @template T of DecoratedObject
      * @param class-string<T>|null $expectedDecoratorFQN
-     * @return ($expectedDecoratorFQN is null ? array<DecoratedObject> : array<T>)
+     * @return ($expectedDecoratorFQN is null ? list<DecoratedObject> : list<T>)
      */
     public function getObjectsForReference(Document $document, DictionaryKey|ExtendedDictionaryKey $dictionaryKey, ?string $expectedDecoratorFQN = null): array {
         $references = $this->getValueForKey($dictionaryKey, ReferenceValueArray::class);

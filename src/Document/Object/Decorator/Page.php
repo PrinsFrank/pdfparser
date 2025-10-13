@@ -93,4 +93,10 @@ class Page extends DecoratedObject {
         return $pagesParent->getResourceDictionary()
             ?->getSubDictionary($this->document, DictionaryKey::FONT);
     }
+
+    /** @return list<FileSpecification> */
+    public function getFileSpecifications(): array {
+        return $this->getDictionary()
+            ->getObjectsForReference($this->document, DictionaryKey::AF, FileSpecification::class);
+    }
 }
