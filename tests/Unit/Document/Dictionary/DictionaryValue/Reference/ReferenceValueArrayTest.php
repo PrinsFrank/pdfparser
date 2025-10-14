@@ -13,6 +13,10 @@ class ReferenceValueArrayTest extends TestCase {
         static::assertNull(ReferenceValueArray::fromValue('42'));
         static::assertNull(ReferenceValueArray::fromValue('42 0'));
         static::assertNull(ReferenceValueArray::fromValue('42 0 R'));
+        static::assertNull(
+            ReferenceValueArray::fromValue('[<< /Foo 42 /Bar 43 >>]'),
+            'Has 6 parts, but starts with << and ends with >> so should not be parsed as reference value array'
+        );
         static::assertEquals(
             new ReferenceValueArray(),
             ReferenceValueArray::fromValue('[]')

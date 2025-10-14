@@ -27,6 +27,10 @@ class ReferenceValueArray implements DictionaryValue {
         $valueString = preg_replace('/\s+/', ' ', $valueString)
             ?? throw new ParseFailureException('An unexpected error occurred while sanitizing reference value array');
         $valueString = trim(rtrim(ltrim($valueString, '['), ']'));
+        if (str_starts_with($valueString, '<<') && str_ends_with($valueString, '>>')) {
+            return null;
+        }
+
         if ($valueString === '') {
             return new self();
         }
