@@ -56,6 +56,14 @@ class DateValueTest extends TestCase {
         );
     }
 
+    /** @throws ValueError */
+    public function testFromValueWithOctalCharacterEscapeSequences(): void {
+        static::assertEquals(
+            DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2025-05-05 15:02:15', new DateTimeZone('UTC')),
+            DateValue::fromValue('(D\07220250505150215\05300\04700\047)')?->value
+        );
+    }
+
     public function testFromValueThrowsExceptionWhenValueNotHexadecimal(): void {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('String "" is not hexadecimal');

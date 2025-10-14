@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use ValueError;
 
 /** @api */
@@ -31,7 +32,11 @@ class DateValue implements DictionaryValue {
         }
 
         if (str_starts_with($valueString, '(') && str_ends_with($valueString, ')')) {
-            $valueString = substr($valueString, 1, -1);
+            $valueString = preg_replace_callback(
+                '/\\\\([0-7]{3})/',
+                fn (array $matches) => mb_chr((int) octdec($matches[1])),
+                substr($valueString, 1, -1)
+            ) ?? throw new ParseFailureException();
         }
 
         if (!str_starts_with($valueString, 'D:')) {
