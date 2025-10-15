@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 
 /** @see 7.11.4 Embedded file streams */
 class EmbeddedFile extends DecoratedObject {
@@ -19,6 +20,12 @@ class EmbeddedFile extends DecoratedObject {
     public function getFileSpecificInformation(): ?Dictionary {
         return $this->getDictionary()
             ->getSubDictionary($this->document, DictionaryKey::PARAMS);
+    }
+
+    public function getSubType(): ?string {
+        return $this->getDictionary()
+            ->getValueForKey(DictionaryKey::SUBTYPE, TextStringValue::class)
+            ?->getText();
     }
 
     public function getSize(): ?int {
