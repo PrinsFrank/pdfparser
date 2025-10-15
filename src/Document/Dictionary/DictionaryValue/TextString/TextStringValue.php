@@ -39,6 +39,14 @@ class TextStringValue implements DictionaryValue {
             );
         }
 
+        if (str_starts_with($this->textStringValue, '/')) {
+            return preg_replace_callback(
+                '/#([0-9A-F]{2})/',
+                fn (array $matches) => chr((int) hexdec($matches[1])),
+                $this->textStringValue,
+            ) ?? throw new ParseFailureException();
+        }
+
         throw new ParseFailureException(sprintf('Unrecognized format %s', $this->textStringValue));
     }
 
