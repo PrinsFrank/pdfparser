@@ -12,7 +12,7 @@ enum PathPaintingOperator: string {
     case CLOSE_STROKE = 's';
     case FILL = 'f';
 
-    /** @deprecated, identical to self::FILL */
+    /** Identical to FILL */
     case FILL_DEPRECATED = 'F';
     case FILL_EVEN_ODD = 'f*';
     case FILL_STROKE = 'B';
