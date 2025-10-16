@@ -7,18 +7,21 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
+use PrinsFrank\PdfParser\Stream\FileStream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @internal */
 class FlateDecode {
     /**
      * @throws PdfParserException
-     * @return string in binary format
+     * @return Stream with contents in binary format
      */
-    public static function decodeBinary(string $value, LZWFlatePredictorValue $predictor, int $columns = 1): string {
+    public static function decodeBinary(Stream $stream, LZWFlatePredictorValue $predictor, int $columns = 1): Stream {
         if ($columns < 1) {
             throw new InvalidArgumentException(sprintf('Nr of columns should be equal to or bigger than 1, %d given', $columns));
         }
 
+        $value = $stream->read(0, $stream->getSizeInBytes());
         $decodedValue = @gzuncompress($value);
         if ($decodedValue === false) {
             if (($tmpFile = tempnam(sys_get_temp_dir(), 'gz')) === false) {
@@ -34,7 +37,7 @@ class FlateDecode {
         }
 
         if ($predictor === LZWFlatePredictorValue::None) {
-            return $decodedValue;
+            return FileStream::fromString($decodedValue);
         }
 
         if ($predictor === LZWFlatePredictorValue::TIFFPredictor2) {
@@ -82,6 +85,6 @@ class FlateDecode {
             throw new ParseFailureException('Unable to hex2bin value "' . substr(trim($value), 0, 30) . '..."');
         }
 
-        return $decodedValue;
+        return FileStream::fromString($decodedValue);
     }
 }

@@ -24,25 +24,24 @@ class CompressedObjectContentParser {
      * @return Stream with content in binary format
      */
     public static function parseBinary(Stream|Document $context, int $startPos, int $nrOfBytes, Dictionary $dictionary): Stream {
-        $binaryStreamContent = ($context instanceof Document ? $context->stream : $context)->read($startPos, $nrOfBytes);
+        $binaryStream = FileStream::fromString(($context instanceof Document ? $context->stream : $context)->read($startPos, $nrOfBytes));
         if ($context instanceof Document && $context->security !== null && ($encryptDictionary = $context->getEncryptDictionary()) !== null) {
-            $binaryStreamContent = RC4::crypt(
+            $binaryStream = RC4::crypt(
                 $context->security->getUserFileEncryptionKey($encryptDictionary, $context->crossReferenceSource->getFirstId()),
-                $binaryStreamContent
+                $binaryStream
             );
         }
 
         if (($filterType = $dictionary->getTypeForKey(DictionaryKey::FILTER)) === FilterNameValue::class) {
-            $binaryStreamContent = ($dictionary->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class) ?? throw new ParseFailureException())
-                ->decodeBinary($binaryStreamContent, $dictionary, ($context instanceof Document ? $context : null));
+            return ($dictionary->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class) ?? throw new ParseFailureException())
+                ->decodeBinary($binaryStream, $dictionary, ($context instanceof Document ? $context : null));
         } elseif ($filterType === ArrayValue::class) {
             foreach ($dictionary->getValueForKey(DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new ParseFailureException() as $filterValue) {
                 if (is_string($filterValue) === false || ($filter = FilterNameValue::tryFrom(ltrim($filterValue, '/'))) === null) {
                     throw new ParseFailureException();
                 }
 
-                $binaryStreamContent = $filter
-                    ->decodeBinary($binaryStreamContent, $dictionary, ($context instanceof Document ? $context : null));
+                return $filter->decodeBinary($binaryStream, $dictionary, ($context instanceof Document ? $context : null));
             }
         } elseif ($filterType === ReferenceValue::class) {
             if (!$context instanceof Document) {
@@ -59,13 +58,12 @@ class CompressedObjectContentParser {
                     throw new ParseFailureException();
                 }
 
-                $binaryStreamContent = $filter
-                    ->decodeBinary($binaryStreamContent, $dictionary, $context);
+                return $filter->decodeBinary($binaryStream, $dictionary, $context);
             }
         } elseif ($filterType !== null) {
             throw new RuntimeException(sprintf('Expected filter to be a FilterNameValue or ArrayValue, got %s', $filterType));
         }
 
-        return FileStream::fromString($binaryStreamContent);
+        return $binaryStream;
     }
 }

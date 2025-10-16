@@ -3,6 +3,8 @@
 namespace PrinsFrank\PdfParser\Document\Filter\Decode;
 
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Stream\FileStream;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 /**
  * See Section 7.4.6
@@ -13,7 +15,8 @@ class CCITTFaxDecode {
     private const IFD_OFFSET_IN_BYTES = 8;
     private const END_OF_IFD_OFFSET = 0;
 
-    public static function addHeaderAndIFD(string $rawData, int $columns, int $rows, int $k): string {
+    public static function addHeaderAndIFD(Stream $stream, int $columns, int $rows, int $k): Stream {
+        $rawData = $stream->toString();
         $ifdEntries = [
             self::createIfdEntry(TiffTag::ImageWidth, 3, 1, $columns),
             self::createIfdEntry(TiffTag::ImageHeight, 3, 1, $rows),
@@ -25,13 +28,15 @@ class CCITTFaxDecode {
 
         $ifdEntries[] = self::createIfdEntry(TiffTag::StripOffsets, 4, 1, 8 + 2 + (12 * (count($ifdEntries) + 1)) + 4);
 
-        return self::BYTE_ORDER_LITTLE_ENDIAN
-            . pack("v", self::MAGIC_NUMBER_TIFF)
-            . pack("V", self::IFD_OFFSET_IN_BYTES)
-            . pack("v", count($ifdEntries))
-            . implode('', $ifdEntries)
-            . pack("V", self::END_OF_IFD_OFFSET)
-            . $rawData;
+        return FileStream::fromString(
+            self::BYTE_ORDER_LITTLE_ENDIAN
+                . pack("v", self::MAGIC_NUMBER_TIFF)
+                . pack("V", self::IFD_OFFSET_IN_BYTES)
+                . pack("v", count($ifdEntries))
+                . implode('', $ifdEntries)
+                . pack("V", self::END_OF_IFD_OFFSET)
+                . $rawData
+        );
     }
 
     /**

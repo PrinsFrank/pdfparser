@@ -29,6 +29,8 @@ interface Stream {
      */
     public function chars(int $from, int $nrOfBytes): iterable;
 
+    public function append(string $string): void;
+
     public function firstPos(WhitespaceCharacter|Marker|DelimiterCharacter|ToUnicodeCMapOperator $needle, int $offsetFromStart, int $before): ?int;
 
     public function lastPos(WhitespaceCharacter|Marker|DelimiterCharacter|ToUnicodeCMapOperator $needle, int $offsetFromEnd): ?int;

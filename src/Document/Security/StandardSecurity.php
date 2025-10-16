@@ -6,6 +6,7 @@ use PrinsFrank\PdfParser\Document\Encryption\RC4;
 use PrinsFrank\PdfParser\Document\Object\Decorator\EncryptDictionary;
 use PrinsFrank\PdfParser\Exception\NotImplementedException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Stream\InMemoryStream;
 use SensitiveParameter;
 
 class StandardSecurity {
@@ -26,20 +27,20 @@ class StandardSecurity {
 
         $fileEncryptionKey = $this->getUserFileEncryptionKey($encryptDictionary, $firstID);
         if ($securityHandlerRevision === StandardSecurityHandlerRevision::v2) { // @see 7.6.4.4.3, step b
-            return hash_equals($userPasswordEntry, RC4::crypt($fileEncryptionKey, self::PADDING_STRING));
+            return hash_equals($userPasswordEntry, RC4::crypt($fileEncryptionKey, new InMemoryStream(self::PADDING_STRING))->toString());
         }
 
         if (in_array($securityHandlerRevision, [StandardSecurityHandlerRevision::v3, StandardSecurityHandlerRevision::v4], true)) { // @see 7.6.4.4.4, step b through e
             $hash = md5(self::PADDING_STRING . $firstID, true);
-            $encryptedHash = RC4::crypt($fileEncryptionKey, $hash);
+            $encryptedHash = RC4::crypt($fileEncryptionKey, new InMemoryStream($hash))->toString();
             for ($i = 1; $i <= 19; $i++) {
                 $encryptedHash = RC4::crypt(
                     implode('', array_map(
                         fn ($c) => chr(ord($c) ^ $i),
                         str_split($fileEncryptionKey)
                     )),
-                    $encryptedHash,
-                );
+                    new InMemoryStream($encryptedHash),
+                )->toString();
             }
 
             return hash_equals(substr($userPasswordEntry, 0, 16), $encryptedHash);
@@ -54,7 +55,7 @@ class StandardSecurity {
 
         $ownerPasswordEntry = $encryptDictionary->getOwnerPasswordEntry();
         if ($encryptDictionary->getStandardSecurityHandlerRevision() === StandardSecurityHandlerRevision::v2) {
-            $userPassword = RC4::crypt($fileEncryptionKey, $ownerPasswordEntry);
+            $userPassword = RC4::crypt($fileEncryptionKey, new InMemoryStream($ownerPasswordEntry))->toString();
         } else {
             $userPassword = $ownerPasswordEntry;
             for ($i = 19; $i >= 0; $i--) {
@@ -63,8 +64,8 @@ class StandardSecurity {
                         fn ($c) => chr(ord($c) ^ $i),
                         str_split($fileEncryptionKey)
                     )),
-                    $userPassword,
-                );
+                    new InMemoryStream($userPassword),
+                )->toString();
             }
         }
 

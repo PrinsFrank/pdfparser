@@ -2,9 +2,12 @@
 
 namespace PrinsFrank\PdfParser\Document\Encryption;
 
+use PrinsFrank\PdfParser\Stream\FileStream;
+use PrinsFrank\PdfParser\Stream\Stream;
+
 /** @internal NEVER USE THIS FOR SECURITY, THIS IS AN INSECURE ALGORITHM */
 class RC4 {
-    public static function crypt(string $key, string $data): string {
+    public static function crypt(string $key, Stream $stream): Stream {
         $s = range(0, 255);
         $j = 0;
 
@@ -14,16 +17,16 @@ class RC4 {
         }
 
         $i = $j = 0;
-        $output = '';
-        foreach (str_split($data) as $byte) {
+        $cryptedStream = FileStream::fromString('');
+        foreach ($stream->chars(0, $stream->getSizeInBytes()) as $byte) {
             $i = ($i + 1) % 256;
             $j = ($j + $s[$i]) % 256;
             [$s[$i], $s[$j]] = [$s[$j], $s[$i]];
 
             $k = $s[($s[$i] + $s[$j]) % 256];
-            $output .= chr(ord($byte) ^ $k);
+            $cryptedStream->append(chr(ord($byte) ^ $k));
         }
 
-        return $output;
+        return $cryptedStream;
     }
 }

@@ -12,6 +12,7 @@ use PrinsFrank\PdfParser\Document\Filter\Decode\FlateDecode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\LZWFlatePredictorValue;
 use PrinsFrank\PdfParser\Document\Image\ImageType;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 enum FilterNameValue: string implements NameValue {
     case ASCII_HEX_DECODE = 'ASCIIHexDecode';
@@ -30,7 +31,7 @@ enum FilterNameValue: string implements NameValue {
     case CICI_SIGN_IT = 'CIC.SignIt';
     case VERISIGN_PPKVS = 'Verisign.PPKVS';
 
-    public function decodeBinary(string $content, ?Dictionary $dictionary, ?Document $document): string {
+    public function decodeBinary(Stream $content, ?Dictionary $dictionary, ?Document $document): Stream {
         $decodeParams = $dictionary?->getSubDictionary($document, DictionaryKey::DECODE_PARMS);
 
         return match($this) {
@@ -54,7 +55,7 @@ enum FilterNameValue: string implements NameValue {
                 $decodeParams->getValueForKey(DictionaryKey::K, IntegerValue::class)->value
                     ?? throw new ParseFailureException('Missing K'),
             ),
-            default => throw new ParseFailureException(sprintf('Content "%.100s..." cannot be decoded for filter "%s"', $content, $this->name))
+            default => throw new ParseFailureException(sprintf('Content "%s..." cannot be decoded for filter "%s"', $content->read(0, 100), $this->name))
         };
     }
 

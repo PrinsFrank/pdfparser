@@ -154,4 +154,10 @@ class FileStream extends AbstractStream {
     public function __destruct() {
         fclose($this->handle);
     }
+
+    #[Override]
+    public function append(string $string): void {
+        fseek($this->handle, 0, SEEK_END);
+        fwrite($this->handle, $string);
+    }
 }

@@ -11,7 +11,7 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 class InMemoryStream extends AbstractStream {
     public function __construct(
-        private readonly string $content
+        private string $content
     ) {
     }
 
@@ -75,5 +75,10 @@ class InMemoryStream extends AbstractStream {
         }
 
         return $pos;
+    }
+
+    #[Override]
+    public function append(string $string): void {
+        $this->content .= $string;
     }
 }
