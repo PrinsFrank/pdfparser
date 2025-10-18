@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=./.yml-schema.json
+version: '1.7'
+password: null
+title: null
+producer: 'LibreOffice 24.2'
+author: null
+creator: Writer
+creationDate: 2024-11-22T22:23:15+01:00
+modificationDate: null
+pages:
+  -
+    content: 'Hello world'

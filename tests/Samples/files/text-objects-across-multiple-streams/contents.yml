@@ -1,0 +1,358 @@
+# yaml-language-server: $schema=./.yml-schema.json
+version: '1.4'
+password: null
+title: 'MPK Router Control Interface to 7707DT'
+producer: 'Acrobat Distiller 5.0.5 (Windows)'
+author: 'Alex Martin'
+creator: 'PScript5.dll Version 5.2'
+creationDate: 2004-06-29T15:02:32+00:00
+modificationDate: 2004-06-29T11:08:11-04:00
+pages:
+  -
+    content: |2-
+       Application Note AN-6 
+      MPK Router Control Interface to 7707DT   
+       
+       
+      1. OVERVIEW 
+       
+      Philips Broadcast implemented the MPK (message per keystroke) interface protocol for control panels 
+      used in Jupiter router systems. Grass Valley has since become responsible for the Jupiter series of 
+      router systems. The MPK control interface uses a proprietary method of signaling, for which special considerations are required when connecting to other interface types. This application note describes methods for using the 7707DT Fiber Data Transceiver to transport MPK control signals.   
+      The 7707DT series Fiber Data Transceivers communicate bi-directional RS-422 and RS-485 data 
+      signals over a single fiber optic link. By methods described herein, the MPK interface protocol is also accommodated. The user must first note that the MPK interface protocol is different from RS-422 or RS-485.   RS-422:  Two devices send data separately in each direction between them. Data in each 
+      direction is carried over a balanced pair of wires. Each of the two devices is always 
+      transmitting data to the receiver of the other device. Figure 1 shows an RS-422 connection between two devices. 
+       RS-485:   Each of two or more devices sends and receives data separately over a shared 
+      balanced pair of wires. At any one time, only one device can transmit data. This avoids 
+      contention of the shared pair of wires. Each device takes turns transmitting data. While not transmitting data, the interface of each other device is in a high-impedance state, and receives input data. Data from the transmitting device is broadcast to all other devices. Each other device must process data being received, and realize it’s turn to transmit data. By this method, several devices can communicate data between each 
+      other using the same balance pair of wires. Figure 2 shows an RS-485 connection 
+      between four devices. 
+       MPK:  This is a proprietary interface protocol used to communicate between Control Panels 
+      and System Controllers of the Jupiter router system. One port of a System Controller 
+      (such as the VM-3000) communicates with one or more Control Panels. The method of 
+       
+      data transfer in the System Controller to Control Panel direction is different from that in the Control Panel to System Controller direction. Figure 2 shows an MPK connection between a System Controller and three Control Panels. 
+        
+        The System Controller broadcasts data to one or more Control Panels. One balanced 
+      pair of wires connects output data from the System Controller to all Control Panels. The interface protocol in this direction is similar to RS-422, in that the System Controller is always transmitting data to the Control Panel inputs.  
+         Each Control Panel must be able to send data back to the System Controller. For this 
+      purpose, a single balanced pair of wires is shared between all Control Panels. At any 
+      one time, only one Control Panel can transmit data. This avoids contention of the shared balanced pair of wires. Each Control Panel takes turns transmitting data. While not transmitting data, the interface of each other Control Panel is in a high-impedance state. The interface protocol in this direction is similar to RS-485, in that each Control Panel 
+      takes turns transmitting data to the System Controller over a shared balanced pair of 
+      wires. 
+        
+      Revision 1.0 AN6-1 
+  -
+    content: |-
+      Application Note AN-6 
+      MPK Router Control Interface to 7707DT 
+       
+       
+       
+      RS-422 DeviceRS-422 Device
+      AN6-2 
+       
+       
+      Figure 1. RS-422 Interface Example 
+       
+          
+       
+      RS-485 DeviceRS-485 DeviceRS-485 Device
+      Each device ouputs
+      data in-turn to all other
+      devices.
+      RS-485 Device
+       
+       
+      Figure 2. RS-485 Interface Example 
+       
+       
+       
+       
+      Control PanelControl PanelControl Panel
+      Each Control Panel
+      ouputs data in-turn to the
+      System Controller input.
+      System Controller
+      outputs identical data to
+      all Control Panel inputs
+      Jupiter System Controller
+       
+       
+      Figure 3. MPK Interface Example 
+      Revision 1.0 
+  -
+    content: |2-
+       Application Note AN-6 
+      MPK Router Control Interface to 7707DT   
+       
+       
+       
+      2. INTERFACE METHODS 
+       
+      From the above overview, it is apparent that special considerations are required when connecting MPK 
+      interface signals to the RS-422 or RS-485 interface of the 7707DT. The issue at hand is the high-impedance state that each Control Panel assumes between data transmissions. If several control panel outputs are to be connected together, then this high-impedance state is required to avoid contention of the shared output connection. The RS-422 interface protocol does not accommodate a high-impedance 
+      output state. The RS-485 interface protocol does support this high-impedance output state, but only 
+      accommodates a single balanced connection per signal channel. The below two sections describe 
+       
+      special requirements for connecting the MPK interface to the RS-422 or RS-485 interfaces of the 7707DT. 
+      2.1.  MPK Interface to RS-422 
+      The RS-422 interface format does not accommodate a high-impedance output state. The MPK interface signal can, however, be connected to the RS-422 interface of the 7707DT. While the input to 
+      the 7707DT is in a high-impedance state, the respective output of the companion 7707DT will assume 
+      a known logic state. By this method the MPK signal will be converted to an RS-422 signal, and the 
+      high-impedance state will be converted to a known logic state.   MPK data from one or more Control Panels can therefore be transported across the RS-422 interface 
+      of the 7707DT. The System Controller must have an independent connection to the RS-422 interface of 
+      one 7707DT. All Control Panels sharing that System Controller port must reside on the respective RS-
+      422 connection of the companion 7707DT. If any Control Panel is connected to the 7707DT interface that is local to the System Controller, the output signals of the 7707DT and that Control Panel will conflict by outputting data to the shared signal connections at the same time.  
+       
+      Serial data channels used for this interface method should be configured for RS-422 at both ends of the 7707DT fiber link. Figures 4 and 5 describe correct and incorrect interface methods, respectively. Figure 6 describes pin-for-pin connections for the correct method.   
+      Revision 1.0 AN6-3 
+  -
+    content: |-
+      Application Note AN-6 
+      MPK Router Control Interface to 7707DT 
+       
+      Control PanelControl PanelControl Panel
+      AN6-4 
+      Set to
+      RS-422
+      7707DT
+      Set to
+      RS-422
+      Jupiter System Controller
+      7707DT
+       
+       
+      Figure 4. MPK Interface to RS-422. Correct Method 
+        
+      Control PanelControl PanelControl Panel
+      Set to
+      RS-422
+      Control Panel output
+      will contend with 7707DT
+      output. W ill not work.
+      7707DT
+      Incorrect Method
+      Set to
+      RS-422
+      Jupiter System Controller
+      7707DT
+       
+       
+      Figure 5. MPK Interface to RS-422. Incorrect Method 
+      Revision 1.0 
+  -
+    content: |2-
+       Application Note AN-6 
+      MPK Router Control Interface to 7707DT   
+       
+       
+      7707DT Channel 1 is configured
+      to RS-422 for this example.
+      Control PanelControl Panel
+       
+      7707DT7707DT
+      12345
+      GND- TX+RX------
+      6789
+      ---+TX-RX---
+      +RS485+RS485
+      +RS422 IN+RS422 IN
+      -RS422 OUT-RS422 OUT
+      -RS485-RS485
+      CH1 CH1
+      -RS422 IN-RS422 IN
+      RS-422 RS-422
+      +RS422 OUT+RS422 OUT
+      RS232 INRS232 OUTRS232 INRS232 OUT
+      CH1CH1CH1CH1
+      GNDGNDGNDGND
+      +RS485+RS485
+      +RS422 IN+RS422 IN
+      -RS422 OUT-RS422 OUT
+      -RS485-RS485
+      -RS422 IN-RS422 IN
+      CH2 CH2
+      RS-422
+      RS-422
+      +RS422 OUT+RS422 OUT
+      RS232 INRS232 OUTRS232 INRS232 OUT
+      CH2CH2CH2CH2
+      GNDGNDGNDGND
+      +RS485+RS485
+      +RS422 IN+RS422 IN
+      -RS422 OUT-RS422 OUT
+      -RS485-RS485
+      CH3 CH3
+      -RS422 IN-RS422 IN
+      RS-422 RS-422
+      +RS422 OUT+RS422 OUT
+      RS232 INRS232 OUTRS232 INRS232 OUT
+      CH3CH3CH3CH3
+      GNDGNDGNDGND
+      +RS485+RS485
+      +RS422 IN+RS422 IN
+      -RS422 OUT-RS422 OUT
+      12345
+      GND- RX+TX------
+      -RS485-RS485
+      CH4 CH4
+      -RS422 IN-RS422 IN
+      RS-422 RS-422
+      +RS422 OUT+RS422 OUT
+      6789
+      ---+RX-TX---
+      +LTC IN+LTC OUT+LTC IN+LTC OUT
+      GNDGNDGNDGND
+      -LTC IN-LTC OUT-LTC IN-LTC OUT
+      Jupiter System Controller
+       
+      Figure 6. MPK Interface to RS-422 
+      Revision 1.0 AN6-5 
+  -
+    content: |-
+      Application Note AN-6 
+      MPK Router Control Interface to 7707DT 
+       
+      2.2.  MPK Interface to RS-485 
+      A second interface method exists, which allows Control Panels to be located on both ends of the 
+      7707DT fiber link. This method is only advantageous should available ports be limited on the System 
+      Controller. Otherwise, Control Panels connected on the System Controller side of the 7707DT fiber link can be moved to a spare port, and the above method used.     The 7707DT can be configured to operate with RS-485 interfaces. This type of interface allows the 
+      output signal to be placed in a high-impedance state, as required for direct connection to Control Panel 
+      outputs. Therefore, when this method of interface is used, Control Panels may be connected on both ends of the 7707DT fiber link. The RS-485 interface protocol accommodates only one balanced pair of wires. Therefore, two channels of the 7707DT must be used; one for each direction of data transport.   
+      Only the channel used to transport data in the Control Panel to System Controller Direction should be 
+      configured for RS-485. This channel should be configured for a data rate of 1200baud. The channel used to transport data in the System Controller to Control Panel direction should be configured for RS-422. Refer to the manual for details about configuring each channel.  
+      Figures 7 shows a block diagram describing this method of interface. Figure 8 describes pin-for-pin 
+      connections.  
+      AN6-6 
+      Control PanelControl PanelControl Panel
+      Set to
+      RS-422
+      Set to
+      RS-485
+      7707DT
+      Set to
+      RS-422
+      Set to
+      RS-485
+      Jupiter System Controller
+      7707DT
+       
+       
+      Figure 7. MPK Interface to RS-485 
+       
+       
+        
+      Revision 1.0 
+  -
+    content: |2-
+       Application Note AN-6 
+      MPK Router Control Interface to 7707DT   
+       
+       
+      7707DT Channel 1 is configured
+      to RS-422 for this example.
+      7707DT Channel 2 is configured
+      to RS-485 @1200baud for this example.
+      Control PanelControl Panel
+       
+      7707DT7707DT
+      12345
+      GND- TX+RX------
+      6789
+      ---+TX-RX---
+      +RS485+RS485
+      +RS422 IN+RS422 IN
+      -RS422 OUT-RS422 OUT
+      -RS485-RS485
+      CH1 CH1
+      -RS422 IN-RS422 IN
+      RS-422 RS-422
+      +RS422 OUT+RS422 OUT
+      RS232 INRS232 OUTRS232 INRS232 OUT
+      CH1CH1CH1CH1
+      GNDGNDGNDGND
+      +RS485+RS485
+      +RS422 IN+RS422 IN
+      -RS422 OUT-RS422 OUT
+      -RS485-RS485
+      -RS422 IN-RS422 IN
+      CH2 CH2
+      RS-422
+      RS-422
+      +RS422 OUT+RS422 OUT
+      RS232 INRS232 OUTRS232 INRS232 OUT
+      CH2CH2CH2CH2
+      GNDGNDGNDGND
+      +RS485+RS485
+      +RS422 IN+RS422 IN
+      -RS422 OUT-RS422 OUT
+      -RS485-RS485
+      CH3 CH3
+      -RS422 IN-RS422 IN
+      RS-422 RS-422
+      +RS422 OUT+RS422 OUT
+      RS232 INRS232 OUTRS232 INRS232 OUT
+      CH3CH3CH3CH3
+      GNDGNDGNDGND
+      +RS485+RS485
+      +RS422 IN+RS422 IN
+      -RS422 OUT-RS422 OUT
+      12345
+      GND- RX+TX------
+      -RS485-RS485
+      CH4 CH4
+      -RS422 IN-RS422 IN
+      RS-422 RS-422
+      +RS422 OUT+RS422 OUT
+      6789
+      ---+RX-TX---
+      +LTC IN+LTC OUT+LTC IN+LTC OUT
+      GNDGNDGNDGND
+      -LTC IN-LTC OUT-LTC IN-LTC OUT
+      Jupiter System ControllerControl Panel
+       
+      Figure 8. MPK Interface to RS-485 
+      Revision 1.0 AN6-7 
+  -
+    content: |-
+      Application Note AN-6 
+      MPK Router Control Interface to 7707DT 
+       
+      3. TERMINATION AND FAILSAFE BIAS 
+       
+      If signal cable lengths are kept to a minimum, then the above interface methods should work without any requirement for terminations or failsafe bias. The 7707DT does provide selectable input terminations and failsafe bias when required.   Signal terminations are used to eliminate distortion of signals traveling over long lengths of cable. If problems are experienced, and signal distortion is suspected, then the user should enable the input termination of the respective 7707DT. Input terminations are easily selectable through the card edge interface of the 7707DT, or via Vistalink
+      AN6-8 
+      TM
+      , as described in the product manual. As a general rule, 
+      terminations are most effective when placed at the far end of a cable. If more than two devices are connected to the same cable, as could be the case with MPK interfaces, then it is recommended that the 7707DT be located at the far end of the longest cable segment when possible.   
+      The 7707DT also provides a selectable bias on the balance data inputs. This is referred to as a failsafe 
+      bias, as it places the balanced input connections in a known logic state while no device is transmitting 
+      to them. Any direct connection between a 7707DT input and a Control Panel may require a failsafe bias, to compensate for ambient noise, long lengths of cable, or connection to many devices. Input 
+      failsafe bias is easily selectable through the card edge interface of the 7707DT, or via Vistalink
+      TM
+      , as 
+      described in the product manual. To enable failsafe bias on any channel of the 7707DT, the termination must first be enabled.  
+      Revision 1.0 
+  -
+    content: |2-
+       Application Note AN-6 
+      MPK Router Control Interface to 7707DT   
+       
+       
+       
+          
+       
+           
+       
+          
+       
+           
+       
+      This page left intentionally blank 
+       
+        
+       
+       
+      Revision 1.0 AN6-9 

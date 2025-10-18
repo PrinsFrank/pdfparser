@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=./.yml-schema.json
+version: '1.5'
+password: null
+title: null
+producer: pdfTeX-1.40.25
+author: null
+creator: TeX
+creationDate: 2024-11-22T22:53:31+01:00
+modificationDate: 2024-11-22T22:53:31+01:00
+pages:
+  -
+    content: |-
+      Hello world
+      1

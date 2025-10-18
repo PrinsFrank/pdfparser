@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=./.yml-schema.json
+version: '1.4'
+password: null
+title: 'File with image'
+producer: 'Skia/PDF m138 Google Docs Renderer'
+author: null
+creator: null
+creationDate: null
+modificationDate: null
+pages:
+  -
+    content: ' '
+    images:
+      - page_0_image_0.jpg
