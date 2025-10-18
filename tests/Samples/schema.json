@@ -1,0 +1,65 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "version": {
+            "type": "number",
+            "description": "PDF version"
+        },
+        "password": {
+            "type": ["string", "null"],
+            "description": "Password to open the file"
+        },
+        "title": {
+            "type": ["string", "null"],
+            "description": "Title of the document"
+        },
+        "producer": {
+            "type": ["string", "null"],
+            "description": "The software that produced the PDF"
+        },
+        "author": {
+            "type": ["string", "null"],
+            "description": "Author of the document"
+        },
+        "creator": {
+            "type": ["string", "null"],
+            "description": "Creator of the document"
+        },
+        "creationDate": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "Creation date of the document"
+        },
+        "modificationDate": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "The last modification date of the document"
+        },
+        "pages": {
+            "type": "array",
+            "description": "An array of objects containing information for each page",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "type": "string",
+                        "description": "Text content of the page"
+                    }
+                },
+                "required": ["content"]
+            }
+        }
+    },
+    "required": [
+        "version",
+        "password",
+        "title",
+        "producer",
+        "author",
+        "creator",
+        "creationDate",
+        "modificationDate",
+        "pages"
+    ]
+}

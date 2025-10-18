@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=./.yml-schema.json
+version: '1.4'
+password: null
+title: Scripts
+producer: 'Skia/PDF m134 Google Docs Renderer'
+author: null
+creator: null
+creationDate: null
+modificationDate: null
+pages:
+  -
+    content: |-
+      World emoji: 🌎🌍🌏  
+      Black flag: 🏴  
+      Flag netherlands: 󰐗  
+      Slide: 🛝  
+      chars: çöăѣ𝔠ծềſģȟᎥ𝒋ǩľḿȯ𝘱𝑞𝗋𝘴ȶ𝞄𝜈ψ 𝒙𝘆𝚣 1234567890!@#$%^&*()-_=+[{]};:'",<.>/? 
+      Hiragana: あいうえおかきくけこさしすせそたちつてとなにぬねのんはひふへほまみむめもやゆ
+      よらりるれろわを  
+      Greek: Α α, Β β, Γ γ, Δ δ, Ε ε, Ζ ζ, Η η, Θ θ, Ι ι, Κ κ, Λ λ, Μ μ, Ν ν, Ξ ξ, Ο ο, Π π, Ρ ρ, Σ σ ς, Τ 
+      τ, Υ υ, Φ φ, Χ χ, Ψ ψ, Ω ω. 
+      Cyrillic: Аа Бб Вв Гг Дд Ее Ëë Жж Зз Ии Йй Кк Лл Мм Нн Оо Пп Рр Сс Тт Уу Фф Хх Цц 
+      Чч Шш Щщ Ъъ Ыы Ьь Ээ Юю Яя  

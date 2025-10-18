@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=./.yml-schema.json
+version: '1.7'
+password: null
+title: null
+producer: null
+author: 'Frank Prins'
+creator: 'Microsoft Word'
+creationDate: 2024-11-22T13:35:52-08:00
+modificationDate: 2024-11-22T13:35:52-08:00
+pages:
+  -
+    content: 'Hello world '
