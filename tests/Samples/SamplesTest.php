@@ -8,8 +8,8 @@ use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
-use PrinsFrank\PdfSamples\FileInfo;
-use PrinsFrank\PdfSamples\SampleProvider;
+use PrinsFrank\PdfParser\Tests\Samples\Info\FileInfo;
+use PrinsFrank\PdfParser\Tests\Samples\Info\SampleProvider;
 use TypeError;
 use ValueError;
 
@@ -29,7 +29,7 @@ class SamplesTest extends TestCase {
         static::assertSame(count($fileInfo->pages ?? []), $document->getNumberOfPages());
         foreach ($fileInfo->pages ?? [] as $index => $expectedPage) {
             static::assertNotNull($page = $document->getPage($index + 1));
-            static::assertSame($expectedPage->content, $page->getText());
+            static::assertSame(trim($expectedPage->content), trim($page->getText()));
             foreach ($expectedPage->imagePaths as $imageIndex => $imagePath) {
                 static::assertSame(
                     file_get_contents($imagePath),

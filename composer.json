@@ -26,14 +26,15 @@
         "phpstan/phpstan-deprecation-rules": "^2.0",
         "phpstan/phpstan-strict-rules": "^2",
         "phpunit/phpunit": "^11.5",
-        "prinsfrank/pdf-samples": "^1.0"
+        "symfony/yaml": "^7.3"
     },
     "scripts": {
         "cs": "php-cs-fixer fix --allow-risky=yes --dry-run",
         "cs:fix": "php-cs-fixer fix --allow-risky=yes",
         "stan": "phpstan analyse --memory-limit 4G -v",
         "unit": "phpunit --testsuite=Unit",
-        "feature": "phpunit --testsuite=Feature"
+        "feature": "phpunit --testsuite=Feature",
+        "update-content": "./tests/Samples/update-content"
     },
     "config": {
         "sort-packages": true

@@ -1,0 +1,62 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+use PrinsFrank\PdfParser\Exception\PdfParserException;
+use PrinsFrank\PdfParser\PdfParser;
+use Symfony\Component\Yaml\Yaml;
+
+require dirname(__DIR__, 2) . '/vendor/autoload.php';
+
+foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sampleName) {
+    $sampleFolder = $filesDir . DIRECTORY_SEPARATOR . $sampleName;
+    if (!file_exists($pdfPath = $sampleFolder . DIRECTORY_SEPARATOR . 'file.pdf')) {
+        throw new RuntimeException(sprintf('File "%s" does not exist', $pdfPath));
+    }
+
+    try {
+        $parsedPDF = (new PdfParser())->parseFile($pdfPath);
+    } catch (PdfParserException $e) {
+        echo sprintf('Failed to parse file "%s": %s', $pdfPath, $e->getMessage()) . PHP_EOL;
+        continue;
+    }
+
+    $pages = [];
+    foreach ($parsedPDF->getPages() as $pageIndex => $page) {
+        $pages[$pageIndex] = [
+            'content' => $page->getText(),
+        ];
+
+        foreach ($page->getImages() as $imageIndex => $image) {
+            $imageFolder = $sampleFolder . DIRECTORY_SEPARATOR . 'images';
+            if (!is_dir($imageFolder) && !mkdir($imageFolder, 0777, true) && !is_dir($imageFolder)) {
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $imageFolder));
+            }
+
+            $fileName = sprintf('page_%d_image_%d.%s', $pageIndex, $imageIndex, $image->getImageType()->getFileExtension());
+            file_put_contents(sprintf('%s/%s', $imageFolder, $fileName), $image->getStream()->toString());
+            $pages[$pageIndex]['images'][] = $fileName;
+        }
+    }
+
+    $yamlContent = Yaml::dump(
+        [
+            'version' => $parsedPDF->version->value,
+            'password' => null,
+            'title' => $parsedPDF->getInformationDictionary()?->getTitle(),
+            'producer' => $parsedPDF->getInformationDictionary()?->getProducer(),
+            'author' => $parsedPDF->getInformationDictionary()?->getAuthor(),
+            'creator' => $parsedPDF->getInformationDictionary()?->getCreator(),
+            'creationDate' => $parsedPDF->getInformationDictionary()?->getCreationDate(),
+            'modificationDate' => $parsedPDF->getInformationDictionary()?->getModificationDate(),
+            'pages' => $pages,
+        ],
+        inline: 10,
+        indent: 2,
+        flags: Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK
+    );
+
+    file_put_contents(
+        $sampleFolder . DIRECTORY_SEPARATOR . 'contents.yml',
+        '# yaml-language-server: $schema=./.yml-schema.json' . PHP_EOL . trim($yamlContent, PHP_EOL) . PHP_EOL
+    );
+}
