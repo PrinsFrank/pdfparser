@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=./.yml-schema.json
+version: '1.7'
+password: null
+title: '(Dossier représentation Mme BEGOT-3.pdf)'
+producer: 'GPL Ghostscript 10.03.1'
+author: mgomes03
+creator: 'PDF24 Creator'
+creationDate: 2025-07-22T09:52:58+02:00
+modificationDate: 2025-07-22T09:52:58+02:00
+pages:
+  -
+    content: ''
+    images:
+      - page_0_image_0.tiff
+      - page_0_image_1.jpg
+  -
+    content: ''
+    images:
+      - page_1_image_0.tiff
+      - page_1_image_1.jpg

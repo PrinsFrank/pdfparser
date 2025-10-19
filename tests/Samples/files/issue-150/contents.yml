@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=./.yml-schema.json
+version: '1.3'
+password: null
+title: null
+producer: 'RICOH M C251FW (6577f3)'
+author: null
+creator: null
+creationDate: 2025-07-21T14:34:03+00:00
+modificationDate: null
+pages:
+  -
+    content: ''
+    images:
+      - page_0_image_0.jpg
+  -
+    content: ''
+    images:
+      - page_1_image_0.jpg
+  -
+    content: ''
+    images:
+      - page_2_image_0.jpg
+  -
+    content: ''
+    images:
+      - page_3_image_0.jpg

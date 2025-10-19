@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=./.yml-schema.json
+version: '1.7'
+password: null
+title: null
+producer: 'PStill Engine 1.90'
+author: null
+creator: null
+creationDate: 2025-09-16T09:37:08+02:00
+modificationDate: null
+pages:
+  -
+    content: |-
+      Veröffentlicht am Dienstag, 16. September 2025
+      BAnz AT 16.09.2025 S1
+      Seite 1 von 1
+      Das Auswärtige Amt gibt bekannt: 
+      Der Bundespräsident hat am Mittwoch, dem 27. August 2025 
+      die Botschafterin der Argentinischen Republik, Frau Betina Alejandra Pasquali, 
+      den Botschafter der Föderativen Republik Brasilien, Herrn Rodrigo De Lima Baena 
+      Empfänge beim Bundespräsidenten 
+      Soares, 
+      den Botschafter der Sozialistischen Republik Vietnam, Herrn Nguyen Dac Thanh, 
+      und 
+      die Botschafterin von Barbados, Frau Nicolla Simone Rudder, 
+      zur Entgegennahme ihrer Beglaubigungsschreiben empfangen. 
+      Sonstiges
+      Auswärtiges Amt   

@@ -32,8 +32,13 @@ foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sa
                 throw new RuntimeException(sprintf('Directory "%s" was not created', $imageFolder));
             }
 
-            $fileName = sprintf('page_%d_image_%d.%s', $pageIndex, $imageIndex, $image->getImageType()->getFileExtension());
-            file_put_contents(sprintf('%s/%s', $imageFolder, $fileName), $image->getStream()->toString());
+            try {
+                $fileName = sprintf('page_%d_image_%d.%s', $pageIndex, $imageIndex, $image->getImageType()->getFileExtension());
+                file_put_contents(sprintf('%s/%s', $imageFolder, $fileName), $image->getStream()->toString());
+            } catch (PdfParserException) {
+                echo sprintf('Failed to save image %d for page %d', $imageIndex, $pageIndex) . PHP_EOL;
+                continue 2;
+            }
             $pages[$pageIndex]['images'][] = $fileName;
         }
     }
