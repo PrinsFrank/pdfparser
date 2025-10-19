@@ -86,7 +86,7 @@ class PositionedTextElement {
                 $chars = str_replace(['\(', '\)', '\n', '\r'], ['(', ')', "\n", "\r"], substr($match['chars'], 1, -1));
                 $chars = preg_replace_callback('/\\\\([0-7]{3})/', fn (array $matches) => mb_chr((int) octdec($matches[1])), $chars)
                     ?? throw new ParseFailureException();
-                foreach (mb_str_split($chars) as $char) {
+                foreach (str_split($chars) as $char) {
                     $codePoints[] = ord($char);
                 }
             } elseif (str_starts_with($match['chars'], '<') && str_ends_with($match['chars'], '>')) {
