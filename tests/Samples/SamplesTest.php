@@ -10,12 +10,13 @@ use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
 use PrinsFrank\PdfParser\Tests\Samples\Info\FileInfo;
 use PrinsFrank\PdfParser\Tests\Samples\Info\SampleProvider;
+use RuntimeException;
 use TypeError;
 use ValueError;
 
 #[CoversNothing]
 class SamplesTest extends TestCase {
-    /** @throws TypeError|ValueError */
+    /** @throws TypeError|ValueError|RuntimeException */
     #[DataProviderExternal(SampleProvider::class, 'samples')]
     public function testExternalSourcePDFs(FileInfo $fileInfo): void {
         $document = (new PdfParser())->parseFile($fileInfo->pdfPath);
@@ -31,9 +32,48 @@ class SamplesTest extends TestCase {
             static::assertNotNull($page = $document->getPage($index + 1));
             static::assertSame(trim($expectedPage->content), trim($page->getText()));
             foreach ($expectedPage->imagePaths as $imageIndex => $imagePath) {
-                static::assertSame(
-                    file_get_contents($imagePath),
+                self::assertImage(
+                    $imagePath,
                     $page->getImages()[$imageIndex]->getStream()->toString(),
+                    sprintf('Page %d, image %d', $index, $imageIndex),
+                );
+            }
+        }
+    }
+
+    /** @throws RuntimeException */
+    private static function assertImage(string $expectedImagePath, string $actualImageContent, string $imageName): void {
+        $expectedImageContent = file_get_contents($expectedImagePath);
+        if ($expectedImageContent === false) {
+            throw new RuntimeException(sprintf('Unable to load expected image "%s"', $expectedImagePath));
+        }
+
+        if (str_ends_with($expectedImagePath, '.tiff')) { // gd doesn't have support for tiff so we have to compare the raw content
+            static::assertSame(
+                $expectedImageContent,
+                $actualImageContent,
+                $imageName,
+            );
+
+            return;
+        }
+
+        if (($expectedImage = imagecreatefromstring($expectedImageContent)) === false) {
+            throw new RuntimeException(sprintf('Unable to load expected image "%s"', $imageName));
+        }
+
+        if (($actualImage = imagecreatefromstring($actualImageContent)) === false) {
+            throw new RuntimeException(sprintf('Unable to load actual image "%s"', $imageName));
+        }
+
+        static::assertSame(imagesx($expectedImage), imagesx($actualImage), $imageName);
+        static::assertSame(imagesy($expectedImage), imagesy($actualImage), $imageName);
+        for ($x = 0; $x < imagesx($expectedImage); $x++) {
+            for ($y = 0; $y < imagesy($expectedImage); $y++) {
+                static::assertSame(
+                    imagecolorat($expectedImage, $x, $y),
+                    imagecolorat($actualImage, $x, $y),
+                    $imageName,
                 );
             }
         }
