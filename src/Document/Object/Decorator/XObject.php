@@ -13,7 +13,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SpecialColorSp
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpace;
-use PrinsFrank\PdfParser\Document\Image\ColorSpace\LUT;
+use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpaceFactory;
 use PrinsFrank\PdfParser\Document\Image\ImageType;
 use PrinsFrank\PdfParser\Document\Image\RasterizedImage;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -102,29 +102,14 @@ class XObject extends DecoratedObject {
         }
 
         if ($type === DeviceColorSpaceNameValue::class || $type === CIEColorSpaceNameValue::class || $type === SpecialColorSpaceNameValue::class) {
-            return new ColorSpace($this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, $type) ?? throw new ParseFailureException(), null);
+            return new ColorSpace(false, $this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, $type) ?? throw new ParseFailureException(), null, null, null);
         }
 
         if ($type === ReferenceValue::class) {
             $colorSpaceObject = $this->getDictionary()->getObjectForReference($this->document, DictionaryKey::COLOR_SPACE)
                 ?? throw new ParseFailureException('Unable to retrieve colorspace object');
 
-            $colorSpaceInfo = ArrayValue::fromValue($colorSpaceObject->getStream()->toString());
-            if (!$colorSpaceInfo instanceof ArrayValue || !array_key_exists(0, $colorSpaceInfo->value) || !is_string($colorSpaceInfo->value[0])) {
-                throw new ParseFailureException('Expected an array for colorspace info');
-            }
-
-            $colorSpaceName = substr($colorSpaceInfo->value[0], 1);
-            $colorSpace = CIEColorSpaceNameValue::tryFrom($colorSpaceName) ?? DeviceColorSpaceNameValue::tryFrom($colorSpaceName) ?? SpecialColorSpaceNameValue::tryFrom($colorSpaceName) ?? throw new ParseFailureException(sprintf('Unsupported colorspace "%s"', $colorSpaceName));
-            if (count($colorSpaceInfo->value) !== 4 || $colorSpaceInfo->value[3] !== 'R') {
-                throw new ParseFailureException(sprintf('Expected reference value for colorspace info, got "%s"', $colorSpaceObject->getStream()->toString()));
-            }
-
-            if (!is_int($objectNumber = $colorSpaceInfo->value[1])) {
-                throw new ParseFailureException(sprintf('Expected an integer for object number, got "%s"', ($jsonEncoded = json_encode($objectNumber)) !== false ? $jsonEncoded : 'Unknown'));
-            }
-
-            return new ColorSpace($colorSpace, new LUT($this->document->getObject($objectNumber) ?? throw new ParseFailureException(sprintf('Unable to locate object %d', $colorSpaceInfo->value[1]))));
+            return ColorSpaceFactory::fromString($colorSpaceObject->getStream()->toString(), $this->document);
         }
 
         throw new ParseFailureException(sprintf('Unsupported colorspace format %s', $type));

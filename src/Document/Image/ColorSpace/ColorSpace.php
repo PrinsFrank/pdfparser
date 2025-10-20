@@ -2,18 +2,45 @@
 
 namespace PrinsFrank\PdfParser\Document\Image\ColorSpace;
 
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\CIEColorSpaceNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\DeviceColorSpaceNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SpecialColorSpaceNameValue;
+use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 class ColorSpace {
+    private readonly Components $components;
+
     public function __construct(
+        public readonly bool $isIndexed,
         public readonly DeviceColorSpaceNameValue|CIEColorSpaceNameValue|SpecialColorSpaceNameValue $nameValue,
-        public readonly ?LUT $lutObject,
+        public readonly DecoratedObject|null $objOrInlineValueLUT,
+        public readonly string|null $fallbackLUT,
+        public readonly ?int $maxIndexLUT,
     ) {
     }
 
     public function getComponents(): Components {
-        return $this->nameValue->getComponents($this->lutObject);
+        if (isset($this->components)) {
+            return $this->components;
+        }
+
+        if ($this->nameValue instanceof DeviceColorSpaceNameValue) {
+            return $this->components = $this->nameValue->getComponents();
+        }
+
+        if ($this->objOrInlineValueLUT?->getDictionary()->getTypeForKey(DictionaryKey::N) !== null) {
+            return $this->components = Components::tryFrom(
+                $this->objOrInlineValueLUT
+                    ->getDictionary()
+                    ->getValueForKey(DictionaryKey::N, IntegerValue::class)
+                    ->value ?? throw new RuntimeException('Unable to determine number of components for color space')
+            ) ?? throw new ParseFailureException('Unable to determine number of components for color space');
+        }
+
+        return $this->components = Components::Gray;
     }
 }
