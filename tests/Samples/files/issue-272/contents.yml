@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=./.yml-schema.json
+version: '1.7'
+password: null
+title: null
+producer: null
+author: null
+creator: null
+creationDate: 2025-10-21T00:00:00+02:00
+modificationDate: null
+pages:
+  -
+    content: |-
+      TODO
