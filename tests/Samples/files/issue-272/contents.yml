@@ -2,7 +2,7 @@
 version: '1.7'
 password: null
 title: null
-producer: null
+producer: 'PStill Engine 1.90'
 author: null
 creator: null
 creationDate: 2025-10-21T00:00:00+02:00
