@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Generic\Character\LiteralStringEscapeCharacter;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
@@ -42,10 +43,12 @@ class PositionedTextElement {
                     $chars = $glyph->getChar();
                 } elseif (strlen($unescapedChars) === 1 && ($glyph = $font->getDifferences()?->getGlyph(ord($unescapedChars))) !== null) {
                     $chars = $glyph->getChar();
-                } elseif (($encoding = $font->getEncoding()) !== null) {
+                } elseif (in_array($encoding = $font->getEncoding(), [EncodingNameValue::MacExpertEncoding, EncodingNameValue::WinAnsiEncoding], true)) {
                     $chars = $encoding->decodeString($unescapedChars);
                 } elseif (($toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont()) !== null) {
                     $chars = $toUnicodeCMap->textToUnicode(bin2hex($unescapedChars));
+                } elseif ($encoding !== null) {
+                    $chars = $encoding->decodeString($unescapedChars);
                 } else {
                     $chars = $unescapedChars;
                 }
