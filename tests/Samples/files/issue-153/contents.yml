@@ -1,0 +1,81 @@
+# yaml-language-server: $schema=./.yml-schema.json
+version: '1.4'
+password: null
+title: reception0658@reseau-intersport.fr
+producer: 'Oracle PDF driver'
+author: 'Oracle Reports'
+creator: 'Oracle12c AS Reports Services'
+creationDate: 2025-07-22T10:00:03+00:00
+modificationDate: 2025-07-22T10:00:03+00:00
+pages:
+  -
+    content: |-
+      CUSTOMER IE802719
+      INTERSPORT PAIMPOL
+      SASU C.E.F SPORTS - 17 T RUE RAYMOND PELLIER    
+      22500   PAIMPOL    France
+      CHAMPION PRODUCTS EUROPE UNLIMITED COMPANY
+      Blanchardstown Corporate Park 2 D15 Blanchardstown - Dublin Ireland
+      Tel. Acc.
+      +353 (0)1 8864217 +353 (0)1 8864217Fax +353 (0)1 8665927
+      Tel. CS
+      IE802719
+      DESTINATION
+      INTERSPORT PAIMPOL
+      ZONE DE KERPUNS CARREFOUR    ILN Code: 3025810065800
+      22500   PAIMPOL    France
+      DELIVERY NOTE
+      DC REF.
+      5204/165/2025/DN/5204 21/07/2025
+      FORWARDER
+      Label
+      UPS - United Parcel Service S.r.l 2.0
+      VIA G. FANTOLI, 15/2 
+      REASON
+      20138 MILANO Milano 
+      Italy
+      Subcontractor
+      TRANSPORTATION COST
+      Delivery Note N
+      CHH/2025/70BO/058510DATE 21/07/2025
+      COMMENTS
+      SALES REP VORACE SAS François RAMOND
+      ARTICLE DESCRIPTION COLOUR SIZE TOTAL
+      ORD. NUM.
+      35/38 39/42 43/46
+      8 19 13
+      4402026619
+      3pk Sneaker Socks
+      U20100-CHA
+      WW001  WHT
+       40
+       40
+      35/38 39/42 43/46
+      8 17 14
+      4402026619
+      3pk Crew Socks
+      U24558-CHA
+      KK001  NBK
+       39
+      8 17 14
+      4402026619
+      WW001  WHT
+       39
+       78
+      Tot. qty  118
+      Cartons Summary
+      250570819669 250570830162
+      Picking List-N.
+      CHH-2025-VE-430761
+      Packing list W2025/PL/CHH282537
+      Leave from
+      PACKING Cartons Nr 2 Net Wght  16,790 Gross Wght  18,490
+      LABEL NOTES
+      Label
+      FORWARDER DESTINATION
+      CIE
+      Signature Date Time Signature Date Time Signature Date Time
+      1 of
+      Copy for Customer Page 1
+    images:
+      - page_0_image_0.jpg
