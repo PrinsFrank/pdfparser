@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Tests\Samples\Info;
 
+use DateTimeImmutable;
 use RuntimeException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -23,10 +24,20 @@ class SampleProvider {
                 throw new RuntimeException();
             }
 
-            /** @var object{version: float, password: ?string, title: ?string, producer: ?string, author: ?string, creator: ?string, creationDate: ?\DateTimeImmutable, modificationDate: ?\DateTimeImmutable, pages: list<object{content: string, images?: string[]}>} $content */
+            /** @var object{version: float, password: ?string, title: ?string, producer: ?string, author: ?string, creator: ?string, creationDate: ?\DateTimeImmutable, modificationDate: ?\DateTimeImmutable, pages: list<object{content: string, images?: string[]}>, textPartsExpectedSomewhereInTheExtractedText: string[]|null} $content */
             $content = Yaml::parseFile($contentsPath, Yaml::PARSE_OBJECT_FOR_MAP | Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE | Yaml::PARSE_DATETIME);
             if ($content->password !== null) {
                 continue;
+            }
+
+            $creationDate = null;
+            if (is_string($content->creationDate)) {
+                $creationDate = new DateTimeImmutable($content->creationDate);
+            }
+
+            $modificationDate = null;
+            if (is_string($content->modificationDate)) {
+                $modificationDate = new DateTimeImmutable($content->modificationDate);
             }
 
             yield $sampleName => [
@@ -38,16 +49,17 @@ class SampleProvider {
                     $content->producer,
                     $content->author,
                     $content->creator,
-                    $content->creationDate,
-                    $content->modificationDate,
+                    $creationDate,
+                    $modificationDate,
                     array_map(
                         /** @param object{content: string, images?: string[]} $page */
                         fn (object $page) => new Page(
                             $page->content,
                             array_values(array_map(fn (string $relativePath) => sprintf('%s/images/%s', $sampleFolder, $relativePath), $page->images ?? []))
                         ),
-                        $content->pages
+                        $content->pages ?? []
                     ),
+                    $content->textPartsExpectedSomewhereInTheExtractedText ?? null
                 )
             ];
         }
