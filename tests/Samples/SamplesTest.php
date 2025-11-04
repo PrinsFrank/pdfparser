@@ -19,7 +19,7 @@ use ValueError;
 class SamplesTest extends TestCase {
     /** @throws TypeError|ValueError|RuntimeException */
     #[DataProviderExternal(SampleProvider::class, 'samples')]
-    public function testExternalSourcePDFs(FileInfo $fileInfo): void {
+    public function testSamples(FileInfo $fileInfo): void {
         $document = (new PdfParser())
             ->parseFile($fileInfo->pdfPath, security: new StandardSecurity($fileInfo->userPassword, $fileInfo->ownerPassword));
 
