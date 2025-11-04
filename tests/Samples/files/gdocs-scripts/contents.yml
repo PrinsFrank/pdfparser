@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=./.yml-schema.json
+# yaml-language-server: $schema=../../schema.json
 version: '1.4'
 password: null
 title: Scripts
