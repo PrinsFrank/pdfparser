@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=../../schema.json
 version: 1.7
-userPassword: Hello
+userPassword: hello
 ownerPassword: null
 title: null
 producer: LibreOffice 24.2
