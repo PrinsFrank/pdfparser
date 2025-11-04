@@ -9,7 +9,8 @@ class FileInfo {
     public function __construct(
         public readonly string $pdfPath,
         public readonly int $version,
-        public readonly ?string $password,
+        public readonly ?string $userPassword,
+        public readonly ?string $ownerPassword,
         public readonly ?string $title,
         public readonly ?string $producer,
         public readonly ?string $author,
