@@ -46,7 +46,8 @@ foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sa
     $yamlContent = Yaml::dump(
         [
             'version' => $parsedPDF->version->value,
-            'password' => null,
+            'userPassword' => null,
+            'ownerPassword' => null,
             'title' => $parsedPDF->getInformationDictionary()?->getTitle(),
             'producer' => $parsedPDF->getInformationDictionary()?->getProducer(),
             'author' => $parsedPDF->getInformationDictionary()?->getAuthor(),

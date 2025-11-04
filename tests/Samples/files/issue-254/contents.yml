@@ -1,6 +1,7 @@
 # yaml-language-server: $schema=./.yml-schema.json
 version: '1.7'
-password: null
+userPassword: null
+ownerPassword: null
 title: 'Publications Office'
 producer: 'PDFlib+PDI 9.1.2p4 (C++/Win64)'
 author: 'Publications Office'

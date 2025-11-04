@@ -1,6 +1,7 @@
 # yaml-language-server: $schema=./.yml-schema.json
 version: '1.7'
-password: null
+userPassword: null
+ownerPassword: null
 title: null
 producer: null
 author: 'Frank Prins'

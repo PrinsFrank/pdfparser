@@ -1,6 +1,7 @@
 # yaml-language-server: $schema=./.yml-schema.json
 version: '2.0'
-password: null
+userPassword: null
+ownerPassword: null
 title: !!binary /v8AMQAuADIAIABUAGEAYgBlAGwAbABlAF8AMQBfAEsAQQBfADEAOQAtADAANwAwADUAOQ==
 producer: 'Kofax Power PDF'
 author: 'Rehm, Martin (LSN)'

@@ -1,6 +1,7 @@
 # yaml-language-server: $schema=./.yml-schema.json
 version: '1.7'
-password: null
+userPassword: null
+ownerPassword: null
 title: '(Dossier représentation Mme BEGOT-3.pdf)'
 producer: 'GPL Ghostscript 10.03.1'
 author: mgomes03
