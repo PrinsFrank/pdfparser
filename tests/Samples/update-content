@@ -62,6 +62,6 @@ foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sa
 
     file_put_contents(
         $sampleFolder . DIRECTORY_SEPARATOR . 'contents.yml',
-        '# yaml-language-server: $schema=./.yml-schema.json' . PHP_EOL . trim($yamlContent, PHP_EOL) . PHP_EOL
+        '# yaml-language-server: $schema=../../schema.json' . PHP_EOL . trim($yamlContent, PHP_EOL) . PHP_EOL
     );
 }
