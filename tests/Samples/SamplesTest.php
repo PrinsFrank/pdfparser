@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Tests\Samples;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
+use PrinsFrank\PdfParser\Document\Security\StandardSecurity;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
 use PrinsFrank\PdfParser\Tests\Samples\Info\FileInfo;
@@ -19,7 +20,9 @@ class SamplesTest extends TestCase {
     /** @throws TypeError|ValueError|RuntimeException */
     #[DataProviderExternal(SampleProvider::class, 'samples')]
     public function testExternalSourcePDFs(FileInfo $fileInfo): void {
-        $document = (new PdfParser())->parseFile($fileInfo->pdfPath);
+        $document = (new PdfParser())
+            ->parseFile($fileInfo->pdfPath, security: new StandardSecurity($fileInfo->userPassword, $fileInfo->ownerPassword));
+
         static::assertSame(Version::from(number_format($fileInfo->version / 10, 1)), $document->version);
         static::assertSame($fileInfo->title, $document->getInformationDictionary()?->getTitle());
         static::assertSame($fileInfo->producer, $document->getInformationDictionary()?->getProducer());
