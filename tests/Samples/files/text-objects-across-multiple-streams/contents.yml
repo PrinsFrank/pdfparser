@@ -1,6 +1,7 @@
 # yaml-language-server: $schema=../../schema.json
 version: '1.4'
-password: null
+userPassword: null
+ownerPassword: null
 title: 'MPK Router Control Interface to 7707DT'
 producer: 'Acrobat Distiller 5.0.5 (Windows)'
 author: 'Alex Martin'

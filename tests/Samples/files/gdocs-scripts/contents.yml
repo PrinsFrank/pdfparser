@@ -1,6 +1,7 @@
 # yaml-language-server: $schema=../../schema.json
 version: '1.4'
-password: null
+userPassword: null
+ownerPassword: null
 title: Scripts
 producer: 'Skia/PDF m134 Google Docs Renderer'
 author: null

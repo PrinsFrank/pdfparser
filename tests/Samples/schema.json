@@ -6,9 +6,13 @@
             "type": "number",
             "description": "PDF version"
         },
-        "password": {
+        "userPassword": {
             "type": ["string", "null"],
             "description": "Password to open the file"
+        },
+        "ownerPassword": {
+            "type": ["string", "null"],
+            "description": "Password to restrict document actions"
         },
         "title": {
             "type": ["string", "null"],

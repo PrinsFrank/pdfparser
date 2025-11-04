@@ -1,6 +1,7 @@
 # yaml-language-server: $schema=../../schema.json
 version: '1.5'
-password: null
+userPassword: null
+ownerPassword: null
 title: null
 producer: pdfTeX-1.40.25
 author: null
