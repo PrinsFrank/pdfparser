@@ -7,7 +7,6 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 class ASCII85Decode {
     /** @throws RuntimeException */
     public static function decodeBinary(string $string): string {
-        file_put_contents(__DIR__ . '/ascii85.txt', $string);
         $string = trim($string);
         if (str_starts_with($string, '<~') && str_ends_with($string, '~>')) {
             $string = substr($string, 2, -2);
