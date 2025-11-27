@@ -30,5 +30,13 @@ class RectangleTest extends TestCase {
             new Rectangle(42.22, 43.33, 44.44, 45.55),
             Rectangle::fromValue('[ 42.22 43.33 44.44 45.55 ]'),
         );
+        static::assertEquals(
+            new Rectangle(0, 0, 595.2756, 841.8898),
+            Rectangle::fromValue('[0 0 595.2756' . "\r" . '841.8898]'),
+        );
+        static::assertEquals(
+            new Rectangle(0, 0, 595.2756, 841.8898),
+            Rectangle::fromValue('[0 0 595.2756' . "\n" . '841.8898]'),
+        );
     }
 }
