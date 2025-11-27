@@ -5,7 +5,10 @@ namespace PrinsFrank\PdfParser\Tests\Samples\Info;
 use DateTimeImmutable;
 
 class FileInfo {
-    /** @param list<Page> $pages */
+    /**
+     * @param list<Page> $pages
+     * @param string[] $textPartsExpectedSomewhereInTheExtractedText
+     */
     public function __construct(
         public readonly string $pdfPath,
         public readonly int $version,
@@ -17,6 +20,7 @@ class FileInfo {
         public readonly ?DateTimeImmutable $creationDate,
         public readonly ?DateTimeImmutable $modificationDate,
         public readonly ?array $pages,
+        public readonly ?array $textPartsExpectedSomewhereInTheExtractedText,
     ) {
     }
 }

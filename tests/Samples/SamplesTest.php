@@ -20,15 +20,56 @@ class SamplesTest extends TestCase {
     #[DataProviderExternal(SampleProvider::class, 'samples')]
     public function testExternalSourcePDFs(FileInfo $fileInfo): void {
         $document = (new PdfParser())->parseFile($fileInfo->pdfPath);
+
+        // PDF version
         static::assertSame(Version::from(number_format($fileInfo->version / 10, 1)), $document->version);
-        static::assertSame($fileInfo->title, $document->getInformationDictionary()?->getTitle());
-        static::assertSame($fileInfo->producer, $document->getInformationDictionary()?->getProducer());
-        static::assertSame($fileInfo->author, $document->getInformationDictionary()?->getAuthor());
-        static::assertSame($fileInfo->creator, $document->getInformationDictionary()?->getCreator());
-        static::assertEquals($fileInfo->creationDate, $document->getInformationDictionary()?->getCreationDate());
-        static::assertEquals($fileInfo->modificationDate, $document->getInformationDictionary()?->getModificationDate());
-        static::assertSame(count($fileInfo->pages ?? []), $document->getNumberOfPages());
-        foreach ($fileInfo->pages ?? [] as $index => $expectedPage) {
+
+        // title
+        if (null !== $fileInfo->title) {
+            static::assertSame($fileInfo->title, $document->getInformationDictionary()?->getTitle());
+        }
+
+        // producer
+        if (null !== $fileInfo->producer) {
+            static::assertSame($fileInfo->producer, $document->getInformationDictionary()?->getProducer());
+        }
+
+        // author
+        if (null !== $fileInfo->author) {
+            static::assertSame($fileInfo->author, $document->getInformationDictionary()?->getAuthor());
+        }
+
+        // creator
+        if (null !== $fileInfo->creator) {
+            static::assertSame($fileInfo->creator, $document->getInformationDictionary()?->getCreator());
+        }
+
+        // creation date
+        if (null !== $fileInfo->creationDate) {
+            static::assertEquals($fileInfo->creationDate, $document->getInformationDictionary()?->getCreationDate());
+        }
+
+        // modification date
+        if (null !== $fileInfo->modificationDate) {
+            static::assertEquals($fileInfo->modificationDate, $document->getInformationDictionary()?->getModificationDate());
+        }
+
+        /*
+         * Check content related expectations
+         */
+        if (is_array($fileInfo->textPartsExpectedSomewhereInTheExtractedText)) {
+            foreach ($fileInfo->textPartsExpectedSomewhereInTheExtractedText as $textPart) {
+                static::assertStringContainsString($textPart, $document->getText());
+            }
+        }
+
+        /*
+         * Check content of pages (fulltext)
+         */
+        $pages = $fileInfo->pages ?? [];
+        static::assertSame(count($pages), $document->getNumberOfPages());
+
+        foreach ($pages as $index => $expectedPage) {
             static::assertNotNull($page = $document->getPage($index + 1));
             static::assertSame(trim($expectedPage->content), trim($page->getText()));
             foreach ($expectedPage->imagePaths as $imageIndex => $imagePath) {
