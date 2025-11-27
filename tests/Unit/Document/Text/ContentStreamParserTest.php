@@ -257,6 +257,24 @@ class ContentStreamParserTest extends TestCase {
         );
     }
 
+    public function testParseWithResourceNameFollowedByLineEnding(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            BT
+            /Artifact
+            ET
+            EOD
+        );
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+            ),
+            ContentStreamParser::parse([$decoratedObject])
+        );
+    }
+
     #[DataProvider('provideOperators')]
     public function testGetOperator(CompatibilityOperator|InlineImageOperator|MarkedContentOperator|TextObjectOperator|ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator $enumCase): void {
         static::assertSame(

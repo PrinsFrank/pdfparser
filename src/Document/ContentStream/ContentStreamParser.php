@@ -44,7 +44,7 @@ class ContentStreamParser {
                         $inStringLiteral = false;
                     }
                 } elseif ($inResourceName === true) {
-                    if (in_array($char, [' ', '<', '(', '/'], true) && $previousChar !== '\\') {
+                    if (in_array($char, [' ', '<', '(', '/', "\r", "\n"], true) && $previousChar !== '\\') {
                         $inResourceName = false;
                     }
                 } elseif ($char === '[' && $previousChar !== '\\') {
