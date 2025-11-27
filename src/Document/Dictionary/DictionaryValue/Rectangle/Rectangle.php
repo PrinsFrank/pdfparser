@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle;
 
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /** @api */
 class Rectangle implements DictionaryValue {
@@ -22,6 +23,9 @@ class Rectangle implements DictionaryValue {
             return null;
         }
 
+        $valueString = str_replace([' ', "\r", "\n"], ' ', $valueString);
+        $valueString = preg_replace('/\s+/', ' ', $valueString)
+            ?? throw new RuntimeException(preg_last_error_msg());
         $coords = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));
         if (count($coords) !== 4) {
             return null;
