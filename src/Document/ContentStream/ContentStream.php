@@ -87,7 +87,7 @@ class ContentStream {
             if ($previousPositionedTextElement !== null) {
                 if ($previousPositionedTextElement->absoluteMatrix->getAbsoluteY() !== $positionedTextElement->absoluteMatrix->getAbsoluteY()) {
                     $text .= "\n";
-                } elseif (($positionedTextElement->absoluteMatrix->getAbsoluteX() - $previousPositionedTextElement->absoluteMatrix->getAbsoluteX() - $positionedTextElement->getFont($document, $page)->getWidthForChars($previousPositionedTextElement->getCodePoints(), $previousPositionedTextElement->textState, $previousPositionedTextElement->absoluteMatrix)) >= ($previousPositionedTextElement->textState->fontSize ?? 10) * $previousPositionedTextElement->absoluteMatrix->scaleX * 0.40) {
+                } elseif (($positionedTextElement->absoluteMatrix->getAbsoluteX() - $previousPositionedTextElement->absoluteMatrix->getAbsoluteX() - $positionedTextElement->getFont($document, $page)->getWidthForChars($previousPositionedTextElement->getCodePoints(), $previousPositionedTextElement->textState, $previousPositionedTextElement->absoluteMatrix)) >= ($previousPositionedTextElement->textState->fontSize ?? 10) * $previousPositionedTextElement->absoluteMatrix->scaleX * 0.20 && str_ends_with($text, ' ') === false) {
                     $text .= ' ';
                 }
             }
