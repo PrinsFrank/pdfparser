@@ -5,13 +5,15 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array;
 
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /** @api */
 class ArrayValue implements DictionaryValue {
-    /** @param list<mixed> $value */
+    /** @param list<int|string|ArrayValue|ReferenceValueArray|null> $value */
     public function __construct(
         public readonly array $value
     ) {
@@ -47,5 +49,21 @@ class ArrayValue implements DictionaryValue {
         }
 
         return new self($array);
+    }
+
+    public function toString(): string {
+        $string = '';
+        foreach ($this->value as $value) {
+            $string .= ' ' . match (true) {
+                is_int($value),
+                is_float($value),
+                is_string($value) => $value,
+                $value instanceof ArrayValue => $value->toString(),
+                $value instanceof ReferenceValueArray => implode(' ', array_map(fn (ReferenceValue $referenceValue) => $referenceValue->objectNumber . ' R', $value->referenceValues)),
+                default => throw new ParseFailureException('Unsupported array value type: ' . gettype($value)),
+            };
+        }
+
+        return '[' . trim($string) . ']';
     }
 }

@@ -105,6 +105,13 @@ class XObject extends DecoratedObject {
             return new ColorSpace(false, $this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, $type) ?? throw new ParseFailureException(), null, null, null);
         }
 
+        if ($type === ArrayValue::class) {
+            $colorSpaceArray = $this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, ArrayValue::class)
+                ?? throw new ParseFailureException();
+
+            return ColorSpaceFactory::fromString($colorSpaceArray->toString(), $this->document);
+        }
+
         if ($type === ReferenceValue::class) {
             $colorSpaceObject = $this->getDictionary()->getObjectForReference($this->document, DictionaryKey::COLOR_SPACE)
                 ?? throw new ParseFailureException('Unable to retrieve colorspace object');

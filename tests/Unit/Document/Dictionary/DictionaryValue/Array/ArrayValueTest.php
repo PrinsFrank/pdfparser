@@ -5,6 +5,8 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\Dictionary\DictionaryValue\Ar
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 
 #[CoversClass(ArrayValue::class)]
 class ArrayValueTest extends TestCase {
@@ -47,6 +49,29 @@ class ArrayValueTest extends TestCase {
                 43 44]
                 EOD
             ),
+        );
+    }
+
+    public function testToString(): void {
+        static::assertSame(
+            '[]',
+            (new ArrayValue([]))->toString()
+        );
+        static::assertSame(
+            '[42 42 42]',
+            (new ArrayValue([42, 42, 42]))->toString()
+        );
+        static::assertSame(
+            '[/Foo /Bar]',
+            (new ArrayValue(['/Foo', '/Bar']))->toString()
+        );
+        static::assertSame(
+            '[[/Foo /Bar]]',
+            (new ArrayValue([new ArrayValue(['/Foo', '/Bar'])]))->toString()
+        );
+        static::assertSame(
+            '[42 R 43 R]',
+            (new ArrayValue([new ReferenceValueArray(new ReferenceValue(42, 0), new ReferenceValue(43, 0))]))->toString()
         );
     }
 }
