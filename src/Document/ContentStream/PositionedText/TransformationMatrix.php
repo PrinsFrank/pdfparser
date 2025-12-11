@@ -13,6 +13,14 @@ class TransformationMatrix {
     ) {
     }
 
+    public function getAbsoluteY(): float {
+        return $this->offsetY * $this->scaleY;
+    }
+
+    public function getAbsoluteX(): float {
+        return $this->offsetX * $this->scaleX;
+    }
+
     /** Please note that a concatenated transformation matrix of A B !== B A */
     public function multiplyWith(self $other): self {
         return new self(
