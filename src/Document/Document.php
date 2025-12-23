@@ -123,7 +123,7 @@ class Document {
 
             $objectItem = $parentObject->objectItem->getCompressedObject($objectNumber, $this);
         } else {
-            $objectItem = UncompressedObjectParser::parseObject($crossReferenceEntry, $objectNumber, $this->stream);
+            $objectItem = UncompressedObjectParser::parseObject($crossReferenceEntry, $this->crossReferenceSource->getByteOffsetNextInUseObject($crossReferenceEntry), $objectNumber, $this->stream);
         }
 
         return $this->objectCache[$objectNumber] = DecoratedObjectFactory::forItem($objectItem, $this, $expectedDecoratorFQN);

@@ -10,8 +10,13 @@ use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @internal */
 class UncompressedObjectParser {
-    public static function parseObject(CrossReferenceEntryInUseObject $crossReferenceEntry, int $objectNumber, Stream $stream): UncompressedObject {
-        $endObj = $stream->firstPos(Marker::END_OBJ, $crossReferenceEntry->byteOffsetInDecodedStream, $stream->getSizeInBytes()) ?? throw new ParseFailureException('Unable to locate end of object');
+    public static function parseObject(CrossReferenceEntryInUseObject $crossReferenceEntry, ?int $byteOffsetNextInUseObject, int $objectNumber, Stream $stream): UncompressedObject {
+        if ($byteOffsetNextInUseObject !== null) {
+            $endObj = $stream->lastPos(Marker::END_OBJ, $stream->getSizeInBytes() - $byteOffsetNextInUseObject) ?? throw new ParseFailureException('Unable to locate end of object');
+        } else {
+            $endObj = $stream->firstPos(Marker::END_OBJ, $crossReferenceEntry->byteOffsetInDecodedStream, $stream->getSizeInBytes()) ?? throw new ParseFailureException('Unable to locate end of object');
+        }
+
         $startObj = $stream->firstPos(Marker::OBJ, $crossReferenceEntry->byteOffsetInDecodedStream, $endObj) ?? throw new ParseFailureException('Unable to locate start of object');
         $objHeader = $stream->read($crossReferenceEntry->byteOffsetInDecodedStream, $startObj + Marker::OBJ->length() - $crossReferenceEntry->byteOffsetInDecodedStream);
         $objHeaderParts = explode(WhitespaceCharacter::SPACE->value, str_replace([WhitespaceCharacter::LINE_FEED->value], ' ', trim($objHeader)));
