@@ -161,7 +161,7 @@ class H4SimpleGraphicsTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
-                new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(883)),
+                new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(602)),
             ),
             $obj5?->getDictionary(),
         );

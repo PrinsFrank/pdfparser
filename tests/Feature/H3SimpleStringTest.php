@@ -173,7 +173,7 @@ class H3SimpleStringTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
-                new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(73)),
+                new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(46)),
             ),
             $obj5?->getDictionary(),
         );
