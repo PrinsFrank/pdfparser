@@ -29,13 +29,14 @@ class ToUnicodeCMap {
 
     /** @throws PdfParserException */
     public function textToUnicode(string $characterGroup): string {
-        return implode(
-            '',
-            array_map(
-                fn(string $character) => $this->charToUnicode((int) hexdec($character)) ?? '',
-                str_split($characterGroup, $this->byteSize * 2),
-            ),
-        );
+        $unicode = '';
+        $chunkSize = $this->byteSize * 2;
+        $nrOfChunks = strlen($characterGroup) / $chunkSize;
+        for ($i = 0; $i < $nrOfChunks; $i++) {
+            $unicode .= $this->charToUnicode((int) hexdec(substr($characterGroup, $i * $chunkSize, $chunkSize))) ?? '';
+        }
+
+        return $unicode;
     }
 
     /** @throws PdfParserException */
