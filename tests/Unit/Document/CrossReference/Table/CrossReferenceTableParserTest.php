@@ -19,13 +19,29 @@ class CrossReferenceTableParserTest extends TestCase {
      * The following line introduces a subsection containing five objects numbered consecutively from 28 to 32.
      */
     public function testParseExample1(): void {
-        $stream = new InMemoryStream(
-            <<<EOD
-            28 5
-            trailer
-
-            EOD,
+        $stream = new InMemoryStream("28 5\ntrailer\n");
+        static::assertEquals(
+            new CrossReferenceSection(
+                new Dictionary(),
+                new CrossReferenceSubSection(28, 5),
+            ),
+            CrossReferenceTableParser::parse($stream, 0, $stream->getSizeInBytes()),
         );
+    }
+
+    public function testParseExample1CarriageReturns(): void {
+        $stream = new InMemoryStream("28 5\rtrailer\r");
+        static::assertEquals(
+            new CrossReferenceSection(
+                new Dictionary(),
+                new CrossReferenceSubSection(28, 5),
+            ),
+            CrossReferenceTableParser::parse($stream, 0, $stream->getSizeInBytes()),
+        );
+    }
+
+    public function testParseExample1NewLineAndCarriageReturns(): void {
+        $stream = new InMemoryStream("28 5\n\rtrailer\n\r");
         static::assertEquals(
             new CrossReferenceSection(
                 new Dictionary(),
