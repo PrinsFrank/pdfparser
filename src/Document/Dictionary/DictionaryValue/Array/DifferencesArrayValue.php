@@ -12,8 +12,7 @@ class DifferencesArrayValue implements DictionaryValue {
     /** @param list<DifferenceRange> $differenceRanges */
     public function __construct(
         private readonly array $differenceRanges,
-    ) {
-    }
+    ) {}
 
     #[Override]
     public static function fromValue(string $valueString): ?self {

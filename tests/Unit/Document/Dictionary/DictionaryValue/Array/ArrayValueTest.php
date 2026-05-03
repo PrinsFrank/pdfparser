@@ -47,7 +47,7 @@ class ArrayValueTest extends TestCase {
                 <<<EOD
                 [42
                 43 44]
-                EOD
+                EOD,
             ),
         );
     }
@@ -55,23 +55,23 @@ class ArrayValueTest extends TestCase {
     public function testToString(): void {
         static::assertSame(
             '[]',
-            (new ArrayValue([]))->toString()
+            (new ArrayValue([]))->toString(),
         );
         static::assertSame(
             '[42 42 42]',
-            (new ArrayValue([42, 42, 42]))->toString()
+            (new ArrayValue([42, 42, 42]))->toString(),
         );
         static::assertSame(
             '[/Foo /Bar]',
-            (new ArrayValue(['/Foo', '/Bar']))->toString()
+            (new ArrayValue(['/Foo', '/Bar']))->toString(),
         );
         static::assertSame(
             '[[/Foo /Bar]]',
-            (new ArrayValue([new ArrayValue(['/Foo', '/Bar'])]))->toString()
+            (new ArrayValue([new ArrayValue(['/Foo', '/Bar'])]))->toString(),
         );
         static::assertSame(
             '[42 R 43 R]',
-            (new ArrayValue([new ReferenceValueArray(new ReferenceValue(42, 0), new ReferenceValue(43, 0))]))->toString()
+            (new ArrayValue([new ReferenceValueArray(new ReferenceValue(42, 0), new ReferenceValue(43, 0))]))->toString(),
         );
     }
 }

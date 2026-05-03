@@ -10,9 +10,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 class ReferenceValue implements DictionaryValue {
     public function __construct(
         public readonly int $objectNumber,
-        public readonly int $versionNumber
-    ) {
-    }
+        public readonly int $versionNumber,
+    ) {}
 
     #[Override]
     public static function fromValue(string $valueString): ?self {

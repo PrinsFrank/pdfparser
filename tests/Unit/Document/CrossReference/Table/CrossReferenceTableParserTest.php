@@ -24,7 +24,7 @@ class CrossReferenceTableParserTest extends TestCase {
             28 5
             trailer
 
-            EOD
+            EOD,
         );
         static::assertEquals(
             new CrossReferenceSection(
@@ -53,7 +53,7 @@ class CrossReferenceTableParserTest extends TestCase {
             0000000409 00000 n
             trailer
 
-            EOD
+            EOD,
         );
         static::assertEquals(
             new CrossReferenceSection(
@@ -96,7 +96,7 @@ class CrossReferenceTableParserTest extends TestCase {
             0000025777 00000 n
             trailer
 
-            EOD
+            EOD,
         );
         static::assertEquals(
             new CrossReferenceSection(

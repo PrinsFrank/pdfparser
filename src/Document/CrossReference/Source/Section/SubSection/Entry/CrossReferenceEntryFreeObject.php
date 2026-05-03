@@ -8,6 +8,5 @@ class CrossReferenceEntryFreeObject {
     public function __construct(
         public readonly int $objectNumberNextFreeObject,
         public readonly int $generationNumber,
-    ) {
-    }
+    ) {}
 }

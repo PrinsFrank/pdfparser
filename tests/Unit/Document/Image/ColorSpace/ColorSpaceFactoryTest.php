@@ -86,7 +86,7 @@ class ColorSpaceFactoryTest extends TestCase {
         $document = $this->createMock(Document::class);
         $document->expects(self::exactly(2))
             ->method('getObject')
-            ->willReturnCallback(static fn (int $id) => match ($id) {
+            ->willReturnCallback(static fn(int $id) => match ($id) {
                 14 => $colorSpaceObject,
                 18 => $lutObject,
                 default => throw new Exception(sprintf('Unexpected id %d', $id)),
@@ -113,7 +113,7 @@ class ColorSpaceFactoryTest extends TestCase {
         $document = $this->createMock(Document::class);
         $document->expects(self::once())
             ->method('getObject')
-            ->willReturnCallback(static fn (int $id) => match ($id) {
+            ->willReturnCallback(static fn(int $id) => match ($id) {
                 41 => $colorSpaceObject,
                 default => throw new Exception(sprintf('Unexpected id %d', $id)),
             });

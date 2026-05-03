@@ -14,6 +14,5 @@ class DictionaryEntry {
     public function __construct(
         public readonly DictionaryKey|ExtendedDictionaryKey $key,
         public readonly DictionaryValue|Dictionary|NameValue $value,
-    ) {
-    }
+    ) {}
 }

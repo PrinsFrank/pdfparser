@@ -257,10 +257,10 @@ class Font extends DecoratedObject {
             $firstChar,
             array_values(
                 array_map(
-                    fn (mixed $width): float => is_numeric($width) ? (float) $width : throw new InvalidArgumentException(sprintf('"%s" is not a valid width', ($jsonEncoded = json_encode($width)) !== false ? $jsonEncoded : 'value')),
+                    fn(mixed $width): float => is_numeric($width) ? (float) $width : throw new InvalidArgumentException(sprintf('"%s" is not a valid width', ($jsonEncoded = json_encode($width)) !== false ? $jsonEncoded : 'value')),
                     array_filter(
                         $widthsArray,
-                        fn (mixed $item) => $item !== '',
+                        fn(mixed $item) => $item !== '',
                     ),
                 ),
             ),

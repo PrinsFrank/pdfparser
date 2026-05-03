@@ -73,7 +73,7 @@ class H4SimpleGraphicsTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
             ),
-            $obj1?->getDictionary()
+            $obj1?->getDictionary(),
         );
         $obj2 = $document->getObject(2);
         static::assertEquals(
@@ -93,7 +93,7 @@ class H4SimpleGraphicsTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
                 new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
             ),
-            $obj2?->getDictionary()
+            $obj2?->getDictionary(),
         );
         $obj3 = $document->getObject(3);
         static::assertEquals(
@@ -114,7 +114,7 @@ class H4SimpleGraphicsTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
                 new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
             ),
-            $obj3?->getDictionary()
+            $obj3?->getDictionary(),
         );
         $obj4 = $document->getObject(4);
         static::assertEquals(
@@ -139,7 +139,7 @@ class H4SimpleGraphicsTest extends TestCase {
                     new DictionaryEntry(DictionaryKey::PROC_SET, new ReferenceValue(6, 0)),
                 )),
             ),
-            $obj4?->getDictionary()
+            $obj4?->getDictionary(),
         );
         $obj5 = $document->getObject(5);
         static::assertEquals(
@@ -158,7 +158,7 @@ class H4SimpleGraphicsTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(883)),
             ),
-            $obj5?->getDictionary()
+            $obj5?->getDictionary(),
         );
         $obj6 = $document->getObject(6);
         static::assertEquals(
@@ -169,7 +169,7 @@ class H4SimpleGraphicsTest extends TestCase {
                     952,
                     975,
                 ),
-                $document
+                $document,
             ),
             $obj6,
         );
@@ -187,7 +187,7 @@ class H4SimpleGraphicsTest extends TestCase {
                 ),
                 $document,
             ),
-            $document->getCatalog()
+            $document->getCatalog(),
         );
         static::assertEquals(null, $document->getInformationDictionary());
     }

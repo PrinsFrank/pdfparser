@@ -11,8 +11,7 @@ class BFRange {
         public readonly int   $sourceCodeStart,
         public readonly int   $sourceCodeEnd,
         public readonly array $destinationCodePoints,
-    ) {
-    }
+    ) {}
 
     public function containsCharacterCode(int $characterCode): bool {
         return $characterCode >= $this->sourceCodeStart

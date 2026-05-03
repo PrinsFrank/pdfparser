@@ -30,8 +30,7 @@ class UncompressedObject implements ObjectItem {
         public readonly int $generationNumber,
         public readonly int $startOffset,
         public readonly int $endOffset,
-    ) {
-    }
+    ) {}
 
     #[Override]
     public function getDictionary(Document $document): Dictionary {
@@ -78,7 +77,7 @@ class UncompressedObject implements ObjectItem {
             $document->stream,
             $this->startOffset,
             $this->endOffset,
-            $dictionary
+            $dictionary,
         );
     }
 
@@ -106,7 +105,7 @@ class UncompressedObject implements ObjectItem {
             $document->stream->read(
                 $nextLineAfterStartObj,
                 $eolObjContent - $nextLineAfterStartObj,
-            )
+            ),
         );
     }
 }

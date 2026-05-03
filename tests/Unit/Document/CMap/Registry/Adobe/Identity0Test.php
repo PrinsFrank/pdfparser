@@ -16,7 +16,7 @@ class Identity0Test extends TestCase {
             new ToUnicodeCMap(
                 [new CodeSpaceRange(0x0000, 0xFFFF)],
                 2,
-                new BFRange(0x0000, 0xFFFF, ['0000'])
+                new BFRange(0x0000, 0xFFFF, ['0000']),
             ),
             (new Identity0())->getToUnicodeCMap(),
         );

@@ -168,7 +168,7 @@ class ContentStreamTest extends TestCase {
             ([Hello) Tj
             (World]) Tj
             ET
-            EOD
+            EOD,
         );
         $decoratedObject = $this->createMock(GenericObject::class);
         $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);

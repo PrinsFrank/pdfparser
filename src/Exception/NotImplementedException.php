@@ -2,5 +2,4 @@
 
 namespace PrinsFrank\PdfParser\Exception;
 
-class NotImplementedException extends PdfParserException {
-}
+class NotImplementedException extends PdfParserException {}

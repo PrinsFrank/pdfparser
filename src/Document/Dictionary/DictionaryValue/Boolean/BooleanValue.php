@@ -9,8 +9,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 class BooleanValue implements DictionaryValue {
     public function __construct(
         public readonly bool $value,
-    ) {
-    }
+    ) {}
 
     #[Override]
     public static function fromValue(string $valueString): ?self {

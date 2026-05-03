@@ -12,8 +12,7 @@ class CrossReferenceStreamByteSizes implements DictionaryValue {
         public readonly int $lengthRecord1InBytes,
         public readonly int $lengthRecord2InBytes,
         public readonly int $lengthRecord3InBytes,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws RuntimeException

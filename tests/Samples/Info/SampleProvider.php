@@ -42,13 +42,13 @@ class SampleProvider {
                     $content->modificationDate,
                     array_map(
                         /** @param object{content: string, images?: string[]} $page */
-                        fn (object $page) => new Page(
+                        fn(object $page) => new Page(
                             $page->content,
-                            array_values(array_map(fn (string $relativePath) => sprintf('%s/images/%s', $sampleFolder, $relativePath), $page->images ?? []))
+                            array_values(array_map(fn(string $relativePath) => sprintf('%s/images/%s', $sampleFolder, $relativePath), $page->images ?? [])),
                         ),
-                        $content->pages
+                        $content->pages,
                     ),
-                )
+                ),
             ];
         }
     }

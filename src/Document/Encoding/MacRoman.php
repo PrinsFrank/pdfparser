@@ -16,7 +16,7 @@ class MacRoman implements Encoding {
         $string = iconv(
             'macintosh',
             'UTF-8//TRANSLIT',
-            $string
+            $string,
         );
 
         if ($string === false) {

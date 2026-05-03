@@ -10,8 +10,7 @@ class TransformationMatrix {
         public readonly float $scaleY,  // d
         public readonly float $offsetX, // e
         public readonly float $offsetY, // f
-    ) {
-    }
+    ) {}
 
     /** Please note that a concatenated transformation matrix of A B !== B A */
     public function multiplyWith(self $other): self {

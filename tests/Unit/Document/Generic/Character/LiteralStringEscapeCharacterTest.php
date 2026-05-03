@@ -16,8 +16,8 @@ class LiteralStringEscapeCharacterTest extends TestCase {
                 These \
                 two strings \
                 are the same.
-                EOD
-            )
+                EOD,
+            ),
         );
     }
 
@@ -50,7 +50,7 @@ class LiteralStringEscapeCharacterTest extends TestCase {
     public function testUnescapeOctalCharactersExample4(): void {
         static::assertSame(
             'This string contains ¥two octal charactersÇ.',
-            LiteralStringEscapeCharacter::unescapeCharacters('This string contains \245two octal characters\307.')
+            LiteralStringEscapeCharacter::unescapeCharacters('This string contains \245two octal characters\307.'),
         );
     }
 

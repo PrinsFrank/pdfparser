@@ -10,17 +10,16 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 /** @api */
 class TextStringValue implements DictionaryValue {
     public function __construct(
-        public readonly string $textStringValue
-    ) {
-    }
+        public readonly string $textStringValue,
+    ) {}
 
     /** @throws ParseFailureException */
     public function getText(): string {
         if (str_starts_with($this->textStringValue, '(') && str_ends_with($this->textStringValue, ')')) {
             return preg_replace_callback(
                 '/\\\\([0-7]{3})/',
-                fn (array $matches) => mb_chr((int) octdec($matches[1])),
-                str_replace(['\(', '\)', '\n', '\r'], ['(', ')', "\n", "\r"], substr($this->textStringValue, 1, -1))
+                fn(array $matches) => mb_chr((int) octdec($matches[1])),
+                str_replace(['\(', '\)', '\n', '\r'], ['(', ')', "\n", "\r"], substr($this->textStringValue, 1, -1)),
             ) ?? throw new ParseFailureException();
         }
 
@@ -33,16 +32,16 @@ class TextStringValue implements DictionaryValue {
             return implode(
                 '',
                 array_map(
-                    fn (string $character) => mb_chr((int) hexdec($character)),
-                    str_split($string, 4)
-                )
+                    fn(string $character) => mb_chr((int) hexdec($character)),
+                    str_split($string, 4),
+                ),
             );
         }
 
         if (str_starts_with($this->textStringValue, '/')) {
             return preg_replace_callback(
                 '/#([0-9A-F]{2})/',
-                fn (array $matches) => chr((int) hexdec($matches[1])),
+                fn(array $matches) => chr((int) hexdec($matches[1])),
                 $this->textStringValue,
             ) ?? throw new ParseFailureException();
         }

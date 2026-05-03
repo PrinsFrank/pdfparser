@@ -14,17 +14,17 @@ class ColorSpaceTest extends TestCase {
         static::assertSame(
             Components::RGB,
             (new ColorSpace(true, DeviceColorSpaceNameValue::DeviceRGB, null, null, null))
-                ->getComponents()
+                ->getComponents(),
         );
         static::assertSame(
             Components::CMYK,
             (new ColorSpace(true, DeviceColorSpaceNameValue::DeviceCMYK, null, null, null))
-                ->getComponents()
+                ->getComponents(),
         );
         static::assertSame(
             Components::Gray,
             (new ColorSpace(true, DeviceColorSpaceNameValue::DeviceGray, null, null, null))
-                ->getComponents()
+                ->getComponents(),
         );
     }
 }

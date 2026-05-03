@@ -16,17 +16,17 @@ class DictionaryEntryFactoryTest extends TestCase {
     public function testFromKeyValuePair(): void {
         static::assertEquals(
             new DictionaryEntry(DictionaryKey::TABS, TabsNameValue::StructureOrder),
-            DictionaryEntryFactory::fromKeyValuePair('/Tabs', 'S')
+            DictionaryEntryFactory::fromKeyValuePair('/Tabs', 'S'),
         );
         static::assertEquals(
             new DictionaryEntry(DictionaryKey::TABS, new TextStringValue('(S)')),
             DictionaryEntryFactory::fromKeyValuePair('/Tabs', '(S)'),
-            'Bug in LibreOffice: https://bugs.documentfoundation.org/show_bug.cgi?id=155228'
+            'Bug in LibreOffice: https://bugs.documentfoundation.org/show_bug.cgi?id=155228',
         );
         static::assertEquals(
             new DictionaryEntry(DictionaryKey::VERSION, Version::V1_5),
             DictionaryEntryFactory::fromKeyValuePair('/Version', '/1#2E5'),
-            'Support for hex values in name objects, see #7.3.5'
+            'Support for hex values in name objects, see #7.3.5',
         );
     }
 }

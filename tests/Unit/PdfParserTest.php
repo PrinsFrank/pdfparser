@@ -15,7 +15,7 @@ class PdfParserTest extends TestCase {
             ' Hello World ',
             (new PdfParser())
                 ->parseString(
-                    $fileContent
+                    $fileContent,
                 )->getText(),
         );
     }
@@ -37,9 +37,9 @@ class PdfParserTest extends TestCase {
             ' Hello World ',
             (new PdfParser())
                 ->parseFile(
-                    dirname(__DIR__) . '/Feature/samples/h3-simple-string.pdf'
+                    dirname(__DIR__) . '/Feature/samples/h3-simple-string.pdf',
                 )
-                ->getText()
+                ->getText(),
         );
     }
 
@@ -49,9 +49,9 @@ class PdfParserTest extends TestCase {
             (new PdfParser())
                 ->parseFile(
                     dirname(__DIR__) . '/Feature/samples/h3-simple-string.pdf',
-                    false
+                    false,
                 )
-                ->getText()
+                ->getText(),
         );
     }
 

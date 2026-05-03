@@ -17,11 +17,10 @@ class ColorSpace {
     public function __construct(
         public readonly bool $isIndexed,
         public readonly DeviceColorSpaceNameValue|CIEColorSpaceNameValue|SpecialColorSpaceNameValue $nameValue,
-        public readonly DecoratedObject|null $LUTObj,
-        public readonly string|null $fallbackLUT,
+        public readonly ?DecoratedObject $LUTObj,
+        public readonly ?string $fallbackLUT,
         public readonly ?int $maxIndexLUT,
-    ) {
-    }
+    ) {}
 
     public function getComponents(): Components {
         if (isset($this->components)) {
@@ -37,7 +36,7 @@ class ColorSpace {
                 $this->LUTObj
                     ->getDictionary()
                     ->getValueForKey(DictionaryKey::N, IntegerValue::class)
-                    ->value ?? throw new RuntimeException('Unable to determine number of components for color space')
+                    ->value ?? throw new RuntimeException('Unable to determine number of components for color space'),
             ) ?? throw new ParseFailureException('Unable to determine number of components for color space');
         }
 

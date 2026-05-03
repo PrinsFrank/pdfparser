@@ -13,15 +13,15 @@ class TextStateOperatorTest extends TestCase {
     public function testApplyToTextState(): void {
         static::assertEquals(
             new TextState(new ExtendedDictionaryKey('F0'), 12, 0, 0, 100, 0, 0, 0),
-            TextStateOperator::FONT_SIZE->applyToTextState('/F0 12', null)
+            TextStateOperator::FONT_SIZE->applyToTextState('/F0 12', null),
         );
         static::assertEquals(
             new TextState(new ExtendedDictionaryKey('F0'), -12, 0, 0, 100, 0, 0, 0),
-            TextStateOperator::FONT_SIZE->applyToTextState('/F0 -12', null)
+            TextStateOperator::FONT_SIZE->applyToTextState('/F0 -12', null),
         );
         static::assertEquals(
             new TextState(new ExtendedDictionaryKey('F2+0'), 12, 0, 0, 100, 0, 0, 0),
-            TextStateOperator::FONT_SIZE->applyToTextState('/F2+0 12', null)
+            TextStateOperator::FONT_SIZE->applyToTextState('/F2+0 12', null),
         );
     }
 }

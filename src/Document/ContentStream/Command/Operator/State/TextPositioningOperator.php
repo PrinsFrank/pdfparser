@@ -34,7 +34,7 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
                 $transformationMatrix->shearY,
                 $transformationMatrix->scaleY,
                 $transformationMatrix->offsetX + (float) $offsets[0],
-                $transformationMatrix->offsetY + (float) $offsets[1]
+                $transformationMatrix->offsetY + (float) $offsets[1],
             );
         }
 

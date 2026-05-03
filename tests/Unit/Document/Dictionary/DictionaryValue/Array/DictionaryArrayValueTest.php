@@ -21,31 +21,31 @@ class DictionaryArrayValueTest extends TestCase {
         static::assertNull(DictionaryArrayValue::fromValue('[]'));
         static::assertEquals(
             new DictionaryArrayValue(new Dictionary()),
-            DictionaryArrayValue::fromValue('[null]')
+            DictionaryArrayValue::fromValue('[null]'),
         );
         static::assertEquals(
             new DictionaryArrayValue(new Dictionary()),
-            DictionaryArrayValue::fromValue('[<<>>]')
+            DictionaryArrayValue::fromValue('[<<>>]'),
         );
         static::assertEquals(
             new DictionaryArrayValue(new Dictionary()),
-            DictionaryArrayValue::fromValue('[ <<>> ]')
+            DictionaryArrayValue::fromValue('[ <<>> ]'),
         );
         static::assertEquals(
             new DictionaryArrayValue(new Dictionary(), new Dictionary()),
-            DictionaryArrayValue::fromValue('[<<>> <<>>]')
+            DictionaryArrayValue::fromValue('[<<>> <<>>]'),
         );
         static::assertEquals(
             new DictionaryArrayValue(new Dictionary(), new Dictionary()),
-            DictionaryArrayValue::fromValue('[null <<>> <<>>]')
+            DictionaryArrayValue::fromValue('[null <<>> <<>>]'),
         );
         static::assertEquals(
             new DictionaryArrayValue(new Dictionary(), new Dictionary()),
-            DictionaryArrayValue::fromValue('[<<>> <<>> null]')
+            DictionaryArrayValue::fromValue('[<<>> <<>> null]'),
         );
         static::assertEquals(
             new DictionaryArrayValue(new Dictionary(new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(106))), new Dictionary(new DictionaryEntry(DictionaryKey::TITLE, new TextStringValue('(Foo)')))),
-            DictionaryArrayValue::fromValue('[<</Length 106>> <</Title(Foo)>>]')
+            DictionaryArrayValue::fromValue('[<</Length 106>> <</Title(Foo)>>]'),
         );
         static::assertEquals(
             new DictionaryArrayValue(
@@ -56,9 +56,9 @@ class DictionaryArrayValueTest extends TestCase {
                     new DictionaryEntry(new ExtendedDictionaryKey('RegistryName'), new TextStringValue('(http://www.color.org)')),
                     new DictionaryEntry(DictionaryKey::INFO, new TextStringValue('(Creator: HP     Manufacturer:IEC    Model:sRGB)')),
                     new DictionaryEntry(new ExtendedDictionaryKey('DestOutputProfile'), new ReferenceValue(361, 0)),
-                )
+                ),
             ),
-            DictionaryArrayValue::fromValue('[<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier(sRGB) /RegistryName(http://www.color.org) /Info(Creator: HP     Manufacturer:IEC    Model:sRGB) /DestOutputProfile 361 0 R>>]')
+            DictionaryArrayValue::fromValue('[<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier(sRGB) /RegistryName(http://www.color.org) /Info(Creator: HP     Manufacturer:IEC    Model:sRGB) /DestOutputProfile 361 0 R>>]'),
         );
     }
 }

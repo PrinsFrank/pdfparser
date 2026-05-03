@@ -13,9 +13,8 @@ use ValueError;
 /** @api */
 class DateValue implements DictionaryValue {
     public function __construct(
-        public readonly ?DateTimeImmutable $value
-    ) {
-    }
+        public readonly ?DateTimeImmutable $value,
+    ) {}
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
@@ -34,8 +33,8 @@ class DateValue implements DictionaryValue {
         if (str_starts_with($valueString, '(') && str_ends_with($valueString, ')')) {
             $valueString = preg_replace_callback(
                 '/\\\\([0-7]{3})/',
-                fn (array $matches) => mb_chr((int) octdec($matches[1])),
-                substr($valueString, 1, -1)
+                fn(array $matches) => mb_chr((int) octdec($matches[1])),
+                substr($valueString, 1, -1),
             ) ?? throw new ParseFailureException();
         }
 
@@ -49,7 +48,7 @@ class DateValue implements DictionaryValue {
         try {
             $parsedDate = DateTimeImmutable::createFromFormat(
                 preg_match('/^D:\d{14}$/', $valueString) === 1 ? '\D\:YmdHis' : '\D\:YmdHisP',
-                str_replace("'", '', $valueString)
+                str_replace("'", '', $valueString),
             );
         } catch (ValueError) {
             return null;

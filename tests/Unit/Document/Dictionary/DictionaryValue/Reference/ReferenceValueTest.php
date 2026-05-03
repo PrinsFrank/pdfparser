@@ -19,7 +19,7 @@ class ReferenceValueTest extends TestCase {
         static::assertNull(ReferenceValue::fromValue('42 A R'));
         static::assertEquals(
             new ReferenceValue(42, 0),
-            ReferenceValue::fromValue('42 0 R')
+            ReferenceValue::fromValue('42 0 R'),
         );
     }
 }

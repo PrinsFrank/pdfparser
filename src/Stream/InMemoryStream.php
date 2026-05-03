@@ -11,9 +11,8 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 class InMemoryStream extends AbstractStream {
     public function __construct(
-        private readonly string $content
-    ) {
-    }
+        private readonly string $content,
+    ) {}
 
     #[Override]
     public function getSizeInBytes(): int {

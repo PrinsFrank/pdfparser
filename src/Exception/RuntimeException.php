@@ -2,5 +2,4 @@
 
 namespace PrinsFrank\PdfParser\Exception;
 
-class RuntimeException extends PdfParserException {
-}
+class RuntimeException extends PdfParserException {}

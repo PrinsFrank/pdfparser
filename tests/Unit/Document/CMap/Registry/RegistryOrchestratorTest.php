@@ -17,29 +17,29 @@ class RegistryOrchestratorTest extends TestCase {
             RegistryOrchestrator::getForRegistryOrderingSupplement(
                 new TextStringValue('(Adobe)'),
                 new TextStringValue('(Identity)'),
-                new IntegerValue(0)
-            )
+                new IntegerValue(0),
+            ),
         );
         static::assertNull(
             RegistryOrchestrator::getForRegistryOrderingSupplement(
                 new TextStringValue('(Adobe)'),
                 new TextStringValue('(Identity)'),
-                new IntegerValue(1)
-            )
+                new IntegerValue(1),
+            ),
         );
         static::assertNull(
             RegistryOrchestrator::getForRegistryOrderingSupplement(
                 new TextStringValue('(Adobe2)'),
                 new TextStringValue('(Identity)'),
-                new IntegerValue(0)
-            )
+                new IntegerValue(0),
+            ),
         );
         static::assertNull(
             RegistryOrchestrator::getForRegistryOrderingSupplement(
                 new TextStringValue('(Adobe)'),
                 new TextStringValue('(Identity2)'),
-                new IntegerValue(0)
-            )
+                new IntegerValue(0),
+            ),
         );
     }
 }

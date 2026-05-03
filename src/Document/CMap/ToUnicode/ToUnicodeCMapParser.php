@@ -73,9 +73,9 @@ class ToUnicodeCMapParser {
                     (int) hexdec(trim($matchBFRange['start'])),
                     (int) hexdec(trim($matchBFRange['end'])),
                     array_map(
-                        fn (string $value) => trim($value),
-                        explode('><', rtrim(ltrim(str_replace(' ', '', $matchBFRange['targetString']), '[<'), '>]'))
-                    )
+                        fn(string $value) => trim($value),
+                        explode('><', rtrim(ltrim(str_replace(' ', '', $matchBFRange['targetString']), '[<'), '>]')),
+                    ),
                 );
             }
             $lastPos = $endBFRangePos;
@@ -85,7 +85,7 @@ class ToUnicodeCMapParser {
         return new ToUnicodeCMap(
             $codeSpaceRanges,
             $byteSize !== null ? $byteSize : 2,
-            ...array_merge(...$bfCharRangeInfo)
+            ...array_merge(...$bfCharRangeInfo),
         );
     }
 }

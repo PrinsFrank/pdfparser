@@ -17,6 +17,5 @@ class FileInfo {
         public readonly ?DateTimeImmutable $creationDate,
         public readonly ?DateTimeImmutable $modificationDate,
         public readonly ?array $pages,
-    ) {
-    }
+    ) {}
 }

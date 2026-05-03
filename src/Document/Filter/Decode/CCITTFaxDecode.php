@@ -4,9 +4,7 @@ namespace PrinsFrank\PdfParser\Document\Filter\Decode;
 
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
-/**
- * See Section 7.4.6
- */
+/** See Section 7.4.6 */
 class CCITTFaxDecode {
     private const BYTE_ORDER_LITTLE_ENDIAN = 'II';
     private const MAGIC_NUMBER_TIFF = 42;

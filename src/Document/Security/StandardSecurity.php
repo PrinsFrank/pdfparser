@@ -14,10 +14,11 @@ class StandardSecurity {
     private const PASSWORD_LENGTH = 32;
 
     public function __construct(
-        #[SensitiveParameter] private ?string $userPassword = null,
-        #[SensitiveParameter] private readonly ?string $ownerPassword = null,
-    ) {
-    }
+        #[SensitiveParameter]
+        private ?string $userPassword = null,
+        #[SensitiveParameter]
+        private readonly ?string $ownerPassword = null,
+    ) {}
 
     /** @see 7.6.4.4.3, 7.6.4.4.4 and 7.6.4.4.5 */
     public function isUserPasswordValid(EncryptDictionary $encryptDictionary, string $firstID): bool {
@@ -35,8 +36,8 @@ class StandardSecurity {
             for ($i = 1; $i <= 19; $i++) {
                 $encryptedHash = RC4::crypt(
                     implode('', array_map(
-                        fn ($c) => chr(ord($c) ^ $i),
-                        str_split($fileEncryptionKey)
+                        fn($c) => chr(ord($c) ^ $i),
+                        str_split($fileEncryptionKey),
                     )),
                     $encryptedHash,
                 );
@@ -60,8 +61,8 @@ class StandardSecurity {
             for ($i = 19; $i >= 0; $i--) {
                 $userPassword = RC4::crypt(
                     implode('', array_map(
-                        fn ($c) => chr(ord($c) ^ $i),
-                        str_split($fileEncryptionKey)
+                        fn($c) => chr(ord($c) ^ $i),
+                        str_split($fileEncryptionKey),
                     )),
                     $userPassword,
                 );
@@ -91,8 +92,8 @@ class StandardSecurity {
             throw new ParseFailureException('Unsupported file encryption key length in bits: ' . $fileEncryptionKeyLengthInBits);
         }
 
-        $hashedString =
-            $this->getPaddedUserPassword() // step a+b
+        $hashedString
+            = $this->getPaddedUserPassword() // step a+b
             . $encryptDictionary->getOwnerPasswordEntry() // step c
             . pack('V', $encryptDictionary->getPValue()) // step d
             . $firstIDValue; // step e

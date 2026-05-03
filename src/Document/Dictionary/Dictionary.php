@@ -25,7 +25,7 @@ class Dictionary {
 
     /** @no-named-arguments */
     public function __construct(
-        DictionaryEntry... $dictionaryEntries
+        DictionaryEntry... $dictionaryEntries,
     ) {
         $this->dictionaryEntries = $dictionaryEntries;
     }

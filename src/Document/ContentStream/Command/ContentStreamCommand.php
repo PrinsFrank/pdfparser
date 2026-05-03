@@ -22,7 +22,6 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\XObjectOp
 class ContentStreamCommand {
     public function __construct(
         public readonly CompatibilityOperator|InlineImageOperator|MarkedContentOperator|TextObjectOperator|ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator $operator,
-        public readonly string $operands
-    ) {
-    }
+        public readonly string $operands,
+    ) {}
 }

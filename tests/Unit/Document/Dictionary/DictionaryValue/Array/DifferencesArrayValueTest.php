@@ -13,7 +13,7 @@ class DifferencesArrayValueTest extends TestCase {
     public function testFromValue(): void {
         static::assertEquals(
             new DifferencesArrayValue([]),
-            DifferencesArrayValue::fromValue('[]')
+            DifferencesArrayValue::fromValue('[]'),
         );
         static::assertEquals(
             new DifferencesArrayValue(
@@ -21,7 +21,7 @@ class DifferencesArrayValueTest extends TestCase {
                     new DifferenceRange(0, [AGlyphList::quotesingle, AGlyphList::grave]),
                 ],
             ),
-            DifferencesArrayValue::fromValue('[0 /quotesingle /grave]')
+            DifferencesArrayValue::fromValue('[0 /quotesingle /grave]'),
         );
         static::assertEquals(
             new DifferencesArrayValue(
@@ -30,7 +30,7 @@ class DifferencesArrayValueTest extends TestCase {
                     new DifferenceRange(36, [AGlyphList::grave]),
                 ],
             ),
-            DifferencesArrayValue::fromValue('[0 /quotesingle 36 /grave]')
+            DifferencesArrayValue::fromValue('[0 /quotesingle 36 /grave]'),
         );
     }
 

@@ -8,6 +8,5 @@ class CrossReferenceEntryInUseObject {
     public function __construct(
         public readonly int $byteOffsetInDecodedStream,
         public readonly int $generationNumber,
-    ) {
-    }
+    ) {}
 }

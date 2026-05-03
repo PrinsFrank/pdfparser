@@ -9,8 +9,7 @@ class BFChar {
     public function __construct(
         public readonly int $sourceCode,
         public readonly string $destinationString,
-    ) {
-    }
+    ) {}
 
     public function containsCharacterCode(int $characterCode): bool {
         return $characterCode === $this->sourceCode;
