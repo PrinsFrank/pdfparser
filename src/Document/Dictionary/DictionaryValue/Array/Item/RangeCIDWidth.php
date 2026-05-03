@@ -7,8 +7,7 @@ class RangeCIDWidth {
         public readonly int $cidStart,
         public readonly int $cidEnd,
         public readonly float $width,
-    ) {
-    }
+    ) {}
 
     public function getWidthForCharacterCode(int $characterCode): ?float {
         if ($characterCode < $this->cidStart || $characterCode > $this->cidEnd) {

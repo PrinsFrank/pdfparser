@@ -53,7 +53,7 @@ class CIDFontWidths implements DictionaryValue {
                 return null;
             }
 
-            if ((string)($endCID = (int) $arguments[0]) !== $arguments[0] || (string)($width = (float) $arguments[1]) !== $arguments[1]) {
+            if ((string) ($endCID = (int) $arguments[0]) !== $arguments[0] || (string) ($width = (float) $arguments[1]) !== $arguments[1]) {
                 return null;
             }
 

@@ -47,7 +47,7 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
         return new PositionedTextElement(
             $operands,
             $globalTransformationMatrix->multiplyWith($textMatrix),
-            $textState
+            $textState,
         );
     }
 }

@@ -41,7 +41,7 @@ class FlateDecode {
             throw new ParseFailureException('Unsupported predictor ' . $predictor->value);
         }
 
-        $hexTable = array_map(fn (string $row) => str_split($row, 2), str_split(bin2hex($decodedValue), ($columns + 1) * 2));
+        $hexTable = array_map(fn(string $row) => str_split($row, 2), str_split(bin2hex($decodedValue), ($columns + 1) * 2));
         $decodedValue = '';
         foreach ($hexTable as $rowIndex => $row) {
             if (!is_array($row) || !array_is_list($row) || count($row) < 2) {

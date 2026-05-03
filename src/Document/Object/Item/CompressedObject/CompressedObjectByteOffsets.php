@@ -7,8 +7,7 @@ class CompressedObjectByteOffsets {
     /** @param array<int, int> $objectNumberByteOffsets */
     public function __construct(
         private readonly array $objectNumberByteOffsets,
-    ) {
-    }
+    ) {}
 
     public function getRelativeByteOffsetForObject(int $objNumber): ?int {
         return $this->objectNumberByteOffsets[$objNumber] ?? null;

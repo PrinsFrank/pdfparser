@@ -32,9 +32,9 @@ class ToUnicodeCMap {
         return implode(
             '',
             array_map(
-                fn (string $character) => $this->charToUnicode((int) hexdec($character)) ?? '',
-                str_split($characterGroup, $this->byteSize * 2)
-            )
+                fn(string $character) => $this->charToUnicode((int) hexdec($character)) ?? '',
+                str_split($characterGroup, $this->byteSize * 2),
+            ),
         );
     }
 

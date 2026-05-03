@@ -10,8 +10,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStri
 class ExtendedDictionaryKey implements DictionaryKeyInterface {
     public function __construct(
         public readonly string $value,
-    ) {
-    }
+    ) {}
 
     /** @internal */
     public static function fromKeyString(string $keyString): self {

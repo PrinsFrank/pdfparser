@@ -21,7 +21,7 @@ enum LiteralStringEscapeCharacter: string {
     case REVERSE_SOLIDUS = '\\';
 
     public function getActualCharacter(): string {
-        return match($this) {
+        return match ($this) {
             self::LINE_FEED => "\n",
             self::CARRIAGE_RETURN => "\r",
             self::HORIZONTAL_TAB => "\t",
@@ -59,7 +59,7 @@ enum LiteralStringEscapeCharacter: string {
 
                 return mb_chr($decimal);
             },
-            str_replace($find, $replace, $string)
+            str_replace($find, $replace, $string),
         ) ?? throw new ParseFailureException();
     }
 }

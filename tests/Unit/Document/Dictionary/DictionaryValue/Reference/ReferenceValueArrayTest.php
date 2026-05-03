@@ -15,42 +15,42 @@ class ReferenceValueArrayTest extends TestCase {
         static::assertNull(ReferenceValueArray::fromValue('42 0 R'));
         static::assertNull(
             ReferenceValueArray::fromValue('[<< /Foo 42 /Bar 43 >>]'),
-            'Has 6 parts, but starts with << and ends with >> so should not be parsed as reference value array'
+            'Has 6 parts, but starts with << and ends with >> so should not be parsed as reference value array',
         );
         static::assertEquals(
             new ReferenceValueArray(),
-            ReferenceValueArray::fromValue('[]')
-        );
-        static::assertEquals(
-            new ReferenceValueArray(
-                new ReferenceValue(42, 0)
-            ),
-            ReferenceValueArray::fromValue('[42 0 R]')
-        );
-        static::assertEquals(
-            new ReferenceValueArray(
-                new ReferenceValue(42, 0)
-            ),
-            ReferenceValueArray::fromValue('[ 42 0 R ]')
+            ReferenceValueArray::fromValue('[]'),
         );
         static::assertEquals(
             new ReferenceValueArray(
                 new ReferenceValue(42, 0),
-                new ReferenceValue(43, 0)
             ),
-            ReferenceValueArray::fromValue('[42 0 R 43 0 R]')
+            ReferenceValueArray::fromValue('[42 0 R]'),
         );
         static::assertEquals(
             new ReferenceValueArray(
                 new ReferenceValue(42, 0),
-                new ReferenceValue(43, 0)
             ),
-            ReferenceValueArray::fromValue('[42 0 R    43 0 R]')
+            ReferenceValueArray::fromValue('[ 42 0 R ]'),
         );
         static::assertEquals(
             new ReferenceValueArray(
                 new ReferenceValue(42, 0),
-                new ReferenceValue(43, 0)
+                new ReferenceValue(43, 0),
+            ),
+            ReferenceValueArray::fromValue('[42 0 R 43 0 R]'),
+        );
+        static::assertEquals(
+            new ReferenceValueArray(
+                new ReferenceValue(42, 0),
+                new ReferenceValue(43, 0),
+            ),
+            ReferenceValueArray::fromValue('[42 0 R    43 0 R]'),
+        );
+        static::assertEquals(
+            new ReferenceValueArray(
+                new ReferenceValue(42, 0),
+                new ReferenceValue(43, 0),
             ),
             ReferenceValueArray::fromValue(
                 <<<EOD
@@ -58,8 +58,8 @@ class ReferenceValueArrayTest extends TestCase {
                     42 0 R
                     43 0 R
                 ]
-                EOD
-            )
+                EOD,
+            ),
         );
     }
 }

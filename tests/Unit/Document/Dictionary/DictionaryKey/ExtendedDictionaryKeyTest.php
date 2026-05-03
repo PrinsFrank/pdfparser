@@ -14,26 +14,26 @@ class ExtendedDictionaryKeyTest extends TestCase {
     public function testFromKeyString(): void {
         static::assertEquals(
             new ExtendedDictionaryKey(''),
-            ExtendedDictionaryKey::fromKeyString('')
+            ExtendedDictionaryKey::fromKeyString(''),
         );
         static::assertEquals(
             new ExtendedDictionaryKey('Foo'),
-            ExtendedDictionaryKey::fromKeyString('/Foo')
+            ExtendedDictionaryKey::fromKeyString('/Foo'),
         );
         static::assertEquals(
             new ExtendedDictionaryKey('Foo'),
-            ExtendedDictionaryKey::fromKeyString('/Foo  ')
+            ExtendedDictionaryKey::fromKeyString('/Foo  '),
         );
         static::assertEquals(
             new ExtendedDictionaryKey('Foo'),
-            ExtendedDictionaryKey::fromKeyString('/Foo ')
+            ExtendedDictionaryKey::fromKeyString('/Foo '),
         );
     }
 
     public function testGetValueTypes(): void {
         static::assertSame(
             [ReferenceValue::class, TextStringValue::class, Dictionary::class],
-            ExtendedDictionaryKey::fromKeyString('Foo')->getValueTypes()
+            ExtendedDictionaryKey::fromKeyString('Foo')->getValueTypes(),
         );
     }
 }

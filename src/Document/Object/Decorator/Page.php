@@ -72,7 +72,7 @@ class Page extends DecoratedObject {
     public function getImages(): array {
         return array_values(array_filter(
             $this->getXObjects(),
-            fn (XObject $XObject) => $XObject->isImage(),
+            fn(XObject $XObject) => $XObject->isImage(),
         ));
     }
 

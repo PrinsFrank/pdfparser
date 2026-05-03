@@ -34,7 +34,7 @@ class Catalog extends DecoratedObject {
             }
 
             return array_map(
-                fn (ReferenceValue $referenceValue) => $this->document->getObject($referenceValue->objectNumber, FileSpecification::class) ?? throw new ParseFailureException('Unable to retrieve file specification'),
+                fn(ReferenceValue $referenceValue) => $this->document->getObject($referenceValue->objectNumber, FileSpecification::class) ?? throw new ParseFailureException('Unable to retrieve file specification'),
                 $AFReferences->referenceValues,
             );
         }

@@ -14,14 +14,14 @@ class FileStreamTest extends TestCase {
         $stream = FileStream::fromString('123objxref');
         static::assertSame(
             3,
-            $stream->firstPos(Marker::OBJ, 0, 10)
+            $stream->firstPos(Marker::OBJ, 0, 10),
         );
         static::assertSame(
             6,
-            $stream->firstPos(Marker::XREF, 0, 10)
+            $stream->firstPos(Marker::XREF, 0, 10),
         );
         static::assertNull(
-            $stream->firstPos(Marker::TRAILER, 0, 10)
+            $stream->firstPos(Marker::TRAILER, 0, 10),
         );
     }
 
@@ -29,14 +29,14 @@ class FileStreamTest extends TestCase {
         $stream = FileStream::fromString('123objxref');
         static::assertSame(
             3,
-            $stream->lastPos(Marker::OBJ, 0)
+            $stream->lastPos(Marker::OBJ, 0),
         );
         static::assertSame(
             6,
-            $stream->lastPos(Marker::XREF, 0)
+            $stream->lastPos(Marker::XREF, 0),
         );
         static::assertNull(
-            $stream->lastPos(Marker::TRAILER, 0)
+            $stream->lastPos(Marker::TRAILER, 0),
         );
     }
 
@@ -78,7 +78,7 @@ class FileStreamTest extends TestCase {
             startxref
             1234
             %%EOF
-            EOD
+            EOD,
         );
         $eofMarkerPos = $stream->lastPos(Marker::EOF, 0);
         static::assertSame(23, $eofMarkerPos);

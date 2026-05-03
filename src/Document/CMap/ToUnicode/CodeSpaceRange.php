@@ -6,6 +6,5 @@ class CodeSpaceRange {
     public function __construct(
         public readonly int $codeSpaceStart,
         public readonly int $codeSpaceEnd,
-    ) {
-    }
+    ) {}
 }

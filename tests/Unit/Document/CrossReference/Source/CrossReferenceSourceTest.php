@@ -23,7 +23,7 @@ class CrossReferenceSourceTest extends TestCase {
                     42,
                     1,
                     $crossReferenceEntry1 = new CrossReferenceEntryInUseObject(0, 0),
-                )
+                ),
             ),
             new CrossReferenceSection(
                 new Dictionary(),
@@ -31,8 +31,8 @@ class CrossReferenceSourceTest extends TestCase {
                     43,
                     1,
                     $crossReferenceEntry2 = new CrossReferenceEntryInUseObject(0, 0),
-                )
-            )
+                ),
+            ),
         );
         static::assertSame($crossReferenceEntry1, $crossReferenceSource->getCrossReferenceEntry(42));
         static::assertSame($crossReferenceEntry2, $crossReferenceSource->getCrossReferenceEntry(43));
@@ -43,12 +43,12 @@ class CrossReferenceSourceTest extends TestCase {
         $crossReferenceSource = new CrossReferenceSource(
             new CrossReferenceSection(
                 new Dictionary(new DictionaryEntry(DictionaryKey::ROOT, $referenceValue1 = new ReferenceValue(1, 0))),
-                new CrossReferenceSubSection(42, 1)
+                new CrossReferenceSubSection(42, 1),
             ),
             new CrossReferenceSection(
                 new Dictionary(new DictionaryEntry(DictionaryKey::INFO, $referenceValue2 = new ReferenceValue(12, 0))),
-                new CrossReferenceSubSection(43, 1)
-            )
+                new CrossReferenceSubSection(43, 1),
+            ),
         );
         static::assertSame($referenceValue1, $crossReferenceSource->getReferenceForKey(DictionaryKey::ROOT));
         static::assertSame($referenceValue2, $crossReferenceSource->getReferenceForKey(DictionaryKey::INFO));

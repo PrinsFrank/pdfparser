@@ -2,7 +2,7 @@
 
 return (new PhpCsFixer\Config())->setRules(
     [
-        '@PSR12'                       => true,
+        '@PER-CS3.0'                   => true,
         'declare_strict_types'         => true,
         'strict_comparison'            => true,
         'blank_line_after_opening_tag' => false,
@@ -13,7 +13,7 @@ return (new PhpCsFixer\Config())->setRules(
         'no_unused_imports'            => true,
         'array_indentation'            => true,
         'no_alias_functions'           => true,
-        'phpdoc_line_span'             => ['property' => 'single', 'method' => 'single', 'const' => 'single'],
+        'phpdoc_line_span'             => ['case' => 'single', 'class' => 'single', 'const' => 'single', 'function' => 'single', 'method' => 'single', 'other' => 'single', 'property' => 'single', 'trait_import' => 'single'],
         'phpdoc_order'                 => ['order' => ['deprecated', 'internal', 'standard', 'source', 'template', 'implements', 'extends', 'covers', 'coversDefaultClass', 'param', 'throws', 'return']],
         'phpdoc_param_order'           => true,
         'phpdoc_separation'            => ['groups' => [['deprecated', 'internal'], ['standard', 'source'], ['covers', 'coversDefaultClass'], ['template', 'implements', 'extends', 'param', 'throws', 'return']]],

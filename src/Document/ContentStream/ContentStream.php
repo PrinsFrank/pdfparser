@@ -23,7 +23,7 @@ class ContentStream {
 
     /** @no-named-arguments */
     public function __construct(
-        TextObject|ContentStreamCommand... $content
+        TextObject|ContentStreamCommand... $content,
     ) {
         $this->content = $content;
     }
@@ -73,7 +73,7 @@ class ContentStream {
                 }
 
                 return $a->absoluteMatrix->offsetX <=> $b->absoluteMatrix->offsetX;
-            }
+            },
         );
 
         return $positionedTextElements;

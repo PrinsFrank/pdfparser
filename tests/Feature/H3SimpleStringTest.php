@@ -56,7 +56,7 @@ class H3SimpleStringTest extends TestCase {
                         new CrossReferenceEntryInUseObject(417, 0),
                         new CrossReferenceEntryInUseObject(447, 0),
                     ),
-                )
+                ),
             ),
             $document->crossReferenceSource,
         );
@@ -69,7 +69,7 @@ class H3SimpleStringTest extends TestCase {
                     9,
                     73,
                 ),
-                $document
+                $document,
             ),
             $obj1,
         );
@@ -79,7 +79,7 @@ class H3SimpleStringTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
             ),
-            $obj1?->getDictionary()
+            $obj1?->getDictionary(),
         );
         $obj2 = $document->getObject(2);
         static::assertEquals(
@@ -146,8 +146,8 @@ class H3SimpleStringTest extends TestCase {
                     new DictionaryEntry(
                         DictionaryKey::FONT,
                         new Dictionary(
-                            new DictionaryEntry(new ExtendedDictionaryKey('F1'), new ReferenceValue(7, 0))
-                        )
+                            new DictionaryEntry(new ExtendedDictionaryKey('F1'), new ReferenceValue(7, 0)),
+                        ),
                     ),
                 )),
             ),
@@ -187,7 +187,7 @@ class H3SimpleStringTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(),
-            $obj6?->getDictionary()
+            $obj6?->getDictionary(),
         );
         $obj7 = $document->getObject(7);
         static::assertEquals(
@@ -222,7 +222,7 @@ class H3SimpleStringTest extends TestCase {
                 ),
                 $document,
             ),
-            $document->getCatalog()
+            $document->getCatalog(),
         );
         static::assertEquals(null, $document->getInformationDictionary());
     }

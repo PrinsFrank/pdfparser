@@ -7,6 +7,5 @@ class Page {
     public function __construct(
         public readonly string $content,
         public readonly array $imagePaths,
-    ) {
-    }
+    ) {}
 }

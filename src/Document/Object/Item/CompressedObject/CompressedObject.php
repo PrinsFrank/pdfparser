@@ -57,18 +57,18 @@ class CompressedObject implements ObjectItem {
         $content = substr(
             $this->storedInObject->getContent($document)->toString(),
             $first->value + $this->startByteOffsetInDecodedStream,
-            $this->endByteOffsetInDecodedStream !== null ? $this->endByteOffsetInDecodedStream - $this->startByteOffsetInDecodedStream : null
+            $this->endByteOffsetInDecodedStream !== null ? $this->endByteOffsetInDecodedStream - $this->startByteOffsetInDecodedStream : null,
         );
 
         if (str_starts_with($content, '[') && str_ends_with($content, ']') && ($referenceValueArray = ReferenceValueArray::fromValue($content)) !== null) {
             $content = implode(
                 '',
                 array_map(
-                    fn (ReferenceValue $referenceValue) => ($document->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException())
+                    fn(ReferenceValue $referenceValue) => ($document->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException())
                         ->getStream()
                         ->toString(),
                     $referenceValueArray->referenceValues,
-                )
+                ),
             );
         }
 

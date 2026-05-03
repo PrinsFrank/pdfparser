@@ -16,6 +16,5 @@ class CrossReferenceEntryCompressed {
     public function __construct(
         public readonly int $storedInStreamWithObjectNumber,
         public readonly int $indexOfThisObjectWithinObjectStream,
-    ) {
-    }
+    ) {}
 }

@@ -5,5 +5,4 @@ namespace PrinsFrank\PdfParser\Exception;
 
 use Exception;
 
-abstract class PdfParserException extends Exception {
-}
+abstract class PdfParserException extends Exception {}

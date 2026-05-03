@@ -78,7 +78,7 @@ class EncryptDictionary extends DecoratedObject {
         return str_pad(
             substr($decodedValue, 0, $expectedLength),
             $expectedLength,
-            "\x00"
+            "\x00",
         );
     }
 

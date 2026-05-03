@@ -14,8 +14,7 @@ class PositionedTextElement {
         public readonly string               $rawTextContent,
         public readonly TransformationMatrix $absoluteMatrix,
         public readonly TextState            $textState,
-    ) {
-    }
+    ) {}
 
     public function getFont(Document $document, Page $page): Font {
         if ($this->textState->fontName === null) {
@@ -59,7 +58,7 @@ class PositionedTextElement {
                 if (($toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont()) !== null) {
                     $string .= $toUnicodeCMap->textToUnicode($chars);
                 } elseif (($encoding = $font->getEncoding()) !== null) {
-                    $string .= $encoding->decodeString(implode('', array_map(fn (string $character) => mb_chr((int) hexdec($character)), str_split($chars, 2))));
+                    $string .= $encoding->decodeString(implode('', array_map(fn(string $character) => mb_chr((int) hexdec($character)), str_split($chars, 2))));
                 } else {
                     throw new ParseFailureException('Unable to use CMap or decode string to retrieve characters for text object');
                 }
@@ -87,7 +86,7 @@ class PositionedTextElement {
         foreach ($matches as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
                 $chars = str_replace(['\(', '\)', '\n', '\r'], ['(', ')', "\n", "\r"], substr($match['chars'], 1, -1));
-                $chars = preg_replace_callback('/\\\\([0-7]{3})/', fn (array $matches) => mb_chr((int) octdec($matches[1])), $chars)
+                $chars = preg_replace_callback('/\\\\([0-7]{3})/', fn(array $matches) => mb_chr((int) octdec($matches[1])), $chars)
                     ?? throw new ParseFailureException();
                 foreach (str_split($chars) as $char) {
                     $codePoints[] = ord($char);

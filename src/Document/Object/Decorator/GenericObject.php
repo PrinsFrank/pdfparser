@@ -2,5 +2,4 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
-class GenericObject extends DecoratedObject {
-}
+class GenericObject extends DecoratedObject {}
