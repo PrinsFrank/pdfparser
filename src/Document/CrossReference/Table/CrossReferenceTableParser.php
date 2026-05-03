@@ -21,12 +21,22 @@ class CrossReferenceTableParser {
             ?? throw new ParseFailureException('Unable to locate trailer for crossReferenceTable');
         $dictionary = DictionaryParser::parse($stream, $startTrailerPos + Marker::TRAILER->length(), $nrOfBytes - ($startTrailerPos + Marker::TRAILER->length() - $startPos));
 
+        $line = '';
         $firstObjectNumber = $nrOfEntries = null;
         $crossReferenceSubSections = $crossReferenceEntries = [];
-        $content = trim($stream->read($startPos, $startTrailerPos - $startPos));
-        $content = str_replace([WhitespaceCharacter::CARRIAGE_RETURN->value, WhitespaceCharacter::LINE_FEED->value . WhitespaceCharacter::LINE_FEED->value], WhitespaceCharacter::LINE_FEED->value, $content);
-        foreach (explode(WhitespaceCharacter::LINE_FEED->value, $content) as $line) {
-            $sections = explode(WhitespaceCharacter::SPACE->value, trim($line));
+        for ($byteOffset = $startPos; $byteOffset < $startTrailerPos; $byteOffset++) {
+            $char = $stream->read($byteOffset, 1);
+            if ($char !== WhitespaceCharacter::LINE_FEED->value && $char !== WhitespaceCharacter::CARRIAGE_RETURN->value) {
+                $line .= $char;
+                continue;
+            }
+
+            $line = trim($line);
+            if ($line === '') {
+                continue;
+            }
+
+            $sections = explode(WhitespaceCharacter::SPACE->value, $line);
             switch (count($sections)) {
                 case 2:
                     if ($firstObjectNumber !== null && $nrOfEntries !== null) {
@@ -44,8 +54,10 @@ class CrossReferenceTableParser {
                     };
                     break;
                 default:
-                    throw new ParseFailureException(sprintf('Invalid line "%s", 2 or 3 sections expected, %d found', substr(trim($line), 0, 30), count($sections)));
+                    throw new ParseFailureException(sprintf('Invalid line "%s", 2 or 3 sections expected, %d found', substr($line, 0, 30), count($sections)));
             }
+
+            $line = '';
         }
 
         if ($firstObjectNumber !== null && $nrOfEntries !== null) {
