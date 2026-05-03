@@ -11,8 +11,7 @@ class DifferenceRange {
     public function __construct(
         private readonly int $firstIndex,
         private readonly array $characters,
-    ) {
-    }
+    ) {}
 
     public function contains(int $index): bool {
         return $index >= $this->firstIndex

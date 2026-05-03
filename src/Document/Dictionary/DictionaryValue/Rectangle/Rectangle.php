@@ -13,9 +13,8 @@ class Rectangle implements DictionaryValue {
         public readonly float $xTopLeft,
         public readonly float $yTopLeft,
         public readonly float $xBottomRight,
-        public readonly float $yBottomRight
-    ) {
-    }
+        public readonly float $yBottomRight,
+    ) {}
 
     #[Override]
     public static function fromValue(string $valueString): ?self {

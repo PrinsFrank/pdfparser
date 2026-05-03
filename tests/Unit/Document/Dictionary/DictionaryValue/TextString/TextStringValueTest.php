@@ -16,47 +16,47 @@ class TextStringValueTest extends TestCase {
     public function testGetTextLiteralNames(): void {
         static::assertSame(
             '/Name1',
-            (new TextStringValue('/Name1'))->getText()
+            (new TextStringValue('/Name1'))->getText(),
         );
         static::assertSame(
             '/ASomewhatLongerName',
-            (new TextStringValue('/ASomewhatLongerName'))->getText()
+            (new TextStringValue('/ASomewhatLongerName'))->getText(),
         );
         static::assertSame(
             '/A;Name_With-Various***Characters?',
-            (new TextStringValue('/A;Name_With-Various***Characters?'))->getText()
+            (new TextStringValue('/A;Name_With-Various***Characters?'))->getText(),
         );
         static::assertSame(
             '/1.2',
-            (new TextStringValue('/1.2'))->getText()
+            (new TextStringValue('/1.2'))->getText(),
         );
         static::assertSame(
             '/$$',
-            (new TextStringValue('/$$'))->getText()
+            (new TextStringValue('/$$'))->getText(),
         );
         static::assertSame(
             '/@pattern',
-            (new TextStringValue('/@pattern'))->getText()
+            (new TextStringValue('/@pattern'))->getText(),
         );
         static::assertSame(
             '/.notdef',
-            (new TextStringValue('/.notdef'))->getText()
+            (new TextStringValue('/.notdef'))->getText(),
         );
         static::assertSame(
             '/Lime Green',
-            (new TextStringValue('/Lime#20Green'))->getText()
+            (new TextStringValue('/Lime#20Green'))->getText(),
         );
         static::assertSame(
             '/paired()parentheses',
-            (new TextStringValue('/paired#28#29parentheses'))->getText()
+            (new TextStringValue('/paired#28#29parentheses'))->getText(),
         );
         static::assertSame(
             '/The_Key_of_F#_Minor',
-            (new TextStringValue('/The_Key_of_F#23_Minor'))->getText()
+            (new TextStringValue('/The_Key_of_F#23_Minor'))->getText(),
         );
         static::assertSame(
             '/AB',
-            (new TextStringValue('/A#42'))->getText()
+            (new TextStringValue('/A#42'))->getText(),
         );
     }
 }

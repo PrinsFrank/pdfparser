@@ -46,7 +46,7 @@ enum GraphicsStateOperator: string implements InteractsWithTransformationMatrix 
                         (float) $matrix[3],
                         (float) $matrix[4],
                         (float) $matrix[5],
-                    )
+                    ),
                 );
         }
 

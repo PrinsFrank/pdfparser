@@ -78,8 +78,8 @@ class H7Stage1UpdatingTest extends TestCase {
                         new CrossReferenceEntryInUseObject(179, 0),
                         new CrossReferenceEntryInUseObject(300, 0),
                         new CrossReferenceEntryInUseObject(384, 0),
-                    )
-                )
+                    ),
+                ),
             ),
             $document->crossReferenceSource,
         );
@@ -92,7 +92,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     9,
                     73,
                 ),
-                $document
+                $document,
             ),
             $obj1,
         );
@@ -102,7 +102,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
             ),
-            $obj1?->getDictionary()
+            $obj1?->getDictionary(),
         );
         $obj2 = $document->getObject(2);
         static::assertEquals(
@@ -113,7 +113,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     74,
                     119,
                 ),
-                $document
+                $document,
             ),
             $obj2,
         );
@@ -122,7 +122,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
                 new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
             ),
-            $obj2?->getDictionary()
+            $obj2?->getDictionary(),
         );
         $obj3 = $document->getObject(3);
         static::assertEquals(
@@ -133,7 +133,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     120,
                     178,
                 ),
-                $document
+                $document,
             ),
             $obj3,
         );
@@ -143,7 +143,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
                 new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
             ),
-            $obj3?->getDictionary()
+            $obj3?->getDictionary(),
         );
         $obj4 = $document->getObject(4);
         static::assertEquals(
@@ -166,7 +166,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValue(5, 0)),
                 new DictionaryEntry(DictionaryKey::ANNOTS, new ReferenceValue(7, 0)),
             ),
-            $obj4?->getDictionary()
+            $obj4?->getDictionary(),
         );
         $obj5 = $document->getObject(5);
         static::assertEquals(
@@ -185,7 +185,7 @@ class H7Stage1UpdatingTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(35)),
             ),
-            $obj5?->getDictionary()
+            $obj5?->getDictionary(),
         );
         $obj6 = $document->getObject(6);
         static::assertEquals(
@@ -242,7 +242,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #1)')),
                 new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(true)),
             ),
-            $obj8?->getDictionary()
+            $obj8?->getDictionary(),
         );
         $obj9 = $document->getObject(9);
         static::assertEquals(
@@ -265,7 +265,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #2)')),
                 new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(false)),
             ),
-            $obj9?->getDictionary()
+            $obj9?->getDictionary(),
         );
         $obj10 = $document->getObject(10);
         static::assertEquals(
@@ -288,7 +288,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #3)')),
                 new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(true)),
             ),
-            $obj10?->getDictionary()
+            $obj10?->getDictionary(),
         );
         $obj11 = $document->getObject(11);
         static::assertEquals(
@@ -311,7 +311,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #4)')),
                 new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(false)),
             ),
-            $obj11?->getDictionary()
+            $obj11?->getDictionary(),
         );
         static::assertEquals(
             new Catalog(
@@ -323,7 +323,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 ),
                 $document,
             ),
-            $document->getCatalog()
+            $document->getCatalog(),
         );
         static::assertEquals(null, $document->getInformationDictionary());
     }

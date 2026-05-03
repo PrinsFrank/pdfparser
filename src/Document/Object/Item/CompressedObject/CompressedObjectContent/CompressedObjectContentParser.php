@@ -28,7 +28,7 @@ class CompressedObjectContentParser {
         if ($context instanceof Document && $context->security !== null && ($encryptDictionary = $context->getEncryptDictionary()) !== null) {
             $binaryStreamContent = RC4::crypt(
                 $context->security->getUserFileEncryptionKey($encryptDictionary, $context->crossReferenceSource->getFirstId()),
-                $binaryStreamContent
+                $binaryStreamContent,
             );
         }
 

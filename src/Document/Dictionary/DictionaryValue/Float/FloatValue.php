@@ -9,9 +9,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 /** @api */
 class FloatValue implements DictionaryValue {
     public function __construct(
-        public readonly float $value
-    ) {
-    }
+        public readonly float $value,
+    ) {}
 
     #[Override]
     public static function fromValue(string $valueString): ?self {

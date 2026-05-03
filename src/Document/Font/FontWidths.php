@@ -7,8 +7,7 @@ class FontWidths {
     public function __construct(
         public readonly int $firstChar,
         public readonly array $widths,
-    ) {
-    }
+    ) {}
 
     public function getWidthForCharacter(int $characterCode): ?float {
         return $this->widths[$characterCode - $this->firstChar] ?? null;

@@ -25,7 +25,7 @@ class CrossReferenceSourceParserTest extends TestCase {
                 new CrossReferenceSection(
                     new Dictionary(
                         new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(7)),
-                        new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(1, 0))
+                        new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(1, 0)),
                     ),
                     new CrossReferenceSubSection(
                         0,
@@ -37,8 +37,8 @@ class CrossReferenceSourceParserTest extends TestCase {
                         new CrossReferenceEntryInUseObject(179, 0),
                         new CrossReferenceEntryInUseObject(300, 0),
                         new CrossReferenceEntryInUseObject(384, 0),
-                    )
-                )
+                    ),
+                ),
             ),
             CrossReferenceSourceParser::parse(
                 new InMemoryStream(
@@ -60,9 +60,9 @@ class CrossReferenceSourceParserTest extends TestCase {
                     startxref
                     9
                     %%EOF
-                    EOD
-                )
-            )
+                    EOD,
+                ),
+            ),
         );
     }
 }

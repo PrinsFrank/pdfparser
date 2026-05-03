@@ -16,11 +16,11 @@ class CrossReferenceStreamByteSizesTest extends TestCase {
         static::assertNull(CrossReferenceStreamByteSizes::fromValue('[0 1]'));
         static::assertEquals(
             new CrossReferenceStreamByteSizes(0, 1, 2),
-            CrossReferenceStreamByteSizes::fromValue('[0 1 2]')
+            CrossReferenceStreamByteSizes::fromValue('[0 1 2]'),
         );
         static::assertEquals(
             new CrossReferenceStreamByteSizes(0, 1, 2),
-            CrossReferenceStreamByteSizes::fromValue('[ 0 1 2 ]')
+            CrossReferenceStreamByteSizes::fromValue('[ 0 1 2 ]'),
         );
     }
 
@@ -35,7 +35,7 @@ class CrossReferenceStreamByteSizesTest extends TestCase {
         static::assertSame(
             6,
             (new CrossReferenceStreamByteSizes(1, 2, 3))
-                ->getTotalLengthInBytes()
+                ->getTotalLengthInBytes(),
         );
     }
 }

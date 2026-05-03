@@ -2,5 +2,4 @@
 
 namespace PrinsFrank\PdfParser\Exception;
 
-class AuthenticationFailedException extends PdfParserException {
-}
+class AuthenticationFailedException extends PdfParserException {}

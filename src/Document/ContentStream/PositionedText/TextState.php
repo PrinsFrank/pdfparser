@@ -15,6 +15,5 @@ class TextState {
         public float $leading = 0,        // Tl
         public int $render = 0,           // Tmode
         public float $rise = 0,           // Trise
-    ) {
-    }
+    ) {}
 }

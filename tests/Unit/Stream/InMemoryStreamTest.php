@@ -66,14 +66,14 @@ class InMemoryStreamTest extends TestCase {
         $stream = new InMemoryStream('123objxref');
         static::assertSame(
             3,
-            $stream->firstPos(Marker::OBJ, 0, 10)
+            $stream->firstPos(Marker::OBJ, 0, 10),
         );
         static::assertSame(
             6,
-            $stream->firstPos(Marker::XREF, 0, 10)
+            $stream->firstPos(Marker::XREF, 0, 10),
         );
         static::assertNull(
-            $stream->firstPos(Marker::TRAILER, 0, 10)
+            $stream->firstPos(Marker::TRAILER, 0, 10),
         );
     }
 
@@ -81,14 +81,14 @@ class InMemoryStreamTest extends TestCase {
         $stream = new InMemoryStream('123objxref');
         static::assertSame(
             3,
-            $stream->lastPos(Marker::OBJ, 0)
+            $stream->lastPos(Marker::OBJ, 0),
         );
         static::assertSame(
             6,
-            $stream->lastPos(Marker::XREF, 0)
+            $stream->lastPos(Marker::XREF, 0),
         );
         static::assertNull(
-            $stream->lastPos(Marker::TRAILER, 0)
+            $stream->lastPos(Marker::TRAILER, 0),
         );
     }
 }

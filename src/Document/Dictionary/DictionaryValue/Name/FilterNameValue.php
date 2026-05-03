@@ -34,7 +34,7 @@ enum FilterNameValue: string implements NameValue {
     public function decodeBinary(string $content, ?Dictionary $dictionary, ?Document $document): string {
         $decodeParams = $dictionary?->getSubDictionary($document, DictionaryKey::DECODE_PARMS);
 
-        return match($this) {
+        return match ($this) {
             self::JPX_DECODE,
             self::JBIG2_DECODE,
             self::DCT_DECODE => $content, // Don't decode JPEG content
@@ -43,7 +43,7 @@ enum FilterNameValue: string implements NameValue {
                 $decodeParams !== null && ($predictorValue = LZWFlatePredictorValue::tryFrom((int) $decodeParams->getValueForKey(DictionaryKey::PREDICTOR, IntegerValue::class)?->value)) !== null
                     ? $predictorValue
                     : LZWFlatePredictorValue::None,
-                $decodeParams?->getValueForKey(DictionaryKey::COLUMNS, IntegerValue::class)->value ?? 1
+                $decodeParams?->getValueForKey(DictionaryKey::COLUMNS, IntegerValue::class)->value ?? 1,
             ),
             self::CCITT_FAX_DECODE => CCITTFaxDecode::addHeaderAndIFD(
                 $content,
@@ -56,7 +56,7 @@ enum FilterNameValue: string implements NameValue {
                     ?? throw new ParseFailureException('Missing K'),
             ),
             self::ASCII_85_DECODE => ASCII85Decode::decodeBinary($content),
-            default => throw new ParseFailureException(sprintf('Content "%.100s..." cannot be decoded for filter "%s"', $content, $this->name))
+            default => throw new ParseFailureException(sprintf('Content "%.100s..." cannot be decoded for filter "%s"', $content, $this->name)),
         };
     }
 

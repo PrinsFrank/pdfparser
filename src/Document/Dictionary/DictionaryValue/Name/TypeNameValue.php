@@ -141,7 +141,7 @@ enum TypeNameValue: string implements NameValue {
 
     /** @return class-string<DecoratedObject> */
     public function getDecoratorFQN(): string {
-        return match($this) {
+        return match ($this) {
             TypeNameValue::CATALOG => Catalog::class,
             TypeNameValue::EMBEDDED_FILE => EmbeddedFile::class,
             TypeNameValue::FILE_SPEC => FileSpecification::class,

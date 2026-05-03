@@ -23,7 +23,7 @@ class CrossReferenceSubSection {
     public function __construct(
         public readonly int $firstObjectNumber,
         public readonly int $nrOfEntries,
-        CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CrossReferenceEntryCompressed... $crossReferenceEntries
+        CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CrossReferenceEntryCompressed... $crossReferenceEntries,
     ) {
         if ($this->nrOfEntries < 0) {
             throw new InvalidArgumentException('$nrOfEntries should be a positive number');

@@ -15,8 +15,8 @@ class VersionParserTest extends TestCase {
         $this->expectException(ParseFailureException::class);
         VersionParser::parse(
             new InMemoryStream(
-                'FOO'
-            )
+                'FOO',
+            ),
         );
     }
 
@@ -25,15 +25,15 @@ class VersionParserTest extends TestCase {
         $this->expectExceptionMessage('9.9');
         VersionParser::parse(
             new InMemoryStream(
-                '%PDF-9.9'
-            )
+                '%PDF-9.9',
+            ),
         );
     }
 
     public function testParse(): void {
         static::assertSame(
             Version::V1_0,
-            VersionParser::parse(new InMemoryStream('%PDF-1.0'))
+            VersionParser::parse(new InMemoryStream('%PDF-1.0')),
         );
     }
 }

@@ -15,21 +15,21 @@ class GraphicsStateOperatorTest extends TestCase {
             GraphicsStateOperator::ModifyCurrentTransformationMatrix->applyToTransformationMatrix(
                 '1 2 3 4 5 6',
                 new TransformationMatrix(1.0, 2.0, 3.0, 4.0, 5.0, 6.0),
-            )
+            ),
         );
         static::assertEquals(
             new TransformationMatrix(7.0, 10.0, 15.0, 22.0, 28.0, 40.0),
             GraphicsStateOperator::ModifyCurrentTransformationMatrix->applyToTransformationMatrix(
                 '1  2  3  4  5  6',
                 new TransformationMatrix(1.0, 2.0, 3.0, 4.0, 5.0, 6.0),
-            )
+            ),
         );
         static::assertEquals(
             new TransformationMatrix(7.0, 10.0, 15.0, 22.0, 28.0, 40.0),
             GraphicsStateOperator::ModifyCurrentTransformationMatrix->applyToTransformationMatrix(
                 '1   2   3   4   5   6',
                 new TransformationMatrix(1.0, 2.0, 3.0, 4.0, 5.0, 6.0),
-            )
+            ),
         );
     }
 }

@@ -14,12 +14,12 @@ use PrinsFrank\PdfParser\Stream\Stream;
 abstract class DecoratedObject {
     final public function __construct(
         public readonly ObjectItem $objectItem,
-        public readonly Document $document
+        public readonly Document $document,
     ) {
         $typeNameValue = $this->objectItem->getDictionary($document)->getType();
         if ($typeNameValue !== null && !in_array($typeNameValue->getDecoratorFQN(), [static::class, GenericObject::class], true)) {
             throw new InvalidArgumentException(
-                sprintf('Object should have decorator %s, got %s', $typeNameValue->getDecoratorFQN(), static::class)
+                sprintf('Object should have decorator %s, got %s', $typeNameValue->getDecoratorFQN(), static::class),
             );
         }
     }

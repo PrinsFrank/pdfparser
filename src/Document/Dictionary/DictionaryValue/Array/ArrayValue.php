@@ -15,13 +15,12 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 class ArrayValue implements DictionaryValue {
     /** @param list<int|string|ArrayValue|ReferenceValueArray|null> $value */
     public function __construct(
-        public readonly array $value
-    ) {
-    }
+        public readonly array $value,
+    ) {}
 
     #[Override]
     /** @throws PdfParserException */
-    public static function fromValue(string $valueString): null|self|ReferenceValueArray {
+    public static function fromValue(string $valueString): self|ReferenceValueArray|null {
         $valueString = trim($valueString);
         if (!str_starts_with($valueString, '[') || !str_ends_with($valueString, ']')) {
             return null;
@@ -59,7 +58,7 @@ class ArrayValue implements DictionaryValue {
                 is_float($value),
                 is_string($value) => $value,
                 $value instanceof ArrayValue => $value->toString(),
-                $value instanceof ReferenceValueArray => implode(' ', array_map(fn (ReferenceValue $referenceValue) => $referenceValue->objectNumber . ' R', $value->referenceValues)),
+                $value instanceof ReferenceValueArray => implode(' ', array_map(fn(ReferenceValue $referenceValue) => $referenceValue->objectNumber . ' R', $value->referenceValues)),
                 default => throw new ParseFailureException('Unsupported array value type: ' . gettype($value)),
             };
         }

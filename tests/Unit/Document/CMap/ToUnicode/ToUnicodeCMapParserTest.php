@@ -41,7 +41,7 @@ class ToUnicodeCMapParserTest extends TestCase {
             CMapName currentdict /CMap defineresource pop
             end
             end
-            EOD
+            EOD,
         );
         static::assertEquals(
             new ToUnicodeCMap(
@@ -51,7 +51,7 @@ class ToUnicodeCMapParserTest extends TestCase {
                 new BFRange(0x005F, 0x0061, ['00660066', '00660069', '00660066006C']),
                 new BFChar(0x3A51, 'D840DC3E'),
             ),
-            ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes())
+            ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -64,14 +64,14 @@ class ToUnicodeCMapParserTest extends TestCase {
             < DDDD > < FFFF >
             endcodespacerange
             endcmap
-            EOD
+            EOD,
         );
         static::assertEquals(
             new ToUnicodeCMap(
                 [new CodeSpaceRange(0x0000, 0xBBBB), new CodeSpaceRange(0xDDDD, 0xFFFF)],
                 2,
             ),
-            ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes())
+            ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes()),
         );
     }
 }

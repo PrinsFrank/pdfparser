@@ -33,20 +33,20 @@ class DictionaryKeyTest extends TestCase {
         self::assertNull(DictionaryKey::tryFromKeyString('Foo'));
         self::assertSame(
             DictionaryKey::ZOOM,
-            DictionaryKey::tryFromKeyString('Zoom')
+            DictionaryKey::tryFromKeyString('Zoom'),
         );
         self::assertSame(
             DictionaryKey::ZOOM,
-            DictionaryKey::tryFromKeyString('/Zoom')
+            DictionaryKey::tryFromKeyString('/Zoom'),
         );
         self::assertSame(
             DictionaryKey::ZOOM,
-            DictionaryKey::tryFromKeyString('/Zoom  ')
+            DictionaryKey::tryFromKeyString('/Zoom  '),
         );
         self::assertSame(
             DictionaryKey::ZOOM,
             DictionaryKey::tryFromKeyString('/Zoom
-            ')
+            '),
         );
     }
 

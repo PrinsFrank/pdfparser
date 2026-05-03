@@ -27,7 +27,7 @@ class CrossReferenceSourceParser {
             ?? throw new ParseFailureException('Expected a carriage return or line feed after the byte offset, none found');
 
         $byteOffsetLastCrossReferenceSection = trim($stream->read($startByteOffset, $endByteOffset - $startByteOffset));
-        if ($byteOffsetLastCrossReferenceSection !== (string)(int) $byteOffsetLastCrossReferenceSection) {
+        if ($byteOffsetLastCrossReferenceSection !== (string) (int) $byteOffsetLastCrossReferenceSection) {
             throw new ParseFailureException(sprintf('Invalid byte offset last crossReference section "%s", "%s"', $byteOffsetLastCrossReferenceSection, $stream->read($startXrefMarkerPos, $stream->getSizeInBytes() - $startXrefMarkerPos)));
         }
 

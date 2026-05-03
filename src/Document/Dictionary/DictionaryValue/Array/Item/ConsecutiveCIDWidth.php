@@ -7,8 +7,7 @@ class ConsecutiveCIDWidth {
     public function __construct(
         public readonly int $cidStart,
         public readonly array $widths,
-    ) {
-    }
+    ) {}
 
     public function getWidthForCharacterCode(int $characterCode): ?float {
         if (array_key_exists($characterCode - $this->cidStart, $this->widths) === false) {

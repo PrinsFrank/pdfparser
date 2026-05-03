@@ -45,7 +45,7 @@ class CompressedObjectByteOffsetParser {
                     continue;
                 }
 
-                if ($numberInBuffer !== (string)(int) $numberInBuffer) {
+                if ($numberInBuffer !== (string) (int) $numberInBuffer) {
                     throw new ParseFailureException(sprintf('Number "%s" in buffer is not a valid number', $numberInBuffer));
                 }
 
