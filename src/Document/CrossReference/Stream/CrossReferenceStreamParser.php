@@ -63,7 +63,7 @@ class CrossReferenceStreamParser {
                 CrossReferenceStreamType::LINKED_LIST_FREE_OBJECT => new CrossReferenceEntryFreeObject($field2, $field3),
                 CrossReferenceStreamType::UNCOMPRESSED_OBJECT => new CrossReferenceEntryInUseObject($field2, $field3),
                 CrossReferenceStreamType::COMPRESSED_OBJECT => new CrossReferenceEntryCompressed($field2, $field3),
-                null => throw new ParseFailureException(sprintf('Unrecognized CrossReferenceStream type "%s"', $field1)),
+                default => throw new ParseFailureException(sprintf('Unrecognized CrossReferenceStream type "%s"', $field1)),
             };
         }
 

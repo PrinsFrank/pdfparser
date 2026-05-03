@@ -309,6 +309,7 @@ class ContentStreamParserTest extends TestCase {
                 1 => ContentStreamParser::getOperator($enumCase->value, null, null, null),
                 2 => ContentStreamParser::getOperator(substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), null, null),
                 3 => ContentStreamParser::getOperator(substr($enumCase->value, 2, 1), substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), null),
+                default => throw new RuntimeException(),
             },
         );
     }
@@ -320,6 +321,7 @@ class ContentStreamParserTest extends TestCase {
                 1 => ContentStreamParser::getOperator($enumCase->value, '\\', null, null),
                 2 => ContentStreamParser::getOperator(substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), '\\', null),
                 3 => ContentStreamParser::getOperator(substr($enumCase->value, 2, 1), substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), '\\'),
+                default => throw new RuntimeException(),
             },
         );
     }
