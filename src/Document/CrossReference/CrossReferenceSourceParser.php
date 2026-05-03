@@ -61,8 +61,14 @@ class CrossReferenceSourceParser {
             ? CrossReferenceTableParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset)
             : CrossReferenceStreamParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset);
         $crossReferenceSections = [$currentCrossReferenceSection];
-        while (($previous = $currentCrossReferenceSection->dictionary->getValueForKey(DictionaryKey::PREV, IntegerValue::class)) !== null && $previous->value !== 0) {
-            $eolPosByteOffset = $stream->getEndOfCurrentLine($previous->value + 1, $stream->getSizeInBytes())
+        $byteOffsets = [$byteOffsetLastCrossReferenceSection];
+        while (($previous = $currentCrossReferenceSection->dictionary->getValueForKey(DictionaryKey::PREV, IntegerValue::class)) !== null && ($byteOffset = $previous->value) !== 0) {
+            if (in_array($byteOffset, $byteOffsets, true) === true) {
+                break;
+            }
+
+            $byteOffsets[] = $byteOffset;
+            $eolPosByteOffset = $stream->getEndOfCurrentLine($byteOffset + 1, $stream->getSizeInBytes())
                 ?? throw new ParseFailureException('Expected a newline after byte offset for cross reference stream');
             $endCrossReferenceSection = $crossReferenceType === CrossReferenceType::Table
                 ? $stream->firstPos(Marker::START_XREF, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new ParseFailureException('Unable to locate startxref')
