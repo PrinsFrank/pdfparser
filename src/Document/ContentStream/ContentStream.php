@@ -75,21 +75,15 @@ class ContentStream {
             return '';
         }
 
-        $lowestY = min(array_map(static fn(PositionedTextElement $positionedTextElement): float => $positionedTextElement->absoluteMatrix->offsetY * $positionedTextElement->absoluteMatrix->scaleY, $positionedTextElements));
-        $highestY = max(array_map(static fn(PositionedTextElement $positionedTextElement): float => $positionedTextElement->absoluteMatrix->offsetY * $positionedTextElement->absoluteMatrix->scaleY, $positionedTextElements));
-        $variabilityY = $lowestY !== $highestY
-            ? ($highestY - $lowestY) / 200
-            : 0;
-
         usort(
             $positionedTextElements,
-            static function (PositionedTextElement $a, PositionedTextElement $b) use ($variabilityY): int {
-                $differenceY = $b->absoluteMatrix->offsetY * $b->absoluteMatrix->scaleY - $a->absoluteMatrix->offsetY * $a->absoluteMatrix->scaleY;
-                if ($differenceY > $variabilityY) {
+            static function (PositionedTextElement $a, PositionedTextElement $b): int {
+                $differenceY = $b->absoluteMatrix->getAbsoluteY() - $a->absoluteMatrix->getAbsoluteY();
+                if ($differenceY > $b->textState->leading) {
                     return 1;
                 }
 
-                if ($differenceY < -$variabilityY) {
+                if ($differenceY < -$a->textState->leading) {
                     return -1;
                 }
 
@@ -102,7 +96,7 @@ class ContentStream {
         foreach ($positionedTextElements as $positionedTextElement) {
             if ($previousPositionedTextElement !== null) {
                 $diffY = $previousPositionedTextElement->absoluteMatrix->offsetY * $previousPositionedTextElement->absoluteMatrix->scaleY - $positionedTextElement->absoluteMatrix->offsetY * $positionedTextElement->absoluteMatrix->scaleY;
-                if ($diffY > $variabilityY || $diffY < -$variabilityY) {
+                if ($diffY > $positionedTextElement->textState->leading || $diffY < -$positionedTextElement->textState->leading) {
                     $text .= "\n";
                 } elseif (($positionedTextElement->absoluteMatrix->getAbsoluteX() - $previousPositionedTextElement->absoluteMatrix->getAbsoluteX() - $positionedTextElement->getFont($document, $page)->getWidthForChars($previousPositionedTextElement->getCodePoints(), $previousPositionedTextElement->textState, $previousPositionedTextElement->absoluteMatrix)) >= ($previousPositionedTextElement->textState->fontSize ?? 10) * $previousPositionedTextElement->absoluteMatrix->scaleX * 0.20 && str_ends_with($text, ' ') === false) {
                     $text .= ' ';
