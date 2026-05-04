@@ -86,14 +86,9 @@ class ContentStream {
 
     /** @throws PdfParserException */
     public function getText(Document $document, Page $page): string {
-        $positionedTextElements = $this->getPositionedTextElements();
-        if ($positionedTextElements === []) {
-            return '';
-        }
-
         $text = '';
         $previousPositionedTextElement = null;
-        foreach ($positionedTextElements as $positionedTextElement) {
+        foreach ($this->getPositionedTextElements() as $positionedTextElement) {
             if ($previousPositionedTextElement !== null) {
                 $diffY = $previousPositionedTextElement->absoluteMatrix->offsetY * $previousPositionedTextElement->absoluteMatrix->scaleY - $positionedTextElement->absoluteMatrix->offsetY * $positionedTextElement->absoluteMatrix->scaleY;
                 if ($diffY > $positionedTextElement->textState->leading || $diffY < -$positionedTextElement->textState->leading) {
