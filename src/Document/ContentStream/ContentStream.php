@@ -65,16 +65,6 @@ class ContentStream {
             }
         }
 
-        return $positionedTextElements;
-    }
-
-    /** @throws PdfParserException */
-    public function getText(Document $document, Page $page): string {
-        $positionedTextElements = $this->getPositionedTextElements();
-        if ($positionedTextElements === []) {
-            return '';
-        }
-
         usort(
             $positionedTextElements,
             static function (PositionedTextElement $a, PositionedTextElement $b): int {
@@ -90,6 +80,16 @@ class ContentStream {
                 return $a->absoluteMatrix->offsetX <=> $b->absoluteMatrix->offsetX;
             }
         );
+
+        return $positionedTextElements;
+    }
+
+    /** @throws PdfParserException */
+    public function getText(Document $document, Page $page): string {
+        $positionedTextElements = $this->getPositionedTextElements();
+        if ($positionedTextElements === []) {
+            return '';
+        }
 
         $text = '';
         $previousPositionedTextElement = null;
