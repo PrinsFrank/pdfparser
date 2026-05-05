@@ -51,7 +51,8 @@ enum TextStateOperator: string implements InteractsWithTextState {
         }
 
         if ($this === self::SCALE) {
-            if (trim($operands) !== (string) ($scale = (int) $operands) && trim($operands) !== (string) ($scale = (float) $operands)) {
+            $trimmedOperands = trim($operands);
+            if (preg_match('/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/', $trimmedOperands) !== 1) {
                 throw new ParseFailureException(sprintf('Invalid scale operand "%s" for scale operator', $operands));
             }
 
@@ -60,7 +61,7 @@ enum TextStateOperator: string implements InteractsWithTextState {
                 $textState->fontSize ?? null,
                 $textState->charSpace ?? 0,
                 $textState->wordSpace ?? 0,
-                $scale,
+                (float) $trimmedOperands,
                 $textState->leading ?? 0,
                 $textState->render ?? 0,
                 $textState->rise ?? 0,
