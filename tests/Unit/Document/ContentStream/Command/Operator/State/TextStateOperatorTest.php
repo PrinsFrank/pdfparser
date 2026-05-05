@@ -31,7 +31,7 @@ class TextStateOperatorTest extends TestCase {
     public function testApplyToTextStateWithValidScaleOperand(string $operand, float $expectedScale): void {
         static::assertEquals(
             new TextState(null, null, 0, 0, $expectedScale, 0, 0, 0),
-            TextStateOperator::SCALE->applyToTextState($operand, null)
+            TextStateOperator::SCALE->applyToTextState($operand, null),
         );
     }
 
