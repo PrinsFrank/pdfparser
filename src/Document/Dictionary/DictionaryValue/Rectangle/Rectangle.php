@@ -16,6 +16,14 @@ class Rectangle implements DictionaryValue {
         public readonly float $yBottomRight,
     ) {}
 
+    public function getWidth(): float {
+        return abs($this->xBottomRight - $this->xTopLeft);
+    }
+
+    public function getHeight(): float {
+        return abs($this->yBottomRight - $this->yTopLeft);
+    }
+
     #[Override]
     public static function fromValue(string $valueString): ?self {
         if (!str_starts_with($valueString, '[') || !str_ends_with($valueString, ']')) {
