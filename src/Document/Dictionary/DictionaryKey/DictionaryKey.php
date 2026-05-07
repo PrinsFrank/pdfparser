@@ -687,7 +687,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::ANNOTATIONS => [IntegerValue::class],
             self::ANNOTS => [ReferenceValue::class, ReferenceValueArray::class, DictionaryArrayValue::class],
             self::ANTI_ALIAS => [BooleanValue::class],
-            self::AP => [DictionaryArrayValue::class],
+            self::AP => [DictionaryArrayValue::class, Dictionary::class],
             self::APREF => [Dictionary::class],
             self::ART_BOX => [Rectangle::class],
             self::AS => [DictionaryArrayValue::class, TextStringValue::class],
