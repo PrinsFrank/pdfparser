@@ -68,12 +68,17 @@ class ContentStream {
         usort(
             $positionedTextElements,
             static function (PositionedTextElement $a, PositionedTextElement $b): int {
-                if (($differenceY = $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY) !== 0) {
-                    return $differenceY;
+                $differenceY = $b->absoluteMatrix->getAbsoluteY() - $a->absoluteMatrix->getAbsoluteY();
+                if ($differenceY > $b->textState->leading) {
+                    return 1;
+                }
+
+                if ($differenceY < -$a->textState->leading) {
+                    return -1;
                 }
 
                 return $a->absoluteMatrix->offsetX <=> $b->absoluteMatrix->offsetX;
-            },
+            }
         );
 
         return $positionedTextElements;
@@ -85,9 +90,10 @@ class ContentStream {
         $previousPositionedTextElement = null;
         foreach ($this->getPositionedTextElements() as $positionedTextElement) {
             if ($previousPositionedTextElement !== null) {
-                if ($previousPositionedTextElement->absoluteMatrix->offsetY !== $positionedTextElement->absoluteMatrix->offsetY) {
+                $diffY = $previousPositionedTextElement->absoluteMatrix->offsetY * $previousPositionedTextElement->absoluteMatrix->scaleY - $positionedTextElement->absoluteMatrix->offsetY * $positionedTextElement->absoluteMatrix->scaleY;
+                if ($diffY > $positionedTextElement->textState->leading || $diffY < -$positionedTextElement->textState->leading) {
                     $text .= "\n";
-                } elseif (($positionedTextElement->absoluteMatrix->offsetX - $previousPositionedTextElement->absoluteMatrix->offsetX - $positionedTextElement->getFont($document, $page)->getWidthForChars($previousPositionedTextElement->getCodePoints(), $previousPositionedTextElement->textState, $previousPositionedTextElement->absoluteMatrix)) >= ($previousPositionedTextElement->textState->fontSize ?? 10) * $previousPositionedTextElement->absoluteMatrix->scaleX * 0.40) {
+                } elseif (($positionedTextElement->absoluteMatrix->getAbsoluteX() - $previousPositionedTextElement->absoluteMatrix->getAbsoluteX() - $positionedTextElement->getFont($document, $page)->getWidthForChars($previousPositionedTextElement->getCodePoints(), $previousPositionedTextElement->textState, $previousPositionedTextElement->absoluteMatrix)) >= ($previousPositionedTextElement->textState->fontSize ?? 10) * $previousPositionedTextElement->absoluteMatrix->scaleX * 0.20 && str_ends_with($text, ' ') === false) {
                     $text .= ' ';
                 }
             }
