@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=./.yml-schema.json
+version: '1.7'
+password: null
+title: null
+producer: 'PStill Engine 1.90'
+author: null
+creator: null
+creationDate: 2025-10-06T10:48:53.000000+0200
+modificationDate: null
+pages:
+  -
+    content: |-
+      TODO
