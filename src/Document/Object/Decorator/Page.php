@@ -7,6 +7,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -98,5 +101,32 @@ class Page extends DecoratedObject {
     public function getFileSpecifications(): array {
         return $this->getDictionary()
             ->getObjectsForReference($this->document, DictionaryKey::AF, FileSpecification::class);
+    }
+
+    public function getMediaBox(): ?Rectangle {
+        return $this->getInheritableValue(DictionaryKey::MEDIA_BOX, Rectangle::class);
+    }
+
+    public function getCropBox(): ?Rectangle {
+        return $this->getInheritableValue(DictionaryKey::CROP_BOX, Rectangle::class)
+            ?? $this->getMediaBox();
+    }
+
+    /**
+     * @template T of DictionaryValue|NameValue|Dictionary
+     * @param class-string<T> $expectedValueType
+     * @return T
+     */
+    public function getInheritableValue(DictionaryKey $dictionaryKey, string $expectedValueType): DictionaryValue|Dictionary|NameValue|null {
+        if (($localValue = $this->getDictionary()->getValueForKey($dictionaryKey, $expectedValueType)) !== null) {
+            return $localValue;
+        }
+
+        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+            return null;
+        }
+
+        return ($this->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+            ->getInheritableValue($dictionaryKey, $expectedValueType, [$parentReference->objectNumber]);
     }
 }
