@@ -62,7 +62,7 @@ class CrossReferenceSourceParser {
             : CrossReferenceStreamParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset);
         $crossReferenceSections = [$currentCrossReferenceSection];
         $byteOffsets = [$byteOffsetLastCrossReferenceSection];
-        while (($previous = $currentCrossReferenceSection->dictionary->getValueForKey(DictionaryKey::PREV, IntegerValue::class)) !== null && ($byteOffset = $previous->value) !== 0) {
+        while (($previous = $currentCrossReferenceSection->dictionary->getValueForKey(DictionaryKey::PREV, IntegerValue::class, null)) !== null && ($byteOffset = $previous->value) !== 0) {
             if (in_array($byteOffset, $byteOffsets, true) === true) {
                 break;
             }

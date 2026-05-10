@@ -13,14 +13,14 @@ class FileSpecification extends DecoratedObject {
         $ufType = $this->getDictionary()->getTypeForKey(DictionaryKey::UF);
         if ($ufType === TextStringValue::class) {
             return $this->getDictionary()
-                ->getValueForKey(DictionaryKey::UF, $ufType)
+                ->getValueForKey(DictionaryKey::UF, $ufType, $this->document)
                 ?->getText() ?? throw new ParseFailureException();
         }
 
         $fType = $this->getDictionary()->getTypeForKey(DictionaryKey::F);
         if ($fType === TextStringValue::class) {
             return $this->getDictionary()
-                ->getValueForKey(DictionaryKey::F, $fType)
+                ->getValueForKey(DictionaryKey::F, $fType, $this->document)
                 ?->getText() ?? throw new ParseFailureException();
         }
 

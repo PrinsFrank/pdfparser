@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValu
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\CIEColorSpaceNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\DeviceColorSpaceNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SpecialColorSpaceNameValue;
+use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
@@ -22,7 +23,7 @@ class ColorSpace {
         public readonly ?int $maxIndexLUT,
     ) {}
 
-    public function getComponents(): Components {
+    public function getComponents(?Document $document = null): Components {
         if (isset($this->components)) {
             return $this->components;
         }
@@ -35,7 +36,7 @@ class ColorSpace {
             return $this->components = Components::tryFrom(
                 $this->LUTObj
                     ->getDictionary()
-                    ->getValueForKey(DictionaryKey::N, IntegerValue::class)
+                    ->getValueForKey(DictionaryKey::N, IntegerValue::class, $document)
                     ->value ?? throw new RuntimeException('Unable to determine number of components for color space'),
             ) ?? throw new ParseFailureException('Unable to determine number of components for color space');
         }

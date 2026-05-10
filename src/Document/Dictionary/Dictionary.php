@@ -35,7 +35,7 @@ class Dictionary {
      * @param class-string<T> $expectedValueType
      * @return T
      */
-    public function getValueForKey(DictionaryKey|ExtendedDictionaryKey $dictionaryKey, string $expectedValueType): DictionaryValue|Dictionary|NameValue|null {
+    public function getValueForKey(DictionaryKey|ExtendedDictionaryKey $dictionaryKey, string $expectedValueType, ?Document $document = null): DictionaryValue|Dictionary|NameValue|null {
         foreach ($this->dictionaryEntries as $dictionaryEntry) {
             if (($dictionaryKey instanceof DictionaryKey && $dictionaryEntry->key === $dictionaryKey) === false
                 && ($dictionaryKey instanceof ExtendedDictionaryKey && $dictionaryEntry->key instanceof ExtendedDictionaryKey && $dictionaryEntry->key->value === $dictionaryKey->value) === false) {
@@ -44,8 +44,15 @@ class Dictionary {
 
             $value = $dictionaryEntry->value;
             if ($value instanceof Dictionary && $expectedValueType !== Dictionary::class) {
-                $value = $value->getValueForKey($dictionaryKey, $expectedValueType)
+                $value = $value->getValueForKey($dictionaryKey, $expectedValueType, $document)
                     ?? throw new InvalidArgumentException('Value type is dictionary but subdictionary not found');
+            }
+
+            if ($value instanceof ReferenceValue && $document !== null && $expectedValueType !== ReferenceValue::class && is_a($expectedValueType, DictionaryValue::class, true)) {
+                $value = $expectedValueType::fromValue(
+                    $content = trim(($document->getObject($value->objectNumber) ?? throw new InvalidArgumentException(sprintf('Object with nr %d not found', $value->objectNumber)))
+                        ->getStream()->toString()),
+                ) ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced object %d as %s', $content, $value->objectNumber, $expectedValueType));
             }
 
             if (is_a($value, $expectedValueType) === false) {
@@ -76,11 +83,11 @@ class Dictionary {
         }
 
         if ($subDictionaryType === Dictionary::class) {
-            return $this->getValueForKey($dictionaryKey, Dictionary::class) ?? throw new RuntimeException();
+            return $this->getValueForKey($dictionaryKey, Dictionary::class, $document) ?? throw new RuntimeException();
         }
 
         if ($subDictionaryType === DictionaryArrayValue::class) {
-            return ($this->getValueForKey($dictionaryKey, DictionaryArrayValue::class) ?? throw new RuntimeException())->toSingleDictionary();
+            return ($this->getValueForKey($dictionaryKey, DictionaryArrayValue::class, $document) ?? throw new RuntimeException())->toSingleDictionary();
         }
 
         if ($subDictionaryType === ReferenceValue::class) {
@@ -101,7 +108,7 @@ class Dictionary {
      * @return ($expectedDecoratorFQN is null ? DecoratedObject : T)
      */
     public function getObjectForReference(Document $document, DictionaryKey|ExtendedDictionaryKey $dictionaryKey, ?string $expectedDecoratorFQN = null): ?DecoratedObject {
-        $reference = $this->getValueForKey($dictionaryKey, ReferenceValue::class);
+        $reference = $this->getValueForKey($dictionaryKey, ReferenceValue::class, $document);
         if ($reference === null) {
             return null;
         }
@@ -116,7 +123,7 @@ class Dictionary {
      * @return ($expectedDecoratorFQN is null ? list<DecoratedObject> : list<T>)
      */
     public function getObjectsForReference(Document $document, DictionaryKey|ExtendedDictionaryKey $dictionaryKey, ?string $expectedDecoratorFQN = null): array {
-        $references = $this->getValueForKey($dictionaryKey, ReferenceValueArray::class);
+        $references = $this->getValueForKey($dictionaryKey, ReferenceValueArray::class, $document);
         if ($references === null) {
             return [];
         }
@@ -130,11 +137,11 @@ class Dictionary {
         return $objects;
     }
 
-    public function getType(): ?TypeNameValue {
-        return $this->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
+    public function getType(?Document $document = null): ?TypeNameValue {
+        return $this->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class, $document);
     }
 
-    public function getSubType(): ?SubtypeNameValue {
-        return $this->getValueForKey(DictionaryKey::SUBTYPE, SubtypeNameValue::class);
+    public function getSubType(?Document $document = null): ?SubtypeNameValue {
+        return $this->getValueForKey(DictionaryKey::SUBTYPE, SubtypeNameValue::class, $document);
     }
 }

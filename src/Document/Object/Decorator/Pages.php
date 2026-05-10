@@ -18,7 +18,7 @@ class Pages extends DecoratedObject {
      */
     public function getPageItems(): array {
         $kids = [];
-        foreach ($this->getDictionary()->getValueForKey(DictionaryKey::KIDS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
+        foreach ($this->getDictionary()->getValueForKey(DictionaryKey::KIDS, ReferenceValueArray::class, $this->document)->referenceValues ?? [] as $referenceValue) {
             $kidObject = $this->document->getObject($referenceValue->objectNumber)
                 ?? throw new ParseFailureException(sprintf('Child with number %d could not be found', $referenceValue->objectNumber));
 
@@ -47,11 +47,11 @@ class Pages extends DecoratedObject {
      * @return T
      */
     public function getInheritableValue(DictionaryKey $dictionaryKey, string $expectedValueType, array $visitedObjectNrs): DictionaryValue|Dictionary|NameValue|null {
-        if (($localValue = $this->getDictionary()->getValueForKey($dictionaryKey, $expectedValueType)) !== null) {
+        if (($localValue = $this->getDictionary()->getValueForKey($dictionaryKey, $expectedValueType, $this->document)) !== null) {
             return $localValue;
         }
 
-        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class, $this->document)) === null) {
             return null;
         }
 
