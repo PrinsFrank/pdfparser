@@ -32,20 +32,27 @@ class Dictionary {
 
     /**
      * @template T of DictionaryValue|NameValue|Dictionary
-     * @param class-string<T> $valueType
+     * @param class-string<T> $expectedValueType
      * @return T
      */
-    public function getValueForKey(DictionaryKey|ExtendedDictionaryKey $dictionaryKey, string $valueType): DictionaryValue|Dictionary|NameValue|null {
+    public function getValueForKey(DictionaryKey|ExtendedDictionaryKey $dictionaryKey, string $expectedValueType): DictionaryValue|Dictionary|NameValue|null {
         foreach ($this->dictionaryEntries as $dictionaryEntry) {
-            if (($dictionaryKey instanceof DictionaryKey && $dictionaryEntry->key === $dictionaryKey)
-                || ($dictionaryKey instanceof ExtendedDictionaryKey && $dictionaryEntry->key instanceof ExtendedDictionaryKey && $dictionaryEntry->key->value === $dictionaryKey->value)) {
-                $value = $dictionaryEntry->value;
-                if (is_a($value, $valueType) === false) {
-                    throw new InvalidArgumentException(sprintf('Expected value with value %s to be of type %s, got %s', $dictionaryKey->value, $valueType, get_class($value)));
-                }
-
-                return $value;
+            if (($dictionaryKey instanceof DictionaryKey && $dictionaryEntry->key === $dictionaryKey) === false
+                && ($dictionaryKey instanceof ExtendedDictionaryKey && $dictionaryEntry->key instanceof ExtendedDictionaryKey && $dictionaryEntry->key->value === $dictionaryKey->value) === false) {
+                continue;
             }
+
+            $value = $dictionaryEntry->value;
+            if ($value instanceof Dictionary && $expectedValueType !== Dictionary::class) {
+                $value = $value->getValueForKey($dictionaryKey, $expectedValueType)
+                    ?? throw new InvalidArgumentException('Value type is dictionary but subdictionary not found');
+            }
+
+            if (is_a($value, $expectedValueType) === false) {
+                throw new InvalidArgumentException(sprintf('Expected value with value %s to be of type %s, got %s', $dictionaryKey->value, $expectedValueType, get_class($value)));
+            }
+
+            return $value;
         }
 
         return null;
@@ -124,20 +131,10 @@ class Dictionary {
     }
 
     public function getType(): ?TypeNameValue {
-        if ($this->getTypeForKey(DictionaryKey::TYPE) === Dictionary::class) {
-            return $this->getValueForKey(DictionaryKey::TYPE, Dictionary::class)
-                ?->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
-        }
-
         return $this->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
     }
 
     public function getSubType(): ?SubtypeNameValue {
-        if ($this->getTypeForKey(DictionaryKey::SUBTYPE) === Dictionary::class) {
-            return $this->getValueForKey(DictionaryKey::SUBTYPE, Dictionary::class)
-                ?->getValueForKey(DictionaryKey::SUBTYPE, SubtypeNameValue::class);
-        }
-
         return $this->getValueForKey(DictionaryKey::SUBTYPE, SubtypeNameValue::class);
     }
 }
