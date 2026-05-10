@@ -32,30 +32,18 @@ class XObject extends DecoratedObject {
     }
 
     public function getWidth(): ?int {
-        if ($this->getDictionary()->getTypeForKey(DictionaryKey::WIDTH) === null) {
-            return null;
-        }
-
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::WIDTH, IntegerValue::class)
             ?->value;
     }
 
     public function getHeight(): ?int {
-        if ($this->getDictionary()->getTypeForKey(DictionaryKey::HEIGHT) === null) {
-            return null;
-        }
-
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::HEIGHT, IntegerValue::class)
             ?->value;
     }
 
     public function getLength(): ?int {
-        if ($this->getDictionary()->getTypeForKey(DictionaryKey::LENGTH) === null) {
-            return null;
-        }
-
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)
             ?->value;
@@ -93,7 +81,8 @@ class XObject extends DecoratedObject {
 
     private function getBitsPerComponent(): ?int {
         return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::BITS_PER_COMPONENT, IntegerValue::class)?->value;
+            ->getValueForKey(DictionaryKey::BITS_PER_COMPONENT, IntegerValue::class)
+            ?->value;
     }
 
     private function getColorSpace(): ?ColorSpace {
