@@ -33,10 +33,10 @@ class CompressedObjectContentParser {
         }
 
         if (($filterType = $dictionary->getTypeForKey(DictionaryKey::FILTER)) === FilterNameValue::class) {
-            $binaryStreamContent = ($dictionary->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class) ?? throw new ParseFailureException())
+            $binaryStreamContent = ($dictionary->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class, null) ?? throw new ParseFailureException())
                 ->decodeBinary($binaryStreamContent, $dictionary, ($context instanceof Document ? $context : null));
         } elseif ($filterType === ArrayValue::class) {
-            foreach ($dictionary->getValueForKey(DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new ParseFailureException() as $filterValue) {
+            foreach ($dictionary->getValueForKey(DictionaryKey::FILTER, ArrayValue::class, null)->value ?? throw new ParseFailureException() as $filterValue) {
                 if (is_string($filterValue) === false || ($filter = FilterNameValue::tryFrom(ltrim($filterValue, '/'))) === null) {
                     throw new ParseFailureException();
                 }

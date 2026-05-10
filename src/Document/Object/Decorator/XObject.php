@@ -23,29 +23,29 @@ use PrinsFrank\PdfParser\Stream\Stream;
 class XObject extends DecoratedObject {
     public function isImage(): bool {
         return $this->getDictionary()
-            ->getSubType() === SubtypeNameValue::IMAGE;
+            ->getSubType($this->document) === SubtypeNameValue::IMAGE;
     }
 
     public function isForm(): bool {
         return $this->getDictionary()
-            ->getSubType() === SubtypeNameValue::FORM;
+            ->getSubType($this->document) === SubtypeNameValue::FORM;
     }
 
     public function getWidth(): ?int {
         return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::WIDTH, IntegerValue::class)
+            ->getValueForKey(DictionaryKey::WIDTH, IntegerValue::class, $this->document)
             ?->value;
     }
 
     public function getHeight(): ?int {
         return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::HEIGHT, IntegerValue::class)
+            ->getValueForKey(DictionaryKey::HEIGHT, IntegerValue::class, $this->document)
             ?->value;
     }
 
     public function getLength(): ?int {
         return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)
+            ->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class, $this->document)
             ?->value;
     }
 
@@ -60,11 +60,11 @@ class XObject extends DecoratedObject {
         }
 
         if ($filterValueType === FilterNameValue::class) {
-            return $this->getDictionary()->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class)?->getImageType();
+            return $this->getDictionary()->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class, $this->document)?->getImageType();
         }
 
         if ($filterValueType === ArrayValue::class) {
-            foreach ($this->getDictionary()->getValueForKey(DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new RuntimeException() as $filterValue) {
+            foreach ($this->getDictionary()->getValueForKey(DictionaryKey::FILTER, ArrayValue::class, $this->document)->value ?? throw new RuntimeException() as $filterValue) {
                 if (!is_string($filterValue)) {
                     throw new ParseFailureException(sprintf('Expected a string for filter value, got "%s"', ($jsonEncoded = json_encode($filterValue)) !== false ? $jsonEncoded : 'Unknown'));
                 }
@@ -81,7 +81,7 @@ class XObject extends DecoratedObject {
 
     private function getBitsPerComponent(): ?int {
         return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::BITS_PER_COMPONENT, IntegerValue::class)
+            ->getValueForKey(DictionaryKey::BITS_PER_COMPONENT, IntegerValue::class, $this->document)
             ?->value;
     }
 
@@ -91,11 +91,11 @@ class XObject extends DecoratedObject {
         }
 
         if ($type === DeviceColorSpaceNameValue::class || $type === CIEColorSpaceNameValue::class || $type === SpecialColorSpaceNameValue::class) {
-            return new ColorSpace(false, $this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, $type) ?? throw new ParseFailureException(), null, null, null);
+            return new ColorSpace(false, $this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, $type, $this->document) ?? throw new ParseFailureException(), null, null, null);
         }
 
         if ($type === ArrayValue::class) {
-            $colorSpaceArray = $this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, ArrayValue::class)
+            $colorSpaceArray = $this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, ArrayValue::class, $this->document)
                 ?? throw new ParseFailureException();
 
             return ColorSpaceFactory::fromString($colorSpaceArray->toString(), $this->document);
@@ -134,6 +134,7 @@ class XObject extends DecoratedObject {
             $height,
             $this->getBitsPerComponent() ?? throw new RuntimeException('Unable to retrieve bits per component'),
             $content,
+            $this->document,
         );
     }
 }

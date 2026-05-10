@@ -13,7 +13,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStri
 class EmbeddedFile extends DecoratedObject {
     public function getLength(): ?int {
         return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)
+            ->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class, $this->document)
             ?->value;
     }
 
@@ -24,25 +24,25 @@ class EmbeddedFile extends DecoratedObject {
 
     public function getSubType(): ?string {
         return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::SUBTYPE, TextStringValue::class)
+            ->getValueForKey(DictionaryKey::SUBTYPE, TextStringValue::class, $this->document)
             ?->getText();
     }
 
     public function getSize(): ?int {
         return $this->getFileSpecificInformation()
-            ?->getValueForKey(DictionaryKey::SIZE, IntegerValue::class)
+            ?->getValueForKey(DictionaryKey::SIZE, IntegerValue::class, $this->document)
             ?->value;
     }
 
     public function getCreationDate(): ?DateTimeImmutable {
         return $this->getFileSpecificInformation()
-            ?->getValueForKey(DictionaryKey::CREATION_DATE, DateValue::class)
+            ?->getValueForKey(DictionaryKey::CREATION_DATE, DateValue::class, $this->document)
             ?->value;
     }
 
     public function getModificationDate(): ?DateTimeImmutable {
         return $this->getFileSpecificInformation()
-            ?->getValueForKey(DictionaryKey::MOD_DATE, DateValue::class)
+            ?->getValueForKey(DictionaryKey::MOD_DATE, DateValue::class, $this->document)
             ?->value;
     }
 }

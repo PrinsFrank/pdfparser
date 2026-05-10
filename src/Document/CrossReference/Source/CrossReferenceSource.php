@@ -48,7 +48,7 @@ class CrossReferenceSource {
      */
     public function getValueForKey(DictionaryKey $dictionaryKey, string $valueType): DictionaryValue|Dictionary|NameValue|null {
         foreach ($this->crossReferenceSections as $crossReferenceSection) {
-            $valueForKey = $crossReferenceSection->dictionary->getValueForKey($dictionaryKey, $valueType);
+            $valueForKey = $crossReferenceSection->dictionary->getValueForKey($dictionaryKey, $valueType, null);
             if ($valueForKey !== null) {
                 return $valueForKey;
             }

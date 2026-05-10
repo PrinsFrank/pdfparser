@@ -118,11 +118,11 @@ class Page extends DecoratedObject {
      * @return T
      */
     public function getInheritableValue(DictionaryKey $dictionaryKey, string $expectedValueType): DictionaryValue|Dictionary|NameValue|null {
-        if (($localValue = $this->getDictionary()->getValueForKey($dictionaryKey, $expectedValueType)) !== null) {
+        if (($localValue = $this->getDictionary()->getValueForKey($dictionaryKey, $expectedValueType, $this->document)) !== null) {
             return $localValue;
         }
 
-        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class, $this->document)) === null) {
             return null;
         }
 
