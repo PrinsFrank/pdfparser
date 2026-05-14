@@ -14,3 +14,11 @@ In the `tests/Samples/files` directory, create a new directory with a descriptiv
 ```bash
 composer update-content
 ```
+
+## Debugging file encryption keys
+
+To retrieve information about passwords and file encryption keys, it's useful to debug against a working implementation. We can use qpdf for that like this:
+
+```bash
+qpdf --show-encryption --show-encryption-key --password=knownPassword file.pdf
+```
