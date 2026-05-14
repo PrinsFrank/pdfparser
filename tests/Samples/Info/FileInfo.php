@@ -11,6 +11,7 @@ readonly class FileInfo {
         public int $version,
         public ?string $userPassword,
         public ?string $ownerPassword,
+        public ?string $fileEncryptionKey,
         public ?string $title,
         public ?string $producer,
         public ?string $author,

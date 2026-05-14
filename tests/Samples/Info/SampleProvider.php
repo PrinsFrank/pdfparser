@@ -25,16 +25,13 @@ class SampleProvider {
 
             /** @var object{version: float, userPassword: ?string, ownerPassword: ?string, fileEncryptionKey: ?string, title: ?string, producer: ?string, author: ?string, creator: ?string, creationDate: ?\DateTimeImmutable, modificationDate: ?\DateTimeImmutable, pages: list<object{content: string, images?: string[]}>} $content */
             $content = Yaml::parseFile($contentsPath, Yaml::PARSE_OBJECT_FOR_MAP | Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE | Yaml::PARSE_DATETIME);
-            if ($content->userPassword !== null || $content->ownerPassword !== null) {
-                continue;
-            }
-
             yield $sampleName => [
                 new FileInfo(
                     $pdfPath,
                     (int) ($content->version * 10),
                     $content->userPassword,
                     $content->ownerPassword,
+                    $content->fileEncryptionKey,
                     $content->title,
                     $content->producer,
                     $content->author,
