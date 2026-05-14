@@ -18,8 +18,16 @@ class BooleanValueTest extends TestCase {
             BooleanValue::fromValue('true'),
         );
         static::assertEquals(
+            new BooleanValue(true),
+            BooleanValue::fromValue('/true'),
+        );
+        static::assertEquals(
             new BooleanValue(false),
             BooleanValue::fromValue('false'),
+        );
+        static::assertEquals(
+            new BooleanValue(false),
+            BooleanValue::fromValue('/false'),
         );
     }
 }
