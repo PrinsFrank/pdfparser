@@ -11,13 +11,18 @@ class BooleanValue implements DictionaryValue {
         public readonly bool $value,
     ) {}
 
+    /**
+     * ISO 32000-2:2020, 7.3.2 defines booleans as the keywords true/false.
+     * ISO 32000-2:2020, 7.3.5 defines /true and /false as name objects.
+     * This parser also accepts slash-prefixed forms as a non-standard recovery path for malformed PDFs.
+     */
     #[Override]
     public static function fromValue(string $valueString): ?self {
-        if ($valueString === 'true') {
+        if ($valueString === 'true' || $valueString === '/true') {
             return new self(true);
         }
 
-        if ($valueString === 'false') {
+        if ($valueString === 'false' || $valueString === '/false') {
             return new self(false);
         }
 
