@@ -77,7 +77,7 @@ class StandardSecurity {
         return $this->isUserPasswordValid($encryptDictionary, $firstID);
     }
 
-    /** @see 7.6.4.4.2 */
+    /** @see 7.6.4.3.2 */
     public function getUserFileEncryptionKey(EncryptDictionary $encryptDictionary, string $firstIDValue): string {
         if (in_array($encryptDictionary->getStandardSecurityHandlerRevision(), [StandardSecurityHandlerRevision::v2, StandardSecurityHandlerRevision::v3, StandardSecurityHandlerRevision::v4], true) === false) {
             throw new NotImplementedException('Unsupported security handler revision: ' . $encryptDictionary->getStandardSecurityHandlerRevision()->value);
