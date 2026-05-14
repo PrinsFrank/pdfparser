@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=../../schema.json
+version: '1.4'
+userPassword: user
+ownerPassword: owner
+fileEncryptionKey: 2b52a32ee5e47fe6d36cc5c0bcaac1f1
+title: 'Untitled document'
+producer: 'Skia/PDF m133 Google Docs Renderer'
+author: null
+creator: null
+creationDate: null
+modificationDate: null
+pages:
+  -
+    content: 'Hello world'
