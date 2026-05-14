@@ -12,6 +12,42 @@ class TextStringValueTest extends TestCase {
         static::assertEquals(new TextStringValue('(foo)'), TextStringValue::fromValue('(foo)'));
     }
 
+    /** @see 7.3.4.2, table 3 */
+    public function testGetTextWithEscapeSequenceInLiteralString(): void {
+        static::assertSame(
+            "\n",
+            (new TextStringValue('(\n)'))->getText(),
+        );
+        static::assertSame(
+            "\r",
+            (new TextStringValue('(\r)'))->getText(),
+        );
+        static::assertSame(
+            "\t",
+            (new TextStringValue('(\t)'))->getText(),
+        );
+        static::assertSame(
+            "\x08",
+            (new TextStringValue('(\b)'))->getText(),
+        );
+        static::assertSame(
+            "\f",
+            (new TextStringValue('(\f)'))->getText(),
+        );
+        static::assertSame(
+            "(",
+            (new TextStringValue('(\()'))->getText(),
+        );
+        static::assertSame(
+            ")",
+            (new TextStringValue('(\))'))->getText(),
+        );
+        static::assertSame(
+            '\\',
+            (new TextStringValue('(\\\\)'))->getText(),
+        );
+    }
+
     /** @see 7.3.5, table 4 */
     public function testGetTextLiteralNames(): void {
         static::assertSame(
