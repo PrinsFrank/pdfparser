@@ -17,7 +17,7 @@ class TextStringValue implements DictionaryValue {
     public function getText(): string {
         if (str_starts_with($this->textStringValue, '(') && str_ends_with($this->textStringValue, ')')) {
             $value = preg_replace_callback(
-                '/\\\\([0-7]{3})/',
+                '/\\\\([0-7]{1,3})/',
                 fn(array $matches) => mb_chr((int) octdec($matches[1])),
                 substr($this->textStringValue, 1, -1),
             ) ?? throw new ParseFailureException();

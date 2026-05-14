@@ -48,6 +48,38 @@ class TextStringValueTest extends TestCase {
         );
     }
 
+    /** @see 7.3.4 */
+    public function testGetTextWithOctalCharacters(): void {
+        static::assertSame(
+            'This string contains ¥two octal charactersÇ.',
+            (new TextStringValue('(This string contains \245two octal characters\307.)'))->getText(),
+        );
+        static::assertSame(
+            "\005",
+            (new TextStringValue('(\005)'))->getText(),
+        );
+        static::assertSame(
+            "\005" . '3',
+            (new TextStringValue('(\0053)'))->getText(),
+        );
+        static::assertSame(
+            "\005",
+            (new TextStringValue('(\05)'))->getText(),
+        );
+        static::assertSame(
+            "\005",
+            (new TextStringValue('(\5)'))->getText(),
+        );
+        static::assertSame(
+            '+',
+            (new TextStringValue('(\053)'))->getText(),
+        );
+        static::assertSame(
+            '+',
+            (new TextStringValue('(\53)'))->getText(),
+        );
+    }
+
     /** @see 7.3.5, table 4 */
     public function testGetTextLiteralNames(): void {
         static::assertSame(
