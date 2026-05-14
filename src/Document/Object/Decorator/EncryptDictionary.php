@@ -74,10 +74,9 @@ class EncryptDictionary extends DecoratedObject {
             throw new ParseFailureException();
         }
 
-        $expectedLength = $this->getStandardSecurityHandlerRevision() === StandardSecurityHandlerRevision::v2 ? 32 : 64;
         return str_pad(
-            substr($decodedValue, 0, $expectedLength),
-            $expectedLength,
+            substr($decodedValue, 0, 32),
+            32,
             "\x00",
         );
     }
