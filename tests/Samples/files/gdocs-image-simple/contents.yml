@@ -2,6 +2,7 @@
 version: '1.4'
 userPassword: null
 ownerPassword: null
+fileEncryptionKey: null
 title: 'File with image'
 producer: 'Skia/PDF m138 Google Docs Renderer'
 author: null

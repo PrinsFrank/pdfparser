@@ -2,6 +2,7 @@
 version: '1.7'
 userPassword: null
 ownerPassword: null
+fileEncryptionKey: null
 title: ''
 producer: 'PDFlib+PDI 10.0.1p2 (C++/Win32)'
 author: ''

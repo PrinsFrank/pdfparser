@@ -2,6 +2,7 @@
 version: '2.0'
 userPassword: null
 ownerPassword: null
+fileEncryptionKey: null
 title: !!binary /v8AMQAuADIAIABUAGEAYgBlAGwAbABlAF8AMQBfAEsAQQBfADEAOQAtADAANwAwADUAOQ==
 producer: 'Kofax Power PDF'
 author: 'Rehm, Martin (LSN)'

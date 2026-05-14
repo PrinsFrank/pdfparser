@@ -48,6 +48,7 @@ foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sa
             'version' => $parsedPDF->version->value,
             'userPassword' => null,
             'ownerPassword' => null,
+            'fileEncryptionKey' => null,
             'title' => $parsedPDF->getInformationDictionary()?->getTitle(),
             'producer' => $parsedPDF->getInformationDictionary()?->getProducer(),
             'author' => $parsedPDF->getInformationDictionary()?->getAuthor(),

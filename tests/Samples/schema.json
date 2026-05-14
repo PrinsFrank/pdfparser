@@ -14,6 +14,10 @@
             "type": ["string", "null"],
             "description": "Password to restrict document actions"
         },
+        "fileEncryptionKey": {
+            "type": ["string", "null"],
+            "description": "File encryption key"
+        },
         "title": {
             "type": ["string", "null"],
             "description": "Title of the document"
