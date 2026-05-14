@@ -35,50 +35,29 @@ class EncryptDictionary extends DecoratedObject {
     public function getOwnerPasswordEntry(): string {
         $textStringValue = $this->getDictionary()
             ->getValueForKey(DictionaryKey::O, TextStringValue::class, $this->document)
-            ->textStringValue
+            ?->getText()
             ?? throw new ParseFailureException();
 
-        if (str_starts_with($textStringValue, '<') && str_ends_with($textStringValue, '>')) {
-            $decodedValue = hex2bin(substr($textStringValue, 1, -1));
-            if ($decodedValue === false) {
-                throw new ParseFailureException('Unable to decode owner password entry');
-            }
-        } elseif (str_starts_with($textStringValue, '(') && str_ends_with($textStringValue, ')')) {
-            $decodedValue = substr($textStringValue, 1, -1);
-        } else {
-            throw new ParseFailureException();
-        }
-
-        $decodedValue = str_pad($decodedValue, 32, "\x00");
+        $textStringValue = str_pad($textStringValue, 32, "\x00");
         if ($this->getStandardSecurityHandlerRevision()->value <= 4) {
-            return substr($decodedValue, 0, 32);
+            return substr($textStringValue, 0, 32);
         }
 
-        return $decodedValue;
+        return $textStringValue;
     }
 
     public function getUserPasswordEntry(): string {
         $textStringValue = $this->getDictionary()
             ->getValueForKey(DictionaryKey::U, TextStringValue::class, $this->document)
-            ->textStringValue
+            ?->getText()
             ?? throw new ParseFailureException();
 
-        if (str_starts_with($textStringValue, '<') && str_ends_with($textStringValue, '>')) {
-            $decodedValue = hex2bin(substr($textStringValue, 1, -1));
-            if ($decodedValue === false) {
-                throw new ParseFailureException('Unable to decode user password entry');
-            }
-        } elseif (str_starts_with($textStringValue, '(') && str_ends_with($textStringValue, ')')) {
-            $decodedValue = substr($textStringValue, 1, -1);
-        } else {
-            throw new ParseFailureException();
+        $textStringValue = str_pad($textStringValue, 32, "\x00");
+        if ($this->getStandardSecurityHandlerRevision()->value <= 4) {
+            return substr($textStringValue, 0, 32);
         }
 
-        return str_pad(
-            substr($decodedValue, 0, 32),
-            32,
-            "\x00",
-        );
+        return $textStringValue;
     }
 
     public function getPValue(): int {
