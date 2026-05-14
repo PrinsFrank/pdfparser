@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntryFactory;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Boolean\BooleanValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TabsNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Version\Version;
@@ -27,6 +28,10 @@ class DictionaryEntryFactoryTest extends TestCase {
             new DictionaryEntry(DictionaryKey::VERSION, Version::V1_5),
             DictionaryEntryFactory::fromKeyValuePair('/Version', '/1#2E5'),
             'Support for hex values in name objects, see #7.3.5',
+        );
+        static::assertEquals(
+            new DictionaryEntry(DictionaryKey::MARKED, new BooleanValue(true)),
+            DictionaryEntryFactory::fromKeyValuePair('/Marked', '/true'),
         );
     }
 }
