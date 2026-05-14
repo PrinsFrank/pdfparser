@@ -2,6 +2,7 @@
 version: '1.3'
 userPassword: null
 ownerPassword: null
+fileEncryptionKey: null
 title: null
 producer: 'RICOH M C251FW (6577f3)'
 author: null

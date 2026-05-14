@@ -23,7 +23,7 @@ class SampleProvider {
                 throw new RuntimeException();
             }
 
-            /** @var object{version: float, userPassword: ?string, ownerPassword: ?string, title: ?string, producer: ?string, author: ?string, creator: ?string, creationDate: ?\DateTimeImmutable, modificationDate: ?\DateTimeImmutable, pages: list<object{content: string, images?: string[]}>} $content */
+            /** @var object{version: float, userPassword: ?string, ownerPassword: ?string, fileEncryptionKey: ?string, title: ?string, producer: ?string, author: ?string, creator: ?string, creationDate: ?\DateTimeImmutable, modificationDate: ?\DateTimeImmutable, pages: list<object{content: string, images?: string[]}>} $content */
             $content = Yaml::parseFile($contentsPath, Yaml::PARSE_OBJECT_FOR_MAP | Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE | Yaml::PARSE_DATETIME);
             if ($content->userPassword !== null || $content->ownerPassword !== null) {
                 continue;

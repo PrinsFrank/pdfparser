@@ -2,6 +2,7 @@
 version: '1.7'
 userPassword: null
 ownerPassword: null
+fileEncryptionKey: null
 title: "The Netherlands courts have jurisdiction to hear a representative action concerning the alleged anticompetitive conduct of Apple in relation to its App Store aimed at the Netherlands market\r"
 producer: !!binary /v8ATQBpAGMAcgBvAHMAbwBmAHQArgAgAFcAbwByAGQAIAAyADAAMgAx
 author: null

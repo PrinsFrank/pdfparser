@@ -2,6 +2,7 @@
 version: '1.6'
 userPassword: null
 ownerPassword: null
+fileEncryptionKey: null
 title: ''
 producer: 'Adobe PDF Library 20.1.50'
 author: null
