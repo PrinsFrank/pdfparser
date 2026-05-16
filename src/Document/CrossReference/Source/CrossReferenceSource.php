@@ -75,4 +75,26 @@ class CrossReferenceSource {
 
         return $firstId;
     }
+
+    public function getByteOffsetNextInUseObject(CrossReferenceEntryInUseObject $crossReferenceEntry): ?int {
+        $byteOffsets = [];
+        foreach ($this->crossReferenceSections as $crossReferenceSection) {
+            foreach ($crossReferenceSection->crossReferenceSubSections as $crossReferenceSubSection) {
+                foreach ($crossReferenceSubSection->crossReferenceEntries as $entry) {
+                    if ($entry instanceof CrossReferenceEntryInUseObject) {
+                        $byteOffsets[] = $entry->byteOffsetInDecodedStream;
+                    }
+                }
+            }
+        }
+
+        sort($byteOffsets);
+        foreach ($byteOffsets as $byteOffset) {
+            if ($byteOffset > $crossReferenceEntry->byteOffsetInDecodedStream) {
+                return $byteOffset;
+            }
+        }
+
+        return null;
+    }
 }
