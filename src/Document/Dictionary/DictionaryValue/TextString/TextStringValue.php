@@ -55,6 +55,33 @@ class TextStringValue implements DictionaryValue {
         throw new ParseFailureException(sprintf('Unrecognized format %s', $this->textStringValue));
     }
 
+    public function getBinaryString(): string {
+        if (str_starts_with($this->textStringValue, '(') && str_ends_with($this->textStringValue, ')')) {
+            $value = preg_replace_callback(
+                '/\\\\([0-7]{1,3})/',
+                fn(array $matches) => chr((int) octdec($matches[1])),
+                substr($this->textStringValue, 1, -1),
+            ) ?? throw new ParseFailureException();
+
+            return str_replace(
+                ['\\\\', '\n', '\r', '\t', '\b', '\f', '\(', '\)'],
+                ['\\', "\n", "\r", "\t", "\x08", "\f", '(', ')'],
+                $value,
+            );
+        }
+
+        if (str_starts_with($this->textStringValue, '<') && str_ends_with($this->textStringValue, '>')) {
+            $string = substr($this->textStringValue, 1, -1);
+            $binaryValue = hex2bin($string);
+            if ($binaryValue === false) {
+                throw new ParseFailureException('Invalid hex string');
+            }
+            return $binaryValue;
+        }
+
+        throw new ParseFailureException(sprintf('Unrecognized format %s', $this->textStringValue));
+    }
+
     #[Override]
     public static function fromValue(string $valueString): self {
         return new self($valueString);

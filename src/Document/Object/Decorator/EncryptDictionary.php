@@ -33,31 +33,31 @@ class EncryptDictionary extends DecoratedObject {
     }
 
     public function getOwnerPasswordEntry(): string {
-        $textStringValue = $this->getDictionary()
+        $binaryString = $this->getDictionary()
             ->getValueForKey(DictionaryKey::O, TextStringValue::class, $this->document)
-            ?->getText()
+            ?->getBinaryString()
             ?? throw new ParseFailureException();
 
-        $textStringValue = str_pad($textStringValue, 32, "\x00");
+        $binaryString = str_pad($binaryString, 32, "\x00");
         if ($this->getStandardSecurityHandlerRevision()->value <= 4) {
-            return substr($textStringValue, 0, 32);
+            return substr($binaryString, 0, 32);
         }
 
-        return $textStringValue;
+        return $binaryString;
     }
 
     public function getUserPasswordEntry(): string {
-        $textStringValue = $this->getDictionary()
+        $binaryString = $this->getDictionary()
             ->getValueForKey(DictionaryKey::U, TextStringValue::class, $this->document)
-            ?->getText()
+            ?->getBinaryString()
             ?? throw new ParseFailureException();
 
-        $textStringValue = str_pad($textStringValue, 32, "\x00");
+        $binaryString = str_pad($binaryString, 32, "\x00");
         if ($this->getStandardSecurityHandlerRevision()->value <= 4) {
-            return substr($textStringValue, 0, 32);
+            return substr($binaryString, 0, 32);
         }
 
-        return $textStringValue;
+        return $binaryString;
     }
 
     public function getPValue(): int {
