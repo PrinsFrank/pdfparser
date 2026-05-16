@@ -40,19 +40,19 @@ enum FilterNameValue: string implements NameValue {
             self::DCT_DECODE => $content, // Don't decode JPEG content
             self::FLATE_DECODE => FlateDecode::decodeBinary(
                 $content,
-                $decodeParams !== null && ($predictorValue = LZWFlatePredictorValue::tryFrom((int) $decodeParams->getValueForKey(DictionaryKey::PREDICTOR, IntegerValue::class, $document)?->value)) !== null
+                $decodeParams !== null && ($predictorValue = LZWFlatePredictorValue::tryFrom((int) $decodeParams->getValueForKey($document, DictionaryKey::PREDICTOR, IntegerValue::class)?->value)) !== null
                     ? $predictorValue
                     : LZWFlatePredictorValue::None,
-                $decodeParams?->getValueForKey(DictionaryKey::COLUMNS, IntegerValue::class, $document)->value ?? 1,
+                $decodeParams?->getValueForKey($document, DictionaryKey::COLUMNS, IntegerValue::class)->value ?? 1,
             ),
             self::CCITT_FAX_DECODE => CCITTFaxDecode::addHeaderAndIFD(
                 $content,
-                $decodeParams?->getValueForKey(DictionaryKey::COLUMNS, IntegerValue::class, $document)->value
+                $decodeParams?->getValueForKey($document, DictionaryKey::COLUMNS, IntegerValue::class)->value
                     ?? throw new ParseFailureException('Missing columns'),
-                $decodeParams->getValueForKey(DictionaryKey::ROWS, IntegerValue::class, $document)->value
-                    ?? $dictionary->getValueForKey(DictionaryKey::HEIGHT, IntegerValue::class, $document)->value
+                $decodeParams->getValueForKey($document, DictionaryKey::ROWS, IntegerValue::class)->value
+                    ?? $dictionary->getValueForKey($document, DictionaryKey::HEIGHT, IntegerValue::class)->value
                     ?? throw new ParseFailureException('Missing rows'),
-                $decodeParams->getValueForKey(DictionaryKey::K, IntegerValue::class, $document)->value
+                $decodeParams->getValueForKey($document, DictionaryKey::K, IntegerValue::class)->value
                     ?? throw new ParseFailureException('Missing K'),
             ),
             self::ASCII_85_DECODE => ASCII85Decode::decodeBinary($content),

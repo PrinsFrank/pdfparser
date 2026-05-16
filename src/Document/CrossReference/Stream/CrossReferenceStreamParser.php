@@ -35,12 +35,12 @@ class CrossReferenceStreamParser {
             throw new ParseFailureException('Expected stream of type xref');
         }
 
-        $wValue = $dictionary->getValueForKey(DictionaryKey::W, CrossReferenceStreamByteSizes::class, null)
+        $wValue = $dictionary->getValueForKey(null, DictionaryKey::W, CrossReferenceStreamByteSizes::class)
             ?? throw new ParseFailureException('Cross reference streams should have a dictionary entry for "W"');
         $startStream = $stream->getStartNextLineAfter(Marker::STREAM, $startPos, $startPos + $nrOfBytes)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::STREAM->value));
 
-        if (($length = $dictionary->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class, null)?->value) === null) {
+        if (($length = $dictionary->getValueForKey(null, DictionaryKey::LENGTH, IntegerValue::class)?->value) === null) {
             $endStream = $stream->lastPos(Marker::END_STREAM, $stream->getSizeInBytes() - $startPos + $nrOfBytes);
             if ($endStream === null || $endStream > ($startPos + $nrOfBytes)) {
                 throw new ParseFailureException(sprintf('Expected end of stream content marked by %s, none found', Marker::END_STREAM->value));
@@ -68,8 +68,8 @@ class CrossReferenceStreamParser {
         }
 
         /** @var list<int> $startObjNrOfItemsArray where all even items are the start object number and all odd items are the number of objects */
-        $startObjNrOfItemsArray = $dictionary->getValueForKey(DictionaryKey::INDEX, ArrayValue::class, null)->value
-            ?? [0, $dictionary->getValueForKey(DictionaryKey::SIZE, IntegerValue::class, null)->value ?? throw new ParseFailureException('Cross reference streams should have either an index or a size, neither was found')];
+        $startObjNrOfItemsArray = $dictionary->getValueForKey(null, DictionaryKey::INDEX, ArrayValue::class)->value
+            ?? [0, $dictionary->getValueForKey(null, DictionaryKey::SIZE, IntegerValue::class)->value ?? throw new ParseFailureException('Cross reference streams should have either an index or a size, neither was found')];
 
         $crossReferenceSubSections = [];
         foreach (array_chunk($startObjNrOfItemsArray, 2) as $startNrNrOfObjects) {

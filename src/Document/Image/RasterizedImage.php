@@ -17,7 +17,7 @@ class RasterizedImage {
      * @param int<1, max> $height
      * @throws ParseFailureException
      */
-    public static function toPNG(ColorSpace $colorSpace, int $width, int $height, int $bitsPerComponent, Stream $content, ?Document $document = null): Stream {
+    public static function toPNG(ColorSpace $colorSpace, int $width, int $height, int $bitsPerComponent, Stream $content, Document $document): Stream {
         $image = imagecreatetruecolor($width, $height);
         if ($image === false) {
             throw new ParseFailureException('Unable to create image');

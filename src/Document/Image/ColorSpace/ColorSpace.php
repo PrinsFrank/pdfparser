@@ -23,7 +23,7 @@ readonly class ColorSpace {
         public ?int $maxIndexLUT,
     ) {}
 
-    public function getComponents(?Document $document = null): Components {
+    public function getComponents(Document $document): Components {
         if (isset($this->components)) {
             return $this->components;
         }
@@ -36,7 +36,7 @@ readonly class ColorSpace {
             return $this->components = Components::tryFrom(
                 $this->LUTObj
                     ->getDictionary()
-                    ->getValueForKey(DictionaryKey::N, IntegerValue::class, $document)
+                    ->getValueForKey($document, DictionaryKey::N, IntegerValue::class)
                     ->value ?? throw new RuntimeException('Unable to determine number of components for color space'),
             ) ?? throw new ParseFailureException('Unable to determine number of components for color space');
         }
