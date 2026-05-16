@@ -28,23 +28,24 @@ class SamplesTest extends TestCase {
             static::assertSame($fileInfo->fileEncryptionKey, bin2hex($fileEncryptionKey));
         } else {
             static::assertNull($fileInfo->fileEncryptionKey);
-            static::assertSame($fileInfo->title, $document->getInformationDictionary()?->getTitle());
-            static::assertSame($fileInfo->producer, $document->getInformationDictionary()?->getProducer());
-            static::assertSame($fileInfo->author, $document->getInformationDictionary()?->getAuthor());
-            static::assertSame($fileInfo->creator, $document->getInformationDictionary()?->getCreator());
-            static::assertEquals($fileInfo->creationDate, $document->getInformationDictionary()?->getCreationDate());
-            static::assertEquals($fileInfo->modificationDate, $document->getInformationDictionary()?->getModificationDate());
-            static::assertSame(count($fileInfo->pages ?? []), $document->getNumberOfPages());
-            foreach ($fileInfo->pages ?? [] as $index => $expectedPage) {
-                static::assertNotNull($page = $document->getPage($index + 1));
-                static::assertSame(trim($expectedPage->content), trim($page->getText()));
-                foreach ($expectedPage->imagePaths as $imageIndex => $imagePath) {
-                    self::assertImage(
-                        $imagePath,
-                        $page->getImages()[$imageIndex]->getStream()->toString(),
-                        sprintf('Page %d, image %d', $index, $imageIndex),
-                    );
-                }
+        }
+
+        static::assertSame($fileInfo->title, $document->getInformationDictionary()?->getTitle());
+        static::assertSame($fileInfo->producer, $document->getInformationDictionary()?->getProducer());
+        static::assertSame($fileInfo->author, $document->getInformationDictionary()?->getAuthor());
+        static::assertSame($fileInfo->creator, $document->getInformationDictionary()?->getCreator());
+        static::assertEquals($fileInfo->creationDate, $document->getInformationDictionary()?->getCreationDate());
+        static::assertEquals($fileInfo->modificationDate, $document->getInformationDictionary()?->getModificationDate());
+        static::assertSame(count($fileInfo->pages ?? []), $document->getNumberOfPages());
+        foreach ($fileInfo->pages ?? [] as $index => $expectedPage) {
+            static::assertNotNull($page = $document->getPage($index + 1));
+            static::assertSame(trim($expectedPage->content), trim($page->getText()));
+            foreach ($expectedPage->imagePaths as $imageIndex => $imagePath) {
+                self::assertImage(
+                    $imagePath,
+                    $page->getImages()[$imageIndex]->getStream()->toString(),
+                    sprintf('Page %d, image %d', $index, $imageIndex),
+                );
             }
         }
     }
