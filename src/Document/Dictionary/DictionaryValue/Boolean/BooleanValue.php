@@ -6,9 +6,9 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
 /** @api */
-class BooleanValue implements DictionaryValue {
+readonly class BooleanValue implements DictionaryValue {
     public function __construct(
-        public readonly bool $value,
+        public bool $value,
     ) {}
 
     #[Override]

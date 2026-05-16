@@ -5,9 +5,9 @@ namespace PrinsFrank\PdfParser\Document\CMap\ToUnicode;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
-class ToUnicodeCMap {
+readonly class ToUnicodeCMap {
     /** @var list<BFRange|BFChar> */
-    private readonly array $bfCharRangeInfo;
+    private array $bfCharRangeInfo;
 
     /**
      * @no-named-arguments
@@ -17,8 +17,8 @@ class ToUnicodeCMap {
      * @throws InvalidArgumentException
      */
     public function __construct(
-        public readonly array $codeSpaceRanges,
-        public readonly int $byteSize,
+        public array   $codeSpaceRanges,
+        public int     $byteSize,
         BFRange|BFChar ...$bfCharRangeInfo,
     ) {
         $this->bfCharRangeInfo = $bfCharRangeInfo;

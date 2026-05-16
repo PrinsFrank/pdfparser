@@ -9,9 +9,9 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
-class CrossReferenceSubSection {
+readonly class CrossReferenceSubSection {
     /** @var array<CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CrossReferenceEntryCompressed> */
-    public array $crossReferenceEntries = [];
+    public array $crossReferenceEntries;
 
     /**
      * @phpstan-assert int<0, max> $nrOfEntries
@@ -21,8 +21,8 @@ class CrossReferenceSubSection {
      * @no-named-arguments
      */
     public function __construct(
-        public readonly int $firstObjectNumber,
-        public readonly int $nrOfEntries,
+        public int $firstObjectNumber,
+        public int $nrOfEntries,
         CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CrossReferenceEntryCompressed... $crossReferenceEntries,
     ) {
         if ($this->nrOfEntries < 0) {

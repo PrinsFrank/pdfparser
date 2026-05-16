@@ -2,14 +2,14 @@
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
-class TransformationMatrix {
+readonly class TransformationMatrix {
     public function __construct(
-        public readonly float $scaleX,  // a
-        public readonly float $shearX,  // b
-        public readonly float $shearY,  // c
-        public readonly float $scaleY,  // d
-        public readonly float $offsetX, // e
-        public readonly float $offsetY, // f
+        public float $scaleX,  // a
+        public float $shearX,  // b
+        public float $shearY,  // c
+        public float $scaleY,  // d
+        public float $offsetX, // e
+        public float $offsetY, // f
     ) {}
 
     /** Please note that a concatenated transformation matrix of A B !== B A */

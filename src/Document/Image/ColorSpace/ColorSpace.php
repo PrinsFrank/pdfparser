@@ -12,15 +12,15 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
-class ColorSpace {
-    private readonly Components $components;
+readonly class ColorSpace {
+    private Components $components;
 
     public function __construct(
-        public readonly bool $isIndexed,
-        public readonly DeviceColorSpaceNameValue|CIEColorSpaceNameValue|SpecialColorSpaceNameValue $nameValue,
-        public readonly ?DecoratedObject $LUTObj,
-        public readonly ?string $fallbackLUT,
-        public readonly ?int $maxIndexLUT,
+        public bool $isIndexed,
+        public DeviceColorSpaceNameValue|CIEColorSpaceNameValue|SpecialColorSpaceNameValue $nameValue,
+        public ?DecoratedObject $LUTObj,
+        public ?string $fallbackLUT,
+        public ?int $maxIndexLUT,
     ) {}
 
     public function getComponents(?Document $document = null): Components {

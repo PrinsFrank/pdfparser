@@ -2,9 +2,9 @@
 
 namespace PrinsFrank\PdfParser\Document\CMap\ToUnicode;
 
-class CodeSpaceRange {
+readonly class CodeSpaceRange {
     public function __construct(
-        public readonly int $codeSpaceStart,
-        public readonly int $codeSpaceEnd,
+        public int $codeSpaceStart,
+        public int $codeSpaceEnd,
     ) {}
 }

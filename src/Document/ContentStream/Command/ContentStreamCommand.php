@@ -19,9 +19,9 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Type3Font
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\XObjectOperator;
 
 /** @internal */
-class ContentStreamCommand {
+readonly class ContentStreamCommand {
     public function __construct(
-        public readonly CompatibilityOperator|InlineImageOperator|MarkedContentOperator|TextObjectOperator|ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator $operator,
-        public readonly string $operands,
+        public CompatibilityOperator|InlineImageOperator|MarkedContentOperator|TextObjectOperator|ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator $operator,
+        public string $operands,
     ) {}
 }

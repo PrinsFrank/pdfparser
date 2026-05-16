@@ -19,9 +19,9 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
-class Dictionary {
+readonly class Dictionary {
     /** @var array<DictionaryEntry> */
-    public readonly array $dictionaryEntries;
+    public array $dictionaryEntries;
 
     /** @no-named-arguments */
     public function __construct(

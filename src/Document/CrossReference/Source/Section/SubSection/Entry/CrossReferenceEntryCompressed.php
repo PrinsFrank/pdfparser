@@ -3,7 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry;
 
 /** 7.5.8, Table 18, only present in crossReferenceStreams */
-class CrossReferenceEntryCompressed {
+readonly class CrossReferenceEntryCompressed {
     /**
      * @see Table 18
      *
@@ -14,7 +14,7 @@ class CrossReferenceEntryCompressed {
     final public const GENERATION_NUMBER = 0;
 
     public function __construct(
-        public readonly int $storedInStreamWithObjectNumber,
-        public readonly int $indexOfThisObjectWithinObjectStream,
+        public int $storedInStreamWithObjectNumber,
+        public int $indexOfThisObjectWithinObjectStream,
     ) {}
 }

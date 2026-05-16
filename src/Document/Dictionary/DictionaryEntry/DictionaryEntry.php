@@ -10,9 +10,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 
 /** @api */
-class DictionaryEntry {
+readonly class DictionaryEntry {
     public function __construct(
-        public readonly DictionaryKey|ExtendedDictionaryKey $key,
-        public readonly DictionaryValue|Dictionary|NameValue $value,
+        public DictionaryKey|ExtendedDictionaryKey  $key,
+        public DictionaryValue|Dictionary|NameValue $value,
     ) {}
 }

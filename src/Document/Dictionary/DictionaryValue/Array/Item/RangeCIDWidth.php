@@ -2,11 +2,11 @@
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\Item;
 
-class RangeCIDWidth {
+readonly class RangeCIDWidth {
     public function __construct(
-        public readonly int $cidStart,
-        public readonly int $cidEnd,
-        public readonly float $width,
+        public int $cidStart,
+        public int $cidEnd,
+        public float $width,
     ) {}
 
     public function getWidthForCharacterCode(int $characterCode): ?float {

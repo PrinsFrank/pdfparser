@@ -21,15 +21,15 @@ use PrinsFrank\PdfParser\Stream\FileStream;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @api */
-class UncompressedObject implements ObjectItem {
-    private readonly Dictionary $dictionary;
-    private readonly CompressedObjectByteOffsets $byteOffsets;
+readonly class UncompressedObject implements ObjectItem {
+    private Dictionary $dictionary;
+    private CompressedObjectByteOffsets $byteOffsets;
 
     public function __construct(
-        public readonly int $objectNumber,
-        public readonly int $generationNumber,
-        public readonly int $startOffset,
-        public readonly int $endOffset,
+        public int $objectNumber,
+        public int $generationNumber,
+        public int $startOffset,
+        public int $endOffset,
     ) {}
 
     #[Override]

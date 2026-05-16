@@ -7,9 +7,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 
-class ExtendedDictionaryKey implements DictionaryKeyInterface {
+readonly class ExtendedDictionaryKey implements DictionaryKeyInterface {
     public function __construct(
-        public readonly string $value,
+        public string $value,
     ) {}
 
     /** @internal */

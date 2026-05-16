@@ -8,12 +8,12 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /** @api */
-class Rectangle implements DictionaryValue {
+readonly class Rectangle implements DictionaryValue {
     public function __construct(
-        public readonly float $xTopLeft,
-        public readonly float $yTopLeft,
-        public readonly float $xBottomRight,
-        public readonly float $yBottomRight,
+        public float $xTopLeft,
+        public float $yTopLeft,
+        public float $xBottomRight,
+        public float $yBottomRight,
     ) {}
 
     public function getWidth(): float {

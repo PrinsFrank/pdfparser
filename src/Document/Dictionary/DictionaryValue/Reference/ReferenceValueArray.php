@@ -8,9 +8,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @api */
-class ReferenceValueArray implements DictionaryValue {
+readonly class ReferenceValueArray implements DictionaryValue {
     /** @var list<ReferenceValue> */
-    public readonly array $referenceValues;
+    public array $referenceValues;
 
     /** @no-named-arguments */
     public function __construct(ReferenceValue ...$referenceValues) {
