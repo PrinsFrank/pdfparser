@@ -17,9 +17,9 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 /** @api */
-class ContentStream {
+readonly class ContentStream {
     /** @var list<TextObject|ContentStreamCommand> */
-    public readonly array $content;
+    public array $content;
 
     /** @no-named-arguments */
     public function __construct(

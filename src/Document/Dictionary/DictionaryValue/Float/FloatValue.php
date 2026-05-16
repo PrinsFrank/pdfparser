@@ -7,9 +7,9 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
 /** @api */
-class FloatValue implements DictionaryValue {
+readonly class FloatValue implements DictionaryValue {
     public function __construct(
-        public readonly float $value,
+        public float $value,
     ) {}
 
     #[Override]

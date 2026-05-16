@@ -7,10 +7,10 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
 /** @api */
-class ReferenceValue implements DictionaryValue {
+readonly class ReferenceValue implements DictionaryValue {
     public function __construct(
-        public readonly int $objectNumber,
-        public readonly int $versionNumber,
+        public int $objectNumber,
+        public int $versionNumber,
     ) {}
 
     #[Override]

@@ -8,9 +8,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @api */
-class TextStringValue implements DictionaryValue {
+readonly class TextStringValue implements DictionaryValue {
     public function __construct(
-        public readonly string $textStringValue,
+        public string $textStringValue,
     ) {}
 
     /** @throws ParseFailureException */

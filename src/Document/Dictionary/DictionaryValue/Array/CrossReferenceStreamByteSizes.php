@@ -7,11 +7,11 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /** @api */
-class CrossReferenceStreamByteSizes implements DictionaryValue {
+readonly class CrossReferenceStreamByteSizes implements DictionaryValue {
     public function __construct(
-        public readonly int $lengthRecord1InBytes,
-        public readonly int $lengthRecord2InBytes,
-        public readonly int $lengthRecord3InBytes,
+        public int $lengthRecord1InBytes,
+        public int $lengthRecord2InBytes,
+        public int $lengthRecord3InBytes,
     ) {}
 
     /**

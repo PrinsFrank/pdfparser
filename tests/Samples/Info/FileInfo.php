@@ -4,19 +4,19 @@ namespace PrinsFrank\PdfParser\Tests\Samples\Info;
 
 use DateTimeImmutable;
 
-class FileInfo {
+readonly class FileInfo {
     /** @param list<Page> $pages */
     public function __construct(
-        public readonly string $pdfPath,
-        public readonly int $version,
-        public readonly ?string $userPassword,
-        public readonly ?string $ownerPassword,
-        public readonly ?string $title,
-        public readonly ?string $producer,
-        public readonly ?string $author,
-        public readonly ?string $creator,
-        public readonly ?DateTimeImmutable $creationDate,
-        public readonly ?DateTimeImmutable $modificationDate,
-        public readonly ?array $pages,
+        public string $pdfPath,
+        public int $version,
+        public ?string $userPassword,
+        public ?string $ownerPassword,
+        public ?string $title,
+        public ?string $producer,
+        public ?string $author,
+        public ?string $creator,
+        public ?DateTimeImmutable $creationDate,
+        public ?DateTimeImmutable $modificationDate,
+        public ?array $pages,
     ) {}
 }

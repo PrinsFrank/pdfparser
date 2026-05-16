@@ -20,14 +20,14 @@ use PrinsFrank\PdfParser\Stream\InMemoryStream;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @api */
-class CompressedObject implements ObjectItem {
-    private readonly Dictionary $dictionary;
+readonly class CompressedObject implements ObjectItem {
+    private Dictionary $dictionary;
 
     public function __construct(
-        public readonly int $objectNumber,
-        public readonly UncompressedObject $storedInObject,
-        public readonly int $startByteOffsetInDecodedStream,
-        public readonly ?int $endByteOffsetInDecodedStream,
+        public int $objectNumber,
+        public UncompressedObject $storedInObject,
+        public int $startByteOffsetInDecodedStream,
+        public ?int $endByteOffsetInDecodedStream,
     ) {
         if ($this->endByteOffsetInDecodedStream !== null && $this->startByteOffsetInDecodedStream > $this->endByteOffsetInDecodedStream) {
             throw new InvalidArgumentException(sprintf('Start offset %d should be before end offset %d', $this->startByteOffsetInDecodedStream, $this->endByteOffsetInDecodedStream));

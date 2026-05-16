@@ -8,13 +8,13 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 
 /** There are multiple crossReference sections if there are incremental updates. See 7.5.6 */
-class CrossReferenceSection {
+readonly class CrossReferenceSection {
     /** @var list<CrossReferenceSubSection> */
-    public readonly array $crossReferenceSubSections;
+    public array $crossReferenceSubSections;
 
     /** @no-named-arguments */
     public function __construct(
-        public readonly Dictionary $dictionary,
+        public Dictionary $dictionary,
         CrossReferenceSubSection... $crossReferenceSubSections,
     ) {
         $this->crossReferenceSubSections = $crossReferenceSubSections;

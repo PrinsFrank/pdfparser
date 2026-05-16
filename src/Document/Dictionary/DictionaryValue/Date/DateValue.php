@@ -11,9 +11,9 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use ValueError;
 
 /** @api */
-class DateValue implements DictionaryValue {
+readonly class DateValue implements DictionaryValue {
     public function __construct(
-        public readonly ?DateTimeImmutable $value,
+        public ?DateTimeImmutable $value,
     ) {}
 
     #[Override]

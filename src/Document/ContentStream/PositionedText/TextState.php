@@ -5,10 +5,10 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 
-class TextState {
+readonly class TextState {
     public function __construct(
-        public readonly DictionaryKey|ExtendedDictionaryKey|null $fontName, // Tf
-        public readonly ?float $fontSize, // Tfs
+        public DictionaryKey|ExtendedDictionaryKey|null $fontName, // Tf
+        public ?float $fontSize, // Tfs
         public float $charSpace = 0,      // Tc
         public float $wordSpace = 0,      // Tw
         public float $scale = 100,        // Th

@@ -9,11 +9,11 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
-class PositionedTextElement {
+readonly class PositionedTextElement {
     public function __construct(
-        public readonly string               $rawTextContent,
-        public readonly TransformationMatrix $absoluteMatrix,
-        public readonly TextState            $textState,
+        public string $rawTextContent,
+        public TransformationMatrix $absoluteMatrix,
+        public TextState $textState,
     ) {}
 
     public function getFont(Document $document, Page $page): Font {

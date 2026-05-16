@@ -2,11 +2,11 @@
 
 namespace PrinsFrank\PdfParser\Document\Font;
 
-class FontWidths {
+readonly class FontWidths {
     /** @param list<float> $widths */
     public function __construct(
-        public readonly int $firstChar,
-        public readonly array $widths,
+        public int   $firstChar,
+        public array $widths,
     ) {}
 
     public function getWidthForCharacter(int $characterCode): ?float {

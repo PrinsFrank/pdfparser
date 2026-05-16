@@ -10,9 +10,9 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
-class DictionaryArrayValue implements DictionaryValue {
+readonly class DictionaryArrayValue implements DictionaryValue {
     /** @var list<Dictionary> */
-    public readonly array $dictionaries;
+    public array $dictionaries;
 
     /** @no-named-arguments */
     public function __construct(

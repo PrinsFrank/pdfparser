@@ -12,10 +12,10 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /** @api */
-class ArrayValue implements DictionaryValue {
+readonly class ArrayValue implements DictionaryValue {
     /** @param list<int|string|ArrayValue|ReferenceValueArray|null> $value */
     public function __construct(
-        public readonly array $value,
+        public array $value,
     ) {}
 
     #[Override]

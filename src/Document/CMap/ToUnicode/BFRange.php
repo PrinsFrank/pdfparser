@@ -5,12 +5,12 @@ namespace PrinsFrank\PdfParser\Document\CMap\ToUnicode;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @internal */
-class BFRange {
+readonly class BFRange {
     /** @param list<string> $destinationCodePoints */
     public function __construct(
-        public readonly int   $sourceCodeStart,
-        public readonly int   $sourceCodeEnd,
-        public readonly array $destinationCodePoints,
+        public int $sourceCodeStart,
+        public int $sourceCodeEnd,
+        public array $destinationCodePoints,
     ) {}
 
     public function containsCharacterCode(int $characterCode): bool {
