@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\Image\ColorSpace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\DeviceColorSpaceNameValue;
+use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpace;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\Components;
 
@@ -14,17 +15,17 @@ class ColorSpaceTest extends TestCase {
         static::assertSame(
             Components::RGB,
             (new ColorSpace(true, DeviceColorSpaceNameValue::DeviceRGB, null, null, null))
-                ->getComponents(),
+                ->getComponents($this->createMock(Document::class)),
         );
         static::assertSame(
             Components::CMYK,
             (new ColorSpace(true, DeviceColorSpaceNameValue::DeviceCMYK, null, null, null))
-                ->getComponents(),
+                ->getComponents($this->createMock(Document::class)),
         );
         static::assertSame(
             Components::Gray,
             (new ColorSpace(true, DeviceColorSpaceNameValue::DeviceGray, null, null, null))
-                ->getComponents(),
+                ->getComponents($this->createMock(Document::class)),
         );
     }
 }

@@ -33,19 +33,19 @@ class XObject extends DecoratedObject {
 
     public function getWidth(): ?int {
         return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::WIDTH, IntegerValue::class, $this->document)
+            ->getValueForKey($this->document, DictionaryKey::WIDTH, IntegerValue::class)
             ?->value;
     }
 
     public function getHeight(): ?int {
         return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::HEIGHT, IntegerValue::class, $this->document)
+            ->getValueForKey($this->document, DictionaryKey::HEIGHT, IntegerValue::class)
             ?->value;
     }
 
     public function getLength(): ?int {
         return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class, $this->document)
+            ->getValueForKey($this->document, DictionaryKey::LENGTH, IntegerValue::class)
             ?->value;
     }
 
@@ -60,11 +60,11 @@ class XObject extends DecoratedObject {
         }
 
         if ($filterValueType === FilterNameValue::class) {
-            return $this->getDictionary()->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class, $this->document)?->getImageType();
+            return $this->getDictionary()->getValueForKey($this->document, DictionaryKey::FILTER, FilterNameValue::class)?->getImageType();
         }
 
         if ($filterValueType === ArrayValue::class) {
-            foreach ($this->getDictionary()->getValueForKey(DictionaryKey::FILTER, ArrayValue::class, $this->document)->value ?? throw new RuntimeException() as $filterValue) {
+            foreach ($this->getDictionary()->getValueForKey($this->document, DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new RuntimeException() as $filterValue) {
                 if (!is_string($filterValue)) {
                     throw new ParseFailureException(sprintf('Expected a string for filter value, got "%s"', ($jsonEncoded = json_encode($filterValue)) !== false ? $jsonEncoded : 'Unknown'));
                 }
@@ -81,7 +81,7 @@ class XObject extends DecoratedObject {
 
     private function getBitsPerComponent(): ?int {
         return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::BITS_PER_COMPONENT, IntegerValue::class, $this->document)
+            ->getValueForKey($this->document, DictionaryKey::BITS_PER_COMPONENT, IntegerValue::class)
             ?->value;
     }
 
@@ -91,11 +91,11 @@ class XObject extends DecoratedObject {
         }
 
         if ($type === DeviceColorSpaceNameValue::class || $type === CIEColorSpaceNameValue::class || $type === SpecialColorSpaceNameValue::class) {
-            return new ColorSpace(false, $this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, $type, $this->document) ?? throw new ParseFailureException(), null, null, null);
+            return new ColorSpace(false, $this->getDictionary()->getValueForKey($this->document, DictionaryKey::COLOR_SPACE, $type) ?? throw new ParseFailureException(), null, null, null);
         }
 
         if ($type === ArrayValue::class) {
-            $colorSpaceArray = $this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, ArrayValue::class, $this->document)
+            $colorSpaceArray = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::COLOR_SPACE, ArrayValue::class)
                 ?? throw new ParseFailureException();
 
             return ColorSpaceFactory::fromString($colorSpaceArray->toString(), $this->document);

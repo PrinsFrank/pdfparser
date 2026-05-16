@@ -11,7 +11,7 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 class Catalog extends DecoratedObject {
     /** @throws PdfParserException */
     public function getPagesRoot(): Pages {
-        $pagesReference = $this->getDictionary()->getValueForKey(DictionaryKey::PAGES, ReferenceValue::class, $this->document)
+        $pagesReference = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::PAGES, ReferenceValue::class)
             ?? throw new ParseFailureException('Every catalog dictionary should contain a pages reference, none found');
 
         return $this->document->getObject($pagesReference->objectNumber, Pages::class)

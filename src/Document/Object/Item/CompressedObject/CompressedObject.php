@@ -51,7 +51,7 @@ readonly class CompressedObject implements ObjectItem {
 
     #[Override]
     public function getContent(Document $document): Stream {
-        $first = $this->storedInObject->getDictionary($document)->getValueForKey(DictionaryKey::FIRST, IntegerValue::class, $document)
+        $first = $this->storedInObject->getDictionary($document)->getValueForKey($document, DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
 
         $content = substr(
