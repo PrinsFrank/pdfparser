@@ -18,6 +18,7 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObjectParser;
+use PrinsFrank\PdfParser\Document\Security\FileEncryptionKey;
 use PrinsFrank\PdfParser\Document\Security\StandardSecurity;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Exception\AuthenticationFailedException;
@@ -34,23 +35,33 @@ class Document {
 
     /** @var array<int, DecoratedObject|null> */
     private array $objectCache = [];
+    public readonly ?FileEncryptionKey $fileEncryptionKey;
 
     public function __construct(
-        public readonly Stream               $stream,
-        public readonly Version              $version,
+        public readonly Stream $stream,
+        public readonly Version $version,
         public readonly CrossReferenceSource $crossReferenceSource,
-        public ?StandardSecurity             $security,
+        ?StandardSecurity $security,
     ) {
-        if (($encryptDictionary = $this->getEncryptDictionary()) !== null) {
-            if ($encryptDictionary->getSecurityHandler() === null) {
-                throw new NotImplementedException('Empty security handler is not supported');
-            }
+        $this->fileEncryptionKey = $this->getFileEncryptionKeyFromSecurity($security);
+    }
 
-            $this->security ??= new StandardSecurity();
-            if ($this->security->getFileEncryptionKey($encryptDictionary, $this->crossReferenceSource->getFirstId()) === null) {
-                throw new AuthenticationFailedException($security === null ? 'Document could not be decrypted using default credentials, please supply an owner or user password' : 'User and owner password are invalid, please supply valid credentials');
-            }
+    private function getFileEncryptionKeyFromSecurity(?StandardSecurity $security): ?FileEncryptionKey {
+        if (($encryptDictionary = $this->getEncryptDictionary()) === null) {
+            return null;
         }
+
+        if ($encryptDictionary->getSecurityHandler() === null) {
+            throw new NotImplementedException('Empty security handler is not supported');
+        }
+
+        return ($security ?? new StandardSecurity())
+            ->getFileEncryptionKey($encryptDictionary, $this->crossReferenceSource->getFirstId())
+            ?? throw new AuthenticationFailedException(
+                $security === null
+                    ? 'Document could not be decrypted using default credentials, please supply an owner or user password'
+                    : 'User and owner password are invalid, please supply valid credentials',
+            );
     }
 
     /** @throws PdfParserException */

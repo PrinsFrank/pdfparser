@@ -21,7 +21,7 @@ readonly class StandardSecurity {
     ) {}
 
     /** @throws ParseFailureException|NotImplementedException */
-    public function getFileEncryptionKey(EncryptDictionary $encryptDictionary, string $firstID): ?string {
+    public function getFileEncryptionKey(EncryptDictionary $encryptDictionary, string $firstID): ?FileEncryptionKey {
         if ($this->ownerPassword !== null) {
             $recoveredPaddedUserPassword = $this->recoverPaddedUserPasswordFromOwnerEntry($encryptDictionary);
             $fileEncryptionKey = $this->getFileEncryptionKeyForUserPassword($recoveredPaddedUserPassword, $encryptDictionary, $firstID);
@@ -39,21 +39,21 @@ readonly class StandardSecurity {
     }
 
     /** @see 7.6.4.4.3, 7.6.4.4.4 and 7.6.4.4.5 */
-    private function isFileEncryptionKeyValid(string $fileEncryptionKey, EncryptDictionary $encryptDictionary, string $firstID): bool {
+    private function isFileEncryptionKeyValid(FileEncryptionKey $fileEncryptionKey, EncryptDictionary $encryptDictionary, string $firstID): bool {
         $userPasswordEntry = $encryptDictionary->getUserPasswordEntry();
         $securityHandlerRevision = $encryptDictionary->getStandardSecurityHandlerRevision();
         if ($securityHandlerRevision === StandardSecurityHandlerRevision::v2) { // @see 7.6.4.4.3, step b
-            return hash_equals($userPasswordEntry, RC4::crypt($fileEncryptionKey, self::PADDING_STRING));
+            return hash_equals($userPasswordEntry, RC4::crypt($fileEncryptionKey->value, self::PADDING_STRING));
         }
 
         if (in_array($securityHandlerRevision, [StandardSecurityHandlerRevision::v3, StandardSecurityHandlerRevision::v4], true)) { // @see 7.6.4.4.4, step b through e
             $hash = md5(self::PADDING_STRING . $firstID, true);
-            $encryptedHash = RC4::crypt($fileEncryptionKey, $hash);
+            $encryptedHash = RC4::crypt($fileEncryptionKey->value, $hash);
             for ($i = 1; $i <= 19; $i++) {
                 $encryptedHash = RC4::crypt(
                     implode('', array_map(
                         fn($c) => chr(ord($c) ^ $i),
-                        str_split($fileEncryptionKey),
+                        str_split($fileEncryptionKey->value),
                     )),
                     $encryptedHash,
                 );
@@ -113,7 +113,7 @@ readonly class StandardSecurity {
     }
 
     /** @see 7.6.4.3.2 */
-    private function getFileEncryptionKeyForUserPassword(string $paddedUserPassword, EncryptDictionary $encryptDictionary, string $firstIDValue): string {
+    private function getFileEncryptionKeyForUserPassword(string $paddedUserPassword, EncryptDictionary $encryptDictionary, string $firstIDValue): FileEncryptionKey {
         if (in_array($encryptDictionary->getStandardSecurityHandlerRevision(), [StandardSecurityHandlerRevision::v2, StandardSecurityHandlerRevision::v3, StandardSecurityHandlerRevision::v4], true) === false) {
             throw new NotImplementedException('Unsupported security handler revision: ' . $encryptDictionary->getStandardSecurityHandlerRevision()->value);
         }
@@ -138,14 +138,14 @@ readonly class StandardSecurity {
 
         $md5Hash = md5($hashedString, true);
         if ($encryptDictionary->getStandardSecurityHandlerRevision() === StandardSecurityHandlerRevision::v2) {
-            return substr($md5Hash, 0, 5);
+            return new FileEncryptionKey(substr($md5Hash, 0, 5));
         }
 
         for ($i = 1; $i <= 50; $i++) { // step h
             $md5Hash = md5(substr($md5Hash, 0, $fileEncryptionKeyLengthInBytes), true);
         }
 
-        return substr($md5Hash, 0, $fileEncryptionKeyLengthInBytes);
+        return new FileEncryptionKey(substr($md5Hash, 0, $fileEncryptionKeyLengthInBytes));
     }
 
     /** @see 7.6.4.3.2 step a */
