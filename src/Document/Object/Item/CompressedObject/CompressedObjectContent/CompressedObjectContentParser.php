@@ -25,9 +25,9 @@ class CompressedObjectContentParser {
      */
     public static function parseBinary(Stream|Document $context, int $startPos, int $nrOfBytes, Dictionary $dictionary): Stream {
         $binaryStreamContent = ($context instanceof Document ? $context->stream : $context)->read($startPos, $nrOfBytes);
-        if ($context instanceof Document && $context->security !== null && ($encryptDictionary = $context->getEncryptDictionary()) !== null) {
+        if ($context instanceof Document && $context->fileEncryptionKey !== null) {
             $binaryStreamContent = RC4::crypt(
-                $context->security->getFileEncryptionKey($encryptDictionary, $context->crossReferenceSource->getFirstId()) ?? throw new ParseFailureException(),
+                $context->fileEncryptionKey->value,
                 $binaryStreamContent,
             );
         }
