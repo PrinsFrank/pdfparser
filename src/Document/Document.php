@@ -47,8 +47,7 @@ class Document {
             }
 
             $this->security ??= new StandardSecurity();
-            if ($this->security->isUserPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false
-                && $this->security->isOwnerPasswordValid($encryptDictionary, $crossReferenceSource->getFirstId()) === false) {
+            if ($this->security->getFileEncryptionKey($encryptDictionary, $this->crossReferenceSource->getFirstId()) === null) {
                 throw new AuthenticationFailedException($security === null ? 'Document could not be decrypted using default credentials, please supply an owner or user password' : 'User and owner password are invalid, please supply valid credentials');
             }
         }

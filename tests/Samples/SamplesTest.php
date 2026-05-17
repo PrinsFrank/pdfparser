@@ -24,7 +24,7 @@ class SamplesTest extends TestCase {
             ->parseFile($fileInfo->pdfPath, security: new StandardSecurity($fileInfo->userPassword, $fileInfo->ownerPassword));
 
         static::assertSame(Version::from(number_format($fileInfo->version / 10, 1)), $document->version);
-        if (($encryptDictionary = $document->getEncryptDictionary()) !== null && ($fileEncryptionKey = $document->security?->getUserFileEncryptionKey($encryptDictionary, $document->crossReferenceSource->getFirstId())) !== null) {
+        if (($encryptDictionary = $document->getEncryptDictionary()) !== null && ($fileEncryptionKey = $document->security?->getFileEncryptionKey($encryptDictionary, $document->crossReferenceSource->getFirstId())) !== null) {
             static::assertSame($fileInfo->fileEncryptionKey, bin2hex($fileEncryptionKey));
         } else {
             static::assertNull($fileInfo->fileEncryptionKey);
