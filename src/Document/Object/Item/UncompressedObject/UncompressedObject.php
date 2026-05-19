@@ -26,6 +26,7 @@ readonly class UncompressedObject implements ObjectItem {
     private CompressedObjectByteOffsets $byteOffsets;
 
     public function __construct(
+        public Document $document,
         public int $objectNumber,
         public int $generationNumber,
         public int $startOffset,

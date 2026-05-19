@@ -64,6 +64,7 @@ class H3SimpleStringTest extends TestCase {
         static::assertEquals(
             new Catalog(
                 new UncompressedObject(
+                    $document,
                     1,
                     0,
                     9,
@@ -85,6 +86,7 @@ class H3SimpleStringTest extends TestCase {
         static::assertEquals(
             new GenericObject(
                 new UncompressedObject(
+                    $document,
                     2,
                     0,
                     74,
@@ -105,6 +107,7 @@ class H3SimpleStringTest extends TestCase {
         static::assertEquals(
             new Pages(
                 new UncompressedObject(
+                    $document,
                     3,
                     0,
                     120,
@@ -126,6 +129,7 @@ class H3SimpleStringTest extends TestCase {
         static::assertEquals(
             new Page(
                 new UncompressedObject(
+                    $document,
                     4,
                     0,
                     179,
@@ -157,6 +161,7 @@ class H3SimpleStringTest extends TestCase {
         static::assertEquals(
             new GenericObject(
                 new UncompressedObject(
+                    $document,
                     5,
                     0,
                     322,
@@ -176,6 +181,7 @@ class H3SimpleStringTest extends TestCase {
         static::assertEquals(
             new GenericObject(
                 new UncompressedObject(
+                    $document,
                     6,
                     0,
                     417,
@@ -193,6 +199,7 @@ class H3SimpleStringTest extends TestCase {
         static::assertEquals(
             new Font(
                 new UncompressedObject(
+                    $document,
                     7,
                     0,
                     447,
@@ -215,6 +222,7 @@ class H3SimpleStringTest extends TestCase {
         static::assertEquals(
             new Catalog(
                 new UncompressedObject(
+                    $document,
                     1,
                     0,
                     9,
