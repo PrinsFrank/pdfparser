@@ -15,6 +15,7 @@ use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectB
 use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectByteOffsets;
 use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectContent\CompressedObjectContentParser;
 use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
+use PrinsFrank\PdfParser\Document\Security\EncryptionContext;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream\FileStream;
@@ -48,7 +49,7 @@ readonly class UncompressedObject implements ObjectItem {
             ?? $document->stream->lastPos(Marker::END_OBJ, $document->stream->getSizeInBytes() - $this->endOffset)
             ?? throw new ParseFailureException('Unable to locate start of stream or end of current object');
 
-        return $this->dictionary = DictionaryParser::parse($document->stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos);
+        return $this->dictionary = DictionaryParser::parse($this->getEncryptionContext(), $document->stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos);
     }
 
     public function getCompressedObject(int $objectNumber, Document $document): CompressedObject {
@@ -79,6 +80,18 @@ readonly class UncompressedObject implements ObjectItem {
             $this->startOffset,
             $this->endOffset,
             $dictionary,
+        );
+    }
+
+    public function getEncryptionContext(): ?EncryptionContext {
+        if ($this->document->fileEncryptionKey === null) {
+            return null;
+        }
+
+        return new EncryptionContext(
+            $this->document->fileEncryptionKey,
+            $this->objectNumber,
+            $this->generationNumber,
         );
     }
 

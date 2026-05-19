@@ -19,7 +19,7 @@ class CrossReferenceTableParser {
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {
         $startTrailerPos = $stream->firstPos(Marker::TRAILER, $startPos, $startPos + $nrOfBytes)
             ?? throw new ParseFailureException('Unable to locate trailer for crossReferenceTable');
-        $dictionary = DictionaryParser::parse($stream, $startTrailerPos + Marker::TRAILER->length(), $nrOfBytes - ($startTrailerPos + Marker::TRAILER->length() - $startPos));
+        $dictionary = DictionaryParser::parse(null, $stream, $startTrailerPos + Marker::TRAILER->length(), $nrOfBytes - ($startTrailerPos + Marker::TRAILER->length() - $startPos));
 
         $line = '';
         $firstObjectNumber = $nrOfEntries = null;

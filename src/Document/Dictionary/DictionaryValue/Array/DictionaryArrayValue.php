@@ -36,7 +36,7 @@ readonly class DictionaryArrayValue implements DictionaryValue {
         foreach (explode('>> <<', substr($valueString, 3, -3)) as $dictionaryValueString) {
             $dictionaryEntries[] = $dictionaryValueString === ''
                 ? new Dictionary()
-                : DictionaryParser::parse($memoryStream = new InMemoryStream('<<' . $dictionaryValueString . '>>'), 0, $memoryStream->getSizeInBytes());
+                : DictionaryParser::parse(null, $memoryStream = new InMemoryStream('<<' . $dictionaryValueString . '>>'), 0, $memoryStream->getSizeInBytes());
         }
 
         return new self(... $dictionaryEntries);

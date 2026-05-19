@@ -30,7 +30,7 @@ class CrossReferenceStreamParser {
      * @throws PdfParserException
      */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {
-        $dictionary = DictionaryParser::parse($stream, $startPos, $nrOfBytes);
+        $dictionary = DictionaryParser::parse(null, $stream, $startPos, $nrOfBytes);
         if ($dictionary->getType(null) !== TypeNameValue::X_REF) {
             throw new ParseFailureException('Expected stream of type xref');
         }
