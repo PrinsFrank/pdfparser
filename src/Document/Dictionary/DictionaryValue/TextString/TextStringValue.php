@@ -30,18 +30,16 @@ readonly class TextStringValue implements DictionaryValue {
         }
 
         if (str_starts_with($this->textStringValue, '<') && str_ends_with($this->textStringValue, '>')) {
-            $string = substr($this->textStringValue, 1, -1);
-            if (str_starts_with($string, 'FEFF')) {
-                $string = substr($string, 4);
+            $binaryValue = hex2bin(substr($this->textStringValue, 1, -1));
+            if ($binaryValue === false) {
+                throw new ParseFailureException('Invalid hex string');
             }
 
-            return implode(
-                '',
-                array_map(
-                    fn(string $character) => mb_chr((int) hexdec($character)),
-                    str_split($string, 4),
-                ),
-            );
+            if (str_starts_with($binaryValue, "\xFE\xFF")) {
+                return mb_convert_encoding(substr($binaryValue, 2), 'UTF-8', 'UTF-16BE');
+            }
+
+            return $binaryValue;
         }
 
         if (str_starts_with($this->textStringValue, '/')) {
