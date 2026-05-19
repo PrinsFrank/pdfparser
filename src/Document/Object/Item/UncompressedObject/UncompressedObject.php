@@ -100,6 +100,7 @@ readonly class UncompressedObject implements ObjectItem {
         if (($startStreamPos = $document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)) !== null
             && ($endStreamPos = $document->stream->lastPos(Marker::END_STREAM, $document->stream->getSizeInBytes() - $this->endOffset)) !== null) {
             return CompressedObjectContentParser::parseBinary(
+                $this->getEncryptionContext(),
                 $document,
                 $startStreamPos,
                 ($document->stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset)
