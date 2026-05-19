@@ -61,7 +61,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(57)),
                 new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::FLATE_DECODE),
             ),
-            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -77,7 +77,7 @@ class DictionaryParserTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::INDEX, new ArrayValue([0, 16])),
             ),
-            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -118,7 +118,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
                 new DictionaryEntry(DictionaryKey::W, new CrossReferenceStreamByteSizes(1, 4, 0)),
             ),
-            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -141,7 +141,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
                 new DictionaryEntry(DictionaryKey::W, new CrossReferenceStreamByteSizes(1, 4, 0)),
             ),
-            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -179,7 +179,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::CHAR_SET, new TextStringValue('(/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two)')),
                 new DictionaryEntry(DictionaryKey::FONT_FILE, new TextStringValue('11 0 R')),
             ),
-            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -207,7 +207,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TRAPPED, TrappedNameValue::FALSE),
                 new DictionaryEntry(DictionaryKey::PTEX_FULLBANNER, new TextStringValue('(This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)')),
             ),
-            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -229,7 +229,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(new ExtendedDictionaryKey('Foo'), new TextStringValue('(Bar)')),
                 new DictionaryEntry(new ExtendedDictionaryKey('Bar'), new TextStringValue('(% this is not a comment but a string literal)')),
             ),
-            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -259,7 +259,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(13221, 0)),
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
             ),
-            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -297,7 +297,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TABS, TabsNameValue::StructureOrder),
                 new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(6, 0)),
             ),
-            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -389,7 +389,7 @@ class DictionaryParserTest extends TestCase {
                     ),
                 ),
             ),
-            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -404,7 +404,7 @@ class DictionaryParserTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::DCT_DECODE),
             ),
-            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
 
         // Note the extra space after the /Filter
@@ -418,7 +418,7 @@ class DictionaryParserTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::DCT_DECODE),
             ),
-            DictionaryParser::parse($stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 }

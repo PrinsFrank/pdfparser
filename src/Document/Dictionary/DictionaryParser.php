@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\LiteralStringEscapeCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
+use PrinsFrank\PdfParser\Document\Security\EncryptionContext;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
@@ -20,7 +21,7 @@ class DictionaryParser {
      *
      * @throws PdfParserException
      */
-    public static function parse(Stream $stream, int $startPos, int $nrOfBytes): Dictionary {
+    public static function parse(?EncryptionContext $encryptionContext, Stream $stream, int $startPos, int $nrOfBytes): Dictionary {
         $dictionaryArray = [];
         $rollingCharBuffer = new RollingCharBuffer(6);
         $nestingContext = (new NestingContext())->setContext(DictionaryParseContext::ROOT);
@@ -85,7 +86,7 @@ class DictionaryParser {
             };
         }
 
-        return DictionaryFactory::fromArray($dictionaryArray);
+        return DictionaryFactory::fromArray($encryptionContext, $dictionaryArray);
     }
 
     /** @param array<string, mixed> $dictionaryArray */

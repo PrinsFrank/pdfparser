@@ -46,7 +46,7 @@ readonly class CompressedObject implements ObjectItem {
         }
 
         $inMemoryStream = new InMemoryStream($objectContent);
-        return $this->dictionary = DictionaryParser::parse($inMemoryStream, 0, $inMemoryStream->getSizeInBytes());
+        return $this->dictionary = DictionaryParser::parse($this->storedInObject->getEncryptionContext(), $inMemoryStream, 0, $inMemoryStream->getSizeInBytes());
     }
 
     #[Override]

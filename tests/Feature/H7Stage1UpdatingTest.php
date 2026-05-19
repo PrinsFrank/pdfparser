@@ -87,6 +87,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertEquals(
             new Catalog(
                 new UncompressedObject(
+                    $document,
                     1,
                     0,
                     9,
@@ -108,6 +109,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertEquals(
             new GenericObject(
                 new UncompressedObject(
+                    $document,
                     2,
                     0,
                     74,
@@ -128,6 +130,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertEquals(
             new Pages(
                 new UncompressedObject(
+                    $document,
                     3,
                     0,
                     120,
@@ -149,6 +152,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertEquals(
             new Page(
                 new UncompressedObject(
+                    $document,
                     4,
                     0,
                     604,
@@ -172,6 +176,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertEquals(
             new GenericObject(
                 new UncompressedObject(
+                    $document,
                     5,
                     0,
                     300,
@@ -191,6 +196,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertEquals(
             new GenericObject(
                 new UncompressedObject(
+                    $document,
                     6,
                     0,
                     384,
@@ -208,6 +214,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertEquals(
             new GenericObject(
                 new UncompressedObject(
+                    $document,
                     7,
                     0,
                     811,
@@ -225,6 +232,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertEquals(
             new GenericObject(
                 new UncompressedObject(
+                    $document,
                     8,
                     0,
                     856,
@@ -248,6 +256,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertEquals(
             new GenericObject(
                 new UncompressedObject(
+                    $document,
                     9,
                     0,
                     958,
@@ -271,6 +280,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertEquals(
             new GenericObject(
                 new UncompressedObject(
+                    $document,
                     10,
                     0,
                     1062,
@@ -294,6 +304,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertEquals(
             new GenericObject(
                 new UncompressedObject(
+                    $document,
                     11,
                     0,
                     1165,
@@ -316,6 +327,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertEquals(
             new Catalog(
                 new UncompressedObject(
+                    $document,
                     1,
                     0,
                     9,

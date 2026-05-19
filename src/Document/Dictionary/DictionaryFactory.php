@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Dictionary;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntryFactory;
+use PrinsFrank\PdfParser\Document\Security\EncryptionContext;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
@@ -13,7 +14,7 @@ class DictionaryFactory {
      * @param array<string, mixed> $dictionaryArray
      * @throws PdfParserException
      */
-    public static function fromArray(array $dictionaryArray): Dictionary {
+    public static function fromArray(?EncryptionContext $encryptionContext, array $dictionaryArray): Dictionary {
         $dictionaryEntries = [];
         foreach ($dictionaryArray as $keyString => $value) {
             if (!is_string($value) && (!is_array($value) || array_is_list($value))) {
@@ -21,7 +22,7 @@ class DictionaryFactory {
             }
 
             /** @var non-empty-array<string, mixed>|string $value */
-            $dictionaryEntry = DictionaryEntryFactory::fromKeyValuePair($keyString, $value);
+            $dictionaryEntry = DictionaryEntryFactory::fromKeyValuePair($encryptionContext, $keyString, $value);
             if ($dictionaryEntry === null) {
                 continue;
             }
