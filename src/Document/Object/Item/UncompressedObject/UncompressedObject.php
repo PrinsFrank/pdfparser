@@ -84,7 +84,7 @@ readonly class UncompressedObject implements ObjectItem {
     }
 
     public function getEncryptionContext(): ?EncryptionContext {
-        if ($this->document->fileEncryptionKey === null) {
+        if (isset($this->document->fileEncryptionKey) === false) { // isset instead of null check because while retrieving fileEncryptionKey we might need to parse dictionaries already
             return null;
         }
 

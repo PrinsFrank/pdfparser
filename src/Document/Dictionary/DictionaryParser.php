@@ -86,7 +86,7 @@ class DictionaryParser {
             };
         }
 
-        return DictionaryFactory::fromArray($dictionaryArray);
+        return DictionaryFactory::fromArray($encryptionContext, $dictionaryArray);
     }
 
     /** @param array<string, mixed> $dictionaryArray */

@@ -14,6 +14,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Dictionary\Normalization\NameValueNormalizer;
+use PrinsFrank\PdfParser\Document\Encryption\RC4;
+use PrinsFrank\PdfParser\Document\Security\EncryptionContext;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
@@ -23,22 +25,30 @@ class DictionaryEntryFactory {
      * @param string|array<string, mixed> $dictionaryValue
      * @throws PdfParserException
      */
-    public static function fromKeyValuePair(string $keyString, string|array $dictionaryValue): ?DictionaryEntry {
+    public static function fromKeyValuePair(?EncryptionContext $encryptionContext, string $keyString, string|array $dictionaryValue): ?DictionaryEntry {
         $dictionaryKey = DictionaryKey::tryFromKeyString($keyString)
             ?? ExtendedDictionaryKey::fromKeyString($keyString);
 
-        return new DictionaryEntry($dictionaryKey, self::getValue($dictionaryKey, $dictionaryValue));
+        return new DictionaryEntry($dictionaryKey, self::getValue($encryptionContext, $dictionaryKey, $dictionaryValue));
     }
 
     /**
      * @param string|array<string, mixed> $value
      * @throws PdfParserException
      */
-    protected static function getValue(DictionaryKey|ExtendedDictionaryKey $dictionaryKey, string|array $value): Dictionary|DictionaryValue|NameValue {
+    protected static function getValue(?EncryptionContext $encryptionContext, DictionaryKey|ExtendedDictionaryKey $dictionaryKey, string|array $value): Dictionary|DictionaryValue|NameValue {
+        if ($encryptionContext !== null && is_string($value)) {
+            if (str_starts_with($value, '<') && str_ends_with($value, '>') && ($binaryValue = hex2bin(substr($value, 1, -1))) !== false) {
+                $value = '<' . bin2hex(RC4::crypt($encryptionContext->getObjectEncryptionKey(), $binaryValue)) . '>';
+            } elseif (str_starts_with($value, '(') && str_ends_with($value, ')')) {
+                $value = '(' . RC4::crypt($encryptionContext->getObjectEncryptionKey(), substr($value, 1, -1)) . ')';
+            }
+        }
+
         $allowedValueTypes = $dictionaryKey->getValueTypes();
         if ((in_array(Dictionary::class, $allowedValueTypes, true) || in_array(ArrayValue::class, $allowedValueTypes, true))
             && is_array($value)) {
-            return DictionaryFactory::fromArray($value);
+            return DictionaryFactory::fromArray($encryptionContext, $value);
         }
 
         if ((in_array(Dictionary::class, $allowedValueTypes, true) || in_array(ArrayValue::class, $allowedValueTypes, true))
