@@ -10,6 +10,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\FilterNameValu
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Encryption\RC4;
+use PrinsFrank\PdfParser\Document\Security\EncryptionContext;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
@@ -23,11 +24,11 @@ class CompressedObjectContentParser {
      * @throws PdfParserException
      * @return Stream with content in binary format
      */
-    public static function parseBinary(Stream|Document $context, int $startPos, int $nrOfBytes, Dictionary $dictionary): Stream {
+    public static function parseBinary(?EncryptionContext $encryptionContext, Stream|Document $context, int $startPos, int $nrOfBytes, Dictionary $dictionary): Stream {
         $binaryStreamContent = ($context instanceof Document ? $context->stream : $context)->read($startPos, $nrOfBytes);
-        if ($context instanceof Document && $context->fileEncryptionKey !== null) {
+        if ($encryptionContext !== null) {
             $binaryStreamContent = RC4::crypt(
-                $context->fileEncryptionKey->value,
+                $encryptionContext->getObjectEncryptionKey(),
                 $binaryStreamContent,
             );
         }
