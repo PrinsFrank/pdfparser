@@ -46,9 +46,9 @@ $document = (new PdfParser())
 $document->getText();
 ```
 
-## Support
+## 💖 Sponsorship
 
-This is one of my biggest projects I've ever worked on, and over the past few months I spent hundreds of hours working on this. Please consider [Sponsoring me on GitHub](https://github.com/sponsors/PrinsFrank) to support this project. Thanks!!
+If you depend on this package and want to support its maintenance, please consider sponsoring me. I'll continue maintaining and releasing updates regardless, but [sponsorships](https://github.com/sponsors/PrinsFrank) help cover the time it takes to review changes and keep everything accurate.
 
 ## Opening a PDF
 
