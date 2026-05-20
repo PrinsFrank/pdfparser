@@ -43,7 +43,8 @@ enum FilterNameValue: string implements NameValue {
                 $decodeParams !== null && ($predictorValue = LZWFlatePredictorValue::tryFrom((int) $decodeParams->getValueForKey($document, DictionaryKey::PREDICTOR, IntegerValue::class)?->value)) !== null
                     ? $predictorValue
                     : LZWFlatePredictorValue::None,
-                $decodeParams?->getValueForKey($document, DictionaryKey::COLUMNS, IntegerValue::class)->value ?? 1,
+                ($decodeParams?->getValueForKey($document, DictionaryKey::COLUMNS, IntegerValue::class)->value ?? 1)
+                    * ($decodeParams?->getValueForKey($document, DictionaryKey::COLORS, IntegerValue::class)->value ?? 1),
             ),
             self::CCITT_FAX_DECODE => CCITTFaxDecode::addHeaderAndIFD(
                 $content,
