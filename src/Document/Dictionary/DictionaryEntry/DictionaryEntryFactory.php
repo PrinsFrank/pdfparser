@@ -41,7 +41,7 @@ class DictionaryEntryFactory {
             if (str_starts_with($value, '<') && str_ends_with($value, '>') && ($binaryValue = hex2bin(substr($value, 1, -1))) !== false) {
                 $value = '<' . bin2hex(RC4::crypt($encryptionContext->getObjectEncryptionKey(), $binaryValue)) . '>';
             } elseif (str_starts_with($value, '(') && str_ends_with($value, ')')) {
-                $value = '(' . RC4::crypt($encryptionContext->getObjectEncryptionKey(), substr($value, 1, -1)) . ')';
+                $value = '(' . RC4::crypt($encryptionContext->getObjectEncryptionKey(), str_replace(['\\\\', '\n', '\r', '\t', '\b', '\f', '\(', '\)'], ['\\', "\n", "\r", "\t", "\x08", "\f", '(', ')'], substr($value, 1, -1))) . ')';
             }
         }
 
