@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\LineGroupingStrategy\StrictLineGrouping;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
@@ -26,7 +27,7 @@ class Page extends DecoratedObject {
     /** @throws PdfParserException */
     public function getText(): string {
         return $this->getContentStream()
-            ->getText($this->document, $this);
+            ->getText($this->document, $this, new StrictLineGrouping());
     }
 
     /** @throws PdfParserException */
