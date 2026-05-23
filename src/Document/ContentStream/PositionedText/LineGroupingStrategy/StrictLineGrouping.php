@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText\LineGroupin
 use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 
+/** Line grouping is done on _exact_ offsetY */
 class StrictLineGrouping implements LineGroupingStrategy {
     #[Override]
     public function group(array $positionedTextElements): iterable {

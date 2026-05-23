@@ -102,4 +102,9 @@ readonly class PositionedTextElement {
 
         return $codePoints;
     }
+
+    public function getHeight(): float {
+        return ($this->textState->fontSize ?? 12)
+            * ($this->textState->scale / 100);
+    }
 }
