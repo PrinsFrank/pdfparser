@@ -28,13 +28,16 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
                 throw new ParseFailureException();
             }
 
+            $tx = (float) $offsets[0];
+            $ty = (float) $offsets[1];
+
             return new TransformationMatrix(
                 $transformationMatrix->scaleX,
                 $transformationMatrix->shearX,
                 $transformationMatrix->shearY,
                 $transformationMatrix->scaleY,
-                $transformationMatrix->offsetX + (float) $offsets[0],
-                $transformationMatrix->offsetY + (float) $offsets[1],
+                $transformationMatrix->offsetX + $tx * $transformationMatrix->scaleX + $ty * $transformationMatrix->shearY,
+                $transformationMatrix->offsetY + $tx * $transformationMatrix->shearX + $ty * $transformationMatrix->scaleY,
             );
         }
 
