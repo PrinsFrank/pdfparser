@@ -44,7 +44,7 @@ readonly class ContentStream {
                     $transformationMatrix = array_pop($transformationStateStack)
                         ?? throw new ParseFailureException();
                 } elseif ($content->operator instanceof InteractsWithTransformationMatrix) {
-                    $transformationMatrix = $content->operator->applyToTransformationMatrix($content->operands, $transformationMatrix);
+                    $transformationMatrix = $content->operator->applyToTransformationMatrix($content->operands, $transformationMatrix, $textState);
                 }
 
                 continue;
@@ -57,7 +57,7 @@ readonly class ContentStream {
                 }
 
                 if ($contentStreamCommand->operator instanceof InteractsWithTransformationMatrix) {
-                    $textMatrix = $contentStreamCommand->operator->applyToTransformationMatrix($contentStreamCommand->operands, $textMatrix);
+                    $textMatrix = $contentStreamCommand->operator->applyToTransformationMatrix($contentStreamCommand->operands, $textMatrix, $textState);
                 }
 
                 if ($contentStreamCommand->operator instanceof ProducesPositionedTextElements && $textState !== null) {

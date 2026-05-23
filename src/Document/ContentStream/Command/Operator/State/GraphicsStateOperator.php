@@ -4,6 +4,7 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 
 use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTransformationMatrix;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
@@ -27,7 +28,7 @@ enum GraphicsStateOperator: string implements InteractsWithTransformationMatrix 
 
     /** @throws ParseFailureException */
     #[Override]
-    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix {
+    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix, ?TextState $textState): TransformationMatrix {
         if ($this === self::ModifyCurrentTransformationMatrix) {
             $operands = preg_replace('/\s+/', ' ', $operands)
                 ?? throw new ParseFailureException('An error occurred while trying to remove duplicate spaces from the operands');

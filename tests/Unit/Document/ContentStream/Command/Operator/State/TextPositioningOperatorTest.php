@@ -13,12 +13,12 @@ class TextPositioningOperatorTest extends TestCase {
         static::assertEquals(
             new TransformationMatrix(1, 0, 0, 1, 100, 100),
             TextPositioningOperator::MOVE_OFFSET
-                ->applyToTransformationMatrix('100 100', new TransformationMatrix(1, 0, 0, 1, 0, 0)),
+                ->applyToTransformationMatrix('100 100', new TransformationMatrix(1, 0, 0, 1, 0, 0), null),
         );
         static::assertEquals(
             new TransformationMatrix(1, 0, 0, 1, 100, 100),
             TextPositioningOperator::MOVE_OFFSET
-                ->applyToTransformationMatrix('100    100', new TransformationMatrix(1, 0, 0, 1, 0, 0)),
+                ->applyToTransformationMatrix('100    100', new TransformationMatrix(1, 0, 0, 1, 0, 0), null),
         );
         static::assertEquals(
             new TransformationMatrix(1, 0, 0, 1, 100, 100),
@@ -29,6 +29,7 @@ class TextPositioningOperatorTest extends TestCase {
                     100
                     EOD,
                     new TransformationMatrix(1, 0, 0, 1, 0, 0),
+                    null,
                 ),
         );
     }
