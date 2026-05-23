@@ -32,8 +32,8 @@ readonly class ContentStream {
 
     /** @return list<PositionedTextElement> */
     public function getPositionedTextElements(): array {
-        $positionedTextElements = $transformationStateStack = [];
-        $textState = new TextState(null, null, 0, 0, 100, 0, 0, 0); // See table 103, Tf operator for initial value
+        $positionedTextElements = $transformationStateStack = $textStateStack = [];
+        $textState = new TextState(null, null); // See table 103, Tf operator for initial value
         $transformationMatrix = new TransformationMatrix(1, 0, 0, 1, 0, 0); // Identity matrix
         foreach ($this->content as $content) {
             if ($content instanceof ContentStreamCommand) {
@@ -41,8 +41,11 @@ readonly class ContentStream {
                     $textState = $content->operator->applyToTextState($content->operands, $textState);
                 } elseif ($content->operator === GraphicsStateOperator::SaveCurrentStateToStack) {
                     $transformationStateStack[] = clone $transformationMatrix;
+                    $textStateStack[] = clone $textState;
                 } elseif ($content->operator === GraphicsStateOperator::RestoreMostRecentStateFromStack) {
                     $transformationMatrix = array_pop($transformationStateStack)
+                        ?? throw new ParseFailureException();
+                    $textState = array_pop($textStateStack)
                         ?? throw new ParseFailureException();
                 } elseif ($content->operator instanceof InteractsWithTransformationMatrix) {
                     $transformationMatrix = $content->operator->applyToTransformationMatrix($content->operands, $transformationMatrix, $textState);
