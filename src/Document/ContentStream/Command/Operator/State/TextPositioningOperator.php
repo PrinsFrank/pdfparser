@@ -53,7 +53,7 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
 
     /** @throws ParseFailureException */
     #[Override]
-    public function applyToTextState(string $operands, ?TextState $textState): ?TextState {
+    public function applyToTextState(string $operands, TextState $textState): TextState {
         if ($this === self::MOVE_OFFSET_LEADING) {
             $offsets = explode(' ', trim($operands));
             if (count($offsets) !== 2) {
@@ -61,14 +61,14 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
             }
 
             return new TextState(
-                $textState->fontName ?? null,
-                $textState->fontSize ?? null,
-                $textState->charSpace ?? 0,
-                $textState->wordSpace ?? 0,
-                $textState->scale ?? 100,
+                $textState->fontName,
+                $textState->fontSize,
+                $textState->charSpace,
+                $textState->wordSpace,
+                $textState->scale,
                 -1 * (float) $offsets[1],
-                $textState->render ?? 0,
-                $textState->rise ?? 0,
+                $textState->render,
+                $textState->rise,
             );
         }
 

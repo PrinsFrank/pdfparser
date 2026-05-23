@@ -11,6 +11,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interacti
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\LineGroupingStrategy\LineGroupingStrategy;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
@@ -32,7 +33,7 @@ readonly class ContentStream {
     /** @return list<PositionedTextElement> */
     public function getPositionedTextElements(): array {
         $positionedTextElements = $transformationStateStack = [];
-        $textState = null; // See table 103, Tf operator for initial value
+        $textState = new TextState(null, null, 0, 0, 100, 0, 0, 0); // See table 103, Tf operator for initial value
         $transformationMatrix = new TransformationMatrix(1, 0, 0, 1, 0, 0); // Identity matrix
         foreach ($this->content as $content) {
             if ($content instanceof ContentStreamCommand) {

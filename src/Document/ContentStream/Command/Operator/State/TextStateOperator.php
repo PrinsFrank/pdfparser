@@ -23,30 +23,30 @@ enum TextStateOperator: string implements InteractsWithTextState {
 
     /** @throws ParseFailureException|InvalidArgumentException */
     #[Override]
-    public function applyToTextState(string $operands, ?TextState $textState): TextState {
+    public function applyToTextState(string $operands, TextState $textState): TextState {
         if ($this === self::CHAR_SPACE) {
             return new TextState(
-                $textState->fontName ?? null,
-                $textState->fontSize ?? null,
+                $textState->fontName,
+                $textState->fontSize,
                 (float) $operands,
-                $textState->wordSpace ?? 0,
-                $textState->scale ?? 100,
-                $textState->leading ?? 0,
-                $textState->render ?? 0,
-                $textState->rise ?? 0,
+                $textState->wordSpace,
+                $textState->scale,
+                $textState->leading,
+                $textState->render,
+                $textState->rise,
             );
         }
 
         if ($this === self::WORD_SPACE) {
             return new TextState(
-                $textState->fontName ?? null,
-                $textState->fontSize ?? null,
-                $textState->charSpace ?? 0,
+                $textState->fontName,
+                $textState->fontSize,
+                $textState->charSpace,
                 (float) $operands,
-                $textState->scale ?? 100,
-                $textState->leading ?? 0,
-                $textState->render ?? 0,
-                $textState->rise ?? 0,
+                $textState->scale,
+                $textState->leading,
+                $textState->render,
+                $textState->rise,
             );
         }
 
@@ -57,27 +57,27 @@ enum TextStateOperator: string implements InteractsWithTextState {
             }
 
             return new TextState(
-                $textState->fontName ?? null,
-                $textState->fontSize ?? null,
-                $textState->charSpace ?? 0,
-                $textState->wordSpace ?? 0,
+                $textState->fontName,
+                $textState->fontSize,
+                $textState->charSpace,
+                $textState->wordSpace,
                 (float) $trimmedOperands,
-                $textState->leading ?? 0,
-                $textState->render ?? 0,
-                $textState->rise ?? 0,
+                $textState->leading,
+                $textState->render,
+                $textState->rise,
             );
         }
 
         if ($this === self::LEADING) {
             return new TextState(
-                $textState->fontName ?? null,
-                $textState->fontSize ?? null,
-                $textState->charSpace ?? 0,
-                $textState->wordSpace ?? 0,
-                $textState->scale ?? 100,
+                $textState->fontName,
+                $textState->fontSize,
+                $textState->charSpace,
+                $textState->wordSpace,
+                $textState->scale,
                 (float) $operands,
-                $textState->render ?? 0,
-                $textState->rise ?? 0,
+                $textState->render,
+                $textState->rise,
             );
         }
 
@@ -89,36 +89,36 @@ enum TextStateOperator: string implements InteractsWithTextState {
             return new TextState(
                 DictionaryKey::tryFrom($matches['fontReference']) ?? new ExtendedDictionaryKey($matches['fontReference']),
                 (float) $matches['FontSize'],
-                $textState->charSpace ?? 0,
-                $textState->wordSpace ?? 0,
-                $textState->scale ?? 100,
-                $textState->leading ?? 0,
-                $textState->render ?? 0,
-                $textState->rise ?? 0,
+                $textState->charSpace,
+                $textState->wordSpace,
+                $textState->scale,
+                $textState->leading,
+                $textState->render,
+                $textState->rise,
             );
         }
 
         if ($this === self::RENDER) {
             return new TextState(
-                $textState->fontName ?? null,
-                $textState->fontSize ?? null,
-                $textState->charSpace ?? 0,
-                $textState->wordSpace ?? 0,
-                $textState->scale ?? 100,
-                $textState->leading ?? 0,
+                $textState->fontName,
+                $textState->fontSize,
+                $textState->charSpace,
+                $textState->wordSpace,
+                $textState->scale,
+                $textState->leading,
                 (int) $operands,
-                $textState->rise ?? 0,
+                $textState->rise,
             );
         }
 
         return new TextState(
-            $textState->fontName ?? null,
-            $textState->fontSize ?? null,
-            $textState->charSpace ?? 0,
-            $textState->wordSpace ?? 0,
-            $textState->scale ?? 100,
-            $textState->leading ?? 0,
-            $textState->render ?? 0,
+            $textState->fontName,
+            $textState->fontSize,
+            $textState->charSpace,
+            $textState->wordSpace,
+            $textState->scale,
+            $textState->leading,
+            $textState->render,
             (float) $operands,
         );
     }
