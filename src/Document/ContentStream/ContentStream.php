@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interacti
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\ProducesPositionedTextElements;
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\LineGroupingStrategy\LineGroupingStrategy;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Document;
@@ -65,35 +66,27 @@ readonly class ContentStream {
             }
         }
 
-        usort(
-            $positionedTextElements,
-            static function (PositionedTextElement $a, PositionedTextElement $b): int {
-                if (($differenceY = $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY) !== 0) {
-                    return $differenceY;
-                }
-
-                return $a->absoluteMatrix->offsetX <=> $b->absoluteMatrix->offsetX;
-            },
-        );
-
         return $positionedTextElements;
     }
 
     /** @throws PdfParserException */
-    public function getText(Document $document, Page $page): string {
+    public function getText(Document $document, Page $page, LineGroupingStrategy $lineGroupingStrategy): string {
         $text = '';
-        $previousPositionedTextElement = null;
-        foreach ($this->getPositionedTextElements() as $positionedTextElement) {
-            if ($previousPositionedTextElement !== null) {
-                if ($previousPositionedTextElement->absoluteMatrix->offsetY !== $positionedTextElement->absoluteMatrix->offsetY) {
-                    $text .= "\n";
-                } elseif (($positionedTextElement->absoluteMatrix->offsetX - $previousPositionedTextElement->absoluteMatrix->offsetX - $positionedTextElement->getFont($document, $page)->getWidthForChars($previousPositionedTextElement->getCodePoints(), $previousPositionedTextElement->textState, $previousPositionedTextElement->absoluteMatrix)) >= ($previousPositionedTextElement->textState->fontSize ?? 10) * $previousPositionedTextElement->absoluteMatrix->scaleX * 0.40) {
-                    $text .= ' ';
-                }
+        foreach ($lineGroupingStrategy->group($this->getPositionedTextElements()) as $i => $positionedTextElementsForLine) {
+            if ($i !== 0) {
+                $text .= "\n";
             }
 
-            $text .= $positionedTextElement->getText($document, $page);
-            $previousPositionedTextElement = $positionedTextElement;
+            $previousTextElementOnLine = null;
+            foreach ($positionedTextElementsForLine as $positionedTextElement) {
+                if ($previousTextElementOnLine !== null
+                    && ($positionedTextElement->absoluteMatrix->offsetX - $previousTextElementOnLine->absoluteMatrix->offsetX - $positionedTextElement->getFont($document, $page)->getWidthForChars($previousTextElementOnLine->getCodePoints(), $previousTextElementOnLine->textState, $previousTextElementOnLine->absoluteMatrix)) >= ($previousTextElementOnLine->textState->fontSize ?? 10) * $previousTextElementOnLine->absoluteMatrix->scaleX * 0.40) {
+                    $text .= ' ';
+                }
+
+                $text .= $positionedTextElement->getText($document, $page);
+                $previousTextElementOnLine = $positionedTextElement;
+            }
         }
 
         return $text;
