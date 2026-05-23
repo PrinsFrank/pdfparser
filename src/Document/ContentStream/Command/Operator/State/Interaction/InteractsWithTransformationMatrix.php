@@ -6,5 +6,5 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 
 interface InteractsWithTransformationMatrix {
-    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix, ?TextState $textState): TransformationMatrix;
+    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix, TextState $textState): TransformationMatrix;
 }
