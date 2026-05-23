@@ -7,8 +7,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
@@ -40,8 +38,16 @@ class Page extends DecoratedObject {
 
     /** @throws PdfParserException */
     public function getResourceDictionary(): ?Dictionary {
-        return $this->getDictionary()
-            ->getSubDictionary($this->document, DictionaryKey::RESOURCES);
+        if (($localResourceDictionary = $this->getDictionary()->getSubDictionary($this->document, DictionaryKey::RESOURCES)) !== null) {
+            return $localResourceDictionary;
+        }
+
+        if (($parentReference = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+            return null;
+        }
+
+        return ($this->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+            ->getResourceDictionary([$parentReference->objectNumber]);
     }
 
     /** @throws PdfParserException */
@@ -85,15 +91,7 @@ class Page extends DecoratedObject {
             return $pageFontDictionary;
         }
 
-        if (($pageResourceFontDictionary = $this->getResourceDictionary()?->getSubDictionary($this->document, DictionaryKey::FONT)) !== null) {
-            return $pageResourceFontDictionary;
-        }
-
-        if (($pagesParent = $this->getDictionary()->getObjectForReference($this->document, DictionaryKey::PARENT, Pages::class)) === null) {
-            return null;
-        }
-
-        return $pagesParent->getResourceDictionary()
+        return $this->getResourceDictionary()
             ?->getSubDictionary($this->document, DictionaryKey::FONT);
     }
 
@@ -104,21 +102,7 @@ class Page extends DecoratedObject {
     }
 
     public function getMediaBox(): ?Rectangle {
-        return $this->getInheritableValue(DictionaryKey::MEDIA_BOX, Rectangle::class);
-    }
-
-    public function getCropBox(): ?Rectangle {
-        return $this->getInheritableValue(DictionaryKey::CROP_BOX, Rectangle::class)
-            ?? $this->getMediaBox();
-    }
-
-    /**
-     * @template T of DictionaryValue|NameValue|Dictionary
-     * @param class-string<T> $expectedValueType
-     * @return T
-     */
-    public function getInheritableValue(DictionaryKey $dictionaryKey, string $expectedValueType): DictionaryValue|Dictionary|NameValue|null {
-        if (($localValue = $this->getDictionary()->getValueForKey($this->document, $dictionaryKey, $expectedValueType)) !== null) {
+        if (($localValue = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::MEDIA_BOX, Rectangle::class)) !== null) {
             return $localValue;
         }
 
@@ -127,6 +111,24 @@ class Page extends DecoratedObject {
         }
 
         return ($this->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
-            ->getInheritableValue($dictionaryKey, $expectedValueType, [$parentReference->objectNumber]);
+            ->getMediaBox([$parentReference->objectNumber]);
+    }
+
+    public function getCropBox(): ?Rectangle {
+        if (($localValue = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::CROP_BOX, Rectangle::class)) !== null) {
+            return $localValue;
+        }
+
+        if (($parentReference = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+            return null;
+        }
+
+        $cropBoxParent = ($this->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+            ->getCropBox([$parentReference->objectNumber]);
+        if ($cropBoxParent !== null) {
+            return $cropBoxParent;
+        }
+
+        return $this->getMediaBox();
     }
 }
