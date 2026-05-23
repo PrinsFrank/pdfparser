@@ -20,29 +20,52 @@ pages:
        
       Philips Broadcast implemented the MPK (message per keystroke) interface protocol for control panels 
       used in Jupiter router systems. Grass Valley has since become responsible for the Jupiter series of 
-      router systems. The MPK control interface uses a proprietary method of signaling, for which special considerations are required when connecting to other interface types. This application note describes methods for using the 7707DT Fiber Data Transceiver to transport MPK control signals.   
+      router systems. The MPK control interface uses a proprietary method of signaling, for which special 
+      considerations are required when connecting to other interface types. This application note describes 
+      methods for using the 7707DT Fiber Data Transceiver to transport MPK control signals.  
+       
       The 7707DT series Fiber Data Transceivers communicate bi-directional RS-422 and RS-485 data 
-      signals over a single fiber optic link. By methods described herein, the MPK interface protocol is also accommodated. The user must first note that the MPK interface protocol is different from RS-422 or RS-485.   RS-422:  Two devices send data separately in each direction between them. Data in each 
+      signals over a single fiber optic link. By methods described herein, the MPK interface protocol is also 
+      accommodated. The user must first note that the MPK interface protocol is different from RS-422 or 
+      RS-485.  
+       
+      RS-422:  Two devices send data separately in each direction between them. Data in each 
       direction is carried over a balanced pair of wires. Each of the two devices is always 
-      transmitting data to the receiver of the other device. Figure 1 shows an RS-422 connection between two devices. 
-       RS-485:   Each of two or more devices sends and receives data separately over a shared 
+      transmitting data to the receiver of the other device. Figure 1 shows an RS-422 
+      connection between two devices. 
+       
+      RS-485:   Each of two or more devices sends and receives data separately over a shared 
       balanced pair of wires. At any one time, only one device can transmit data. This avoids 
-      contention of the shared pair of wires. Each device takes turns transmitting data. While not transmitting data, the interface of each other device is in a high-impedance state, and receives input data. Data from the transmitting device is broadcast to all other devices. Each other device must process data being received, and realize it’s turn to transmit data. By this method, several devices can communicate data between each 
+      contention of the shared pair of wires. Each device takes turns transmitting data. While 
+      not transmitting data, the interface of each other device is in a high-impedance state, 
+      and receives input data. Data from the transmitting device is broadcast to all other 
+      devices. Each other device must process data being received, and realize it’s turn to 
+      transmit data. By this method, several devices can communicate data between each 
       other using the same balance pair of wires. Figure 2 shows an RS-485 connection 
       between four devices. 
-       MPK:  This is a proprietary interface protocol used to communicate between Control Panels 
+       
+      MPK:  This is a proprietary interface protocol used to communicate between Control Panels 
       and System Controllers of the Jupiter router system. One port of a System Controller 
       (such as the VM-3000) communicates with one or more Control Panels. The method of 
-      data transfer in the System Controller to Control Panel direction is different from that in the Control Panel to System Controller direction. Figure 2 shows an MPK connection between a System Controller and three Control Panels. 
+      data transfer in the System Controller to Control Panel direction is different from that in 
+      the Control Panel to System Controller direction. Figure 2 shows an MPK connection 
+      between a System Controller and three Control Panels. 
         
         The System Controller broadcasts data to one or more Control Panels. One balanced 
-      pair of wires connects output data from the System Controller to all Control Panels. The interface protocol in this direction is similar to RS-422, in that the System Controller is always transmitting data to the Control Panel inputs.  
-         Each Control Panel must be able to send data back to the System Controller. For this 
+      pair of wires connects output data from the System Controller to all Control Panels. The 
+      interface protocol in this direction is similar to RS-422, in that the System Controller is 
+      always transmitting data to the Control Panel inputs.  
+       
+        Each Control Panel must be able to send data back to the System Controller. For this 
       purpose, a single balanced pair of wires is shared between all Control Panels. At any 
-      one time, only one Control Panel can transmit data. This avoids contention of the shared balanced pair of wires. Each Control Panel takes turns transmitting data. While not transmitting data, the interface of each other Control Panel is in a high-impedance state. The interface protocol in this direction is similar to RS-485, in that each Control Panel 
+      one time, only one Control Panel can transmit data. This avoids contention of the shared 
+      balanced pair of wires. Each Control Panel takes turns transmitting data. While not 
+      transmitting data, the interface of each other Control Panel is in a high-impedance state. 
+      The interface protocol in this direction is similar to RS-485, in that each Control Panel 
       takes turns transmitting data to the System Controller over a shared balanced pair of 
       wires. 
-        
+       
+       
        
       Revision 1.0 AN6-1 
   -
@@ -57,7 +80,8 @@ pages:
        
       Figure 1. RS-422 Interface Example 
        
-          
+         
+       
        
       RS-485 DeviceRS-485 DeviceRS-485 Device
       Each device ouputs
@@ -94,20 +118,32 @@ pages:
       2. INTERFACE METHODS 
        
       From the above overview, it is apparent that special considerations are required when connecting MPK 
-      interface signals to the RS-422 or RS-485 interface of the 7707DT. The issue at hand is the high-impedance state that each Control Panel assumes between data transmissions. If several control panel outputs are to be connected together, then this high-impedance state is required to avoid contention of the shared output connection. The RS-422 interface protocol does not accommodate a high-impedance 
+      interface signals to the RS-422 or RS-485 interface of the 7707DT. The issue at hand is the high-
+      impedance state that each Control Panel assumes between data transmissions. If several control panel 
+      outputs are to be connected together, then this high-impedance state is required to avoid contention of 
+      the shared output connection. The RS-422 interface protocol does not accommodate a high-impedance 
       output state. The RS-485 interface protocol does support this high-impedance output state, but only 
       accommodates a single balanced connection per signal channel. The below two sections describe 
-      special requirements for connecting the MPK interface to the RS-422 or RS-485 interfaces of the 7707DT. 
+      special requirements for connecting the MPK interface to the RS-422 or RS-485 interfaces of the 
+      7707DT. 
       2.1.  MPK Interface to RS-422 
-      The RS-422 interface format does not accommodate a high-impedance output state. The MPK interface signal can, however, be connected to the RS-422 interface of the 7707DT. While the input to 
+      The RS-422 interface format does not accommodate a high-impedance output state. The MPK 
+      interface signal can, however, be connected to the RS-422 interface of the 7707DT. While the input to 
       the 7707DT is in a high-impedance state, the respective output of the companion 7707DT will assume 
       a known logic state. By this method the MPK signal will be converted to an RS-422 signal, and the 
-      high-impedance state will be converted to a known logic state.   MPK data from one or more Control Panels can therefore be transported across the RS-422 interface 
+      high-impedance state will be converted to a known logic state.  
+       
+      MPK data from one or more Control Panels can therefore be transported across the RS-422 interface 
       of the 7707DT. The System Controller must have an independent connection to the RS-422 interface of 
       one 7707DT. All Control Panels sharing that System Controller port must reside on the respective RS-
-      422 connection of the companion 7707DT. If any Control Panel is connected to the 7707DT interface that is local to the System Controller, the output signals of the 7707DT and that Control Panel will conflict by outputting data to the shared signal connections at the same time.  
+      422 connection of the companion 7707DT. If any Control Panel is connected to the 7707DT interface 
+      that is local to the System Controller, the output signals of the 7707DT and that Control Panel will 
+      conflict by outputting data to the shared signal connections at the same time.  
        
-      Serial data channels used for this interface method should be configured for RS-422 at both ends of the 7707DT fiber link. Figures 4 and 5 describe correct and incorrect interface methods, respectively. Figure 6 describes pin-for-pin connections for the correct method.   
+      Serial data channels used for this interface method should be configured for RS-422 at both ends of the 
+      7707DT fiber link. Figures 4 and 5 describe correct and incorrect interface methods, respectively. 
+      Figure 6 describes pin-for-pin connections for the correct method.  
+       
        
       Revision 1.0 AN6-3 
   -
@@ -126,7 +162,8 @@ pages:
        
        
       Figure 4. MPK Interface to RS-422. Correct Method 
-        
+       
+       
       Control PanelControl PanelControl Panel
       Set to
       RS-422
@@ -219,13 +256,23 @@ pages:
       2.2.  MPK Interface to RS-485 
       A second interface method exists, which allows Control Panels to be located on both ends of the 
       7707DT fiber link. This method is only advantageous should available ports be limited on the System 
-      Controller. Otherwise, Control Panels connected on the System Controller side of the 7707DT fiber link can be moved to a spare port, and the above method used.     The 7707DT can be configured to operate with RS-485 interfaces. This type of interface allows the 
+      Controller. Otherwise, Control Panels connected on the System Controller side of the 7707DT fiber link 
+      can be moved to a spare port, and the above method used.    
+       
+      The 7707DT can be configured to operate with RS-485 interfaces. This type of interface allows the 
       output signal to be placed in a high-impedance state, as required for direct connection to Control Panel 
-      outputs. Therefore, when this method of interface is used, Control Panels may be connected on both ends of the 7707DT fiber link. The RS-485 interface protocol accommodates only one balanced pair of wires. Therefore, two channels of the 7707DT must be used; one for each direction of data transport.   
+      outputs. Therefore, when this method of interface is used, Control Panels may be connected on both 
+      ends of the 7707DT fiber link. The RS-485 interface protocol accommodates only one balanced pair of 
+      wires. Therefore, two channels of the 7707DT must be used; one for each direction of data transport.  
+       
       Only the channel used to transport data in the Control Panel to System Controller Direction should be 
-      configured for RS-485. This channel should be configured for a data rate of 1200baud. The channel used to transport data in the System Controller to Control Panel direction should be configured for RS-422. Refer to the manual for details about configuring each channel.  
+      configured for RS-485. This channel should be configured for a data rate of 1200baud. The channel 
+      used to transport data in the System Controller to Control Panel direction should be configured for RS-
+      422. Refer to the manual for details about configuring each channel. 
+       
       Figures 7 shows a block diagram describing this method of interface. Figure 8 describes pin-for-pin 
-      connections.  
+      connections. 
+       
       Control PanelControl PanelControl Panel
       Set to
       RS-422
@@ -243,7 +290,8 @@ pages:
       Figure 7. MPK Interface to RS-485 
        
        
-        
+       
+       
       AN6-6 
       Revision 1.0 
   -
@@ -322,17 +370,29 @@ pages:
        
       3. TERMINATION AND FAILSAFE BIAS 
        
-      If signal cable lengths are kept to a minimum, then the above interface methods should work without any requirement for terminations or failsafe bias. The 7707DT does provide selectable input terminations and failsafe bias when required.   Signal terminations are used to eliminate distortion of signals traveling over long lengths of cable. If problems are experienced, and signal distortion is suspected, then the user should enable the input termination of the respective 7707DT. Input terminations are easily selectable through the card edge interface of the 7707DT, or via Vistalink
+      If signal cable lengths are kept to a minimum, then the above interface methods should work without 
+      any requirement for terminations or failsafe bias. The 7707DT does provide selectable input 
+      terminations and failsafe bias when required.  
+       
+      Signal terminations are used to eliminate distortion of signals traveling over long lengths of cable. If 
+      problems are experienced, and signal distortion is suspected, then the user should enable the input 
+      termination of the respective 7707DT. Input terminations are easily selectable through the card edge 
       TM
       , as described in the product manual. As a general rule, 
-      terminations are most effective when placed at the far end of a cable. If more than two devices are connected to the same cable, as could be the case with MPK interfaces, then it is recommended that the 7707DT be located at the far end of the longest cable segment when possible.   
+      interface of the 7707DT, or via Vistalink
+      terminations are most effective when placed at the far end of a cable. If more than two devices are 
+      connected to the same cable, as could be the case with MPK interfaces, then it is recommended that 
+      the 7707DT be located at the far end of the longest cable segment when possible.  
+       
       The 7707DT also provides a selectable bias on the balance data inputs. This is referred to as a failsafe 
       bias, as it places the balanced input connections in a known logic state while no device is transmitting 
-      to them. Any direct connection between a 7707DT input and a Control Panel may require a failsafe bias, to compensate for ambient noise, long lengths of cable, or connection to many devices. Input 
-      failsafe bias is easily selectable through the card edge interface of the 7707DT, or via Vistalink
+      to them. Any direct connection between a 7707DT input and a Control Panel may require a failsafe 
+      bias, to compensate for ambient noise, long lengths of cable, or connection to many devices. Input 
       TM
       , as 
-      described in the product manual. To enable failsafe bias on any channel of the 7707DT, the termination must first be enabled.  
+      failsafe bias is easily selectable through the card edge interface of the 7707DT, or via Vistalink
+      described in the product manual. To enable failsafe bias on any channel of the 7707DT, the termination 
+      must first be enabled.  
       AN6-8 
       Revision 1.0 
   -
@@ -343,16 +403,31 @@ pages:
        
        
        
-          
        
-           
        
-          
        
-           
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
        
       This page left intentionally blank 
        
-        
+       
+       
        
       Revision 1.0 AN6-9 

@@ -20,7 +20,7 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
 
     /** @throws ParseFailureException */
     #[Override]
-    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix): TransformationMatrix {
+    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix, ?TextState $textState): TransformationMatrix {
         $operands = preg_replace('/\s+/', ' ', $operands) ?? throw new RuntimeException();
         if ($this === self::MOVE_OFFSET || $this === self::MOVE_OFFSET_LEADING) {
             $offsets = explode(' ', trim($operands));
@@ -31,14 +31,8 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
             $tx = (float) $offsets[0];
             $ty = (float) $offsets[1];
 
-            return new TransformationMatrix(
-                $transformationMatrix->scaleX,
-                $transformationMatrix->shearX,
-                $transformationMatrix->shearY,
-                $transformationMatrix->scaleY,
-                $transformationMatrix->offsetX + $tx * $transformationMatrix->scaleX + $ty * $transformationMatrix->shearY,
-                $transformationMatrix->offsetY + $tx * $transformationMatrix->shearX + $ty * $transformationMatrix->scaleY,
-            );
+            return (new TransformationMatrix(1, 0, 0, 1, $tx, $ty))
+                ->multiplyWith($transformationMatrix);
         }
 
         if ($this === self::SET_MATRIX) {
@@ -50,7 +44,11 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
             return new TransformationMatrix((float) $matrix[0], (float) $matrix[1], (float) $matrix[2], (float) $matrix[3], (float) $matrix[4], (float) $matrix[5]);
         }
 
-        return $transformationMatrix;
+        $tx = 0.0;
+        $ty = -($textState->leading ?? 0.0);
+
+        return (new TransformationMatrix(1, 0, 0, 1, $tx, $ty))
+            ->multiplyWith($transformationMatrix);
     }
 
     /** @throws ParseFailureException */
