@@ -1,13 +1,42 @@
-# yaml-language-server: $schema=./.yml-schema.json
+# yaml-language-server: $schema=../../schema.json
 version: '1.7'
-password: null
+userPassword: null
+ownerPassword: null
+fileEncryptionKey: null
 title: null
 producer: 'PStill Engine 1.90'
 author: null
 creator: null
-creationDate: 2025-10-06T10:48:53.000000+0200
+creationDate: 2025-10-06T10:48:53+02:00
 modificationDate: null
 pages:
   -
     content: |-
-      TODO
+      Bekanntmachung
+      Veröffentlicht am Mittwoch, 8. Oktober 2025
+      BAnz AT 08.10.2025 B5
+      Seite 1 von 1
+      Bundesministerium für Gesundheit   
+      Bekanntmachung 
+      eines Beschlusses des Gemeinsamen Bundesausschusses 
+      über eine Änderung der MD-Qualitätskontroll-Richtlinie: 
+      Liposuktion bei Lipödem 
+      Vom 17. Juli 2025 
+      Der Gemeinsame Bundesausschuss (G-BA) hat in seiner Sitzung am 17. Juli 2025 
+      beschlossen, die MD-Qualitätskontroll-Richtlinie in der Fassung vom 21. Dezem-
+      ber 2017 (BAnz AT 12.12.2018 B2), die zuletzt durch die Bekanntmachung des 
+      Beschlusses vom 16. Januar 2025 (BAnz AT 17.04.2025 B3) geändert worden ist, 
+      wie folgt zu ändern: 
+      I. 
+      In der Anlage „Richtlinien gemäß Abschnitt 2 Teil B“ wird in Nummer 7 die Angabe 
+      „im Stadium III“ gestrichen. 
+      II. 
+      Die Änderung der Richtlinie tritt am Tag nach der Veröffentlichung im Bundes-
+      anzeiger in Kraft. 
+      Die Tragenden Gründe zu diesem Beschluss werden auf den Internetseiten des 
+      G-BA unter www.g-ba.de veröffentlicht. 
+      Berlin, den 17. Juli 2025 
+      Gemeinsamer Bundesausschuss 
+      gemäß § 91 SGB V 
+      Der Vorsitzende 
+      Prof. Hecken 
