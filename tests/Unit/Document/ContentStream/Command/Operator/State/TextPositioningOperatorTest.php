@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\ContentStream\Command\Operato
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextPositioningOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 
 #[CoversClass(TextPositioningOperator::class)]
@@ -13,12 +14,12 @@ class TextPositioningOperatorTest extends TestCase {
         static::assertEquals(
             new TransformationMatrix(1, 0, 0, 1, 100, 100),
             TextPositioningOperator::MOVE_OFFSET
-                ->applyToTransformationMatrix('100 100', new TransformationMatrix(1, 0, 0, 1, 0, 0), null),
+                ->applyToTransformationMatrix('100 100', new TransformationMatrix(1, 0, 0, 1, 0, 0), new TextState(null, null)),
         );
         static::assertEquals(
             new TransformationMatrix(1, 0, 0, 1, 100, 100),
             TextPositioningOperator::MOVE_OFFSET
-                ->applyToTransformationMatrix('100    100', new TransformationMatrix(1, 0, 0, 1, 0, 0), null),
+                ->applyToTransformationMatrix('100    100', new TransformationMatrix(1, 0, 0, 1, 0, 0), new TextState(null, null)),
         );
         static::assertEquals(
             new TransformationMatrix(1, 0, 0, 1, 100, 100),
@@ -29,7 +30,7 @@ class TextPositioningOperatorTest extends TestCase {
                     100
                     EOD,
                     new TransformationMatrix(1, 0, 0, 1, 0, 0),
-                    null,
+                    new TextState(null, null),
                 ),
         );
     }

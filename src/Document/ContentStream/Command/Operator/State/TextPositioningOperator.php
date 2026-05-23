@@ -20,7 +20,7 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
 
     /** @throws ParseFailureException */
     #[Override]
-    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix, ?TextState $textState): TransformationMatrix {
+    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix, TextState $textState): TransformationMatrix {
         $operands = preg_replace('/\s+/', ' ', $operands) ?? throw new RuntimeException();
         if ($this === self::MOVE_OFFSET || $this === self::MOVE_OFFSET_LEADING) {
             $offsets = explode(' ', trim($operands));
@@ -44,10 +44,7 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
             return new TransformationMatrix((float) $matrix[0], (float) $matrix[1], (float) $matrix[2], (float) $matrix[3], (float) $matrix[4], (float) $matrix[5]);
         }
 
-        $tx = 0.0;
-        $ty = -($textState->leading ?? 0.0);
-
-        return (new TransformationMatrix(1, 0, 0, 1, $tx, $ty))
+        return (new TransformationMatrix(1, 0, 0, 1, 0.0, -$textState->leading))
             ->multiplyWith($transformationMatrix);
     }
 

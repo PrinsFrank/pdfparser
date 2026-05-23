@@ -28,7 +28,7 @@ enum GraphicsStateOperator: string implements InteractsWithTransformationMatrix 
 
     /** @throws ParseFailureException */
     #[Override]
-    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix, ?TextState $textState): TransformationMatrix {
+    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix, TextState $textState): TransformationMatrix {
         if ($this === self::ModifyCurrentTransformationMatrix) {
             $operands = preg_replace('/\s+/', ' ', $operands)
                 ?? throw new ParseFailureException('An error occurred while trying to remove duplicate spaces from the operands');

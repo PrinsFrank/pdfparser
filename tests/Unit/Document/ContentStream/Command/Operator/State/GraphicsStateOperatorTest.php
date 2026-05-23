@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\ContentStream\Command\Operato
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\GraphicsStateOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 
 #[CoversClass(GraphicsStateOperator::class)]
@@ -15,7 +16,7 @@ class GraphicsStateOperatorTest extends TestCase {
             GraphicsStateOperator::ModifyCurrentTransformationMatrix->applyToTransformationMatrix(
                 '1 2 3 4 5 6',
                 new TransformationMatrix(1.0, 2.0, 3.0, 4.0, 5.0, 6.0),
-                null,
+                new TextState(null, null),
             ),
         );
         static::assertEquals(
@@ -23,7 +24,7 @@ class GraphicsStateOperatorTest extends TestCase {
             GraphicsStateOperator::ModifyCurrentTransformationMatrix->applyToTransformationMatrix(
                 '1  2  3  4  5  6',
                 new TransformationMatrix(1.0, 2.0, 3.0, 4.0, 5.0, 6.0),
-                null,
+                new TextState(null, null),
             ),
         );
         static::assertEquals(
@@ -31,7 +32,7 @@ class GraphicsStateOperatorTest extends TestCase {
             GraphicsStateOperator::ModifyCurrentTransformationMatrix->applyToTransformationMatrix(
                 '1   2   3   4   5   6',
                 new TransformationMatrix(1.0, 2.0, 3.0, 4.0, 5.0, 6.0),
-                null,
+                new TextState(null, null),
             ),
         );
     }
