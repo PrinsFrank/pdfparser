@@ -13,7 +13,8 @@ pages:
   -
     content: |2-
        Application Note AN-6 
-       MPK Router Control Interface to 7707DT   
+      MPK Router Control Interface to 7707DT   
+       
        
       1. OVERVIEW 
        
@@ -108,7 +109,8 @@ pages:
   -
     content: |2-
        Application Note AN-6 
-       MPK Router Control Interface to 7707DT   
+      MPK Router Control Interface to 7707DT   
+       
        
        
       2. INTERFACE METHODS 
@@ -152,7 +154,8 @@ pages:
       7707DT
       Set to
       RS-422
-      7707DTJupiter System Controller
+      Jupiter System Controller
+      7707DT
        
        
       Figure 4. MPK Interface to RS-422. Correct Method 
@@ -167,7 +170,8 @@ pages:
       7707DT
       Set to
       RS-422
-      7707DTJupiter System Controller
+      Jupiter System Controller
+      7707DT
        
        
       Figure 5. MPK Interface to RS-422. Incorrect Method 
@@ -175,7 +179,8 @@ pages:
   -
     content: |2-
        Application Note AN-6 
-       MPK Router Control Interface to 7707DT   
+      MPK Router Control Interface to 7707DT   
+       
        
       7707DT Channel 1 is configured
       Control PanelControl Panelto RS-422 for this example.
@@ -230,12 +235,14 @@ pages:
       -RS485-RS485
       CH4
       CH4
-      +RS422 OUTGND- RX+TX------+RS422 OUT
+      GND- RX+TX------
+      +RS422 OUT+RS422 OUT
       RS-422
       RS-422
       -RS422 IN-RS422 IN
       6789
-      +LTC IN+LTC OUT---+RX-TX---+LTC IN+LTC OUT
+      ---+RX-TX---
+      +LTC IN+LTC OUT+LTC IN+LTC OUT
       GNDGNDGNDGND
       -LTC IN-LTC OUT-LTC IN-LTC OUT
       Jupiter System Controller
@@ -277,7 +284,8 @@ pages:
       RS-422
       Set to
       RS-485
-      7707DTJupiter System Controller
+      Jupiter System Controller
+      7707DT
        
        
       Figure 7. MPK Interface to RS-485 
@@ -289,7 +297,8 @@ pages:
   -
     content: |2-
        Application Note AN-6 
-       MPK Router Control Interface to 7707DT   
+      MPK Router Control Interface to 7707DT   
+       
        
       7707DT Channel 1 is configured
       to RS-422 for this example.
@@ -347,12 +356,14 @@ pages:
       -RS485-RS485
       CH4
       CH4
-      +RS422 OUTGND- RX+TX------+RS422 OUT
+      GND- RX+TX------
+      +RS422 OUT+RS422 OUT
       RS-422
       RS-422
       -RS422 IN-RS422 IN
       6789
-      +LTC IN+LTC OUT---+RX-TX---+LTC IN+LTC OUT
+      ---+RX-TX---
+      +LTC IN+LTC OUT+LTC IN+LTC OUT
       GNDGNDGNDGND
       -LTC IN-LTC OUT-LTC IN-LTC OUT
       Jupiter System ControllerControl Panel
@@ -389,7 +400,8 @@ pages:
   -
     content: |2-
        Application Note AN-6 
-       MPK Router Control Interface to 7707DT   
+      MPK Router Control Interface to 7707DT   
+       
        
        
        
