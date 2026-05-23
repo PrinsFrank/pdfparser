@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=../../schema.json
+version: '1.7'
+userPassword: null
+ownerPassword: null
+fileEncryptionKey: null
+title: null
+producer: 'LibreOffice 25.2.7.2 (X86_64)'
+author: null
+creator: Writer
+creationDate: 2025-12-02T18:58:35+01:00
+modificationDate: null
+pages:
+  -
+    content: |-2
+      Etiam vitae lectus sodales
+      Vestibulum et augue vitae orci sagittis faucibus
+      Donec risus risus
+      viverra a aliquam elementum
+      Lorem ipsum dolor sit amet
+      ornare nec nisl
+      consectetur adipiscing elit
