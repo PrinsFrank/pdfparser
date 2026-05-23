@@ -60,16 +60,7 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
                 throw new ParseFailureException();
             }
 
-            return new TextState(
-                $textState->fontName,
-                $textState->fontSize,
-                $textState->charSpace,
-                $textState->wordSpace,
-                $textState->scale,
-                -1 * (float) $offsets[1],
-                $textState->render,
-                $textState->rise,
-            );
+            return $textState->withLeading(-1 * (float) $offsets[1]);
         }
 
         return $textState;

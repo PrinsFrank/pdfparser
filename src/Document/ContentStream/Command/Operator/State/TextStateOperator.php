@@ -25,29 +25,11 @@ enum TextStateOperator: string implements InteractsWithTextState {
     #[Override]
     public function applyToTextState(string $operands, TextState $textState): TextState {
         if ($this === self::CHAR_SPACE) {
-            return new TextState(
-                $textState->fontName,
-                $textState->fontSize,
-                (float) $operands,
-                $textState->wordSpace,
-                $textState->scale,
-                $textState->leading,
-                $textState->render,
-                $textState->rise,
-            );
+            return $textState->withCharSpace((float) $operands);
         }
 
         if ($this === self::WORD_SPACE) {
-            return new TextState(
-                $textState->fontName,
-                $textState->fontSize,
-                $textState->charSpace,
-                (float) $operands,
-                $textState->scale,
-                $textState->leading,
-                $textState->render,
-                $textState->rise,
-            );
+            return $textState->withWordSpace((float) $operands);
         }
 
         if ($this === self::SCALE) {
@@ -56,29 +38,11 @@ enum TextStateOperator: string implements InteractsWithTextState {
                 throw new ParseFailureException(sprintf('Invalid scale operand "%s" for scale operator', $operands));
             }
 
-            return new TextState(
-                $textState->fontName,
-                $textState->fontSize,
-                $textState->charSpace,
-                $textState->wordSpace,
-                (float) $trimmedOperands,
-                $textState->leading,
-                $textState->render,
-                $textState->rise,
-            );
+            return $textState->withScale((float) $trimmedOperands);
         }
 
         if ($this === self::LEADING) {
-            return new TextState(
-                $textState->fontName,
-                $textState->fontSize,
-                $textState->charSpace,
-                $textState->wordSpace,
-                $textState->scale,
-                (float) $operands,
-                $textState->render,
-                $textState->rise,
-            );
+            return $textState->withLeading((float) $operands);
         }
 
         if ($this === self::FONT_SIZE) {
@@ -86,40 +50,16 @@ enum TextStateOperator: string implements InteractsWithTextState {
                 throw new InvalidArgumentException(sprintf('Invalid font operand "%s" for Tf operator', substr($operands, 0, 200)));
             }
 
-            return new TextState(
+            return $textState->withFont(
                 DictionaryKey::tryFrom($matches['fontReference']) ?? new ExtendedDictionaryKey($matches['fontReference']),
                 (float) $matches['FontSize'],
-                $textState->charSpace,
-                $textState->wordSpace,
-                $textState->scale,
-                $textState->leading,
-                $textState->render,
-                $textState->rise,
             );
         }
 
         if ($this === self::RENDER) {
-            return new TextState(
-                $textState->fontName,
-                $textState->fontSize,
-                $textState->charSpace,
-                $textState->wordSpace,
-                $textState->scale,
-                $textState->leading,
-                (int) $operands,
-                $textState->rise,
-            );
+            return $textState->withRender((int) $operands);
         }
 
-        return new TextState(
-            $textState->fontName,
-            $textState->fontSize,
-            $textState->charSpace,
-            $textState->wordSpace,
-            $textState->scale,
-            $textState->leading,
-            $textState->render,
-            (float) $operands,
-        );
+        return $textState->withRise((float) $operands);
     }
 }
