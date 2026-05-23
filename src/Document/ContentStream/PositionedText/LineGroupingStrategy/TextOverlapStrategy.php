@@ -4,6 +4,8 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText\LineGroupin
 
 use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
+use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /**
@@ -21,7 +23,7 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 class TextOverlapStrategy implements LineGroupingStrategy {
     /** @param int<0, 100> $overlapPercentage */
     public function __construct(
-        private readonly int $overlapPercentage = 50,
+        private readonly int $overlapPercentage = 70,
     ) {}
 
     #[Override]
@@ -48,7 +50,7 @@ class TextOverlapStrategy implements LineGroupingStrategy {
 
                 $overlap = min($highestElementTop, $currentElementTop) - max($highestElementBottom, $currentElementBottom);
                 $smallestElementHeight = min($positionedTextElement->getHeight(), $highestPositionedTextElement->getHeight());
-                if ($overlap / $smallestElementHeight * 100 > $this->overlapPercentage) {
+                if ($smallestElementHeight !== 0.0 && $overlap / $smallestElementHeight * 100 > $this->overlapPercentage) {
                     $positionedTextElementsOnLine[] = $positionedTextElement;
                     $indexOfItemsToProcess = array_diff($indexOfItemsToProcess, [$indexOfItemToProcess]);
                 }
