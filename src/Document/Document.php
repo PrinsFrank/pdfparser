@@ -9,6 +9,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
+use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObjectFactory;
@@ -175,7 +177,7 @@ class Document {
     public function getText(?string $pageSeparator = null): string {
         $text = '';
         foreach ($this->getPages() as $page) {
-            $text .= ($pageSeparator !== null ? $pageSeparator : '')
+            $text .= ($pageSeparator !== null ? $pageSeparator : WhitespaceCharacter::LINE_FEED->value)
                 . $page->getText();
         }
 
