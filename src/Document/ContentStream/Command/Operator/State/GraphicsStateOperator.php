@@ -38,17 +38,8 @@ enum GraphicsStateOperator: string implements InteractsWithTransformationMatrix 
                 throw new ParseFailureException(sprintf('Expected 6 values for matrix transformation, got %d: "%s"', count($matrix), $operands));
             }
 
-            return $transformationMatrix
-                ->multiplyWith(
-                    new TransformationMatrix(
-                        (float) $matrix[0],
-                        (float) $matrix[1],
-                        (float) $matrix[2],
-                        (float) $matrix[3],
-                        (float) $matrix[4],
-                        (float) $matrix[5],
-                    ),
-                );
+            return (new TransformationMatrix((float) $matrix[0], (float) $matrix[1], (float) $matrix[2], (float) $matrix[3], (float) $matrix[4], (float) $matrix[5]))
+                ->multiplyWith($transformationMatrix);
         }
 
         return $transformationMatrix;
