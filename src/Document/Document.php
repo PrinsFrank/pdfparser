@@ -42,7 +42,7 @@ class Document {
         public readonly Stream $stream,
         public readonly Version $version,
         public readonly CrossReferenceSource $crossReferenceSource,
-        ?StandardSecurity $security,
+        public readonly ?StandardSecurity $security,
     ) {
         $this->fileEncryptionKey = $this->getFileEncryptionKeyFromSecurity($security);
     }

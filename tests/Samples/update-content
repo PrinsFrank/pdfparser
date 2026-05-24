@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
 
+use PrinsFrank\PdfParser\Document\Security\StandardSecurity;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\PdfParser;
 use Symfony\Component\Yaml\Yaml;
@@ -13,8 +14,15 @@ foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sa
         throw new RuntimeException(sprintf('File "%s" does not exist', $pdfPath));
     }
 
+    $userPassword = $ownerPassword = null;
+    if (file_exists($contentsYamlPath = $sampleFolder . DIRECTORY_SEPARATOR . 'contents.yml')) {
+        $currentYamlContent = Yaml::parseFile($contentsYamlPath, Yaml::PARSE_OBJECT_FOR_MAP | Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE | Yaml::PARSE_DATETIME);
+        $userPassword = $currentYamlContent->userPassword;
+        $ownerPassword = $currentYamlContent->ownerPassword;
+    }
+
     try {
-        $parsedPDF = (new PdfParser())->parseFile($pdfPath);
+        $parsedPDF = (new PdfParser())->parseFile($pdfPath, security: new StandardSecurity($userPassword, $ownerPassword));
     } catch (PdfParserException $e) {
         echo sprintf('Failed to parse file "%s": %s', $pdfPath, $e->getMessage()) . PHP_EOL;
         continue;
@@ -46,9 +54,9 @@ foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sa
     $yamlContent = Yaml::dump(
         [
             'version' => $parsedPDF->version->value,
-            'userPassword' => null,
-            'ownerPassword' => null,
-            'fileEncryptionKey' => null,
+            'userPassword' => $parsedPDF->security->userPassword,
+            'ownerPassword' => $parsedPDF->security->ownerPassword,
+            'fileEncryptionKey' => $parsedPDF->fileEncryptionKey !== null ? bin2hex($parsedPDF->fileEncryptionKey->value) : null,
             'title' => $parsedPDF->getInformationDictionary()?->getTitle(),
             'producer' => $parsedPDF->getInformationDictionary()?->getProducer(),
             'author' => $parsedPDF->getInformationDictionary()?->getAuthor(),
@@ -63,7 +71,7 @@ foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sa
     );
 
     file_put_contents(
-        $sampleFolder . DIRECTORY_SEPARATOR . 'contents.yml',
+        $contentsYamlPath,
         '# yaml-language-server: $schema=../../schema.json' . PHP_EOL . trim($yamlContent, PHP_EOL) . PHP_EOL
     );
 }
