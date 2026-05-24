@@ -12,7 +12,7 @@ class StrictLineGrouping implements LineGroupingStrategy {
         usort(
             $positionedTextElements,
             static function (PositionedTextElement $a, PositionedTextElement $b): int {
-                if (($differenceY = $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY) !== 0) {
+                if (($differenceY = abs($b->absoluteMatrix->offsetY) <=> abs($a->absoluteMatrix->offsetY)) !== 0) {
                     return $differenceY;
                 }
 

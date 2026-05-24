@@ -28,7 +28,7 @@ class TextOverlapStrategy implements LineGroupingStrategy {
     public function group(array $positionedTextElements): iterable {
         usort(
             $positionedTextElements,
-            fn(PositionedTextElement $a, PositionedTextElement $b): int => $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY,
+            fn(PositionedTextElement $a, PositionedTextElement $b): int => abs($b->absoluteMatrix->offsetY) <=> abs($a->absoluteMatrix->offsetY),
         );
 
         $indexOfItemsToProcess = array_keys($positionedTextElements);
