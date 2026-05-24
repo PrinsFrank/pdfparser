@@ -15,9 +15,9 @@ readonly class StandardSecurity {
 
     public function __construct(
         #[SensitiveParameter]
-        private ?string $userPassword = null,
+        public ?string $userPassword = null,
         #[SensitiveParameter]
-        private ?string $ownerPassword = null,
+        public ?string $ownerPassword = null,
     ) {}
 
     /** @throws ParseFailureException|NotImplementedException */
