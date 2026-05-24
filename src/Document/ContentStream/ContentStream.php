@@ -37,9 +37,7 @@ readonly class ContentStream {
         $transformationMatrix = new TransformationMatrix(1, 0, 0, 1, 0, 0); // Identity matrix
         foreach ($this->content as $content) {
             if ($content instanceof ContentStreamCommand) {
-                if ($content->operator instanceof InteractsWithTextState) {
-                    $textState = $content->operator->applyToTextState($content->operands, $textState);
-                } elseif ($content->operator === GraphicsStateOperator::SaveCurrentStateToStack) {
+                if ($content->operator === GraphicsStateOperator::SaveCurrentStateToStack) {
                     $transformationStateStack[] = clone $transformationMatrix;
                     $textStateStack[] = clone $textState;
                 } elseif ($content->operator === GraphicsStateOperator::RestoreMostRecentStateFromStack) {
@@ -47,7 +45,13 @@ readonly class ContentStream {
                         ?? throw new ParseFailureException();
                     $textState = array_pop($textStateStack)
                         ?? throw new ParseFailureException();
-                } elseif ($content->operator instanceof InteractsWithTransformationMatrix) {
+                }
+
+                if ($content->operator instanceof InteractsWithTextState) {
+                    $textState = $content->operator->applyToTextState($content->operands, $textState);
+                }
+
+                if ($content->operator instanceof InteractsWithTransformationMatrix) {
                     $transformationMatrix = $content->operator->applyToTransformationMatrix($content->operands, $transformationMatrix, $textState);
                 }
 
