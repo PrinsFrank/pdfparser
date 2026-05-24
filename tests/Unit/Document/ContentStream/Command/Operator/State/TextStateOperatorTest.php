@@ -15,15 +15,15 @@ class TextStateOperatorTest extends TestCase {
     public function testApplyToTextState(): void {
         static::assertEquals(
             new TextState(new ExtendedDictionaryKey('F0'), 12, 0, 0, 100, 0, 0, 0),
-            TextStateOperator::FONT_SIZE->applyToTextState('/F0 12', null),
+            TextStateOperator::FONT_SIZE->applyToTextState('/F0 12', new TextState(null, null)),
         );
         static::assertEquals(
             new TextState(new ExtendedDictionaryKey('F0'), -12, 0, 0, 100, 0, 0, 0),
-            TextStateOperator::FONT_SIZE->applyToTextState('/F0 -12', null),
+            TextStateOperator::FONT_SIZE->applyToTextState('/F0 -12', new TextState(null, null)),
         );
         static::assertEquals(
             new TextState(new ExtendedDictionaryKey('F2+0'), 12, 0, 0, 100, 0, 0, 0),
-            TextStateOperator::FONT_SIZE->applyToTextState('/F2+0 12', null),
+            TextStateOperator::FONT_SIZE->applyToTextState('/F2+0 12', new TextState(null, null)),
         );
     }
 
@@ -31,7 +31,7 @@ class TextStateOperatorTest extends TestCase {
     public function testApplyToTextStateWithValidScaleOperand(string $operand, float $expectedScale): void {
         static::assertEquals(
             new TextState(null, null, 0, 0, $expectedScale, 0, 0, 0),
-            TextStateOperator::SCALE->applyToTextState($operand, null),
+            TextStateOperator::SCALE->applyToTextState($operand, new TextState(null, null)),
         );
     }
 
@@ -49,7 +49,7 @@ class TextStateOperatorTest extends TestCase {
         $this->expectException(ParseFailureException::class);
         $this->expectExceptionMessage(sprintf('Invalid scale operand "%s" for scale operator', $operand));
 
-        TextStateOperator::SCALE->applyToTextState($operand, null);
+        TextStateOperator::SCALE->applyToTextState($operand, new TextState(null, null));
     }
 
     /** @return iterable<string, array{0: string}> */

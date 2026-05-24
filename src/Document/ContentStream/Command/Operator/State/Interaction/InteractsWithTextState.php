@@ -5,5 +5,5 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Int
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 
 interface InteractsWithTextState {
-    public function applyToTextState(string $operands, ?TextState $textState): ?TextState;
+    public function applyToTextState(string $operands, TextState $textState): TextState;
 }

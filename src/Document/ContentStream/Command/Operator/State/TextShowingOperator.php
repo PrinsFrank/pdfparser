@@ -20,7 +20,7 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
 
     /** @throws ParseFailureException */
     #[Override]
-    public function applyToTextState(string $operands, ?TextState $textState): ?TextState {
+    public function applyToTextState(string $operands, TextState $textState): TextState {
         if ($this === self::MOVE_SHOW_SPACING) {
             $spacing = explode(' ', trim($operands));
             if (count($spacing) !== 2) {
@@ -28,14 +28,14 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
             }
 
             return new TextState(
-                $textState->fontName ?? null,
-                $textState->fontSize ?? null,
+                $textState->fontName,
+                $textState->fontSize,
                 (float) $spacing[1],
                 (float) $spacing[0],
-                $textState->scale ?? 100,
-                $textState->leading ?? 0,
-                $textState->render ?? 0,
-                $textState->rise ?? 0,
+                $textState->scale,
+                $textState->leading,
+                $textState->render,
+                $textState->rise,
             );
         }
 
