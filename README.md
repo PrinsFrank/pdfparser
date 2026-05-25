@@ -19,6 +19,15 @@ Previously, there wasn't a PDF library that allows parsing of PDFs that was open
 
 Instead, this package allows for parsing of a wide variety of PDF files while not relying on external dependencies, all while being MIT licensed!
 
+## Comparison with `smalot/pdfparser`
+
+<picture>
+    <source srcset="https://prinsfrank.github.io/pdfparser-benchmarks/comparison_dark.png" media="(prefers-color-scheme: dark)">
+    <img src="https://prinsfrank.github.io/pdfparser-benchmarks/comparison_light.png" alt="Banner">
+</picture>
+
+See the [benchmark repository](https://github.com/PrinsFrank/pdfparser-benchmarks) for more details.
+
 ## Setup
 
 To start right away, run the following command in your composer project;
