@@ -18,6 +18,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\Item\RangeCID
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\ToUnicodeCMapNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
@@ -75,6 +76,15 @@ class Font extends DecoratedObject {
             }
 
             return $this->toUnicodeCMap;
+        }
+
+        if ($this->getDictionary()->getTypeForKey(DictionaryKey::TO_UNICODE) === ToUnicodeCMapNameValue::class) {
+            $toUnicodeCMapNameValue = $this->getDictionary()
+                ->getValueForKey($this->document, DictionaryKey::TO_UNICODE, ToUnicodeCMapNameValue::class)
+                ?? throw new ParseFailureException();
+
+            return $this->toUnicodeCMap = $toUnicodeCMapNameValue
+                ->getToUnicodeCMap();
         }
 
         $toUnicodeObject = $this->getDictionary()
