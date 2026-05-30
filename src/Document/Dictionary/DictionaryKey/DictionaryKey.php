@@ -36,6 +36,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SecurityHandle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SpecialColorSpaceNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TabsNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\ToUnicodeCMapNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TransitionStyleNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TrappedNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
@@ -1192,7 +1193,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::TITLE => [TextStringValue::class],
             self::TK => [BooleanValue::class],
             self::TM => [TextStringValue::class, IntegerValue::class, FloatValue::class],
-            self::TO_UNICODE => [ReferenceValue::class],
+            self::TO_UNICODE => [ReferenceValue::class, ToUnicodeCMapNameValue::class],
             self::TP => [IntegerValue::class],
             self::TPL => [TextStringValue::class],
             self::TR => [TextStringValue::class, ArrayValue::class],
