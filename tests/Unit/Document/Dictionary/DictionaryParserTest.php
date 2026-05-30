@@ -177,7 +177,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::STEM_V, new IntegerValue(69)),
                 new DictionaryEntry(DictionaryKey::XHEIGHT, new IntegerValue(431)),
                 new DictionaryEntry(DictionaryKey::CHAR_SET, new TextStringValue('(/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two)')),
-                new DictionaryEntry(DictionaryKey::FONT_FILE, new TextStringValue('11 0 R')),
+                new DictionaryEntry(DictionaryKey::FONT_FILE, new ReferenceValue(11, 0)),
             ),
             DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );

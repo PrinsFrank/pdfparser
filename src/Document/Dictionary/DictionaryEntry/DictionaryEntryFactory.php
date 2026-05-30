@@ -51,8 +51,7 @@ class DictionaryEntryFactory {
             return DictionaryFactory::fromArray($encryptionContext, $value);
         }
 
-        if ((in_array(Dictionary::class, $allowedValueTypes, true) || in_array(ArrayValue::class, $allowedValueTypes, true))
-            && is_string($value)
+        if (is_string($value)
             && preg_match('/^[0-9]+ [0-9]+ R$/', $value) === 1
             && ($referenceValue = ReferenceValue::fromValue($value)) !== null) {
             return $referenceValue;
