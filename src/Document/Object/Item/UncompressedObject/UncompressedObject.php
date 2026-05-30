@@ -100,7 +100,8 @@ readonly class UncompressedObject implements ObjectItem {
     public function getContent(Document $document): Stream {
         if (($startStreamPos = $document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)) !== null
             && ($endStreamPos = $document->stream->lastPos(Marker::END_STREAM, $document->stream->getSizeInBytes() - $this->endOffset)) !== null) {
-            if ($startStreamPos === $endStreamPos) {
+            if ($startStreamPos === $endStreamPos
+                || $startStreamPos === ($eolEndStreamPos = $document->stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset))) {
                 return new InMemoryStream('');
             }
 
@@ -108,8 +109,7 @@ readonly class UncompressedObject implements ObjectItem {
                 $this->getEncryptionContext(),
                 $document,
                 $startStreamPos,
-                ($document->stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset)
-                    ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value))) - $startStreamPos,
+                ($eolEndStreamPos ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value))) - $startStreamPos,
                 $this->getDictionary($document),
             );
         }
