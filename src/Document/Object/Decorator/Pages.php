@@ -12,17 +12,23 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class Pages extends DecoratedObject {
     /**
+     * @param list<int> $visitedObjectNrs
      * @throws PdfParserException
      * @return list<Page>
      */
-    public function getPageItems(): array {
+    public function getPageItems(array $visitedObjectNrs = []): array {
         $kids = [];
         foreach ($this->getDictionary()->getValueForKey($this->document, DictionaryKey::KIDS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
+            if (in_array($referenceValue->objectNumber, $visitedObjectNrs, true) === true) {
+                continue;
+            }
+
+            $visitedObjectNrs[] = $referenceValue->objectNumber;
             $kidObject = $this->document->getObject($referenceValue->objectNumber)
                 ?? throw new ParseFailureException(sprintf('Child with number %d could not be found', $referenceValue->objectNumber));
 
             if ($kidObject instanceof Pages) {
-                $kids = [...$kids, ...$kidObject->getPageItems()];
+                $kids = [...$kids, ...$kidObject->getPageItems($visitedObjectNrs)];
             } elseif ($kidObject instanceof Page) {
                 $kids[] = $kidObject;
             } elseif ($kidObject instanceof GenericObject) {
