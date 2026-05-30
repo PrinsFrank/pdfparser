@@ -21,17 +21,21 @@ class Page extends DecoratedObject {
      */
     public function getPositionedTextElements(): array {
         return $this->getContentStream()
-            ->getPositionedTextElements();
+            ?->getPositionedTextElements() ?? [];
     }
 
     /** @throws PdfParserException */
     public function getText(): string {
         return $this->getContentStream()
-            ->getText($this->document, $this, new TextOverlapStrategy());
+            ?->getText($this->document, $this, new TextOverlapStrategy()) ?? '';
     }
 
     /** @throws PdfParserException */
-    public function getContentStream(): ContentStream {
+    public function getContentStream(): ?ContentStream {
+        if ($this->getDictionary()->getTypeForKey(DictionaryKey::CONTENTS) === null) {
+            return null;
+        }
+
         return ContentStreamParser::parse(
             $this->document->getObjectsByDictionaryKey($this->getDictionary(), DictionaryKey::CONTENTS),
         );
