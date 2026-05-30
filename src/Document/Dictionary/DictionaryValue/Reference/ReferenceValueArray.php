@@ -43,9 +43,11 @@ readonly class ReferenceValueArray implements DictionaryValue {
 
         $referenceValues = [];
         for ($i = 0; $i < $nrOfReferenceParts; $i += 3) {
-            /** @phpstan-ignore offsetAccess.notFound, offsetAccess.notFound, offsetAccess.notFound */
-            $string = $referenceParts[$i] . ' ' . $referenceParts[$i + 1] . ' ' . $referenceParts[$i + 2];
+            if ($referenceParts[$i + 2] !== 'R') {
+                return null;
+            }
 
+            $string = $referenceParts[$i] . ' ' . $referenceParts[$i + 1] . ' ' . $referenceParts[$i + 2];
             $referenceValues[] = ReferenceValue::fromValue($string)
                 ?? throw new ParseFailureException(sprintf('Could not parse reference value "%s" at index %d in "%s"', $string, $i, $valueString));
         }
