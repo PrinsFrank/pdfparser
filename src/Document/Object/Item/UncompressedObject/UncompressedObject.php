@@ -19,6 +19,7 @@ use PrinsFrank\PdfParser\Document\Security\EncryptionContext;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream\FileStream;
+use PrinsFrank\PdfParser\Stream\InMemoryStream;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @api */
@@ -99,6 +100,10 @@ readonly class UncompressedObject implements ObjectItem {
     public function getContent(Document $document): Stream {
         if (($startStreamPos = $document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)) !== null
             && ($endStreamPos = $document->stream->lastPos(Marker::END_STREAM, $document->stream->getSizeInBytes() - $this->endOffset)) !== null) {
+            if ($startStreamPos === $endStreamPos) {
+                return new InMemoryStream('');
+            }
+
             return CompressedObjectContentParser::parseBinary(
                 $this->getEncryptionContext(),
                 $document,
