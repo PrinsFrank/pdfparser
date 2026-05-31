@@ -48,11 +48,18 @@ readonly class Dictionary {
                     ?? throw new InvalidArgumentException('Value type is dictionary but subdictionary not found');
             }
 
-            if ($value instanceof ReferenceValue && $document !== null && $expectedValueType !== ReferenceValue::class && is_a($expectedValueType, DictionaryValue::class, true)) {
-                $value = $expectedValueType::fromValue(
-                    $content = trim(($document->getObject($value->objectNumber) ?? throw new InvalidArgumentException(sprintf('Object with nr %d not found', $value->objectNumber)))
-                        ->getStream()->toString()),
-                ) ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced object %d as %s', $content, $value->objectNumber, $expectedValueType));
+            if ($value instanceof ReferenceValue && $document !== null && $expectedValueType !== ReferenceValue::class) {
+                $content = ($document->getObject($value->objectNumber) ?? throw new InvalidArgumentException(sprintf('Object with nr %d not found', $value->objectNumber)))
+                    ->getStream();
+                if ($expectedValueType === Dictionary::class) {
+                    $value = DictionaryParser::parse(null, $content, 0, $content->getSizeInBytes());
+                } elseif (is_a($expectedValueType, NameValue::class, true)) {
+                    $value = $expectedValueType::tryFrom(trim($content->toString()))
+                        ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced object %d as %s', $content->toString(), $value->objectNumber, $expectedValueType));
+                } elseif (is_a($expectedValueType, DictionaryValue::class, true)) {
+                    $value = $expectedValueType::fromValue(trim($content->toString()))
+                        ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced object %d as %s', $content->toString(), $value->objectNumber, $expectedValueType));
+                }
             }
 
             if (is_a($value, $expectedValueType) === false) {
