@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Filter\Decode\ASCII85Decode;
+use PrinsFrank\PdfParser\Document\Filter\Decode\ASCIIHexDecode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\CCITTFaxDecode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\FlateDecode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\LZWFlatePredictorValue;
@@ -57,6 +58,7 @@ enum FilterNameValue: string implements NameValue {
                     ?? throw new ParseFailureException('Missing K'),
             ),
             self::ASCII_85_DECODE => ASCII85Decode::decodeBinary($content),
+            self::ASCII_HEX_DECODE => ASCIIHexDecode::decodeBinary($content),
             default => throw new ParseFailureException(sprintf('Content "%.100s..." cannot be decoded for filter "%s"', $content, $this->name)),
         };
     }
