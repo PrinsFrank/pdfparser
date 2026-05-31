@@ -84,6 +84,10 @@ class CrossReferenceSourceParser {
     }
 
     private static function getCrossReferenceType(Stream $stream, int $byteOffsetLastCrossReferenceSection, int $byteOffsetEndOfCurrentLine): ?CrossReferenceType {
+        if ($byteOffsetEndOfCurrentLine === $byteOffsetLastCrossReferenceSection) {
+            return null;
+        }
+
         $startCrossReferenceContent = trim($stream->read($byteOffsetLastCrossReferenceSection, $byteOffsetEndOfCurrentLine - $byteOffsetLastCrossReferenceSection));
         if ($startCrossReferenceContent === Marker::XREF->value) {
             return CrossReferenceType::Table;
