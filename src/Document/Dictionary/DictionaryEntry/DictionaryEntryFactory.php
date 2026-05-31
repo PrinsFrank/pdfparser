@@ -78,6 +78,10 @@ class DictionaryEntryFactory {
             return $valueObject;
         }
 
+        if (in_array(ExtendedDictionaryKey::class, $allowedValueTypes, true) && is_string($value) && ($extendedDictionaryKey = ExtendedDictionaryKey::fromValue($value)) !== null) {
+            return $extendedDictionaryKey;
+        }
+
         if (in_array(TextStringValue::class, $allowedValueTypes, true) && is_string($value)) {
             return TextStringValue::fromValue($value);
         }
