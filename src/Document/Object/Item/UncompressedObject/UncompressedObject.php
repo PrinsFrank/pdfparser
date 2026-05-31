@@ -114,17 +114,17 @@ readonly class UncompressedObject implements ObjectItem {
             );
         }
 
-        $nextLineAfterStartObj = $document->stream->getStartNextLineAfter(Marker::OBJ, $this->startOffset, $this->endOffset)
-            ?? throw new ParseFailureException(sprintf('Unable to locate newline after marker %s', Marker::OBJ->value));
+        $startObjPos = $document->stream->firstPos(Marker::OBJ, $this->startOffset, $this->endOffset)
+            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::OBJ->value));
         $endObjPos = $document->stream->lastPos(Marker::END_OBJ, $document->stream->getSizeInBytes() - $this->endOffset)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_OBJ->value));
-        $eolObjContent = $document->stream->getEndOfCurrentLine($endObjPos - 2, $this->endOffset)
-            ?? throw new ParseFailureException(sprintf('Unable to locate newline after marker %s', Marker::END_OBJ->value));
+        $nextLineAfterStartObj = $document->stream->getStartNextLineAfter(Marker::OBJ, $startObjPos, $endObjPos);
+        $eolObjContent = $document->stream->getEndOfCurrentLine($endObjPos - 2, $endObjPos);
 
         return FileStream::fromString(
             $document->stream->read(
-                $nextLineAfterStartObj,
-                $eolObjContent - $nextLineAfterStartObj,
+                $nextLineAfterStartObj ?? ($startObjPos + Marker::OBJ->length()),
+                ($eolObjContent ?? $endObjPos) - ($nextLineAfterStartObj ?? ($startObjPos + Marker::OBJ->length())),
             ),
         );
     }
