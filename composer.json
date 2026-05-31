@@ -1,6 +1,6 @@
 {
     "name": "prinsfrank/pdfparser",
-    "description": "maintainable, fast & low-memory; built from scratch ",
+    "description": "PHP library to Read and extract text & images from PDFs - Fast & Low memory - Built from scratch",
     "type": "library",
     "license": "MIT",
     "autoload": {
