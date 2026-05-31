@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CIDFontWidths;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CrossReferenceStreamByteSizes;
@@ -40,7 +41,7 @@ class Font extends DecoratedObject {
     }
 
     public function getEncodingDictionary(): ?Dictionary {
-        if (in_array($this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING), [null, EncodingNameValue::class], true)) {
+        if (in_array($this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING), [null, EncodingNameValue::class, ExtendedDictionaryKey::class], true)) {
             return null;
         }
 
