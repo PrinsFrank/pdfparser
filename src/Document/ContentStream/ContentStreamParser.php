@@ -72,12 +72,10 @@ class ContentStreamParser {
                     $textObject = new TextObject();
                 } elseif ($char === 'T' && $previousChar === 'E') { // TextObjectOperator::END
                     $startCurrentOperandIndex = $index + 1;
-                    if ($textObject === null) {
-                        throw new ParseFailureException('Encountered TextObjectOperator::END without preceding TextObjectOperator::BEGIN');
+                    if ($textObject !== null) {
+                        $content[] = $textObject;
+                        $textObject = null;
                     }
-
-                    $content[] = $textObject;
-                    $textObject = null;
                 } elseif ($char === 'C'
                     && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
                     $startCurrentOperandIndex = $index + 1;
