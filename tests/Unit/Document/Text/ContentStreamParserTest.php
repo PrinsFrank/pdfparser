@@ -323,6 +323,29 @@ class ContentStreamParserTest extends TestCase {
         );
     }
 
+    /** @see 7.2.4 */
+    public function testParserCorrectlyHandlesCommentsBeforeTextObjects(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            % Comment before text object
+            BT
+            0 0 1 rg
+            1 0 0 RG
+            ET
+            EOD,
+        );
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(ColorOperator::SetColorDeviceRGB, '0 0 1'))
+                    ->addContentStreamCommand(new ContentStreamCommand(ColorOperator::SetStrokingColorDeviceRGB, '1 0 0')),
+            ),
+            ContentStreamParser::parse([$decoratedObject]),
+        );
+    }
+
     #[DataProvider('provideOperators')]
     public function testGetOperator(CompatibilityOperator|InlineImageOperator|MarkedContentOperator|TextObjectOperator|ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator $enumCase): void {
         static::assertSame(
