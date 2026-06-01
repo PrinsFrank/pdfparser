@@ -30,15 +30,23 @@ class ContentStreamParser {
      */
     public static function parse(array $contentsObjects): ContentStream {
         $content = [];
-        $inStringLiteral = $inResourceName = $inDictionary = false;
+        $inComment = $inStringLiteral = $inResourceName = $inDictionary = false;
         $inArrayLevel = $inStringLevel = 0;
-        $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = $previousContentStream = $startPreviousOperandIndex = null;
+        $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = $previousContentStream = $startPreviousOperandIndex = $startOfCommentOffset = $endCommentOffset = null;
         foreach ($contentsObjects as $contentsObject) {
             $startCurrentOperandIndex = 0;
             $contentStream = $contentsObject->getStream();
             $contentStreamSize = $contentStream->getSizeInBytes();
             for ($index = 0; $index < $contentStreamSize; $index++) {
                 $char = $contentStream->read($index, 1);
+                if ($inComment === true) {
+                    if (in_array($char, ["\r", "\n"], true)) {
+                        $endCommentOffset = $index + 1;
+                        $inComment = false;
+                    }
+                    continue;
+                }
+
                 if ($inStringLiteral === true) {
                     if ($char === ')' && $previousChar !== '\\') {
                         $inStringLiteral = false;
@@ -51,6 +59,10 @@ class ContentStreamParser {
                     if ($char === '>' && $previousChar === '>' && $secondToLastChar !== '\\') {
                         $inDictionary = false;
                     }
+                } elseif ($char === '%') {
+                    $inComment = true;
+                    $startOfCommentOffset = $index;
+                    $previousChar = $secondToLastChar = $thirdToLastChar = null;
                 } elseif ($char === '[' && $previousChar !== '\\') {
                     $inArrayLevel++;
                 } elseif ($char === '<' && $previousChar === '<' && $secondToLastChar !== '\\') {
@@ -86,8 +98,15 @@ class ContentStreamParser {
                         $operands .= $previousContentStream->read($startPreviousOperandIndex, $previousContentStream->getSizeInBytes() - $startPreviousOperandIndex);
                         $startPreviousOperandIndex = null;
                     }
-                    if (($operandLength = $index + 1 - $startCurrentOperandIndex - strlen($operator->value)) > 0) {
-                        $operands .= $contentStream->read($startCurrentOperandIndex, $operandLength);
+                    $operandLength = $index + 1 - $startCurrentOperandIndex - strlen($operator->value);
+                    if ($operandLength > 0) {
+                        if ($endCommentOffset !== null && $startOfCommentOffset !== null) {
+                            $operands .= $contentStream->read($startCurrentOperandIndex, $startOfCommentOffset - $startCurrentOperandIndex);
+                            $operands .= $contentStream->read($endCommentOffset, $index + 1 - strlen($operator->value) - $endCommentOffset);
+                            $endCommentOffset = $startOfCommentOffset = null;
+                        } else {
+                            $operands .= $contentStream->read($startCurrentOperandIndex, $operandLength);
+                        }
                     }
 
                     $command = new ContentStreamCommand($operator, trim($operands));

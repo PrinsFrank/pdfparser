@@ -301,6 +301,28 @@ class ContentStreamParserTest extends TestCase {
         );
     }
 
+    /** @see 7.2.4 */
+    public function testParserCorrectlyHandlesComments(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            BT % comment 1
+            (Hello) Tj % comment 2
+            (World) Tj % comment 3
+            ET % comment 4
+            EOD,
+        );
+        $decoratedObject = $this->createMock(GenericObject::class);
+        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hello)'))
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(World)')),
+            ),
+            ContentStreamParser::parse([$decoratedObject]),
+        );
+    }
+
     #[DataProvider('provideOperators')]
     public function testGetOperator(CompatibilityOperator|InlineImageOperator|MarkedContentOperator|TextObjectOperator|ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator $enumCase): void {
         static::assertSame(
