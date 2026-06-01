@@ -21,17 +21,17 @@ readonly class ArrayValue implements DictionaryValue {
     #[Override]
     /** @throws PdfParserException */
     public static function fromValue(string $valueString): self|ReferenceValueArray|null {
-        $valueString = trim($valueString);
-        if (!str_starts_with($valueString, '[') || !str_ends_with($valueString, ']')) {
+        $sanitizedValueString = trim($valueString);
+        if (!str_starts_with($sanitizedValueString, '[') || !str_ends_with($sanitizedValueString, ']')) {
             return null;
         }
 
-        $valueString = preg_replace('/(<[^>]*>)(?=<[^>]*>)/', '$1 $2', $valueString)
+        $sanitizedValueString = preg_replace('/(<[^>]*>)(?=<[^>]*>)/', '$1 $2', $sanitizedValueString)
             ?? throw new RuntimeException('An error occurred while sanitizing array value');
-        $valueString = str_replace(['/', "\n"], [' /', ' '], rtrim(ltrim($valueString, '[ '), ' ]'));
-        $valueString = preg_replace('/\s+/', ' ', $valueString)
+        $sanitizedValueString = str_replace(['/', "\n"], [' /', ' '], rtrim(ltrim($sanitizedValueString, '[ '), ' ]'));
+        $sanitizedValueString = preg_replace('/\s+/', ' ', $sanitizedValueString)
             ?? throw new RuntimeException('An error occurred while removing duplicate spaces from array value');
-        $values = explode(' ', $valueString);
+        $values = explode(' ', $sanitizedValueString);
         if (count($values) % 3 === 0 && array_key_exists(2, $values) && $values[2] === 'R') {
             return ReferenceValueArray::fromValue($valueString);
         }
