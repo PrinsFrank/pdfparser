@@ -50,6 +50,10 @@ class ArrayValueTest extends TestCase {
                 EOD,
             ),
         );
+        static::assertEquals(
+            new ReferenceValueArray(new ReferenceValue(42, 0), new ReferenceValue(43, 0)),
+            ArrayValue::fromValue('[42 0 R 43 0 R]'),
+        );
     }
 
     public function testToString(): void {
