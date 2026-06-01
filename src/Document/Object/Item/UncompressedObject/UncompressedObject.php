@@ -118,13 +118,11 @@ readonly class UncompressedObject implements ObjectItem {
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::OBJ->value));
         $endObjPos = $document->stream->lastPos(Marker::END_OBJ, $document->stream->getSizeInBytes() - $this->endOffset)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_OBJ->value));
-        $nextLineAfterStartObj = $document->stream->getStartNextLineAfter(Marker::OBJ, $startObjPos, $endObjPos);
-        $eolObjContent = $document->stream->getEndOfCurrentLine($endObjPos - 2, $endObjPos);
 
         return FileStream::fromString(
             $document->stream->read(
-                $nextLineAfterStartObj ?? ($startObjPos + Marker::OBJ->length()),
-                ($eolObjContent ?? $endObjPos) - ($nextLineAfterStartObj ?? ($startObjPos + Marker::OBJ->length())),
+                $startObjPos + Marker::OBJ->length(),
+                $endObjPos - ($startObjPos + Marker::OBJ->length()),
             ),
         );
     }
