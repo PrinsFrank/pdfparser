@@ -100,10 +100,13 @@ class ContentStreamParser {
                     }
                     $operandLength = $index + 1 - $startCurrentOperandIndex - strlen($operator->value);
                     if ($operandLength > 0) {
-                        if ($endCommentOffset !== null && $startOfCommentOffset !== null) {
+                        $operandEndOffset = $index + 1 - strlen($operator->value);
+                        if ($endCommentOffset !== null
+                            && $endCommentOffset < $operandEndOffset
+                            && $startOfCommentOffset !== null
+                            && $startOfCommentOffset > $startCurrentOperandIndex) {
                             $operands .= $contentStream->read($startCurrentOperandIndex, $startOfCommentOffset - $startCurrentOperandIndex);
-                            $operands .= $contentStream->read($endCommentOffset, $index + 1 - strlen($operator->value) - $endCommentOffset);
-                            $endCommentOffset = $startOfCommentOffset = null;
+                            $operands .= $contentStream->read($endCommentOffset, $operandEndOffset - $endCommentOffset);
                         } else {
                             $operands .= $contentStream->read($startCurrentOperandIndex, $operandLength);
                         }
@@ -117,6 +120,7 @@ class ContentStreamParser {
                     }
 
                     $startCurrentOperandIndex = $index + 1;
+                    $endCommentOffset = $startOfCommentOffset = null;
                 }
 
                 $thirdToLastChar = $secondToLastChar;
