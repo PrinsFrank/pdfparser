@@ -23,3 +23,6 @@ trim_trailing_whitespace = false
 
 [tests/Samples/files/**/contents.yml]
 indent_size = unset
+
+[*.php]
+indent_size = unset
