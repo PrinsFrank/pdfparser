@@ -6,11 +6,13 @@ namespace PrinsFrank\PdfParser\Document\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Document;
@@ -18,6 +20,7 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
+use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
 readonly class Dictionary {
     /** @var array<DictionaryEntry> */
@@ -59,6 +62,30 @@ readonly class Dictionary {
                 } elseif (is_a($expectedValueType, DictionaryValue::class, true)) {
                     $value = $expectedValueType::fromValue(trim($content->toString()))
                         ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced object %d as %s', $content->toString(), $value->objectNumber, $expectedValueType));
+                }
+            }
+
+            if ($value instanceof ReferenceValueArray && $document !== null && $expectedValueType !== ReferenceValueArray::class) {
+                $content = '';
+                foreach ($value->referenceValues as $referenceValue) {
+                    $content .= ($document->getObject($referenceValue->objectNumber) ?? throw new InvalidArgumentException(sprintf('Object with nr %d not found', $referenceValue->objectNumber)))
+                        ->getStream()
+                        ->toString();
+                }
+
+                $content = new InMemoryStream($content);
+                if ($expectedValueType === Dictionary::class) {
+                    $value = DictionaryParser::parse(null, $content, 0, $content->getSizeInBytes());
+                } elseif (is_a($expectedValueType, NameValue::class, true)) {
+                    $value = $expectedValueType::tryFrom(trim($content->toString()))
+                        ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced value array', $content->toString()));
+                } elseif (is_a($expectedValueType, DictionaryValue::class, true)) {
+                    if (in_array($expectedValueType, [Rectangle::class, ArrayValue::class], true)) {
+                        $content = new InMemoryStream('[' . $content->toString() . ']');
+                    }
+
+                    $value = $expectedValueType::fromValue(trim($content->toString()))
+                        ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced value array', $content->toString()));
                 }
             }
 

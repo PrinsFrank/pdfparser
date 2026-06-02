@@ -12,6 +12,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Dictionary\Normalization\NameValueNormalizer;
 use PrinsFrank\PdfParser\Document\Encryption\RC4;
@@ -76,6 +77,10 @@ class DictionaryEntryFactory {
             }
 
             return $valueObject;
+        }
+
+        if (is_string($value) && ($referenceValueArray = ReferenceValueArray::fromValue($value)) !== null) {
+            return $referenceValueArray;
         }
 
         if (in_array(ExtendedDictionaryKey::class, $allowedValueTypes, true) && is_string($value) && ($extendedDictionaryKey = ExtendedDictionaryKey::fromValue($value)) !== null) {

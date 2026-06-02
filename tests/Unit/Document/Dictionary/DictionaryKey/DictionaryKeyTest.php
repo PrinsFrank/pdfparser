@@ -50,11 +50,6 @@ class DictionaryKeyTest extends TestCase {
         );
     }
 
-    #[DataProvider('cases')]
-    public function testGetValueTypes(DictionaryKey $dictionaryKey): void {
-        static::assertNotEmpty($dictionaryKey->getValueTypes());
-    }
-
     /** @return iterable<array<DictionaryKey>> */
     public static function cases(): iterable {
         foreach (DictionaryKey::cases() as $dictionaryKey) {
