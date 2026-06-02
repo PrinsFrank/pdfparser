@@ -47,4 +47,19 @@ class CIDFontWidthsTest extends TestCase {
             ),
         );
     }
+
+    public function testFromValueAcceptsEmptyArray(): void {
+        static::assertEquals(
+            new CIDFontWidths(),
+            CIDFontWidths::fromValue('[]'),
+        );
+        static::assertEquals(
+            new CIDFontWidths(),
+            CIDFontWidths::fromValue(' [] '),
+        );
+        static::assertEquals(
+            new CIDFontWidths(),
+            CIDFontWidths::fromValue(' [   ] '),
+        );
+    }
 }
