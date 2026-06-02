@@ -1,0 +1,332 @@
+# yaml-language-server: $schema=../../schema.json
+version: '1.7'
+userPassword: null
+ownerPassword: null
+fileEncryptionKey: null
+title: 'Drucksache 21/1407'
+producer: 'Antenna House PDF Output Library 7.3.1866'
+author: 'Deutscher Bundestag'
+creator: 'Antenna XSL House Formatter V7.3 MR2 Linux : 7.3.3.60933 (2023-04-21T14:08+09)'
+creationDate: 2025-09-01T16:24:09+02:00
+modificationDate: 2025-09-01T16:24:09+02:00
+pages:
+  -
+    content: |-
+      Deutscher Bundestag Drucksache  21/ 1407
+      21. Wahlperiode 28.08.2025
+      Antwort 
+      der Bundesregierung 
+      auf die Kleine Anfrage der Abgeordneten Jörg Cezanne, Desiree Becker, Violetta 
+      Bock, Clara Bünger, Anne-Mieke Bremer, Katrin Fey, Dr. Gregor Gysi, Luke Hoß, 
+      Ferat Koçak, Jan Köstering, Sonja Lemke, Tamara Mazzi, Bodo Ramelow, David 
+      Schliesing, Aaron Valent, Donata Vogtschmidt, Christin Willnat, Janine Wissler 
+      und der Fraktion Die Linke 
+      – Drucksache 21/1240 –
+      Neubau des Bundeskriminalamts in Wiesbaden
+      Vorbemerkung der Fragesteller
+      Das  Hessische Ministerium  der Finanzen,  das  Bundeskriminalamt  (BKA),  die 
+      Bundesanstalt  für   Immobilienaufgaben   (BImA)   und  die  Landeshauptstadt 
+      Wiesbaden  (LHW)  planen im  Rahmen  der städtebaulichen  Entwicklungsmaß-
+      nahme  „Ostfeld“  den Neubau  eines zentralen Campus  für  das  BKA.  Ziel  ist 
+      es, die bislang  über  das  Stadtgebiet  verstreuten Liegenschaften des BKA  an 
+      einem Ort zu  bündeln („All  in one“). Dafür  soll auf  rund 30 Hektar  eines ins-
+      gesamt  ca. 120  Hektar  großen  Entwicklungsgebiets  Baurecht  geschaffen wer-
+      den. Der  Aufstellungsbeschluss  zum  Bebauungsplan  „Bundeskriminalamt“  in 
+      den  Ortsbezirken   Erbenheim   und  Südost  der  Landeshauptstadt   Wiesbaden 
+      wurde   am   2.  April   2025   von  der  Stadtverordnetenversammlung   beschlossen 
+      (https://piwi.wiesbaden.de/sitzungsvorlage/detail/3434709 ).
+      Das  Vorhaben ist Teil eines größeren  Plans  zur  Schaffung eines neuen Stadt-
+      teils,  stößt   jedoch  auf   erheblichen  Widerstand.   Konfliktlinien  verlaufen  ent-
+      lang verschiedener Interessen: Landwirte wehren sich gegen den Verlust wert-
+      voller Ackerflächen, weil weite Teile des Gebiets als Vorrangflächen für Land-
+      wirtschaft und regionale Grünzüge ausgewiesen sind. Die am Rhein liegenden 
+      Stadtteile Kastel  und Kostheim  sowie  der anliegende Stadtteil Erbenheim  ge-
+      hören  nach der landesweiten  Klimaanalyse  Hessen zu  den durch  Hitzestress 
+      besonders belasteten Gebieten ( https://landesplanung.hessen.de/sites/landespla
+      nung.hessen.de/files/2024-10/landeswklimaanalysehessen_abschlussbericht_2
+      0240918.pdf , S. 67 f.).
+      Zudem  hat der Bund für  Umwelt  und Naturschutz  (BUND)  Hessen gegen die 
+      mit  dem  Vorhaben verbundene Abweichung  vom  Regionalplan  geklagt.  Zwar 
+      wurde  die Klage  zunächst  abgewiesen,  das  Urteil ist aber  noch nicht rechts-
+      kräftig.   In  den  weiteren   Planungsverfahren   sollen  Maßnahmen   zum   Klima- 
+      und  Landschaftsschutz   sowie   zur   Sicherung   landwirtschaftlicher   Existenzen 
+      entwickelt  werden.  Die  Umsetzung  des BKA-Neubaus  bleibt somit  rechtlich, 
+      ökologisch   und  gesellschaftlich  umstritten.   Daher   wird   die  Bundesregierung 
+      zum  Planungsstand  bei den in ihre  direkte  Zuständigkeit  fallenden Behörden, 
+      Die Antwort wurde namens der Bundesregierung mit Schreiben des Bundesministeriums des Innern
+      vom 28. August 2025 übermittelt.
+      Die Drucksache enthält zusätzlich – in kleinerer Schrifttype – den Fragetext.
+  -
+    content: |-
+      Drucksache  21/ 1407 – 2 – Deutscher Bundestag – 21. Wahlperiode
+      BKA  und BImA,  sowie  zur  Gesamtverantwortlichkeit  und Koordination  des 
+      geplanten BKA-Neubaus in Wiesbaden befragt.
+      Vorbemerkung der Bundesregierung
+      Das Bauprojekt ALL IN ONE befindet sich, nach Billigung der Bedarfsplanung 
+      durch   das   Bundesministerium   der  Finanzen  (BMF)  im   Juli  2024,   gemäß   der 
+      Richtlinien für  die Durchführung  von Bauaufgaben  des Bundes (RBBau),  der-
+      zeit in der Phase der Erstellung der Initialen Projektunterlage (IPU).
+      Das Bundeskriminalamt (BKA) ist neben der Bundesanstalt für Immobilienauf-
+      gaben (BImA)  als Bauherrin  sowie  der Bauverwaltung  des Landes Hessen in 
+      der Rolle des Nutzers gemäß RBBau daran beteiligt.
+      Im  Verantwortungsbereich  der Landeshauptstadt  Wiesbaden  wurde  am  2.  April 
+      2025   im   Rahmen   einer  Städtebaulichen   Entwicklungsmaßnahme   (SEM)  der 
+      Beschluss für  die Änderung  des Flächennutzungsplans  sowie  für  die Aufstel-
+      lung des Bebauungsplans gefasst.
+      Das   dazugehörige   Verfahren   der  Bauleitplanung,   im   Besonderen  die  Unter-
+      suchungen der damit  einhergehenden Auswirkungen  auf  den Naturschutz,  be-
+      finden sich noch in Prüfung.  Diese  sind noch nicht so weit  gediehen, dass  be-
+      reits Erkenntnisse dazu vorliegen.
+       1. Welche  bestehenden Standorte des BKA  (z. B. in Wiesbaden,  Mecken-
+      heim,  Berlin und ggf. weitere)  sollen durch  den Neubau  im  Bereich Ost-
+      feld/Kalkofen ersetzt werden?
+      Alle Liegenschaften am  Standort Wiesbaden  sollen durch  den Neubau  ersetzt 
+      werden.
+       2. Welche  spezifischen  Kriterien  und Gewichtungen  wurden  bei der Stand-
+      ortwahl  für  das  BKA  im  Ostfeld/Kalkofen angewendet,  und wie  wurden 
+      diese im  Vergleich zu  anderen geprüften  Standorten (insbesondere Kon-
+      versionsflächen) bewertet,  auch  unter Berücksichtigung  der langfristigen 
+      wirtschaftlichen   Opportunitätskosten   des  Verlusts  landwirtschaftlicher 
+      Flächen und der Kosten für die Bewältigung der Umweltbelastungen?
+       5. Sind andere,  leichter zu  erschließende  Flächen in der Region (z. B. ge-
+      werbliche   und  militärische   Konversionsflächen)  geprüft   worden,   die 
+      weniger  Eingriffe in Natur  und Umwelt  erfordern  würden,  in Anbetracht 
+      der Umwelt-  und Klimabelastungen,  die in diesem  und umliegenden Ge-
+      bieten bereits sehr hoch sind, und dementsprechend große und kostspieli-
+      ge  Anforderungen   an  die  Bewältigung   dieser   Belastungen  stellen  wür-
+      den?
+      Die  Fragen  2  und 5 werden  aufgrund  des Sachzusammenhangs  gemeinsam  be-
+      antwortet.
+      Die   BImA   prüft   im   Rahmen   ihres   Erkundungsverfahren   alle  möglichen   zur 
+      Verfügung  stehenden Bestands- sowie  Konversionsflächen. Der  Nutzer  hat der 
+      BImA  einen auf  das  Stadtgebiet  beschränkten  Erkundungsauftrag  erteilt. Aus 
+      dieser  Erkundung  ist auf  Grund  der benötigten Fläche bzw.  spezifischen  Flä-
+      chenanforderung  des Nutzers  das  Ostfeld als geeigneter Standort hervorgegan-
+      gen.
+  -
+    content: |-
+      Deutscher Bundestag – 21. Wahlperiode – 3 – Drucksache  21/ 1407
+       3. Spielt  die  Nähe  des  US-Headquarters   Europe   und  des  NATO-Haupt-
+      quartiers  zur  Koordinierung  von Waffenlieferungen  und Ausbildungsak-
+      tivitäten für die Ukraine eine Rolle, und wenn ja, welche?
+      Nein.
+       4. Werden   weitere   künftige   Standorte  für   das   BKA   in  Betracht  gezogen, 
+      und wenn ja, wo liegen diese?
+      Es sind keine weiteren Planungen in Wiesbaden vorgesehen.
+       6. Für  wie  viele Beschäftigte ist der neue Standort des BKA  geplant,  und 
+      wie  viel Prozent  der Gesamtbeschäftigten  des BKAs  sollen nach Fertig-
+      stellung am neuen Standort arbeiten?
+      Der  Neubau  am  Standort Wiesbaden  wird  gemäß  Stellenplan des Jahres  2023 
+      für 5  369 Stellen geplant. Dabei handelt es sich um 100  Prozent der Beschäftig-
+      ten am Standort Wiesbaden.
+       7. An  welchen Standorten arbeiten  wie  viele der BKA-Beschäftigten  aktu-
+      ell, und wann  soll der Umzug  jeweils  stattfinden (bitte tabellarisch  auf-
+      stellen)?
+      Die  BKA-Beschäftigten  am  Standort Wiesbaden  sind derzeit  in sieben Liegen-
+      schaften untergebracht. Die Arbeitsplätze verteilen sich wie folgt:
+      W1: 750
+      W2: 933
+      W3: 1  361
+      W4: 24
+      W7: 94
+      W8: 1  337
+      W9: 917
+      Der   Umzug   in  den  Neubau   soll  sukzessive   nach  Fertigstellung  einzelner 
+      Bauabschnitte   erfolgen.  Die   genauen  Termine   und  Details   zum   Umzug   sind 
+      zum aktuellen Planungsstand noch nicht bekannt.
+       8. Wie  stellen sich die Gesamtkosten  des Neubauprojekts  dar  (bitte detail-
+      liert die Gesamtkosten  des Neubauprojekts,  einschließlich  der Methodik 
+      der Kostenschätzung,  der Annahmen  für  zukünftige  Preisentwicklungen 
+      und der Höhe  der eingeplanten Risikopuffer  für  unvorhergesehene Kos-
+      ten aufschlüsseln)?
+      Aufgrund   des  noch  frühen  Planungsstadiums   kann  derzeit   keine  Aussage   zu 
+      den Gesamtkosten getätigt werden (siehe Vorbemerkung).
+  -
+    content: |-
+      Drucksache  21/ 1407 – 4 – Deutscher Bundestag – 21. Wahlperiode
+       9. Wie  stellt sich die sicherlich  vorgenommene  umfassende  Wirtschaftlich-
+      keitsanalyse  dar,  die den Neubau  mit  einer Sanierung  und Modernisie-
+      rung  der bestehenden BKA-Standorte  vergleicht,  unter Berücksichtigung 
+      von Lebenszykluskosten,  Flexibilität für  zukünftige  Arbeitsmodelle  und 
+      potenziellen Verwertungserlösen der aufgegebenen Liegenschaften?
+      Aufgrund  des hohen Instandhaltungsstaus,  besonders im  Hinblick  auf  die ener-
+      getische  Sanierung   sowie   Umsetzung   von  Barrierefreiheit-Standards   sowie 
+      einer fehlenden Nachverdichtungskapazität auf den Bestandsliegenschaften und 
+      Anmietungen,   ist  der  Neubau   des  BKA   in  Wiesbaden   begründet.   Durch   die 
+      Konsolidierung   auf   einen  Standort  mit   allen  Funktionseinheiten  des  Nutzers, 
+      unter  anderem   der  Anwendung   des  Leitfadens  Nachhaltiges   Bauen  und  des 
+      energetischen Standards für Bundesbauten (EGB40), werden die Betriebsabläu-
+      fe der derzeit  auf  das  gesamte  Stadtgebiet  Wiesbaden  verteilten Standorte er-
+      heblich verbessert und die Zukunftsfähigkeit gewährleistet.
+      10. Mit  wie  viel Gesamtkosten  wurde  ursprünglich  beim  Neubau  samt  Um-
+      zug  von Pullach  nach Berlin für  den Bundesnachrichtendienst kalkuliert, 
+      und wie viel hat das Projekt dann letztendlich gekostet?
+      Die  Gesamtkosten  für  den Neubau  der Zentrale  des Bundesnachrichtendienstes 
+      wurden   ursprünglich   mit   720,28  Mio.   Euro   kalkuliert.   Letztendlich  betrugen 
+      die Gesamtkosten samt Umzug 1.088,29  Mio. Euro.
+      11. Wie  viel Büro-  und Arbeitsfläche  steht dem  BKA  derzeit  zur  Verfügung, 
+      und wie  viel zusätzliche  Büro-  und Arbeitsfläche  wird  am  neuen Stand-
+      ort geplant?
+      Dem   BKA   wurde   die  Bedarfsplanung   mit   einem  Raumbedarf   von 
+      244  099,10  m² Nutzungsfläche gebilligt. Die Fläche verteilt sich auf 32  Prozent 
+      Bürofläche und 68  Prozent Sonderfläche.
+      12. Gibt  es  Planungen,   einen  Teil  der  bestehenden  Büroflächen   nach  dem 
+      Umzug aufzugeben oder anderweitig zu nutzen?
+      Eine Nachnutzung  der Bestandsliegenschaften wird  im  Rahmen  von Standort-
+      konzepten durch die BImA betrachtet.
+      13. Wurde  das  „All  in one“-Konzept  für  den BKA-Neubau  nach den Erfah-
+      rungen der Corona-Pandemie  und der Zunahme  mobiler  Arbeit  neu be-
+      wertet?
+      a) Wenn ja, welche konkreten Anpassungen wurden vorgenommen oder 
+      sind geplant,  um  die Flächeneffizienz  zu  optimieren  und eine poten-
+      zielle Überkapazität zu vermeiden?
+      b) Welche   Kosteneinsparungen   oder  Kostenverschiebungen  ergeben 
+      sich daraus?
+      c) Wenn keine wesentlichen Anpassungen  vorgenommen  wurden,  wa-
+      rum  wurde  das  „All  in one“-Konzept  in seiner ursprünglichen  Form 
+      weiterhin als optimal erachtet (bitte begründen)?
+      14. Wie  hat sich die Quote der mobilen Arbeit  (Homeoffice) im  BKA  ent-
+      wickelt (bitte eine jährliche Durchschnittsquote seit 2019 nennen)?
+  -
+    content: |-
+      Deutscher Bundestag – 21. Wahlperiode – 5 – Drucksache  21/ 1407
+      15. Mit welcher Quote der mobilen Arbeit (Homeoffice) rechnet das BKA in 
+      Zukunft?
+      Die Fragen 13 bis 15 werden gemeinsam beantwortet.
+      Die  Erfahrungen  der Corona-Pandemie  wurden  im  Zuge  der Bedarfserhebung 
+      berücksichtigt.  Hierzu  gehört  insbesondere die Einführung  des mobilen Arbei-
+      tens. Aufgrund  der Aufgaben,  die das  BKA  wahrnimmt,  ist mobiles  Arbeiten 
+      nicht  flächendeckend  umsetzbar.   Eine  amtsweite,   pauschale   Quote  kann  des-
+      halb nicht angesetzt werden.
+      16. Wie  viele der auswärtig  wohnenden BKA-Mitarbeitenden  wären  bereit, 
+      an den möglichen Standort Wiesbaden umzuziehen?
+      Es liegen hierzu keine Erkenntnisse vor.
+      17. Wie hoch sind die aktuellen monatlichen Mietkosten an den bestehenden 
+      BKA-Standorten?
+      Insgesamt belaufen sich die aktuellen monatlichen Mietkosten der Liegenschaf-
+      ten am Standort Wiesbaden im Haushaltstitel des BKA auf ca. 4,2  Mio. Euro.
+      18. In welchem Verhältnis stehen diese Kosten zu den veranschlagten Kosten 
+      für den Neubau, einschließlich der langfristigen Betriebskosten?
+      Auf Grund des noch frühen Planungsstadiums kann noch keine Aussage zu den 
+      Gesamtkosten getätigt werden (siehe Vorbemerkung).
+      19. Über  welche Haushaltstitel  soll die Finanzierung  des Neubaus  erfolgen, 
+      in welcher Höhe und wann sind die entsprechenden Mittel eingeplant?
+      20. Gibt es bereits  zugesicherte  Fördermittel  oder andere  Finanzierungsquel-
+      len für das Projekt?
+      Die Fragen 19 und 20 werden gemeinsam beantwortet.
+      Für  die Mietkosten  des geplanten Neubaus  ist im  Haushaltstitel  des BKA  im 
+      weiteren  Verfahren  eine neue Verpflichtungsermächtigung  (VE) zu  veranschla-
+      gen.
+      21. Wie  sieht die aktuelle  Zeitplanung  für  die Realisierung  des BKA-Neu-
+      baus im Ostfeld/Kalkofen aus, und welche Meilensteine sind bis zur Fer-
+      tigstellung geplant?
+      Der Rahmenterminplan für die Umsetzung des Bauprojektes befindet sich noch 
+      in der Erstellung. Auf die Vorbemerkung wird verwiesen.
+      22. Sind  Zeitverzögerungen   wegen   juristischer   Auseinandersetzungen   mit 
+      Grundstückseigentümern  hinsichtlich des Verkaufs  ihrer  Grundstücke  zu 
+      erwarten?
+      23. Wurden   Grundstückseigentümer   bereits   enteignet  oder  ist  eine  Enteig-
+      nung  geplant,   und  auf   welcher   Rechtsgrundlage   findet  eine  mögliche 
+      Enteignung statt?
+  -
+    content: |-
+      Drucksache  21/ 1407 – 6 – Deutscher Bundestag – 21. Wahlperiode
+      24. Welche  Erkenntnisse liegen der Bundesregierung  über  die ökologischen 
+      Auswirkungen des BKA-Neubaus im Ostfeld/Kalkofen vor, insbesondere 
+      in Bezug auf den Verlust von 26  Hektar hochwertiger Ackerböden?
+      Die Fragen 22 bis 24 werden gemeinsam beantwortet.
+      Es wird auf die Vorbemerkung verwiesen. Die kommunale Planungshoheit liegt 
+      bei  der  Landeshauptstadt   Wiesbaden,   etwaige   Fragen   zu   Grundstücksthemen 
+      bzw. dem Bauleitplanverfahren sind von dort aus zu beantworten.
+      25. Welche  Folgen für  den Bodenschutz erwartet  die Bundesregierung  durch 
+      die geplante Bodenversiegelung?
+      26. Welche  langfristigen  Auswirkungen  auf  die landwirtschaftliche  Nutzbar-
+      keit der Flächen sieht die Bundesregierung, und wie bewertet sie diese?
+      27. Welche Informationen hat die Bundesregierung über die potenziellen Be-
+      einträchtigungen   von  Lebensräumen   geschützter   Arten,   wie   etwa   der 
+      hochgeschützten Feldlerche, durch das geplante Bauvorhaben?
+      28. Welche  Maßnahmen  will  die Bundesregierung  ergreifen,  um  den Arten-
+      schutz  im  Rahmen  des Bauvorhabens  sicherzustellen,  und welche Aus-
+      gleichsmaßnahmen werden als notwendig erachtet?
+      29. Wie  bewertet  die Bundesregierung  die klimatischen  Funktionen des Ge-
+      biets als Kaltluftentstehungsgebiet für Wiesbaden und die Region?
+      30. Welche   Auswirkungen   könnte  die  geplante  Bodenversiegelung  auf   das 
+      lokale Klima und die Luftqualität haben?
+      31. Welche Maßnahmen hält die Bundesregierung für notwendig, um negati-
+      ve klimatische  Effekte, wie  eine Verschlechterung der CO2 -Bilanz  oder 
+      die Entstehung von städtischen Hitzeinseln, durch das Bauprojekt zu ver-
+      hindern oder zu minimieren?
+      32. Welche  Maßnahmen  sind vorgesehen, um  insbesondere die Folgen von 
+      steigenden  Durchschnittstemperaturen,   vermehrten   Hitzetagen   und  ver-
+      mehrten Starkregenereignissen  im  Planungsraum  und darüber  hinaus  zu 
+      minimieren?
+      33. Welche   konkreten,   verbindlichen  Maßnahmen   sind  im   Bebauungsplan 
+      und in den nachfolgenden Bauleitplanverfahren  festgeschrieben,  um  die 
+      Beeinträchtigung  von Kaltluftströmungen  und die Verschlechterung be-
+      reits überwärmter Gebiete am Rhein sicherzustellen?
+      34. Wie  wird  die Einhaltung dieser  Vorgaben  (z. B. maximale  Gebäudehö-
+      hen, Fassadenbegrünung  von mindestens 25  Prozent)  während  der Bau- 
+      und Betriebsphase überwacht?
+      a) Welche Sanktionen sind bei Nichteinhaltung vorgesehen?
+      b) Welche   unabhängigen   Kontrollmechanismen   sind  etabliert,   um   die 
+      Wirksamkeit der Maßnahmen langfristig zu evaluieren?
+      35. Welche  detaillierten Ergebnisse  liegen der Untersuchung zur  Betroffen-
+      heit und Existenzgefährdung  der einzelnen Landwirte  vor,  die durch  den 
+      Flächenverlust betroffen sind?
+      a) Welche  konkreten  Ausgleichs-  und Entschädigungsmaßnahmen  sind 
+      für  jeden betroffenen Betrieb vorgesehen, und wie  hoch sind die da-
+      für veranschlagten Gesamtkosten?
+  -
+    content: |-
+      Deutscher Bundestag – 21. Wahlperiode – 7 – Drucksache  21/ 1407
+      b) Wie   wird   sichergestellt,  dass   diese  Maßnahmen   die  Existenz  der 
+      landwirtschaftlichen  Betriebe tatsächlich  sichern und nicht nur kurz-
+      fristige Kompensationen darstellen?
+      36. Welche  umfassenden  sozioökonomischen  Auswirkungen  werden  für  die 
+      Stadt Wiesbaden und die umliegende Region durch den BKA-Neubau er-
+      wartet, sowohl positive (z.  B. Arbeitsplätze, Kaufkraft) als auch negative 
+      (z. B.  Belastung  der  Infrastruktur,   Wohnungsmarkt,   Verlust  kultureller 
+      Landschaftswerte)?
+      a) Liegen hierzu detaillierte Studien vor?
+      b) Wie  werden  diese Erkenntnisse in die weitere  Stadtentwicklung  inte-
+      griert?
+      Die Fragen 25 bis 36b werden gemeinsam beantwortet.
+      Es wird auf die Vorbemerkung verwiesen. Die kommunale Planungshoheit liegt 
+      bei  der  Landeshauptstadt   Wiesbaden,   etwaige   Fragen   zu   Grundstücksthemen 
+      bzw.  dem  Bauleitplanverfahren  können von hiesiger  Stelle daher  nicht beant-
+      wortet werden.
+      37. Wurde der Flächenbedarf des neuen BKA-Standortes unter Berücksichti-
+      gung einer möglichen  strategischen  Neuausrichtung  des BKA,  insbeson-
+      dere  im   Bereich  Cyberkriminalität   und  internationale  Zusammenarbeit, 
+      neu bewertet?
+      38. Werden  spezifische  Flächen für  zukünftige  Erweiterungen  oder Anpas-
+      sungen an sich ändernde Bedrohungsszenarien vorgehalten?
+      Die Fragen 37 und 38 werden gemeinsam beantwortet. Die Bedarfsplanung ba-
+      siert auf den Anforderungen der RBBau und den Rahmenbedingungen aus dem 
+      Jahr 2023. Die Gesamtfläche (vgl. Antwort zu Frage  11) bietet die Möglichkeit, 
+      bei Bedarf auf veränderte Anforderungen reagieren zu können.
+      39. Wie   ist  die  Governance-Struktur   für   das   BKA-Neubauprojekt   organi-
+      siert?
+      a) Wie   wird   die  Koordination   zwischen   den  beteiligten  Bundes-, 
+      Landes-  und  Kommunalbehörden   sichergestellt,  um   eine  effiziente 
+      und reibungslose Projektabwicklung zu gewährleisten?
+      Die Fragen 39 und 39a werden zusammen beantwortet.
+      Nach RBBau  wurde  eine Projektgovernance  implementiert  (Projektebene,  Ko-
+      ordinierungsebene,  Lenkungsebene) die jeweils  durch  die Bauverwaltung  Hes-
+      sen, das  BKA  und die BImA  auf  den jeweiligen  Ebenen vertreten werden.  Um 
+      einen  reibungslosen  Projektablauf   zu   gewährleisten   finden  regelmäßige   Ab-
+      stimmungstermine zwischen dem Bund und der Kommune statt.
+      b) Welche  Mechanismen  sind etabliert,  um  technische, finanzielle,  recht-
+      liche und soziale  Risiken  zu  identifizieren,  zu  bewerten  und zu  min-
+      dern?
+      Die   RBBau   sieht  die  Erstellung  eines  Risikoregisters   vor,   dieses  wird   regel-
+      mäßig gemonitored und ist integraler Teil der Projektsteuerung.
+  -
+    content: |-
+      Drucksache  21/ 1407 – 8 – Deutscher Bundestag – 21. Wahlperiode
+      c) Welche Behörde leitet das BKA-Neubauprojekt federführend und trägt 
+      damit die Gesamtverantwortung?
+      Bauherrin für das Bauprojekt ist die BImA.
+      Gesamtherstellung: H. Heenemann GmbH & Co. KG, Buch- und Offsetdruckerei, Bessemerstraße 83–91, 12103 Berlin, www.heenemann-druck.de
+      Vertrieb: Bundesanzeiger Verlag GmbH, Postfach 10 05 34, 50445 Köln, Telefon (02 21) 97 66 83 40, Fax (02 21) 97 66 83 44, www.bundesanzeiger-verlag.de
+      ISSN 0722-8333
