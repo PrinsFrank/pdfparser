@@ -20,34 +20,8 @@ enum LiteralStringEscapeCharacter: string {
     case RIGHT_PARENTHESIS = '\)';
     case REVERSE_SOLIDUS = '\\';
 
-    public function getActualCharacter(): string {
-        return match ($this) {
-            self::LINE_FEED => "\n",
-            self::CARRIAGE_RETURN => "\r",
-            self::HORIZONTAL_TAB => "\t",
-            self::BACKSPACE => "\x08",
-            self::FORM_FEED => "\x0C",
-            self::LEFT_PARENTHESIS => "(",
-            self::RIGHT_PARENTHESIS => ")",
-            self::REVERSE_SOLIDUS => "\\",
-        };
-    }
-
-    /** @return array{0: list<string>, 1: list<string>} */
-    private static function getReplacementSet(): array {
-        $find = $replace = [];
-        foreach (self::cases() as $case) {
-            $find[] = $case->value;
-            $replace[] = $case->getActualCharacter();
-        }
-
-        return [$find, $replace];
-    }
-
     public static function unescapeCharacters(string $string): string {
         $string = str_replace("\\\n", '', $string); // Example 2, 7.3.4.2 newlines preceded by reverse solidus should be handled like single lines
-
-        [$find, $replace] = LiteralStringEscapeCharacter::getReplacementSet();
 
         return preg_replace_callback(
             '/\\\\([0-7]{1,3})/',
@@ -59,7 +33,7 @@ enum LiteralStringEscapeCharacter: string {
 
                 return mb_chr($decimal);
             },
-            str_replace($find, $replace, $string),
+            str_replace(['\n', '\r', '\t', '\b', '\f', '\(', '\)', '\\'], ["\n", "\r", "\t", "\x08", "\x0C", "(", ")", "\\"], $string),
         ) ?? throw new ParseFailureException();
     }
 }
