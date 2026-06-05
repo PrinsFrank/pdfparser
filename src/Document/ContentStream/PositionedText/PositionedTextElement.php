@@ -42,7 +42,7 @@ readonly class PositionedTextElement {
                     $chars = $glyph->getChar();
                 } elseif (strlen($unescapedChars) === 1 && ($glyph = $font->getDifferences()?->getGlyph(ord($unescapedChars))) !== null) {
                     $chars = $glyph->getChar();
-                } elseif (in_array($encoding = $font->getEncoding(), [EncodingNameValue::MacExpertEncoding, EncodingNameValue::WinAnsiEncoding], true)) {
+                } elseif (in_array($encoding = $font->getEncoding(), [EncodingNameValue::MacExpertEncoding, EncodingNameValue::WinAnsiEncoding], true) && $font->getDifferences() === null) {
                     $chars = $encoding->decodeString($unescapedChars);
                 } elseif (($toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont()) !== null) {
                     $chars = $toUnicodeCMap->textToUnicode(bin2hex($unescapedChars));

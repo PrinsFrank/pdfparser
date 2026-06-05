@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../../schema.json
+version: '1.6'
+userPassword: null
+ownerPassword: null
+fileEncryptionKey: null
+title: 'Custom encoding extraction reproducer (control-char range)'
+producer: 'GPL Ghostscript 10.07.1'
+author: null
+creator: 'synthetic reproducer for PDF parser CFF/Custom encoding extraction'
+creationDate: 2026-06-04T11:31:22-05:00
+modificationDate: 2026-06-04T11:31:22-05:00
+pages:
+  -
+    content: |-
+      HELLO PDF WORLD.
+      THIS PDF USES CUSTOM ENCODING.
+      VISIBLE TEXT IS WHAT YOU READ ABOVE.
+      NAIVE PARSERS THAT IGNORE THE
+      DIFFERENCES ARRAY AND TOUNICODE CMAP
+      WILL OUTPUT GARBAGE FOR EVERY LINE.
+      EVERY VISIBLE CHARACTER MAPS THROUGH A
+      DIFFERENCES ARRAY AT WINANSI CONTROL
+      POSITIONS, FORCING TOUNICODE LOOKUP.
