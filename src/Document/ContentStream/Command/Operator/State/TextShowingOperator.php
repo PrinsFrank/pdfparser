@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 
 use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\ProducesPositionedTextElements;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
@@ -12,11 +13,21 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @internal */
-enum TextShowingOperator: string implements InteractsWithTextState, ProducesPositionedTextElements {
+enum TextShowingOperator: string implements InteractsWithTextState, ProducesPositionedTextElements, InteractsWithTransformationMatrix {
     case SHOW = 'Tj';
     case MOVE_SHOW = '\'';
     case MOVE_SHOW_SPACING = '"';
     case SHOW_ARRAY = 'TJ';
+
+    #[Override]
+    public function applyToTransformationMatrix(string $operands, TransformationMatrix $transformationMatrix, TextState $textState): TransformationMatrix {
+        if ($this === self::MOVE_SHOW || $this === self::MOVE_SHOW_SPACING) {
+            return (new TransformationMatrix(1, 0, 0, 1, 0.0, -$textState->leading))
+                ->multiplyWith($transformationMatrix);
+        }
+
+        return $transformationMatrix;
+    }
 
     /** @throws ParseFailureException */
     #[Override]
