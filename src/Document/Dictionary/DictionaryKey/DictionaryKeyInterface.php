@@ -7,6 +7,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 
 interface DictionaryKeyInterface {
-    /** @return list<class-string<DictionaryValue|Dictionary|NameValue>> */
+    /** @return non-empty-list<class-string<DictionaryValue|Dictionary|NameValue>> */
     public function getValueTypes(): array;
 }
