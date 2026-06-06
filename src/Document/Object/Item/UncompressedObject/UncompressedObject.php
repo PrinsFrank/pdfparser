@@ -20,6 +20,7 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream\FileStream;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
+use PrinsFrank\PdfParser\Stream\Meta\BoundedStream;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @api */
@@ -119,11 +120,10 @@ readonly class UncompressedObject implements ObjectItem {
         $endObjPos = $document->stream->lastPos(Marker::END_OBJ, $document->stream->getSizeInBytes() - $this->endOffset)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_OBJ->value));
 
-        return FileStream::fromString(
-            $document->stream->read(
-                $startObjPos + Marker::OBJ->length(),
-                $endObjPos - ($startObjPos + Marker::OBJ->length()),
-            ),
+        return new BoundedStream(
+            $document->stream,
+            $startObjPos + Marker::OBJ->length(),
+            $endObjPos,
         );
     }
 }
