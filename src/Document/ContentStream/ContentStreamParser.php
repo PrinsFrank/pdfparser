@@ -40,7 +40,7 @@ class ContentStreamParser {
             for ($index = 0; $index < $contentStreamSize; $index++) {
                 $char = $contentStream->read($index, 1);
                 if ($inComment === true) {
-                    if (in_array($char, ["\r", "\n"], true)) {
+                    if ($char === "\r" || $char === "\n") {
                         $endCommentOffset = $index + 1;
                         $inComment = false;
                     }
