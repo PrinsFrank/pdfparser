@@ -15,7 +15,8 @@ readonly class IntegerValue implements DictionaryValue {
     #[Override]
     public static function fromValue(string $valueString): ?self {
         $valueAsInt = (int) $valueString;
-        if ((string) $valueAsInt !== $valueString) {
+        if ((string) $valueAsInt !== $valueString
+            && (string) $valueAsInt !== ltrim($valueString, '0')) {
             return null;
         }
 
