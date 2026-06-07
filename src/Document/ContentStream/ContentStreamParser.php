@@ -52,7 +52,7 @@ class ContentStreamParser {
                         $inStringLiteral = false;
                     }
                 } elseif ($inResourceName === true) {
-                    if (in_array($char, [' ', '<', '(', '/', "\r", "\n"], true) && $previousChar !== '\\') {
+                    if (($char === ' ' || $char === '<' || $char === '(' || $char === '/' || $char === "\r" || $char === "\n") && $previousChar !== '\\') {
                         $inResourceName = false;
                     }
                 } elseif ($inDictionary === true) {
