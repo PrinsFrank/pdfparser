@@ -4,7 +4,6 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText\LineGroupin
 
 use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
-use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /**
  *    #
@@ -31,18 +30,27 @@ class TextOverlapStrategy implements LineGroupingStrategy {
             fn(PositionedTextElement $a, PositionedTextElement $b): int => abs($b->absoluteMatrix->offsetY) <=> abs($a->absoluteMatrix->offsetY),
         );
 
-        $indexOfItemsToProcess = array_keys($positionedTextElements);
-        while ($indexOfItemsToProcess !== []) {
-            $highestPositionedTextElementIndex = array_shift($indexOfItemsToProcess);
+        /** @var array<int, true> $processedIndices */
+        $processedIndices = [];
+        $nrOfItems = count($positionedTextElements);
+        for ($i = 0; $i < $nrOfItems; $i++) {
+            if (isset($processedIndices[$i])) {
+                continue;
+            }
 
             /** @var PositionedTextElement $highestPositionedTextElement */
-            $highestPositionedTextElement = $positionedTextElements[$highestPositionedTextElementIndex] ?? throw new RuntimeException();
+            $highestPositionedTextElement = $positionedTextElements[$i];
             $highestPositionedTextElementBottom = $highestPositionedTextElement->absoluteMatrix->offsetY;
             $highestPositionedTextElementHeight = $highestPositionedTextElement->getHeight();
 
             $positionedTextElementsOnLine = [$highestPositionedTextElement];
-            foreach ($indexOfItemsToProcess as $indexOfItemToProcess) {
-                $positionedTextElement = $positionedTextElements[$indexOfItemToProcess] ?? throw new RuntimeException();
+            $processedIndices[$i] = true;
+            for ($j = $i + 1; $j < $nrOfItems; $j++) {
+                if (isset($processedIndices[$j])) {
+                    continue;
+                }
+
+                $positionedTextElement = $positionedTextElements[$j];
                 $positionedTextElementHeight = $positionedTextElement->getHeight();
 
                 $highestElementTop = $highestPositionedTextElementBottom + $highestPositionedTextElementHeight;
@@ -54,7 +62,7 @@ class TextOverlapStrategy implements LineGroupingStrategy {
                 $smallestElementHeight = min($positionedTextElementHeight, $highestPositionedTextElementHeight);
                 if ($smallestElementHeight !== 0.0 && $overlap / $smallestElementHeight * 100 >= $this->overlapPercentage) {
                     $positionedTextElementsOnLine[] = $positionedTextElement;
-                    $indexOfItemsToProcess = array_diff($indexOfItemsToProcess, [$indexOfItemToProcess]);
+                    $processedIndices[$j] = true;
                 }
             }
 
