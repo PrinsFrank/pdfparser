@@ -14,7 +14,7 @@ use PrinsFrank\PdfParser\Document\Security\EncryptionContext;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
-use PrinsFrank\PdfParser\Stream\FileStream;
+use PrinsFrank\PdfParser\Stream\InMemoryStream;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @internal */
@@ -67,6 +67,6 @@ class CompressedObjectContentParser {
             throw new RuntimeException(sprintf('Expected filter to be a FilterNameValue or ArrayValue, got %s', $filterType));
         }
 
-        return FileStream::fromString($binaryStreamContent);
+        return new InMemoryStream($binaryStreamContent);
     }
 }

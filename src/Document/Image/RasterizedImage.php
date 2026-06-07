@@ -6,7 +6,7 @@ use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpace;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\Components;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
-use PrinsFrank\PdfParser\Stream\FileStream;
+use PrinsFrank\PdfParser\Stream\InMemoryStream;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 class RasterizedImage {
@@ -106,6 +106,6 @@ class RasterizedImage {
             throw new ParseFailureException('Unable to decode image');
         }
 
-        return FileStream::fromString($imageContent);
+        return new InMemoryStream($imageContent);
     }
 }
