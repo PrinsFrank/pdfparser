@@ -72,6 +72,6 @@ readonly class CompressedObject implements ObjectItem {
             );
         }
 
-        return FileStream::fromString($content);
+        return new InMemoryStream($content);
     }
 }
