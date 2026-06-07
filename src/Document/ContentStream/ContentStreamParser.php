@@ -98,9 +98,10 @@ class ContentStreamParser {
                         $operands .= $previousContentStream->read($startPreviousOperandIndex, $previousContentStream->getSizeInBytes() - $startPreviousOperandIndex);
                         $startPreviousOperandIndex = null;
                     }
-                    $operandLength = $index + 1 - $startCurrentOperandIndex - strlen($operator->value);
+                    $operatorLength = strlen($operator->value);
+                    $operandLength = $index + 1 - $startCurrentOperandIndex - $operatorLength;
                     if ($operandLength > 0) {
-                        $operandEndOffset = $index + 1 - strlen($operator->value);
+                        $operandEndOffset = $index + 1 - $operatorLength;
                         if ($endCommentOffset !== null
                             && $endCommentOffset < $operandEndOffset
                             && $startOfCommentOffset !== null
