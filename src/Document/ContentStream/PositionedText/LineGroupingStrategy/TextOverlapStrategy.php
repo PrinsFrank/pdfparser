@@ -34,20 +34,24 @@ class TextOverlapStrategy implements LineGroupingStrategy {
         $indexOfItemsToProcess = array_keys($positionedTextElements);
         while ($indexOfItemsToProcess !== []) {
             $highestPositionedTextElementIndex = array_shift($indexOfItemsToProcess);
+
             /** @var PositionedTextElement $highestPositionedTextElement */
             $highestPositionedTextElement = $positionedTextElements[$highestPositionedTextElementIndex] ?? throw new RuntimeException();
+            $highestPositionedTextElementBottom = $highestPositionedTextElement->absoluteMatrix->offsetY;
+            $highestPositionedTextElementHeight = $highestPositionedTextElement->getHeight();
+
             $positionedTextElementsOnLine = [$highestPositionedTextElement];
             foreach ($indexOfItemsToProcess as $indexOfItemToProcess) {
                 $positionedTextElement = $positionedTextElements[$indexOfItemToProcess] ?? throw new RuntimeException();
+                $positionedTextElementHeight = $positionedTextElement->getHeight();
 
-                $highestElementBottom = $highestPositionedTextElement->absoluteMatrix->offsetY;
-                $highestElementTop = $highestElementBottom + $highestPositionedTextElement->getHeight();
+                $highestElementTop = $highestPositionedTextElementBottom + $highestPositionedTextElementHeight;
 
                 $currentElementBottom = $positionedTextElement->absoluteMatrix->offsetY;
-                $currentElementTop = $currentElementBottom + $positionedTextElement->getHeight();
+                $currentElementTop = $currentElementBottom + $positionedTextElementHeight;
 
-                $overlap = min($highestElementTop, $currentElementTop) - max($highestElementBottom, $currentElementBottom);
-                $smallestElementHeight = min($positionedTextElement->getHeight(), $highestPositionedTextElement->getHeight());
+                $overlap = min($highestElementTop, $currentElementTop) - max($highestPositionedTextElementBottom, $currentElementBottom);
+                $smallestElementHeight = min($positionedTextElementHeight, $highestPositionedTextElementHeight);
                 if ($smallestElementHeight !== 0.0 && $overlap / $smallestElementHeight * 100 >= $this->overlapPercentage) {
                     $positionedTextElementsOnLine[] = $positionedTextElement;
                     $indexOfItemsToProcess = array_diff($indexOfItemsToProcess, [$indexOfItemToProcess]);
