@@ -60,7 +60,7 @@ readonly class PositionedTextElement {
                 } elseif (($encoding = $font->getEncoding()) !== null) {
                     $string .= $encoding->decodeString(implode('', array_map(fn(string $character) => mb_chr((int) hexdec($character)), str_split($chars, 2))));
                 } else {
-                    throw new ParseFailureException('Unable to use CMap or decode string to retrieve characters for text object');
+                    $string .= EncodingNameValue::IdentityH->decodeString($chars);
                 }
             } else {
                 throw new ParseFailureException(sprintf('Unrecognized character group format "%s"', $match['chars']));
