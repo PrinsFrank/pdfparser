@@ -15,7 +15,6 @@ use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObj
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
-use PrinsFrank\PdfParser\Stream\FileStream;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 use PrinsFrank\PdfParser\Stream\Stream;
 
@@ -72,6 +71,6 @@ readonly class CompressedObject implements ObjectItem {
             );
         }
 
-        return FileStream::fromString($content);
+        return new InMemoryStream($content);
     }
 }
