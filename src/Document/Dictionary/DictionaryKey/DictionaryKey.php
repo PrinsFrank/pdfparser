@@ -1052,7 +1052,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::PC => [Dictionary::class, IntegerValue::class, ArrayValue::class],
             self::PDF => [TextStringValue::class],
             self::PDFDOC_ENCODING => [TextStringValue::class],
-            self::PERMS => [Dictionary::class],
+            self::PERMS => [Dictionary::class, TextStringValue::class],
             self::PI => [Dictionary::class],
             self::PICK_TRAY_BY_PDFSIZE => [BooleanValue::class],
             self::PID => [Dictionary::class],
