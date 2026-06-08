@@ -20,9 +20,8 @@ class UncompressedObjectParser {
             ?? throw new ParseFailureException('Unable to locate end of object');
         if (($startStream = $document->stream->getStartNextLineAfter(Marker::STREAM, $startObj, $endObj)) !== null) {
             $dictionary = DictionaryParser::parse(null, $document->stream, $startObj, $startStream - $startObj);
-            $length = $dictionary->getValueForKey($document, DictionaryKey::LENGTH, IntegerValue::class)->value
-                ?? throw new ParseFailureException('Stream objects must have a length entry');
-            $endStream = $document->stream->firstPos(Marker::END_STREAM, $startStream + $length, $document->stream->getSizeInBytes())
+            $length = $dictionary->getValueForKey($document, DictionaryKey::LENGTH, IntegerValue::class)?->value;
+            $endStream = $document->stream->firstPos(Marker::END_STREAM, $startStream + ($length ?? 0), $document->stream->getSizeInBytes())
                 ?? throw new ParseFailureException('Unable to locate end of stream');
             $endObj = $document->stream->firstPos(Marker::END_OBJ, $endStream, $document->stream->getSizeInBytes())
                 ?? throw new ParseFailureException('Unable to locate end of object');
