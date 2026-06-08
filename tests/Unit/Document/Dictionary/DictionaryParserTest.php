@@ -440,4 +440,23 @@ class DictionaryParserTest extends TestCase {
             DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
+
+    public function testHandlesKeyValuePairWithCommentBetweenKeyAndValue(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            << /Type %
+             /Catalog %
+             /Pages %
+             3 0 R %
+            >>
+            EOD,
+        );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
+                new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
+            ),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+        );
+    }
 }
