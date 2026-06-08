@@ -74,6 +74,9 @@ class DictionaryParser {
             } elseif (trim($char) !== '' && $nestingContext->getContext() === DictionaryParseContext::KEY_VALUE_SEPARATOR) {
                 $nestingContext->setContext(DictionaryParseContext::VALUE);
             } elseif ($char === DelimiterCharacter::PERCENT_SIGN->value && $rollingCharBuffer->getPreviousCharacter() !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_PARENTHESES) {
+                if ($nestingContext->getContext() === DictionaryParseContext::VALUE) {
+                    self::flush($dictionaryArray, $nestingContext);
+                }
                 $nestingContext->setContext(DictionaryParseContext::COMMENT);
             }
 
