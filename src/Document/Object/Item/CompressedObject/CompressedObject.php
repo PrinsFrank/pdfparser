@@ -39,13 +39,13 @@ readonly class CompressedObject implements ObjectItem {
             return $this->dictionary;
         }
 
-        $objectContent = trim($this->getContent($document)->toString());
-        if ($objectContent === '' || !str_starts_with($objectContent, '<<') || !str_ends_with($objectContent, '>>')) {
-            return $this->dictionary = new Dictionary();
-        }
-
-        $inMemoryStream = new InMemoryStream($objectContent);
-        return $this->dictionary = DictionaryParser::parse($this->storedInObject->getEncryptionContext(), $inMemoryStream, 0, $inMemoryStream->getSizeInBytes());
+        $content = $this->getContent($document);
+        return $this->dictionary = DictionaryParser::parse(
+            $this->storedInObject->getEncryptionContext(),
+            $content,
+            0,
+            $content->getSizeInBytes(),
+        );
     }
 
     #[Override]
