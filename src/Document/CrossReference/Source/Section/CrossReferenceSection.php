@@ -6,6 +6,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Cross
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 /** There are multiple crossReference sections if there are incremental updates. See 7.5.6 */
 readonly class CrossReferenceSection {
@@ -28,5 +29,15 @@ readonly class CrossReferenceSection {
         }
 
         return null;
+    }
+
+    public function hasInvalidByteOffset(Stream $stream): bool {
+        foreach ($this->crossReferenceSubSections as $crossReferenceSubSection) {
+            if ($crossReferenceSubSection->hasInvalidByteOffset($stream)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

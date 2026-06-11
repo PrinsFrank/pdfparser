@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 readonly class CrossReferenceSubSection {
     /** @var array<CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CrossReferenceEntryCompressed> */
@@ -50,5 +51,25 @@ readonly class CrossReferenceSubSection {
         }
 
         return $object;
+    }
+
+    public function hasInvalidByteOffset(Stream $stream): bool {
+        foreach ($this->crossReferenceEntries as $index => $crossReferenceEntry) {
+            if ($crossReferenceEntry instanceof CrossReferenceEntryInUseObject === false) {
+                continue;
+            }
+
+            if ($crossReferenceEntry->byteOffsetInDecodedStream > $stream->getSizeInBytes()) {
+                return true;
+            }
+
+            $objNumber = $this->firstObjectNumber + $index;
+            $expectedObjMarker = $objNumber . ' ' . $crossReferenceEntry->generationNumber . ' obj';
+            if ($stream->read($crossReferenceEntry->byteOffsetInDecodedStream, strlen($expectedObjMarker)) !== $expectedObjMarker) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
