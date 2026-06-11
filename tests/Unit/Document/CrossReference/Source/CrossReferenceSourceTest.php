@@ -12,6 +12,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Document;
 
 #[CoversClass(CrossReferenceSource::class)]
 class CrossReferenceSourceTest extends TestCase {
@@ -34,9 +35,9 @@ class CrossReferenceSourceTest extends TestCase {
                 ),
             ),
         );
-        static::assertSame($crossReferenceEntry1, $crossReferenceSource->getCrossReferenceEntry(42));
-        static::assertSame($crossReferenceEntry2, $crossReferenceSource->getCrossReferenceEntry(43));
-        static::assertNull($crossReferenceSource->getCrossReferenceEntry(44));
+        static::assertSame($crossReferenceEntry1, $crossReferenceSource->getCrossReferenceEntry(42, $this->createMock(Document::class)));
+        static::assertSame($crossReferenceEntry2, $crossReferenceSource->getCrossReferenceEntry(43, $this->createMock(Document::class)));
+        static::assertNull($crossReferenceSource->getCrossReferenceEntry(44, $this->createMock(Document::class)));
     }
 
     public function testGetReferenceForKey(): void {

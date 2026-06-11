@@ -5,7 +5,7 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\CrossReference;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSourceParser;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\RecoveredCrossReferenceSource;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\CrossReferenceSection;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\CrossReferenceSubSection;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryFreeObject;
@@ -21,7 +21,8 @@ use PrinsFrank\PdfParser\Stream\InMemoryStream;
 class CrossReferenceSourceParserTest extends TestCase {
     public function testParse(): void {
         static::assertEquals(
-            new CrossReferenceSource(
+            new RecoveredCrossReferenceSource(
+                [],
                 new CrossReferenceSection(
                     new Dictionary(
                         new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(7)),
