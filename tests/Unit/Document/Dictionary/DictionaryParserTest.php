@@ -14,6 +14,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CrossReferenceStreamByteSizes;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Boolean\BooleanValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EventNameValue;
@@ -26,6 +27,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 use ValueError;
 
@@ -455,6 +457,138 @@ class DictionaryParserTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
+            ),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+        );
+    }
+
+    public function testHandlesComplexNestedObjectsOnSingleLine(): void {
+        $stream = new InMemoryStream(
+            <<<PDF
+            <</AcroForm<</DA(/Helv 0 Tf 0 g )/DR<</Encoding<</PDFDocEncoding 50 0 R>>/Font<</Helv 48 0 R/ZaDb 49 0 R>>/ProcSet[/PDF/Text/ImageB/ImageC/ImageI]/XObject<</FRM 31 0 R>>>>/Fields[30 0 R]/SigFlags 3>>/DSS 40 0 R/Extensions<</ADBE<</BaseVersion/1.7/ExtensionLevel 5>>>>/Lang(de)/MarkInfo<</Marked true>>/Metadata 27 0 R/Pages 2 0 R/StructTreeRoot 15 0 R/Type/Catalog/Version/1.7/ViewerPreferences 28 0 R>>
+            PDF,
+        );
+
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(
+                    DictionaryKey::ACRO_FORM,
+                    new Dictionary(
+                        new DictionaryEntry(
+                            DictionaryKey::DA,
+                            new TextStringValue('(/Helv 0 Tf 0 g )'),
+                        ),
+                        new DictionaryEntry(
+                            DictionaryKey::DR,
+                            new Dictionary(
+                                new DictionaryEntry(
+                                    DictionaryKey::ENCODING,
+                                    new Dictionary(
+                                        new DictionaryEntry(
+                                            DictionaryKey::PDFDOC_ENCODING,
+                                            new ReferenceValue(50, 0),
+                                        ),
+                                    ),
+                                ),
+                                new DictionaryEntry(
+                                    DictionaryKey::FONT,
+                                    new Dictionary(
+                                        new DictionaryEntry(
+                                            DictionaryKey::HELV,
+                                            new ReferenceValue(48, 0),
+                                        ),
+                                        new DictionaryEntry(
+                                            DictionaryKey::ZA_DB,
+                                            new ReferenceValue(49, 0),
+                                        ),
+                                    ),
+                                ),
+                                new DictionaryEntry(
+                                    DictionaryKey::PROC_SET,
+                                    new ArrayValue(['/PDF', '/Text', '/ImageB', '/ImageC', '/ImageI']),
+                                ),
+                                new DictionaryEntry(
+                                    DictionaryKey::XOBJECT,
+                                    new Dictionary(
+                                        new DictionaryEntry(
+                                            new ExtendedDictionaryKey('FRM'),
+                                            new ReferenceValue(31, 0),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                        new DictionaryEntry(
+                            DictionaryKey::FIELDS,
+                            new ReferenceValueArray(
+                                new ReferenceValue(30, 0),
+                            ),
+                        ),
+                        new DictionaryEntry(
+                            DictionaryKey::SIG_FLAGS,
+                            new IntegerValue(3),
+                        ),
+                    ),
+                ),
+                new DictionaryEntry(
+                    new ExtendedDictionaryKey('DSS'),
+                    new ReferenceValue(40, 0),
+                ),
+                new DictionaryEntry(
+                    DictionaryKey::EXTENSIONS,
+                    new Dictionary(
+                        new DictionaryEntry(
+                            new ExtendedDictionaryKey('ADBE'),
+                            new Dictionary(
+                                new DictionaryEntry(
+                                    DictionaryKey::BASE_VERSION,
+                                    Version::V1_7,
+                                ),
+                                new DictionaryEntry(
+                                    DictionaryKey::EXTENSION_LEVEL,
+                                    new IntegerValue(5),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                new DictionaryEntry(
+                    DictionaryKey::LANG,
+                    new TextStringValue('(de)'),
+                ),
+                new DictionaryEntry(
+                    DictionaryKey::MARK_INFO,
+                    new Dictionary(
+                        new DictionaryEntry(
+                            DictionaryKey::MARKED,
+                            new BooleanValue(true),
+                        ),
+                    ),
+                ),
+                new DictionaryEntry(
+                    DictionaryKey::METADATA,
+                    new ReferenceValue(27, 0),
+                ),
+                new DictionaryEntry(
+                    DictionaryKey::PAGES,
+                    new ReferenceValue(2, 0),
+                ),
+                new DictionaryEntry(
+                    DictionaryKey::STRUCT_TREE_ROOT,
+                    new ReferenceValue(15, 0),
+                ),
+                new DictionaryEntry(
+                    DictionaryKey::TYPE,
+                    TypeNameValue::CATALOG,
+                ),
+                new DictionaryEntry(
+                    DictionaryKey::VERSION,
+                    Version::V1_7,
+                ),
+                new DictionaryEntry(
+                    DictionaryKey::VIEWER_PREFERENCES,
+                    new ReferenceValue(28, 0),
+                ),
             ),
             DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
