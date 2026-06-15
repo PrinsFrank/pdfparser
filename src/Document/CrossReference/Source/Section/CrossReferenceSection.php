@@ -6,6 +6,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Cross
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 /** There are multiple crossReference sections if there are incremental updates. See 7.5.6 */
@@ -21,6 +22,7 @@ readonly class CrossReferenceSection {
         $this->crossReferenceSubSections = $crossReferenceSubSections;
     }
 
+    /** @throws RuntimeException */
     public function getCrossReferenceEntry(int $objNumber): CrossReferenceEntryInUseObject|CrossReferenceEntryCompressed|null {
         foreach ($this->crossReferenceSubSections as $crossReferenceSubSection) {
             if ($crossReferenceSubSection->containsObject($objNumber)) {
