@@ -14,6 +14,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 /** Can be both from a crossReferenceTable or a crossReferenceStream */
@@ -28,6 +29,7 @@ class CrossReferenceSource {
         $this->crossReferenceSections = $crossReferenceSections;
     }
 
+    /** @throws RuntimeException */
     public function getCrossReferenceEntry(int $objNumber, Document $document): CrossReferenceEntryInUseObject|CrossReferenceEntryCompressed|null {
         foreach ($this->crossReferenceSections as $crossReferenceSection) {
             $crossReferenceEntry = $crossReferenceSection->getCrossReferenceEntry($objNumber);

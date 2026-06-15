@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\CrossReferenceSe
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Document;
+use Throwable;
 
 class RecoveredCrossReferenceSource extends CrossReferenceSource {
     /**
@@ -23,7 +24,12 @@ class RecoveredCrossReferenceSource extends CrossReferenceSource {
 
     #[Override]
     public function getCrossReferenceEntry(int $objNumber, Document $document): CrossReferenceEntryInUseObject|CrossReferenceEntryCompressed|null {
-        $crossReferenceEntry = parent::getCrossReferenceEntry($objNumber, $document);
+        try {
+            $crossReferenceEntry = parent::getCrossReferenceEntry($objNumber, $document);
+        } catch (Throwable) {
+            $crossReferenceEntry = null;
+        }
+
         if ($crossReferenceEntry instanceof CrossReferenceEntryInUseObject
             && $document->stream->read($crossReferenceEntry->byteOffsetInDecodedStream, strlen($expectedStartObjMarker = sprintf('%d %d obj', $objNumber, $crossReferenceEntry->generationNumber))) === $expectedStartObjMarker) {
             return $crossReferenceEntry;
