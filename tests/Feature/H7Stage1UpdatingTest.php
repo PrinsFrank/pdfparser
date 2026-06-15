@@ -4,7 +4,7 @@ namespace PrinsFrank\PdfParser\Tests\Feature;
 
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\RecoveredCrossReferenceSource;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\CrossReferenceSection;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\CrossReferenceSubSection;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryFreeObject;
@@ -36,7 +36,20 @@ class H7Stage1UpdatingTest extends TestCase {
 
         static::assertSame(Version::V1_4, $document->version);
         static::assertEquals(
-            new CrossReferenceSource(
+            new RecoveredCrossReferenceSource(
+                [
+                    1 => 9,
+                    2 => 74,
+                    3 => 120,
+                    4 => 604,
+                    5 => 704,
+                    6 => 788,
+                    7 => 812,
+                    8 => 856,
+                    9 => 958,
+                    10 => 1062,
+                    11 => 1166,
+                ],
                 new CrossReferenceSection(
                     new Dictionary(
                         new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(12)),
@@ -217,7 +230,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     $document,
                     7,
                     0,
-                    811,
+                    812,
                     855,
                 ),
                 $document,
@@ -307,7 +320,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     $document,
                     11,
                     0,
-                    1165,
+                    1166,
                     1269,
                 ),
                 $document,

@@ -128,7 +128,7 @@ class Document {
             return $this->objectCache[$objectNumber];
         }
 
-        $crossReferenceEntry = $this->crossReferenceSource->getCrossReferenceEntry($objectNumber);
+        $crossReferenceEntry = $this->crossReferenceSource->getCrossReferenceEntry($objectNumber, $this);
         if ($crossReferenceEntry === null) {
             return null;
         }

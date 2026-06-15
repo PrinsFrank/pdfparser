@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\CrossReference;
 
+use PrinsFrank\PdfParser\Document\CrossReference\RawStream\ObjectPositionsFromRawStreamParser;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\RecoveredCrossReferenceSource;
 use PrinsFrank\PdfParser\Document\CrossReference\Stream\CrossReferenceStreamParser;
 use PrinsFrank\PdfParser\Document\CrossReference\Table\CrossReferenceTableParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
@@ -80,7 +82,15 @@ class CrossReferenceSourceParser {
             $crossReferenceSections[] = $currentCrossReferenceSection;
         }
 
-        return new CrossReferenceSource(... $crossReferenceSections);
+        $crossReferenceSource = new CrossReferenceSource(... $crossReferenceSections);
+        if ($crossReferenceSource->hasInvalidByteOffset($stream)) {
+            return new RecoveredCrossReferenceSource(
+                ObjectPositionsFromRawStreamParser::parse($stream),
+                ...$crossReferenceSections,
+            );
+        }
+
+        return $crossReferenceSource;
     }
 
     private static function getCrossReferenceType(Stream $stream, int $byteOffsetLastCrossReferenceSection, int $byteOffsetEndOfCurrentLine): ?CrossReferenceType {
