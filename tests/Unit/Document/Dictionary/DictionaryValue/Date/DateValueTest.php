@@ -66,7 +66,18 @@ class DateValueTest extends TestCase {
 
     public function testFromValueThrowsExceptionWhenValueNotHexadecimal(): void {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('String "" is not hexadecimal');
-        DateValue::fromValue('<>');
+        $this->expectExceptionMessage('String "A" is not hexadecimal');
+        DateValue::fromValue('<A>');
+    }
+
+    public function testFromValueHandlesEmptyDates(): void {
+        static::assertEquals(
+            new DateValue(null),
+            DateValue::fromValue('()'),
+        );
+        static::assertEquals(
+            new DateValue(null),
+            DateValue::fromValue('<>'),
+        );
     }
 }
