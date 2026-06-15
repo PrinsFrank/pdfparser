@@ -20,6 +20,10 @@ readonly class DateValue implements DictionaryValue {
     public static function fromValue(string $valueString): ?self {
         if (str_starts_with($valueString, '<') && str_ends_with($valueString, '>')) {
             $valueString = substr($valueString, 1, -1);
+            if ($valueString === '') {
+                return new self(null);
+            }
+
             if (!ctype_xdigit($valueString) || strlen($valueString) % 2 !== 0) {
                 throw new InvalidArgumentException(sprintf('String "%s" is not hexadecimal', substr($valueString, 0, 10)));
             }
@@ -36,6 +40,10 @@ readonly class DateValue implements DictionaryValue {
                 fn(array $matches) => mb_chr((int) octdec($matches[1])),
                 substr($valueString, 1, -1),
             ) ?? throw new ParseFailureException();
+
+            if ($valueString === '') {
+                return new self(null);
+            }
         }
 
         if (!str_starts_with($valueString, 'D:')) {
