@@ -29,5 +29,6 @@
     </source>
     <php>
         <ini name="memory_limit" value="256M"/>
+        <ini name="date.timezone" value="UTC"/>
     </php>
 </phpunit>
