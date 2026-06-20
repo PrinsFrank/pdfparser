@@ -211,7 +211,7 @@ class Font extends DecoratedObject {
             }
         }
 
-        return 1000;
+        return 1.0;
     }
 
     /** @throws PdfParserException */
