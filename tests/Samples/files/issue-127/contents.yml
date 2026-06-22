@@ -3,7 +3,7 @@ version: '2.0'
 userPassword: null
 ownerPassword: null
 fileEncryptionKey: null
-title: !!binary /v8AMQAuADIAIABUAGEAYgBlAGwAbABlAF8AMQBfAEsAQQBfADEAOQAtADAANwAwADUAOQ==
+title: '1.2 Tabelle_1_KA_19-07059'
 producer: 'Kofax Power PDF'
 author: 'Rehm, Martin (LSN)'
 creator: 'Kofax Power PDF'

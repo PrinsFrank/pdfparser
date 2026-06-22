@@ -80,6 +80,56 @@ class TextStringValueTest extends TestCase {
         );
     }
 
+    /** @see 7.9.2.2 Text string type — UTF-16BE with a leading byte order mark */
+    public function testGetTextConvertsUTF16BEToUTF8(): void {
+        // "Tïtle" as UTF-16BE (FE FF BOM) written as a hex string
+        static::assertSame(
+            'Tïtle',
+            (new TextStringValue('<FEFF005400EF0074006C0065>'))->getText(),
+        );
+
+        // The same UTF-16BE bytes written as a literal string with octal escapes
+        static::assertSame(
+            'Tïtle',
+            (new TextStringValue("(\376\377\000T\000\357\000t\000l\000e)"))->getText(),
+        );
+    }
+
+    /** @see 7.9.2.2 Text string type — UTF-16LE with a leading byte order mark */
+    public function testGetTextConvertsUTF16LEToUTF8(): void {
+        static::assertSame(
+            'Tïtle',
+            (new TextStringValue('<FFFE5400EF0074006C006500>'))->getText(),
+        );
+    }
+
+    /** @see 7.9.2.2.1 Text string type — UTF-8 with a leading byte order mark (PDF 2.0) */
+    public function testGetTextStripsUTF8BOM(): void {
+        static::assertSame(
+            'Tïtle',
+            (new TextStringValue('<EFBBBF54C3AF746C65>'))->getText(),
+        );
+    }
+
+    /** @see 7.9.2.2 Text string type — PDFDocEncoding (no byte order mark) is normalized to valid UTF-8 */
+    public function testGetTextNormalizesPDFDocEncodingToUTF8(): void {
+        // 0xFC ("ü", shared with Latin-1) written as a literal octal escape and as a hex string
+        static::assertSame(
+            'für',
+            (new TextStringValue('(f\374r)'))->getText(),
+        );
+        static::assertSame(
+            'für',
+            (new TextStringValue('<66FC72>'))->getText(),
+        );
+
+        // 0x80 ("•") and 0xA0 ("€") sit in the range where PDFDocEncoding diverges from Latin-1
+        static::assertSame(
+            '•€',
+            (new TextStringValue('<80A0>'))->getText(),
+        );
+    }
+
     /** @see 7.3.5, table 4 */
     public function testGetTextLiteralNames(): void {
         static::assertSame(
