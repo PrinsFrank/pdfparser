@@ -6,6 +6,7 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\Item\ConsecutiveCIDWidth;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\Item\RangeCIDWidth;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /** @see 9.7.4.3 Glyph metrics in CIDFonts */
 class CIDFontWidths implements DictionaryValue {
@@ -47,7 +48,12 @@ class CIDFontWidths implements DictionaryValue {
             }
 
             if (str_starts_with($match['CIDS'], '[') && str_ends_with($match['CIDS'], ']')) {
-                $widths[] = new ConsecutiveCIDWidth($startingCID, array_map('floatval', explode(' ', rtrim(ltrim($match['CIDS'], '['), ']'))));
+                $cidWidths = preg_split('/\s+/', trim(rtrim(ltrim($match['CIDS'], '['), ']')), -1, PREG_SPLIT_NO_EMPTY);
+                if ($cidWidths === false) {
+                    throw new RuntimeException('Something went wrong while splitting');
+                }
+
+                $widths[] = new ConsecutiveCIDWidth($startingCID, array_map('floatval', $cidWidths));
 
                 continue;
             }

@@ -48,6 +48,18 @@ class CIDFontWidthsTest extends TestCase {
         );
     }
 
+    public function testFromValueWithPaddedBrackets(): void {
+        static::assertEquals(
+            new CIDFontWidths(
+                new ConsecutiveCIDWidth(43, [722.16797]),
+                new RangeCIDWidth(71, 72, 556.15234),
+                new ConsecutiveCIDWidth(79, [222.16797, 0, 0, 556.15234, 0, 0, 333.00781]),
+                new ConsecutiveCIDWidth(90, [722.16797]),
+            ),
+            CIDFontWidths::fromValue('[ 43 [ 722.16797 ] 71 72 556.15234 79 [ 222.16797 0 0 556.15234 0 0 333.00781 ] 90 [ 722.16797 ] ]'),
+        );
+    }
+
     public function testFromValueAcceptsEmptyArray(): void {
         static::assertEquals(
             new CIDFontWidths(),
