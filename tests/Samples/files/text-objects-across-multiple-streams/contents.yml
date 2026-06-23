@@ -29,7 +29,7 @@ pages:
       accommodated. The user must first note that the MPK interface protocol is different from RS-422 or 
       RS-485.  
        
-      RS-422:  Two devices send data separately in  each direction between them. Data in each 
+      RS-422:  Two devices send data separately in each direction between them. Data in each 
       direction is carried over a balanced pair of wires. Each of the two devices is always 
       transmitting data to the receiver of the other device. Figure 1 shows an RS-422 
       connection between two devices. 
@@ -66,7 +66,7 @@ pages:
       wires. 
        
        
-        Revision 1.0  AN6-1  
+       Revision 1.0 AN6-1 
   -
     content: |-
       Application Note AN-6 
@@ -105,7 +105,7 @@ pages:
        
        
       Figure 3. MPK Interface Example 
-      AN6-2  Revision 1.0 
+      AN6-2 Revision 1.0 
   -
     content: |2-
        Application Note AN-6 
@@ -142,7 +142,7 @@ pages:
       7707DT fiber link. Figures 4 and 5 describe correct and incorrect interface methods, respectively. 
       Figure 6 describes pin-for-pin connections for the correct method.  
        
-        Revision 1.0  AN6-3  
+       Revision 1.0 AN6-3 
   -
     content: |-
       Application Note AN-6 
@@ -175,7 +175,7 @@ pages:
        
        
       Figure 5. MPK Interface to RS-422. Incorrect Method 
-      AN6-4  Revision 1.0 
+      AN6-4 Revision 1.0 
   -
     content: |2-
        Application Note AN-6 
@@ -248,7 +248,7 @@ pages:
       Jupiter System Controller
        
       Figure 6. MPK Interface to RS-422 
-        Revision 1.0  AN6-5  
+       Revision 1.0 AN6-5 
   -
     content: |-
       Application Note AN-6 
@@ -293,7 +293,7 @@ pages:
        
        
        
-      AN6-6  Revision 1.0 
+      AN6-6 Revision 1.0 
   -
     content: |2-
        Application Note AN-6 
@@ -369,7 +369,7 @@ pages:
       Jupiter System Controller Control Panel
        
       Figure 8. MPK Interface to RS-485 
-        Revision 1.0  AN6-7  
+       Revision 1.0 AN6-7 
   -
     content: |-
       Application Note AN-6 
@@ -393,10 +393,10 @@ pages:
       bias, as it places the balanced input connections in a known logic state while no device is transmitting 
       to them. Any direct connection between a 7707DT input and a Control Panel may require a failsafe 
       bias, to compensate for ambient noise, long lengths of cable, or connection to many devices. Input 
-      failsafe bias is easily selectable through the card edge interface of the 7707DT, or via  Vista linkTM, as 
+      failsafe bias is easily selectable through the card edge interface of the 7707DT, or via Vista linkTM, as 
       described in the product manual. To enable failsafe bias on any channel of the 7707DT, the termination 
       must first be enabled.  
-      AN6-8  Revision 1.0 
+      AN6-8 Revision 1.0 
   -
     content: |2-
        Application Note AN-6 
@@ -431,4 +431,4 @@ pages:
        
        
        
-        Revision 1.0  AN6-9  
+       Revision 1.0 AN6-9 
