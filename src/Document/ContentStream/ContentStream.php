@@ -87,12 +87,18 @@ readonly class ContentStream {
 
             $previousTextElementOnLine = null;
             foreach ($positionedTextElementsForLine as $positionedTextElement) {
+                if (($positionedTextElementText = $positionedTextElement->getText($document, $page)) === '') {
+                    $previousTextElementOnLine = $positionedTextElement;
+                    continue;
+                }
+
                 if ($previousTextElementOnLine !== null
-                    && ($positionedTextElement->absoluteMatrix->offsetX - $previousTextElementOnLine->absoluteMatrix->offsetX - $positionedTextElement->getFont($document, $page)->getWidthForChars($previousTextElementOnLine->getCodePoints(), $previousTextElementOnLine->textState, $previousTextElementOnLine->absoluteMatrix)) >= ($previousTextElementOnLine->textState->fontSize ?? 10) * $previousTextElementOnLine->absoluteMatrix->scaleX * 0.40) {
+                    && ($positionedTextElement->absoluteMatrix->offsetX - $previousTextElementOnLine->absoluteMatrix->offsetX - $positionedTextElement->getFont($document, $page)->getWidthForChars($previousTextElementOnLine->getCodePoints(), $previousTextElementOnLine->textState, $previousTextElementOnLine->absoluteMatrix)) >= ($previousTextElementOnLine->textState->fontSize ?? 10) * $previousTextElementOnLine->absoluteMatrix->scaleX * 0.40
+                    && str_ends_with($text, ' ') === false && str_starts_with($positionedTextElementText, ' ') === false) {
                     $text .= ' ';
                 }
 
-                $text .= $positionedTextElement->getText($document, $page);
+                $text .= $positionedTextElementText;
                 $previousTextElementOnLine = $positionedTextElement;
             }
         }
