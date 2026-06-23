@@ -29,7 +29,7 @@ pages:
       accommodated. The user must first note that the MPK interface protocol is different from RS-422 or 
       RS-485.  
        
-      RS-422:  Two devices send data separately in each direction between them. Data in each 
+      RS-422:  Two devices send data separately in  each direction between them. Data in each 
       direction is carried over a balanced pair of wires. Each of the two devices is always 
       transmitting data to the receiver of the other device. Figure 1 shows an RS-422 
       connection between two devices. 
@@ -66,7 +66,7 @@ pages:
       wires. 
        
        
-       Revision 1.0 AN6-1 
+        Revision 1.0  AN6-1  
   -
     content: |-
       Application Note AN-6 
@@ -74,7 +74,7 @@ pages:
        
        
        
-      RS-422 DeviceRS-422 Device
+      RS-422 Device RS-422 Device
        
        
       Figure 1. RS-422 Interface Example 
@@ -82,7 +82,7 @@ pages:
          
        
        
-      RS-485 DeviceRS-485 DeviceRS-485 Device
+      RS-485 Device RS-485 Device RS-485 Device
       Each device ouputs
       data in-turn to all other
       devices.
@@ -94,7 +94,7 @@ pages:
        
        
        
-      Control PanelControl PanelControl Panel
+      Control Panel Control Panel Control Panel
       Each Control Panel
       ouputs data in-turn to the
       System Controller input.
@@ -105,7 +105,7 @@ pages:
        
        
       Figure 3. MPK Interface Example 
-      AN6-2 Revision 1.0 
+      AN6-2  Revision 1.0 
   -
     content: |2-
        Application Note AN-6 
@@ -142,13 +142,13 @@ pages:
       7707DT fiber link. Figures 4 and 5 describe correct and incorrect interface methods, respectively. 
       Figure 6 describes pin-for-pin connections for the correct method.  
        
-       Revision 1.0 AN6-3 
+        Revision 1.0  AN6-3  
   -
     content: |-
       Application Note AN-6 
       MPK Router Control Interface to 7707DT 
        
-      Control PanelControl PanelControl Panel
+      Control Panel Control Panel Control Panel
       Set to
       RS-422
       7707DT
@@ -161,12 +161,12 @@ pages:
       Figure 4. MPK Interface to RS-422. Correct Method 
        
        
-      Control PanelControl PanelControl Panel
+      Control Panel Control Panel Control Panel
       Set to
       RS-422
       Control Panel output
       will contend with 7707DT
-      Incorrect Methodoutput. W ill not work.
+      Incorrect Method output. W ill not work.
       7707DT
       Set to
       RS-422
@@ -175,7 +175,7 @@ pages:
        
        
       Figure 5. MPK Interface to RS-422. Incorrect Method 
-      AN6-4 Revision 1.0 
+      AN6-4  Revision 1.0 
   -
     content: |2-
        Application Note AN-6 
@@ -183,72 +183,72 @@ pages:
        
        
       7707DT Channel 1 is configured
-      Control PanelControl Panelto RS-422 for this example.
-      7707DT7707DT
-      12345
-      GND- TX+RX------
-      6789
-      ---+TX-RX---
-      +RS485+RS485
-      -RS422 OUT-RS422 OUT
-      +RS422 IN+RS422 IN
-      -RS485-RS485
+      Control Panel Control Panel to RS-422 for this example.
+      7707DT 7707DT
+      1 2 3 4 5
+      GND - TX +RX --- ---
+      6 7 8 9
+      --- +TX -RX ---
+      +RS485 +RS485
+      -RS422 OUT -RS422 OUT
+      +RS422 IN +RS422 IN
+      -RS485 -RS485
       CH1
       CH1
-      +RS422 OUT+RS422 OUT
+      +RS422 OUT +RS422 OUT
       RS-422
       RS-422
-      -RS422 IN-RS422 IN
-      RS232 INRS232 OUTRS232 INRS232 OUT
-      CH1CH1CH1CH1
-      GNDGNDGNDGND
-      +RS485+RS485
-      -RS422 OUT-RS422 OUT
-      +RS422 IN+RS422 IN
-      -RS485-RS485
+      -RS422 IN -RS422 IN
+      RS232 IN RS232 OUT RS232 IN RS232 OUT
+      CH1 CH1 CH1 CH1
+      GND GND GND GND
+      +RS485 +RS485
+      -RS422 OUT -RS422 OUT
+      +RS422 IN +RS422 IN
+      -RS485 -RS485
       CH2
       CH2
-      +RS422 OUT+RS422 OUT
-      -RS422 IN-RS422 IN
+      +RS422 OUT +RS422 OUT
+      -RS422 IN -RS422 IN
       RS-422
       RS-422
-      RS232 INRS232 OUTRS232 INRS232 OUT
-      CH2CH2CH2CH2
-      GNDGNDGNDGND
-      +RS485+RS485
-      -RS422 OUT-RS422 OUT
-      +RS422 IN+RS422 IN
-      -RS485-RS485
+      RS232 IN RS232 OUT RS232 IN RS232 OUT
+      CH2 CH2 CH2 CH2
+      GND GND GND GND
+      +RS485 +RS485
+      -RS422 OUT -RS422 OUT
+      +RS422 IN +RS422 IN
+      -RS485 -RS485
       CH3
       CH3
-      +RS422 OUT+RS422 OUT
+      +RS422 OUT +RS422 OUT
       RS-422
       RS-422
-      -RS422 IN-RS422 IN
-      RS232 INRS232 OUTRS232 INRS232 OUT
-      CH3CH3CH3CH3
-      GNDGNDGNDGND
-      +RS485+RS485
-      -RS422 OUT-RS422 OUT
-      +RS422 IN+RS422 IN
-      12345
-      -RS485-RS485
+      -RS422 IN -RS422 IN
+      RS232 IN RS232 OUT RS232 IN RS232 OUT
+      CH3 CH3 CH3 CH3
+      GND GND GND GND
+      +RS485 +RS485
+      -RS422 OUT -RS422 OUT
+      +RS422 IN +RS422 IN
+      1 2 3 4 5
+      -RS485 -RS485
       CH4
       CH4
-      GND- RX+TX------
-      +RS422 OUT+RS422 OUT
+      GND - RX +TX --- ---
+      +RS422 OUT +RS422 OUT
       RS-422
       RS-422
-      -RS422 IN-RS422 IN
-      6789
-      ---+RX-TX---
-      +LTC IN+LTC OUT+LTC IN+LTC OUT
-      GNDGNDGNDGND
-      -LTC IN-LTC OUT-LTC IN-LTC OUT
+      -RS422 IN -RS422 IN
+      6 7 8 9
+      --- +RX -TX ---
+      +LTC IN +LTC OUT +LTC IN +LTC OUT
+      GND GND GND GND
+      -LTC IN -LTC OUT -LTC IN -LTC OUT
       Jupiter System Controller
        
       Figure 6. MPK Interface to RS-422 
-       Revision 1.0 AN6-5 
+        Revision 1.0  AN6-5  
   -
     content: |-
       Application Note AN-6 
@@ -274,7 +274,7 @@ pages:
       Figures 7 shows a block diagram describing this method of interface. Figure 8 describes pin-for-pin 
       connections. 
        
-      Control PanelControl PanelControl Panel
+      Control Panel Control Panel Control Panel
       Set to
       RS-422
       Set to
@@ -293,7 +293,7 @@ pages:
        
        
        
-      AN6-6 Revision 1.0 
+      AN6-6  Revision 1.0 
   -
     content: |2-
        Application Note AN-6 
@@ -302,74 +302,74 @@ pages:
        
       7707DT Channel 1 is configured
       to RS-422 for this example.
-      Control PanelControl Panel
+      Control Panel Control Panel
       7707DT Channel 2 is configured
       to RS-485 @1200baud for this example.
-      7707DT7707DT
-      12345
-      GND- TX+RX------
-      6789
-      ---+TX-RX---
-      +RS485+RS485
-      -RS422 OUT-RS422 OUT
-      +RS422 IN+RS422 IN
-      -RS485-RS485
+      7707DT 7707DT
+      1 2 3 4 5
+      GND - TX +RX --- ---
+      6 7 8 9
+      --- +TX -RX ---
+      +RS485 +RS485
+      -RS422 OUT -RS422 OUT
+      +RS422 IN +RS422 IN
+      -RS485 -RS485
       CH1
       CH1
-      +RS422 OUT+RS422 OUT
+      +RS422 OUT +RS422 OUT
       RS-422
       RS-422
-      -RS422 IN-RS422 IN
-      RS232 INRS232 OUTRS232 INRS232 OUT
-      CH1CH1CH1CH1
-      GNDGNDGNDGND
-      +RS485+RS485
-      -RS422 OUT-RS422 OUT
-      +RS422 IN+RS422 IN
-      -RS485-RS485
+      -RS422 IN -RS422 IN
+      RS232 IN RS232 OUT RS232 IN RS232 OUT
+      CH1 CH1 CH1 CH1
+      GND GND GND GND
+      +RS485 +RS485
+      -RS422 OUT -RS422 OUT
+      +RS422 IN +RS422 IN
+      -RS485 -RS485
       CH2
       CH2
-      +RS422 OUT+RS422 OUT
-      -RS422 IN-RS422 IN
+      +RS422 OUT +RS422 OUT
+      -RS422 IN -RS422 IN
       RS-422
       RS-422
-      RS232 INRS232 OUTRS232 INRS232 OUT
-      CH2CH2CH2CH2
-      GNDGNDGNDGND
-      +RS485+RS485
-      -RS422 OUT-RS422 OUT
-      +RS422 IN+RS422 IN
-      -RS485-RS485
+      RS232 IN RS232 OUT RS232 IN RS232 OUT
+      CH2 CH2 CH2 CH2
+      GND GND GND GND
+      +RS485 +RS485
+      -RS422 OUT -RS422 OUT
+      +RS422 IN +RS422 IN
+      -RS485 -RS485
       CH3
       CH3
-      +RS422 OUT+RS422 OUT
+      +RS422 OUT +RS422 OUT
       RS-422
       RS-422
-      -RS422 IN-RS422 IN
-      RS232 INRS232 OUTRS232 INRS232 OUT
-      CH3CH3CH3CH3
-      GNDGNDGNDGND
-      +RS485+RS485
-      -RS422 OUT-RS422 OUT
-      +RS422 IN+RS422 IN
-      12345
-      -RS485-RS485
+      -RS422 IN -RS422 IN
+      RS232 IN RS232 OUT RS232 IN RS232 OUT
+      CH3 CH3 CH3 CH3
+      GND GND GND GND
+      +RS485 +RS485
+      -RS422 OUT -RS422 OUT
+      +RS422 IN +RS422 IN
+      1 2 3 4 5
+      -RS485 -RS485
       CH4
       CH4
-      GND- RX+TX------
-      +RS422 OUT+RS422 OUT
+      GND - RX +TX --- ---
+      +RS422 OUT +RS422 OUT
       RS-422
       RS-422
-      -RS422 IN-RS422 IN
-      6789
-      ---+RX-TX---
-      +LTC IN+LTC OUT+LTC IN+LTC OUT
-      GNDGNDGNDGND
-      -LTC IN-LTC OUT-LTC IN-LTC OUT
-      Jupiter System ControllerControl Panel
+      -RS422 IN -RS422 IN
+      6 7 8 9
+      --- +RX -TX ---
+      +LTC IN +LTC OUT +LTC IN +LTC OUT
+      GND GND GND GND
+      -LTC IN -LTC OUT -LTC IN -LTC OUT
+      Jupiter System Controller Control Panel
        
       Figure 8. MPK Interface to RS-485 
-       Revision 1.0 AN6-7 
+        Revision 1.0  AN6-7  
   -
     content: |-
       Application Note AN-6 
@@ -384,7 +384,7 @@ pages:
       Signal terminations are used to eliminate distortion of signals traveling over long lengths of cable. If 
       problems are experienced, and signal distortion is suspected, then the user should enable the input 
       termination of the respective 7707DT. Input terminations are easily selectable through the card edge 
-      interface of the 7707DT, or via VistalinkTM, as described in the product manual. As a general rule, 
+      interface of the 7707DT, or via Vista linkTM, as described in the product manual. As a general rule, 
       terminations are most effective when placed at the far end of a cable. If more than two devices are 
       connected to the same cable, as could be the case with MPK interfaces, then it is recommended that 
       the 7707DT be located at the far end of the longest cable segment when possible.  
@@ -393,10 +393,10 @@ pages:
       bias, as it places the balanced input connections in a known logic state while no device is transmitting 
       to them. Any direct connection between a 7707DT input and a Control Panel may require a failsafe 
       bias, to compensate for ambient noise, long lengths of cable, or connection to many devices. Input 
-      failsafe bias is easily selectable through the card edge interface of the 7707DT, or via VistalinkTM, as 
+      failsafe bias is easily selectable through the card edge interface of the 7707DT, or via  Vista linkTM, as 
       described in the product manual. To enable failsafe bias on any channel of the 7707DT, the termination 
       must first be enabled.  
-      AN6-8 Revision 1.0 
+      AN6-8  Revision 1.0 
   -
     content: |2-
        Application Note AN-6 
@@ -431,4 +431,4 @@ pages:
        
        
        
-       Revision 1.0 AN6-9 
+        Revision 1.0  AN6-9  

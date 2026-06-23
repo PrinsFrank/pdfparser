@@ -10,6 +10,11 @@ readonly class FontWidths {
     ) {}
 
     public function getWidthForCharacter(int $characterCode): ?float {
-        return $this->widths[$characterCode - $this->firstChar] ?? null;
+        $width = $this->widths[$characterCode - $this->firstChar] ?? null;
+        if ($width === null) {
+            return null;
+        }
+
+        return $width / 1000;
     }
 }
