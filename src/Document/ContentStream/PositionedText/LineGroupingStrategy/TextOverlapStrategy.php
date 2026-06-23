@@ -25,9 +25,12 @@ class TextOverlapStrategy implements LineGroupingStrategy {
 
     #[Override]
     public function group(array $positionedTextElements): iterable {
+        // Order lines top to bottom by descending offsetY. Not abs(offsetY): a page whose MediaBox origin sits
+        // above its content (negative lower-left, e.g. [0 -792 612 0]) has all-negative offsetY with the topmost
+        // line the least negative, which abs() would reverse.
         usort(
             $positionedTextElements,
-            fn(PositionedTextElement $a, PositionedTextElement $b): int => abs($b->absoluteMatrix->offsetY) <=> abs($a->absoluteMatrix->offsetY),
+            fn(PositionedTextElement $a, PositionedTextElement $b): int => $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY,
         );
 
         /** @var array<int, true> $processedIndices */
