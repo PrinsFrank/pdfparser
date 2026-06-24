@@ -22,3 +22,16 @@ To retrieve information about passwords and file encryption keys, it's useful to
 ```bash
 qpdf --show-encryption --show-encryption-key --password=knownPassword file.pdf
 ```
+
+## Use of comments
+
+Code should be self-documenting, and if something can be clarified by giving a method, variable or class a clearer name or writing code more explicitly that should be done instead of adding comments.
+
+Content in comments should not replicate content in code. There is no way to guarantee that the comment gets updated when the code gets updated.
+
+If there are edge cases a piece of code accounts for, there should be a test with that explicit edge case instead of a comment. This way, the test case can be considered living documentation, and it has to be considered when the code under test is updated.
+
+There are some acceptable reasons to add comments:
+- Something is done in a specific way that is not intuitive. In this case, the considerations should be put in the comments.
+- A unit of code can be referenced by multiple names. A comment can clarify the alternative name. 
+    - For example: a parameter for `characterSpace` is named `Tc`. To clarify the name, this package uses `characterSpace` internally. A comment clarifying that this references `Tc` in the specification makes sense.
