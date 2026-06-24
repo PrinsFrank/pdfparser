@@ -48,6 +48,8 @@ class TextOverlapStrategy implements LineGroupingStrategy {
 
             $positionedTextElementsOnLine = [$highestPositionedTextElement];
             $processedIndices[$i] = true;
+            $lineLeftX = $highestPositionedTextElement->absoluteMatrix->offsetX;
+            $lineRightX = $highestPositionedTextElement->absoluteMatrix->offsetX;
             for ($j = $i + 1; $j < $nrOfItems; $j++) {
                 if (isset($processedIndices[$j])) {
                     continue;
@@ -63,9 +65,22 @@ class TextOverlapStrategy implements LineGroupingStrategy {
 
                 $overlap = min($highestElementTop, $currentElementTop) - max($highestPositionedTextElementBottom, $currentElementBottom);
                 $smallestElementHeight = min($positionedTextElementHeight, $highestPositionedTextElementHeight);
-                if ($smallestElementHeight !== 0.0 && $overlap / $smallestElementHeight * 100 >= $this->overlapPercentage) {
+                if ($smallestElementHeight === 0.0) {
+                    continue;
+                }
+
+                $belongsOnLine = $overlap / $smallestElementHeight * 100 >= $this->overlapPercentage;
+
+                $isEnclosedSubscript = $overlap > 0.0
+                    && $positionedTextElementHeight < $highestPositionedTextElementHeight
+                    && $positionedTextElement->absoluteMatrix->offsetX >= $lineLeftX
+                    && $positionedTextElement->absoluteMatrix->offsetX <= $lineRightX;
+
+                if ($belongsOnLine || $isEnclosedSubscript) {
                     $positionedTextElementsOnLine[] = $positionedTextElement;
                     $processedIndices[$j] = true;
+                    $lineLeftX = min($lineLeftX, $positionedTextElement->absoluteMatrix->offsetX);
+                    $lineRightX = max($lineRightX, $positionedTextElement->absoluteMatrix->offsetX);
                 }
             }
 
