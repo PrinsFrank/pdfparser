@@ -20,6 +20,8 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 /** @api */
 readonly class ContentStream {
+    public const WORD_BREAK_THRESHOLD = 0.25;
+
     /** @var list<TextObject|ContentStreamCommand> */
     public array $content;
 
@@ -85,20 +87,38 @@ readonly class ContentStream {
                 $text .= "\n";
             }
 
+            $texts = [];
+            foreach ($positionedTextElementsForLine as $index => $positionedTextElement) {
+                $texts[$index] = $positionedTextElement->getText($document, $page);
+            }
+
             $previousTextElementOnLine = null;
-            foreach ($positionedTextElementsForLine as $positionedTextElement) {
-                if (($positionedTextElementText = $positionedTextElement->getText($document, $page)) === '') {
+            foreach ($positionedTextElementsForLine as $index => $positionedTextElement) {
+                if ($texts[$index] === '') {
                     $previousTextElementOnLine = $positionedTextElement;
                     continue;
                 }
 
-                if ($previousTextElementOnLine !== null
-                    && ($positionedTextElement->absoluteMatrix->offsetX - $previousTextElementOnLine->absoluteMatrix->offsetX - $positionedTextElement->getFont($document, $page)->getWidthForChars($previousTextElementOnLine->getCodePoints(), $previousTextElementOnLine->textState, $previousTextElementOnLine->absoluteMatrix)) >= ($previousTextElementOnLine->textState->fontSize ?? 10) * $previousTextElementOnLine->absoluteMatrix->scaleX * 0.40
-                    && str_ends_with($text, ' ') === false && str_starts_with($positionedTextElementText, ' ') === false) {
-                    $text .= ' ';
+                if ($previousTextElementOnLine !== null) {
+                    $gap = $positionedTextElement->absoluteMatrix->offsetX
+                        - $previousTextElementOnLine->absoluteMatrix->offsetX
+                        - $previousTextElementOnLine->getAdvanceWidth($document, $page);
+
+                    $wordBreakThreshold = ($previousTextElementOnLine->textState->fontSize ?? 10)
+                        * $previousTextElementOnLine->absoluteMatrix->scaleX
+                        * ($previousTextElementOnLine->textState->scale / 100)
+                        * self::WORD_BREAK_THRESHOLD;
+
+                    if (
+                        $gap >= $wordBreakThreshold
+                        && str_ends_with($text, ' ') === false
+                        && str_starts_with($texts[$index], ' ') === false
+                    ) {
+                        $text .= ' ';
+                    }
                 }
 
-                $text .= $positionedTextElementText;
+                $text .= $texts[$index];
                 $previousTextElementOnLine = $positionedTextElement;
             }
         }

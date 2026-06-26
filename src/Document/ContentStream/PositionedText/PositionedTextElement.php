@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
+use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Generic\Character\LiteralStringEscapeCharacter;
@@ -66,7 +67,9 @@ readonly class PositionedTextElement {
                 throw new ParseFailureException(sprintf('Unrecognized character group format "%s"', $match['chars']));
             }
 
-            if (isset($match['offset']) && (float) $match['offset'] < -100) {
+            // A large negative TJ adjustment inside a single run is the same word break as a between-element gap,
+            // measured directly: −offset/1000 is the gap in em, so it is a word break above the same threshold.
+            if (isset($match['offset']) && (float) $match['offset'] / 1000 <= -ContentStream::WORD_BREAK_THRESHOLD) {
                 $string .= ' ';
             }
         }
@@ -107,5 +110,53 @@ readonly class PositionedTextElement {
         return ($this->textState->fontSize ?? 12)
             * abs($this->absoluteMatrix->scaleY)
             * ($this->textState->scale / 100);
+    }
+
+    /**
+     * The horizontal distance, in device space, that showing this element advances the text cursor, per the
+     * displacement formula in the PDF spec §9.4.4:
+     *
+     *   ((w0 − Tj/1000)·Tfs + Tc + Tw·[single-byte code 32]) · Th , transformed by the text rendering matrix.
+     *
+     * Reconstructed here because Tj/TJ do not advance the text matrix in this parser.
+     */
+    public function getAdvanceWidth(Document $document, Page $page): float {
+        $font = $this->getFont($document, $page);
+        $scaleX = $this->absoluteMatrix->scaleX;
+        $fontSize = $this->textState->fontSize ?? 10;
+
+        $glyphAdvance = $font->getWidthForChars($this->getCodePoints(), $this->textState, $this->absoluteMatrix); // Σ (w0·Tfs + Tc) · scaleX
+        $wordSpaceAdvance = $this->textState->wordSpace * $this->getWordSpaceableCharacterCount($font) * $scaleX;  // Tw · #(code 32) · scaleX
+        $kerningAdvance = -($this->getTotalOffset() / 1000) * $fontSize * $scaleX;                                // − Σ(Tj)/1000 · Tfs · scaleX
+
+        return ($glyphAdvance + $wordSpaceAdvance + $kerningAdvance) * ($this->textState->scale / 100); // · Th
+    }
+
+    /** The sum of the TJ adjustment numbers in this element's operand, in thousandths of an em. */
+    public function getTotalOffset(): float {
+        if (preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $this->rawTextContent, $matches, PREG_SET_ORDER) === false) {
+            throw new ParseFailureException('Error with regex');
+        }
+
+        $totalOffset = 0.0;
+        foreach ($matches as $match) {
+            if (isset($match['offset'])) {
+                $totalOffset += (float) $match['offset'];
+            }
+        }
+
+        return $totalOffset;
+    }
+
+    /**
+     * The number of character codes eligible for word spacing (Tw): the single-byte character code 32. Composite
+     * (Type0) fonts encode space as a byte inside a multi-byte code, to which Tw does not apply (spec §9.3.3).
+     */
+    private function getWordSpaceableCharacterCount(Font $font): int {
+        if ($font->getDescendantFonts() !== []) {
+            return 0;
+        }
+
+        return count(array_filter($this->getCodePoints(), static fn(int $codePoint): bool => $codePoint === 32));
     }
 }
