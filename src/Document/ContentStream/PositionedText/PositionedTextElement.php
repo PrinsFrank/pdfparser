@@ -28,15 +28,9 @@ readonly class PositionedTextElement {
 
     /** @throws ParseFailureException */
     public function getText(Document $document, Page $page): string {
-        if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $this->rawTextContent, $matches, PREG_SET_ORDER)) === false) {
-            throw new ParseFailureException(sprintf('Error with regex'));
-        } elseif ($result === 0) {
-            throw new ParseFailureException(sprintf('Operands "%s" is not in a recognized format', $this->rawTextContent));
-        }
-
         $string = '';
         $font = $this->getFont($document, $page);
-        foreach ($matches as $match) {
+        foreach ($this->parseOperand() as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
                 $unescapedChars = LiteralStringEscapeCharacter::unescapeCharacters(substr($match['chars'], 1, -1));
                 if (preg_match('/^\\\\\d{3}$/', substr($match['chars'], 1, -1)) === 1 && ($glyph = $font->getDifferences()?->getGlyph((int) octdec(substr($match['chars'], 2, -1)))) !== null) {
@@ -69,7 +63,7 @@ readonly class PositionedTextElement {
 
             // A large negative TJ adjustment inside a single run is the same word break as a between-element gap,
             // measured directly: −offset/1000 is the gap in em, so it is a word break above the same threshold.
-            if (isset($match['offset']) && (float) $match['offset'] / 1000 <= -ContentStream::WORD_BREAK_THRESHOLD) {
+            if ($match['offset'] !== null && $match['offset'] / 1000 <= -ContentStream::WORD_BREAK_THRESHOLD) {
                 $string .= ' ';
             }
         }
@@ -80,13 +74,7 @@ readonly class PositionedTextElement {
     /** @return list<int> */
     public function getCodePoints(): array {
         $codePoints = [];
-        if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $this->rawTextContent, $matches, PREG_SET_ORDER)) === false) {
-            throw new ParseFailureException(sprintf('Error with regex'));
-        } elseif ($result === 0) {
-            throw new ParseFailureException(sprintf('Operands "%s" is not in a recognized format', $this->rawTextContent));
-        }
-
-        foreach ($matches as $match) {
+        foreach ($this->parseOperand() as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
                 $chars = str_replace(['\(', '\)', '\n', '\r'], ['(', ')', "\n", "\r"], substr($match['chars'], 1, -1));
                 $chars = preg_replace_callback('/\\\\([0-7]{3})/', fn(array $matches) => mb_chr((int) octdec($matches[1])), $chars)
@@ -134,18 +122,34 @@ readonly class PositionedTextElement {
 
     /** The sum of the TJ adjustment numbers in this element's operand, in thousandths of an em. */
     public function getTotalOffset(): float {
-        if (preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $this->rawTextContent, $matches, PREG_SET_ORDER) === false) {
-            throw new ParseFailureException('Error with regex');
-        }
-
         $totalOffset = 0.0;
-        foreach ($matches as $match) {
-            if (isset($match['offset'])) {
-                $totalOffset += (float) $match['offset'];
+        foreach ($this->parseOperand() as $match) {
+            if ($match['offset'] !== null) {
+                $totalOffset += $match['offset'];
             }
         }
 
         return $totalOffset;
+    }
+
+    /** @return list<array{chars: string, offset: float|null}> */
+    private function parseOperand(): array {
+        if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $this->rawTextContent, $matches, PREG_SET_ORDER)) === false) {
+            throw new ParseFailureException('Error with regex');
+        }
+        if ($result === 0) {
+            throw new ParseFailureException(sprintf('Operands "%s" is not in a recognized format', $this->rawTextContent));
+        }
+
+        $operands = [];
+        foreach ($matches as $match) {
+            $operands[] = [
+                'chars' => $match['chars'],
+                'offset' => isset($match['offset']) ? (float) $match['offset'] : null,
+            ];
+        }
+
+        return $operands;
     }
 
     /**
