@@ -6,7 +6,6 @@ use PrinsFrank\PdfParser\Document\CMap\Registry\RegistryOrchestrator;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMap;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMapParser;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
-use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
@@ -138,7 +137,8 @@ class Font extends DecoratedObject {
             ?->value;
     }
 
-    public function getWidthForChar(int $characterCode, TextState $textState, TransformationMatrix $transformationMatrix): float {
+    /** The advance width of a single character code in unscaled text space (w0·Tfs + Tc); the caller applies the matrix. */
+    public function getWidthForChar(int $characterCode, TextState $textState): float {
         $fontWidths = $this->getWidths();
         if ($fontWidths !== null && ($charWidth = $fontWidths->getWidthForCharacter($characterCode)) !== null) {
             $characterWidth = $charWidth;
@@ -146,14 +146,14 @@ class Font extends DecoratedObject {
             $characterWidth = $this->getDefaultWidth();
         }
 
-        return ($characterWidth * ($textState->fontSize ?? 10) + $textState->charSpace) * $transformationMatrix->scaleX;
+        return $characterWidth * ($textState->fontSize ?? 10) + $textState->charSpace;
     }
 
     /** @param list<int> $chars */
-    public function getWidthForChars(array $chars, TextState $textState, TransformationMatrix $transformationMatrix): float {
+    public function getWidthForChars(array $chars, TextState $textState): float {
         $totalCharacterWidth = 0;
         foreach ($chars as $char) {
-            $totalCharacterWidth += $this->getWidthForChar($char, $textState, $transformationMatrix);
+            $totalCharacterWidth += $this->getWidthForChar($char, $textState);
         }
 
         return $totalCharacterWidth;
