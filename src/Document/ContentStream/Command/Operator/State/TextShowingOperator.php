@@ -8,8 +8,10 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interacti
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\ProducesPositionedTextElements;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @internal */
@@ -55,8 +57,17 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
 
     #[Override]
     public function getPositionedTextElement(string $operands, TransformationMatrix $textMatrix, TransformationMatrix $globalTransformationMatrix, TextState $textState): PositionedTextElement {
+        if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $operands, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL)) === false) {
+            throw new ParseFailureException(sprintf('Error with regex'));
+        } elseif ($result === 0) {
+            throw new ParseFailureException(sprintf('Operands "%s" is not in a recognized format', $operands));
+        }
+
         return new PositionedTextElement(
-            $operands,
+            array_map(
+                fn(array $match) => new TextSegment(new TextStringValue($match['chars']), $match['offset'] !== null ? (float) $match['offset'] : null),
+                $matches,
+            ),
             $textMatrix->multiplyWith($globalTransformationMatrix),  // 9.4.4, Note 2 on Trm calculation
             $textState,
         );
