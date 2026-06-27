@@ -12,6 +12,11 @@ readonly class TransformationMatrix {
         public float $offsetY, // f
     ) {}
 
+    /** The baseline (text advance) direction in page space: the matrix's first column (scaleX, shearX). */
+    public function baselineVector(): Vector {
+        return new Vector($this->scaleX, $this->shearX);
+    }
+
     /** Please note that a concatenated transformation matrix of A B !== B A */
     public function multiplyWith(self $other): self {
         return new self(
