@@ -7,9 +7,11 @@ use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
 use PrinsFrank\PdfParser\Stream\FileStream;
 
@@ -130,30 +132,30 @@ class ContentStreamTest extends TestCase {
         $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             [
-                new PositionedTextElement('<0024>', new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 759.6821291075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0025>', new TransformationMatrix(0.75, 0, 0, 0.75, 79.33170315, 759.6821291075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0026>', new TransformationMatrix(0.75, 0, 0, 0.75, 86.6634063, 759.6821291075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 94.60161225, 759.6821291075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0027>', new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 745.1358641075001), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0028>', new TransformationMatrix(0.75, 0, 0, 0.75, 79.938205725, 745.1358641075001), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0029>', new TransformationMatrix(0.75, 0, 0, 0.75, 87.269908875, 745.1358641075001), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 93.984375, 745.1358641075001), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 108.0, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<002A>', new TransformationMatrix(0.75, 0, 0, 0.75, 144.0, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<002B>', new TransformationMatrix(0.75, 0, 0, 0.75, 152.550075525, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<002C>', new TransformationMatrix(0.75, 0, 0, 0.75, 160.48828125, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 163.54226325000002, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 166.596245025, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 169.65022679999998, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 172.704208575, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 175.75819035, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 178.812172125, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<002D>', new TransformationMatrix(0.75, 0, 0, 0.75, 181.86615375, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<002E>', new TransformationMatrix(0.75, 0, 0, 0.75, 187.3622475, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<002F>', new TransformationMatrix(0.75, 0, 0, 0.75, 194.69395065, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 200.80728, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
-                new PositionedTextElement('<0003>', new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 716.0433351075001), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0024>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 759.6821291075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0025>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 79.33170315, 759.6821291075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0026>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 86.6634063, 759.6821291075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 94.60161225, 759.6821291075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0027>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 745.1358641075001), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0028>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 79.938205725, 745.1358641075001), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0029>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 87.269908875, 745.1358641075001), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 93.984375, 745.1358641075001), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 108.0, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<002A>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 144.0, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<002B>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 152.550075525, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<002C>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 160.48828125, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 163.54226325000002, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 166.596245025, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 169.65022679999998, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 172.704208575, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 175.75819035, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 178.812172125, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<002D>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 181.86615375, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<002E>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 187.3622475, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<002F>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 194.69395065, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 200.80728, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 716.0433351075001), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
             ],
             ContentStreamParser::parse([$decoratedObject])->getPositionedTextElements(),
         );
@@ -174,8 +176,8 @@ class ContentStreamTest extends TestCase {
         $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
         static::assertEquals(
             [
-                new PositionedTextElement('([Hello)', new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState(new ExtendedDictionaryKey('F1'), 7)),
-                new PositionedTextElement('(World])', new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState(new ExtendedDictionaryKey('F1'), 7)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('([Hello)'), null)], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState(new ExtendedDictionaryKey('F1'), 7)),
+                new PositionedTextElement([new TextSegment(new TextStringValue('(World])'), null)], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState(new ExtendedDictionaryKey('F1'), 7)),
             ],
             ContentStreamParser::parse([$decoratedObject])->getPositionedTextElements(),
         );

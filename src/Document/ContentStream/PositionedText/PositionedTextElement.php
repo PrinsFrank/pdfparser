@@ -2,16 +2,16 @@
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
 use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Document\Generic\Character\LiteralStringEscapeCharacter;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 readonly class PositionedTextElement {
+    /** @param list<TextSegment> $textSegments */
     public function __construct(
-        public string $rawTextContent,
+        public array $textSegments,
         public TransformationMatrix $absoluteMatrix,
         public TextState $textState,
     ) {}
@@ -27,48 +27,11 @@ readonly class PositionedTextElement {
 
     /** @throws ParseFailureException */
     public function getText(Document $document, Page $page): string {
-        if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $this->rawTextContent, $matches, PREG_SET_ORDER)) === false) {
-            throw new ParseFailureException(sprintf('Error with regex'));
-        } elseif ($result === 0) {
-            throw new ParseFailureException(sprintf('Operands "%s" is not in a recognized format', $this->rawTextContent));
-        }
+        $font = $this->getFont($document, $page);
 
         $string = '';
-        $font = $this->getFont($document, $page);
-        foreach ($matches as $match) {
-            if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
-                $unescapedChars = LiteralStringEscapeCharacter::unescapeCharacters(substr($match['chars'], 1, -1));
-                if (preg_match('/^\\\\\d{3}$/', substr($match['chars'], 1, -1)) === 1 && ($glyph = $font->getDifferences()?->getGlyph((int) octdec(substr($match['chars'], 2, -1)))) !== null) {
-                    $chars = $glyph->getChar();
-                } elseif (strlen($unescapedChars) === 1 && ($glyph = $font->getDifferences()?->getGlyph(ord($unescapedChars))) !== null) {
-                    $chars = $glyph->getChar();
-                } elseif (in_array($encoding = $font->getEncoding(), [EncodingNameValue::MacExpertEncoding, EncodingNameValue::WinAnsiEncoding], true) && $font->getDifferences() === null) {
-                    $chars = $encoding->decodeString($unescapedChars);
-                } elseif (($toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont()) !== null) {
-                    $chars = $toUnicodeCMap->textToUnicode(bin2hex($unescapedChars));
-                } elseif ($encoding !== null) {
-                    $chars = $encoding->decodeString($unescapedChars);
-                } else {
-                    $chars = $unescapedChars;
-                }
-
-                $string .= $chars;
-            } elseif (str_starts_with($match['chars'], '<') && str_ends_with($match['chars'], '>')) {
-                $chars = substr($match['chars'], 1, -1);
-                if (($toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont()) !== null) {
-                    $string .= $toUnicodeCMap->textToUnicode($chars);
-                } elseif (($encoding = $font->getEncoding()) !== null) {
-                    $string .= $encoding->decodeString(implode('', array_map(fn(string $character) => mb_chr((int) hexdec($character)), str_split($chars, 2))));
-                } else {
-                    $string .= EncodingNameValue::IdentityH->decodeString($chars);
-                }
-            } else {
-                throw new ParseFailureException(sprintf('Unrecognized character group format "%s"', $match['chars']));
-            }
-
-            if (isset($match['offset']) && (float) $match['offset'] < -100) {
-                $string .= ' ';
-            }
+        foreach ($this->textSegments as $textSegment) {
+            $string .= $textSegment->getText($font);
         }
 
         return $string;
@@ -77,27 +40,8 @@ readonly class PositionedTextElement {
     /** @return list<int> */
     public function getCodePoints(): array {
         $codePoints = [];
-        if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $this->rawTextContent, $matches, PREG_SET_ORDER)) === false) {
-            throw new ParseFailureException(sprintf('Error with regex'));
-        } elseif ($result === 0) {
-            throw new ParseFailureException(sprintf('Operands "%s" is not in a recognized format', $this->rawTextContent));
-        }
-
-        foreach ($matches as $match) {
-            if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
-                $chars = str_replace(['\(', '\)', '\n', '\r'], ['(', ')', "\n", "\r"], substr($match['chars'], 1, -1));
-                $chars = preg_replace_callback('/\\\\([0-7]{3})/', fn(array $matches) => mb_chr((int) octdec($matches[1])), $chars)
-                    ?? throw new ParseFailureException();
-                foreach (str_split($chars) as $char) {
-                    $codePoints[] = ord($char);
-                }
-            } elseif (str_starts_with($match['chars'], '<') && str_ends_with($match['chars'], '>')) {
-                foreach (str_split(substr($match['chars'], 1, -1), 4) as $char) {
-                    $codePoints[] = is_int($codePoint = hexdec($char)) ? $codePoint : throw new ParseFailureException();
-                }
-            } else {
-                throw new ParseFailureException(sprintf('Unrecognized character group format "%s"', $match['chars']));
-            }
+        foreach ($this->textSegments as $textSegment) {
+            array_push($codePoints, ...$textSegment->getCodePoints());
         }
 
         return $codePoints;
