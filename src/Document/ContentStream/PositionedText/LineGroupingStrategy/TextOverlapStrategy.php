@@ -18,6 +18,8 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextEle
  * And for each text element check if there is significant overlap above a threshold. Continue until all elements are processed
  */
 class TextOverlapStrategy implements LineGroupingStrategy {
+    use MatrixOffsetSpacing;
+
     /** @param int<0, 100> $overlapPercentage */
     public function __construct(
         private readonly int $overlapPercentage = 90,
