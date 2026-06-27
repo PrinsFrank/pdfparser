@@ -151,7 +151,7 @@ class Font extends DecoratedObject {
             ? $textState->wordSpace
             : 0.0;
 
-        return $characterWidth * ($textState->fontSize ?? 10) + $textState->charSpace + $wordSpace;
+        return $characterWidth * $textState->getFontSize() + $textState->charSpace + $wordSpace;
     }
 
     /** @param list<int> $chars */
