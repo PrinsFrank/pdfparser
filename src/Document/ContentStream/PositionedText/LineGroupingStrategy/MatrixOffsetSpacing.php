@@ -22,7 +22,7 @@ trait MatrixOffsetSpacing {
             - $previous->absoluteMatrix->offsetX
             - $previous->getAdvanceWidth($document, $page);
 
-        $threshold = ($previous->textState->fontSize ?? 10)
+        $threshold = $previous->textState->getFontSize()
             * $previous->absoluteMatrix->scaleX
             * ($previous->textState->scale / 100)
             * PositionedTextElement::WORD_BREAK_THRESHOLD_EM;
