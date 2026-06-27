@@ -324,7 +324,7 @@ class BaselineClusterStrategy implements LineGroupingStrategy {
         // of the em separates word breaks from kerning -- the same comparison the axis-aligned strategies make for
         // upright text.
         $advanceWidth = $previous->getAdvanceWidth($document, $page, $unit);
-        $threshold = ($previous->textState->fontSize ?? 10)
+        $threshold = $previous->textState->getFontSize()
             * $baselineScale
             * ($previous->textState->scale / 100)
             * ContentStream::WORD_BREAK_THRESHOLD;
