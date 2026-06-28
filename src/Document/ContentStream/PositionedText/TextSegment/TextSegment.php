@@ -54,10 +54,7 @@ readonly class TextSegment {
     public function getCodePoints(): array {
         $codePoints = [];
         if (str_starts_with($this->textString->textStringValue, '(') && str_ends_with($this->textString->textStringValue, ')')) {
-            $chars = str_replace(['\(', '\)', '\n', '\r'], ['(', ')', "\n", "\r"], substr($this->textString->textStringValue, 1, -1));
-            $chars = preg_replace_callback('/\\\\([0-7]{3})/', fn(array $matches) => mb_chr((int) octdec($matches[1])), $chars)
-                ?? throw new ParseFailureException();
-            foreach (str_split($chars) as $char) {
+            foreach (str_split($this->textString->getBinaryString()) as $char) {
                 $codePoints[] = ord($char);
             }
         } elseif (str_starts_with($this->textString->textStringValue, '<') && str_ends_with($this->textString->textStringValue, '>')) {
