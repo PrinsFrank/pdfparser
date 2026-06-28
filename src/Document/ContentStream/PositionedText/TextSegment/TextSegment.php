@@ -17,9 +17,7 @@ readonly class TextSegment {
         $text = '';
         if (str_starts_with($this->textString->textStringValue, '(') && str_ends_with($this->textString->textStringValue, ')')) {
             $unescapedChars = $this->textString->getBinaryString();
-            if (preg_match('/^\\\\\d{3}$/', substr($this->textString->textStringValue, 1, -1)) === 1 && ($glyph = $font->getDifferences()?->getGlyph((int) octdec(substr($this->textString->textStringValue, 2, -1)))) !== null) {
-                $chars = $glyph->getChar();
-            } elseif (strlen($unescapedChars) === 1 && ($glyph = $font->getDifferences()?->getGlyph(ord($unescapedChars))) !== null) {
+            if (strlen($unescapedChars) === 1 && ($glyph = $font->getDifferences()?->getGlyph(ord($unescapedChars))) !== null) {
                 $chars = $glyph->getChar();
             } elseif (in_array($encoding = $font->getEncoding(), [EncodingNameValue::MacExpertEncoding, EncodingNameValue::WinAnsiEncoding], true) && $font->getDifferences() === null) {
                 $chars = $encoding->decodeString($unescapedChars);
