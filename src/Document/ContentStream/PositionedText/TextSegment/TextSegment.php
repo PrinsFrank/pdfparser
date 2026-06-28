@@ -4,7 +4,6 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
-use PrinsFrank\PdfParser\Document\Generic\Character\LiteralStringEscapeCharacter;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
@@ -17,10 +16,8 @@ readonly class TextSegment {
     public function getText(Font $font): string {
         $text = '';
         if (str_starts_with($this->textString->textStringValue, '(') && str_ends_with($this->textString->textStringValue, ')')) {
-            $unescapedChars = LiteralStringEscapeCharacter::unescapeCharacters(substr($this->textString->textStringValue, 1, -1));
-            if (preg_match('/^\\\\\d{3}$/', substr($this->textString->textStringValue, 1, -1)) === 1 && ($glyph = $font->getDifferences()?->getGlyph((int) octdec(substr($this->textString->textStringValue, 2, -1)))) !== null) {
-                $chars = $glyph->getChar();
-            } elseif (strlen($unescapedChars) === 1 && ($glyph = $font->getDifferences()?->getGlyph(ord($unescapedChars))) !== null) {
+            $unescapedChars = $this->textString->getBinaryString();
+            if (strlen($unescapedChars) === 1 && ($glyph = $font->getDifferences()?->getGlyph(ord($unescapedChars))) !== null) {
                 $chars = $glyph->getChar();
             } elseif (in_array($encoding = $font->getEncoding(), [EncodingNameValue::MacExpertEncoding, EncodingNameValue::WinAnsiEncoding], true) && $font->getDifferences() === null) {
                 $chars = $encoding->decodeString($unescapedChars);
