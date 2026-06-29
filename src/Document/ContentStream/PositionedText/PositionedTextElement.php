@@ -28,10 +28,13 @@ readonly class PositionedTextElement {
     /** @throws ParseFailureException */
     public function getText(Document $document, Page $page): string {
         $font = $this->getFont($document, $page);
+        $differences = $font->getDifferences();
+        $encoding = $font->getEncoding();
+        $toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont();
 
         $string = '';
         foreach ($this->textSegments as $textSegment) {
-            $string .= $textSegment->getText($font);
+            $string .= $textSegment->getText($differences, $encoding, $toUnicodeCMap);
         }
 
         return $string;
