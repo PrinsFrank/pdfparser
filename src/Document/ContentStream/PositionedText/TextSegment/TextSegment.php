@@ -2,9 +2,10 @@
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment;
 
+use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMap;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DifferencesArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 readonly class TextSegment {
@@ -13,34 +14,19 @@ readonly class TextSegment {
         public int|float|null $offset,
     ) {}
 
-    public function getText(Font $font): string {
-        $text = '';
-        if (str_starts_with($this->textString->textStringValue, '(') && str_ends_with($this->textString->textStringValue, ')')) {
-            $unescapedChars = $this->textString->getBinaryString();
-            if (strlen($unescapedChars) === 1 && ($glyph = $font->getDifferences()?->getGlyph(ord($unescapedChars))) !== null) {
-                $chars = $glyph->getChar();
-            } elseif (in_array($encoding = $font->getEncoding(), [EncodingNameValue::MacExpertEncoding, EncodingNameValue::WinAnsiEncoding], true) && $font->getDifferences() === null) {
-                $chars = $encoding->decodeString($unescapedChars);
-            } elseif (($toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont()) !== null) {
-                $chars = $toUnicodeCMap->textToUnicode(bin2hex($unescapedChars));
-            } elseif ($encoding !== null) {
-                $chars = $encoding->decodeString($unescapedChars);
-            } else {
-                $chars = $unescapedChars;
-            }
-
-            $text .= $chars;
-        } elseif (str_starts_with($this->textString->textStringValue, '<') && str_ends_with($this->textString->textStringValue, '>')) {
-            $chars = substr($this->textString->textStringValue, 1, -1);
-            if (($toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont()) !== null) {
-                $text .= $toUnicodeCMap->textToUnicode($chars);
-            } elseif (($encoding = $font->getEncoding()) !== null) {
-                $text .= $encoding->decodeString(implode('', array_map(fn(string $character) => mb_chr((int) hexdec($character)), str_split($chars, 2))));
-            } else {
-                $text .= EncodingNameValue::IdentityH->decodeString($chars);
-            }
+    public function getText(?DifferencesArrayValue $differences, ?EncodingNameValue $encoding, ?ToUnicodeCMap $toUnicodeCMap): string {
+        $binaryString = $this->textString->getBinaryString();
+        if (strlen($binaryString) === 1 && ($glyph = $differences?->getGlyph(ord($binaryString))) !== null) {
+            $text = $glyph->getChar();
+        } elseif (in_array($encoding, [EncodingNameValue::MacExpertEncoding, EncodingNameValue::WinAnsiEncoding], true)
+            && $differences === null) {
+            $text = $encoding->decodeString($binaryString);
+        } elseif ($toUnicodeCMap !== null) {
+            $text = $toUnicodeCMap->textToUnicode(bin2hex($binaryString));
+        } elseif ($encoding !== null) {
+            $text = $encoding->decodeString($binaryString);
         } else {
-            throw new ParseFailureException(sprintf('Unrecognized character group format "%s"', $this->textString->textStringValue));
+            $text = $binaryString;
         }
 
         if ($this->offset !== null && $this->offset < -100) {
