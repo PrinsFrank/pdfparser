@@ -92,10 +92,17 @@ readonly class ContentStream {
                     continue;
                 }
 
-                if ($previousTextElementOnLine !== null
-                    && ($positionedTextElement->absoluteMatrix->offsetX - $previousTextElementOnLine->absoluteMatrix->offsetX - $positionedTextElement->getFont($document, $page)->getWidthForChars($previousTextElementOnLine->getCodePoints(), $previousTextElementOnLine->textState, $previousTextElementOnLine->absoluteMatrix)) >= ($previousTextElementOnLine->textState->fontSize ?? 10) * $previousTextElementOnLine->absoluteMatrix->scaleX * 0.40
-                    && str_ends_with($text, ' ') === false && str_starts_with($positionedTextElementText, ' ') === false) {
-                    $text .= ' ';
+                if ($previousTextElementOnLine !== null) {
+                    $gap = $positionedTextElement->absoluteMatrix->offsetX - $previousTextElementOnLine->applyDisplacement($document, $page)->offsetX;
+                    $emWidth = ($previousTextElementOnLine->textState->fontSize ?? 10)
+                        * $previousTextElementOnLine->absoluteMatrix->scaleX
+                        * ($previousTextElementOnLine->textState->scale / 100);
+
+                    if ($gap > ($emWidth * 0.25)
+                        && str_ends_with($text, ' ') === false
+                        && str_starts_with($positionedTextElementText, ' ') === false) {
+                        $text .= ' ';
+                    }
                 }
 
                 $text .= $positionedTextElementText;

@@ -138,25 +138,13 @@ class Font extends DecoratedObject {
             ?->value;
     }
 
-    public function getWidthForChar(int $characterCode, TextState $textState, TransformationMatrix $transformationMatrix): float {
+    public function getWidthForChar(int $characterCode): float {
         $fontWidths = $this->getWidths();
         if ($fontWidths !== null && ($charWidth = $fontWidths->getWidthForCharacter($characterCode)) !== null) {
-            $characterWidth = $charWidth;
-        } else {
-            $characterWidth = $this->getDefaultWidth();
+            return $charWidth;
         }
 
-        return ($characterWidth * ($textState->fontSize ?? 10) + $textState->charSpace) * $transformationMatrix->scaleX;
-    }
-
-    /** @param list<int> $chars */
-    public function getWidthForChars(array $chars, TextState $textState, TransformationMatrix $transformationMatrix): float {
-        $totalCharacterWidth = 0;
-        foreach ($chars as $char) {
-            $totalCharacterWidth += $this->getWidthForChar($char, $textState, $transformationMatrix);
-        }
-
-        return $totalCharacterWidth;
+        return $this->getDefaultWidth();
     }
 
     /** @return list<Font|Dictionary> */

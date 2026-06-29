@@ -43,14 +43,14 @@ readonly class PositionedTextElement {
         return $string;
     }
 
-    /** @return list<int> */
-    public function getCodePoints(): array {
-        $codePoints = [];
+    public function applyDisplacement(Document $document, Page $page): TransformationMatrix {
+        $font = $this->getFont($document, $page);
+        $textMatrix = $this->absoluteMatrix;
         foreach ($this->textSegments as $textSegment) {
-            array_push($codePoints, ...$textSegment->getCodePoints());
+            $textMatrix = $textSegment->applyDisplacement($textMatrix, $font, $this->textState);
         }
 
-        return $codePoints;
+        return $textMatrix;
     }
 
     public function getHeight(): float {
