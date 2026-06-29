@@ -35,6 +35,9 @@ readonly class PositionedTextElement {
         $string = '';
         foreach ($this->textSegments as $textSegment) {
             $string .= $textSegment->getText($differences, $encoding, $toUnicodeCMap);
+            if ($textSegment->offset !== null && $textSegment->offset < -100) {
+                $string .= ' ';
+            }
         }
 
         return $string;

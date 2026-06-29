@@ -29,10 +29,6 @@ readonly class TextSegment {
             $text = $binaryString;
         }
 
-        if ($this->offset !== null && $this->offset < -100) {
-            $text .= ' ';
-        }
-
         return $text;
     }
 
