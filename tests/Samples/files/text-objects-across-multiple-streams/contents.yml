@@ -29,12 +29,12 @@ pages:
       accommodated. The user must first note that the MPK interface protocol is different from RS-422 or 
       RS-485.  
        
-      RS-422:  Two devices send data separately in each direction between them. Data in each 
+      RS-422: Two devices send data separately in each direction between them. Data in each 
       direction is carried over a balanced pair of wires. Each of the two devices is always 
       transmitting data to the receiver of the other device. Figure 1 shows an RS-422 
       connection between two devices. 
        
-      RS-485:   Each of two or more devices sends and receives data separately over a shared 
+      RS-485:  Each of two or more devices sends and receives data separately over a shared 
       balanced pair of wires. At any one time, only one device can transmit data. This avoids 
       contention of the shared pair of wires. Each device takes turns transmitting data. While 
       not transmitting data, the interface of each other device is in a high-impedance state, 
@@ -44,19 +44,19 @@ pages:
       other using the same balance pair of wires. Figure 2 shows an RS-485 connection 
       between four devices. 
        
-      MPK:  This is a proprietary interface protocol used to communicate between Control Panels 
+      MPK: This is a proprietary interface protocol used to communicate between Control Panels 
       and System Controllers of the Jupiter router system. One port of a System Controller 
       (such as the VM-3000) communicates with one or more Control Panels. The method of 
       data transfer in the System Controller to Control Panel direction is different from that in 
       the Control Panel to System Controller direction. Figure 2 shows an MPK connection 
       between a System Controller and three Control Panels. 
         
-        The System Controller broadcasts data to one or more Control Panels. One balanced 
+       The System Controller broadcasts data to one or more Control Panels. One balanced 
       pair of wires connects output data from the System Controller to all Control Panels. The 
       interface protocol in this direction is similar to RS-422, in that the System Controller is 
       always transmitting data to the Control Panel inputs.  
        
-        Each Control Panel must be able to send data back to the System Controller. For this 
+       Each Control Panel must be able to send data back to the System Controller. For this 
       purpose, a single balanced pair of wires is shared between all Control Panels. At any 
       one time, only one Control Panel can transmit data. This avoids contention of the shared 
       balanced pair of wires. Each Control Panel takes turns transmitting data. While not 
@@ -124,7 +124,7 @@ pages:
       accommodates a single balanced connection per signal channel. The below two sections describe 
       special requirements for connecting the MPK interface to the RS-422 or RS-485 interfaces of the 
       7707DT. 
-      2.1.  MPK Interface to RS-422 
+      2.1. MPK Interface to RS-422 
       The RS-422 interface format does not accommodate a high-impedance output state. The MPK 
       interface signal can, however, be connected to the RS-422 interface of the 7707DT. While the input to 
       the 7707DT is in a high-impedance state, the respective output of the companion 7707DT will assume 
@@ -254,7 +254,7 @@ pages:
       Application Note AN-6 
       MPK Router Control Interface to 7707DT 
        
-      2.2.  MPK Interface to RS-485 
+      2.2. MPK Interface to RS-485 
       A second interface method exists, which allows Control Panels to be located on both ends of the 
       7707DT fiber link. This method is only advantageous should available ports be limited on the System 
       Controller. Otherwise, Control Panels connected on the System Controller side of the 7707DT fiber link 
