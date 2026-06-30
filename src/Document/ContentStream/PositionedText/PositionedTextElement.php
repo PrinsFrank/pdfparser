@@ -34,12 +34,22 @@ readonly class PositionedTextElement {
         $encoding = $font->getEncoding();
         $toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont();
 
-        $string = '';
+        $text = '';
+        $previousOffset = null;
         foreach ($this->textSegments as $textSegment) {
-            $string .= $textSegment->getText($differences, $encoding, $toUnicodeCMap);
+            $textSegmentText = $textSegment->getText($differences, $encoding, $toUnicodeCMap);
+            if ($previousOffset !== null
+                && $previousOffset / 1000 <= -self::WORD_BREAK_THRESHOLD_EM
+                && str_ends_with($text, ' ') === false
+                && str_starts_with($textSegmentText, ' ') === false) {
+                $text .= ' ';
+            }
+
+            $text .= $textSegmentText;
+            $previousOffset = $textSegment->offset;
         }
 
-        return $string;
+        return $text;
     }
 
     /** @return list<int> */
