@@ -9,6 +9,8 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 readonly class PositionedTextElement {
+    public const WORD_BREAK_THRESHOLD_EM = 0.25;
+
     /** @param list<TextSegment> $textSegments */
     public function __construct(
         public array $textSegments,
