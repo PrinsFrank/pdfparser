@@ -3,6 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment;
 
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMap;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DifferencesArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
@@ -29,7 +30,8 @@ readonly class TextSegment {
             $text = $binaryString;
         }
 
-        if ($this->offset !== null && $this->offset < -100) {
+        if ($this->offset !== null
+            && $this->offset / 1000 <= -PositionedTextElement::WORD_BREAK_THRESHOLD_EM) {
             $text .= ' ';
         }
 
