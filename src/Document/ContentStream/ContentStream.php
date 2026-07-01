@@ -80,11 +80,13 @@ readonly class ContentStream {
     /** @throws PdfParserException */
     public function getText(Document $document, Page $page, LineGroupingStrategy $lineGroupingStrategy): string {
         $text = '';
-        foreach ($lineGroupingStrategy->group($this->getPositionedTextElements()) as $i => $positionedTextElementsForLine) {
-            if ($i !== 0) {
+        $isFirstLine = true;
+        foreach ($lineGroupingStrategy->group($this->getPositionedTextElements()) as $positionedTextElementsForLine) {
+            if (!$isFirstLine) {
                 $text .= "\n";
             }
 
+            $isFirstLine = false;
             $previousTextElementOnLine = null;
             foreach ($positionedTextElementsForLine as $positionedTextElement) {
                 $elementText = $positionedTextElement->getText($document, $page);
@@ -93,27 +95,13 @@ readonly class ContentStream {
                     continue;
                 }
 
-                if ($previousTextElementOnLine !== null) {
-                    // The gap between two elements is what remains of the horizontal distance once the previous
-                    // element's own advance is subtracted. That advance is reconstructed by getAdvanceWidth() because
-                    // Tj/TJ do not move the text matrix here; ignoring it (as the old next-element-font width did) left
-                    // the TJ kerning term in the gap and forced a slack threshold.
-                    $gap = $positionedTextElement->absoluteMatrix->offsetX
-                        - $previousTextElementOnLine->absoluteMatrix->offsetX
-                        - $previousTextElementOnLine->getAdvanceWidth($document, $page);
-
-                    $wordBreakThreshold = ($previousTextElementOnLine->textState->fontSize ?? 10)
-                        * $previousTextElementOnLine->absoluteMatrix->scaleX
-                        * ($previousTextElementOnLine->textState->scale / 100)
-                        * PositionedTextElement::WORD_BREAK_THRESHOLD_EM;
-
-                    if (
-                        $gap >= $wordBreakThreshold
-                        && str_ends_with($text, ' ') === false
-                        && str_starts_with($elementText, ' ') === false
-                    ) {
-                        $text .= ' ';
-                    }
+                if (
+                    $previousTextElementOnLine !== null
+                    && $lineGroupingStrategy->requiresSpaceBetween($previousTextElementOnLine, $positionedTextElement, $document, $page)
+                    && str_ends_with($text, ' ') === false
+                    && str_starts_with($elementText, ' ') === false
+                ) {
+                    $text .= ' ';
                 }
 
                 $text .= $elementText;

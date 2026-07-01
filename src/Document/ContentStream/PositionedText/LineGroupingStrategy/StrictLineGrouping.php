@@ -7,6 +7,8 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextEle
 
 /** Line grouping is done on _exact_ offsetY */
 class StrictLineGrouping implements LineGroupingStrategy {
+    use MatrixOffsetSpacing;
+
     #[Override]
     public function group(array $positionedTextElements): iterable {
         usort(

@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=../../schema.json
+version: '1.7'
+userPassword: null
+ownerPassword: null
+fileEncryptionKey: null
+title: null
+producer: null
+author: null
+creator: null
+creationDate: null
+modificationDate: null
+pages:
+  -
+    content: WATERMARK

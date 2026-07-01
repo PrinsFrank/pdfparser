@@ -2,7 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
-use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\LineGroupingStrategy\TextOverlapStrategy;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\LineGroupingStrategy\BaselineClusterStrategy;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
@@ -27,7 +27,7 @@ class Page extends DecoratedObject {
     /** @throws PdfParserException */
     public function getText(): string {
         return $this->getContentStream()
-            ?->getText($this->document, $this, new TextOverlapStrategy()) ?? '';
+            ?->getText($this->document, $this, new BaselineClusterStrategy()) ?? '';
     }
 
     /** @throws PdfParserException */
