@@ -384,7 +384,7 @@ pages:
       Signal terminations are used to eliminate distortion of signals traveling over long lengths of cable. If 
       problems are experienced, and signal distortion is suspected, then the user should enable the input 
       termination of the respective 7707DT. Input terminations are easily selectable through the card edge 
-      interface of the 7707DT, or via Vista linkTM, as described in the product manual. As a general rule, 
+      interface of the 7707DT, or via VistalinkTM, as described in the product manual. As a general rule, 
       terminations are most effective when placed at the far end of a cable. If more than two devices are 
       connected to the same cable, as could be the case with MPK interfaces, then it is recommended that 
       the 7707DT be located at the far end of the longest cable segment when possible.  
@@ -393,7 +393,7 @@ pages:
       bias, as it places the balanced input connections in a known logic state while no device is transmitting 
       to them. Any direct connection between a 7707DT input and a Control Panel may require a failsafe 
       bias, to compensate for ambient noise, long lengths of cable, or connection to many devices. Input 
-      failsafe bias is easily selectable through the card edge interface of the 7707DT, or via Vista linkTM, as 
+      failsafe bias is easily selectable through the card edge interface of the 7707DT, or via VistalinkTM, as 
       described in the product manual. To enable failsafe bias on any channel of the 7707DT, the termination 
       must first be enabled.  
       AN6-8 Revision 1.0 
