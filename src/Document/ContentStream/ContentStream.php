@@ -87,18 +87,36 @@ readonly class ContentStream {
 
             $previousTextElementOnLine = null;
             foreach ($positionedTextElementsForLine as $positionedTextElement) {
-                if (($positionedTextElementText = $positionedTextElement->getText($document, $page)) === '') {
+                $elementText = $positionedTextElement->getText($document, $page);
+                if ($elementText === '') {
                     $previousTextElementOnLine = $positionedTextElement;
                     continue;
                 }
 
-                if ($previousTextElementOnLine !== null
-                    && ($positionedTextElement->absoluteMatrix->offsetX - $previousTextElementOnLine->absoluteMatrix->offsetX - $positionedTextElement->getFont($document, $page)->getWidthForChars($previousTextElementOnLine->getCodePoints(), $previousTextElementOnLine->textState, $previousTextElementOnLine->absoluteMatrix)) >= ($previousTextElementOnLine->textState->fontSize ?? 10) * $previousTextElementOnLine->absoluteMatrix->scaleX * 0.40
-                    && str_ends_with($text, ' ') === false && str_starts_with($positionedTextElementText, ' ') === false) {
-                    $text .= ' ';
+                if ($previousTextElementOnLine !== null) {
+                    // The gap between two elements is what remains of the horizontal distance once the previous
+                    // element's own advance is subtracted. That advance is reconstructed by getAdvanceWidth() because
+                    // Tj/TJ do not move the text matrix here; ignoring it (as the old next-element-font width did) left
+                    // the TJ kerning term in the gap and forced a slack threshold.
+                    $gap = $positionedTextElement->absoluteMatrix->offsetX
+                        - $previousTextElementOnLine->absoluteMatrix->offsetX
+                        - $previousTextElementOnLine->getAdvanceWidth($document, $page);
+
+                    $wordBreakThreshold = ($previousTextElementOnLine->textState->fontSize ?? 10)
+                        * $previousTextElementOnLine->absoluteMatrix->scaleX
+                        * ($previousTextElementOnLine->textState->scale / 100)
+                        * PositionedTextElement::WORD_BREAK_THRESHOLD_EM;
+
+                    if (
+                        $gap >= $wordBreakThreshold
+                        && str_ends_with($text, ' ') === false
+                        && str_starts_with($elementText, ' ') === false
+                    ) {
+                        $text .= ' ';
+                    }
                 }
 
-                $text .= $positionedTextElementText;
+                $text .= $elementText;
                 $previousTextElementOnLine = $positionedTextElement;
             }
         }

@@ -146,7 +146,12 @@ class Font extends DecoratedObject {
             $characterWidth = $this->getDefaultWidth();
         }
 
-        return ($characterWidth * ($textState->fontSize ?? 10) + $textState->charSpace) * $transformationMatrix->scaleX;
+        // Word spacing (Tw) applies only to the single-byte character code 32, and never to composite (Type0) fonts (spec §9.3.3).
+        $wordSpace = ($textState->wordSpace !== 0.0 && $characterCode === 32 && $this->getDescendantFonts() === [])
+            ? $textState->wordSpace
+            : 0.0;
+
+        return ($characterWidth * ($textState->fontSize ?? 10) + $textState->charSpace + $wordSpace) * $transformationMatrix->scaleX;
     }
 
     /** @param list<int> $chars */

@@ -67,4 +67,35 @@ readonly class PositionedTextElement {
             * abs($this->absoluteMatrix->scaleY)
             * ($this->textState->scale / 100);
     }
+
+    /**
+     * The horizontal distance, in device space, that showing this element advances the text cursor, per the
+     * displacement formula in the PDF spec §9.4.4:
+     *
+     *   ((w0 − Tj/1000)·Tfs + Tc + Tw·[single-byte code 32]) · Th , transformed by the text rendering matrix.
+     *
+     * Reconstructed here because Tj/TJ do not advance the text matrix in this parser.
+     */
+    public function getAdvanceWidth(Document $document, Page $page): float {
+        $font = $this->getFont($document, $page);
+        $scaleX = $this->absoluteMatrix->scaleX;
+        $fontSize = $this->textState->fontSize ?? 10;
+
+        $glyphAdvance = $font->getWidthForChars($this->getCodePoints(), $this->textState, $this->absoluteMatrix); // Σ (w0·Tfs + Tc + Tw·[code 32]) · scaleX
+        $offsetAdvance = -($this->getTotalOffset() / 1000) * $fontSize * $scaleX;                                 // − Σ(Tj)/1000 · Tfs · scaleX
+
+        return ($glyphAdvance + $offsetAdvance) * ($this->textState->scale / 100); // · Th
+    }
+
+    /** The sum of the TJ adjustment numbers in this element's segments, in thousandths of an em. */
+    public function getTotalOffset(): float {
+        $totalOffset = 0.0;
+        foreach ($this->textSegments as $textSegment) {
+            if ($textSegment->offset !== null) {
+                $totalOffset += $textSegment->offset;
+            }
+        }
+
+        return $totalOffset;
+    }
 }
