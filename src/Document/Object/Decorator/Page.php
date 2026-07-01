@@ -92,10 +92,6 @@ class Page extends DecoratedObject {
 
     /** @throws PdfParserException */
     public function getFontDictionary(): ?Dictionary {
-        if (($pageFontDictionary = $this->getDictionary()->getSubDictionary($this->document, DictionaryKey::FONT)) !== null) {
-            return $pageFontDictionary;
-        }
-
         return $this->getResourceDictionary()
             ?->getSubDictionary($this->document, DictionaryKey::FONT);
     }
