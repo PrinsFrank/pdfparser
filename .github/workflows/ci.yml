@@ -78,3 +78,32 @@ jobs:
 
       - name: Run Samples tests
         run: vendor/bin/phpunit tests/Samples/
+
+  pr-size:
+    name: PR size
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      BASE: ${{ github.event.pull_request.base.sha }}
+      HEAD: ${{ github.event.pull_request.head.sha }}
+      MAX_LINE_CHANGE_COUNT_SRC: 200
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Check nr of lines changed
+        run: |
+          read ADDED REMOVED < <(git diff "$BASE" "$HEAD" --numstat -- src/ | awk '{added+=$1; removed+=$2} END {print added+0, removed+0}')
+          echo "Lines changed in src/: +$ADDED -$REMOVED (max +/- $MAX_LINE_CHANGE_COUNT_SRC)"
+          if [ "$ADDED" -gt $MAX_LINE_CHANGE_COUNT_SRC ] || [ "$REMOVED" -gt $MAX_LINE_CHANGE_COUNT_SRC ]; then
+            echo
+            echo "This PR is too large to review"
+            echo "Please split it into smaller PRs"
+            echo "=> See CONTRIBUTING.md for more info"
+            echo
+            exit 1
+          fi
