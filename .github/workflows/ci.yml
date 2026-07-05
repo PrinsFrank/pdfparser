@@ -84,6 +84,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: write
     env:
       BASE: ${{ github.event.pull_request.base.sha }}
       HEAD: ${{ github.event.pull_request.head.sha }}
@@ -96,14 +97,30 @@ jobs:
           fetch-depth: 0
 
       - name: Check nr of lines changed
+        id: size_check
         run: |
           read ADDED REMOVED < <(git diff "$BASE" "$HEAD" --numstat -- src/ | awk '{added+=$1; removed+=$2} END {print added+0, removed+0}')
           echo "Lines changed in src/: +$ADDED -$REMOVED (max +/- $MAX_LINE_CHANGE_COUNT_SRC)"
           if [ "$ADDED" -gt $MAX_LINE_CHANGE_COUNT_SRC ] || [ "$REMOVED" -gt $MAX_LINE_CHANGE_COUNT_SRC ]; then
-            echo
-            echo "This PR is too large to review"
-            echo "Please split it into smaller PRs"
-            echo "=> See CONTRIBUTING.md for more info"
-            echo
+            echo "too_large=true" >> "$GITHUB_OUTPUT"
             exit 1
           fi
+
+      - name: Comment on PR
+        if: failure() && steps.size_check.outputs.too_large == 'true'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const body = [
+              "This PR is too large to review.",
+              "",
+              "Please split it into smaller PRs.",
+              "See `CONTRIBUTING.md` for more info."
+            ].join("\n")
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            })
