@@ -35,3 +35,9 @@ There are some acceptable reasons to add comments:
 - Something is done in a specific way that is not intuitive. In this case, the considerations should be put in the comments.
 - A unit of code can be referenced by multiple names. A comment can clarify the alternative name. 
     - For example: a parameter for `characterSpace` is named `Tc`. To clarify the name, this package uses `characterSpace` internally. A comment clarifying that this references `Tc` in the specification makes sense.
+
+## Pull request size Guidelines
+
+Pull requests should be **reviewable in under an hour**. This means:
+- Less than 200 lines of actual code changes (excluding tests)
+- Single logical change. Either one new feature or one bugfix per PR
