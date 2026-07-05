@@ -84,6 +84,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      # Required to post a PR comment
       pull-requests: write
     env:
       BASE: ${{ github.event.pull_request.base.sha }}
