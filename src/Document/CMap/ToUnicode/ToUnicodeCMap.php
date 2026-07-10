@@ -5,9 +5,12 @@ namespace PrinsFrank\PdfParser\Document\CMap\ToUnicode;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
-readonly class ToUnicodeCMap {
+class ToUnicodeCMap {
     /** @var list<BFRange|BFChar> */
-    private array $bfCharRangeInfo;
+    private readonly array $bfCharRangeInfo;
+
+    /** @var array<int, string|null> */
+    private array $charCache = [];
 
     /**
      * @no-named-arguments
@@ -17,8 +20,8 @@ readonly class ToUnicodeCMap {
      * @throws InvalidArgumentException
      */
     public function __construct(
-        public array   $codeSpaceRanges,
-        public int     $byteSize,
+        public readonly array   $codeSpaceRanges,
+        public readonly int     $byteSize,
         BFRange|BFChar ...$bfCharRangeInfo,
     ) {
         $this->bfCharRangeInfo = $bfCharRangeInfo;
@@ -41,6 +44,10 @@ readonly class ToUnicodeCMap {
 
     /** @throws PdfParserException */
     protected function charToUnicode(int $characterCode): ?string {
+        if (array_key_exists($characterCode, $this->charCache)) {
+            return $this->charCache[$characterCode];
+        }
+
         $char = null;
         foreach ($this->bfCharRangeInfo as $bfCharRangeInfo) {
             if (!$bfCharRangeInfo->containsCharacterCode($characterCode)) {
@@ -48,18 +55,18 @@ readonly class ToUnicodeCMap {
             }
 
             if (($char = $bfCharRangeInfo->toUnicode($characterCode)) !== "\0") { // Some characters map to NULL in one BFRange and to an actual character in another
-                return $char;
+                return $this->charCache[$characterCode] = $char;
             }
         }
 
         if ($char === "\0") {
-            return $char; // Only return NULL when it is the only character this is mapped to
+            return $this->charCache[$characterCode] = $char; // Only return NULL when it is the only character this is mapped to
         }
 
         if ($characterCode === 0) {
-            return '';
+            return $this->charCache[$characterCode] = '';
         }
 
-        return null;
+        return $this->charCache[$characterCode] = null;
     }
 }
