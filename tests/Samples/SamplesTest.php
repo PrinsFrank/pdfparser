@@ -75,16 +75,18 @@ class SamplesTest extends TestCase {
             throw new RuntimeException(sprintf('Unable to load actual image "%s"', $imageName));
         }
 
-        static::assertSame(imagesx($expectedImage), imagesx($actualImage), $imageName);
-        static::assertSame(imagesy($expectedImage), imagesy($actualImage), $imageName);
-        for ($x = 0; $x < imagesx($expectedImage); $x++) {
-            for ($y = 0; $y < imagesy($expectedImage); $y++) {
-                static::assertSame(
-                    imagecolorat($expectedImage, $x, $y),
-                    imagecolorat($actualImage, $x, $y),
-                    $imageName,
-                );
-            }
-        }
+        ob_start();
+        imagepng($expectedImage, null, 9);
+        $normalizedExpected = ob_get_clean();
+
+        ob_start();
+        imagepng($actualImage, null, 9);
+        $normalizedActual = ob_get_clean();
+
+        static::assertSame(
+            $normalizedExpected,
+            $normalizedActual,
+            $imageName,
+        );
     }
 }
