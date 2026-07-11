@@ -1,5 +1,21 @@
 # Contributing
 
+## Starting the PHP docker container
+
+For easier development, a bundled dockerfile can be started with:
+```bash
+docker compose up -d
+```
+
+It contains php-spx for easier profiling of memory/cpu usage, which can be enabled by prefixing any command in the PHP container with SPX_ENABLED=1
+
+## Profiling specific PDFs
+
+To profile how a specific PDF is being parsed, you can run the parser with SPX_ENABLED=1 for a specific sample from the Samples test suite. For example, to debug the file in `tests/Samples/files/gdocs-image-simple/file.pdf`, you can run the following command:
+```bash
+docker compose exec -e SPX_ENABLED=1 php vendor/bin/phpunit tests/Samples/ --filter "gdocs-image-simple"
+```
+
 ## Acquiring the specification document
 
 Because the specification document is not freely available, it cannot be included in this repository directly. The specification document is downloadable on two different places:
@@ -12,7 +28,7 @@ Because the specification document is not freely available, it cannot be include
 In the `tests/Samples/files` directory, create a new directory with a descriptive title. If you don't know what title to use, you can use the issue number like this: `issue-1234`. Place the sample file in this directory, and make sure that the file is named `file.pdf`. To create the `content.yml` file with the expected output, run the following command:
 
 ```bash
-composer update-content
+docker compose exec php composer update-content
 ```
 
 ## Debugging file encryption keys
