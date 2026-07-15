@@ -13,13 +13,13 @@ It contains php-spx for easier profiling of memory/cpu usage, which can be enabl
 
 To profile how a specific PDF is being parsed, you can run the parser with SPX_ENABLED=1 for a specific sample from the Samples test suite. For example, to debug the file in `tests/Samples/files/gdocs-image-simple/file.pdf`, you can run the following command:
 ```bash
-docker compose exec -e SPX_ENABLED=1 php vendor/bin/phpunit tests/Samples/ --filter "gdocs-image-simple"
+docker compose exec -e SPX_ENABLED=1 php php tests/Samples/profile.php gdocs-image-simple getText
 ```
 
 If you want a more detailed profile, you can run the following command:
 
 ```bash
-docker compose exec -e SPX_ENABLED=1 -e SPX_REPORT=full php vendor/bin/phpunit tests/Samples/ --filter "gdocs-image-simple"
+docker compose exec -e SPX_ENABLED=1 -e SPX_REPORT=full php php tests/Samples/profile.php gdocs-image-simple getText
 ```
 
 you can then head to http://localhost, scroll down to the last run and click on it to view the full profile.
