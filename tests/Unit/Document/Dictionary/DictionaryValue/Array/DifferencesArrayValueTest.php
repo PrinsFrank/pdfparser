@@ -36,7 +36,7 @@ class DifferencesArrayValueTest extends TestCase {
 
     public function testGetGlyph(): void {
         static::assertSame(
-            AglyphList::grave,
+            "\u{0060}",
             (new DifferencesArrayValue([new DifferenceRange(36, [AGlyphList::grave])]))
                 ->getGlyph(36),
         );
