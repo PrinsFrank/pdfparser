@@ -15,7 +15,7 @@ RUN apk add --no-cache --virtual .build-deps \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd \
     && pie install noisebynorthwest/php-spx \
-    && mkdir -p /opt/spx && echo '<?php declare(strict_types=1);' > /opt/spx/spx.php \
+    && mkdir -p /opt/spx && echo "<?php declare(strict_types=1); if (!isset(\$_GET['SPX_KEY']) && !isset(\$_GET['SPX_UI_URI']) && !isset(\$_GET['SPX_ENABLED'])) {header('Location: /?SPX_KEY=dev&SPX_UI_URI=/'); exit;}" > /opt/spx/spx.php \
     && apk del .build-deps \
     && rm -rf /tmp/* /var/tmp/* /var/cache/apk/* /usr/bin/pie
 

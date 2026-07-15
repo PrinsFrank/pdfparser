@@ -16,6 +16,14 @@ To profile how a specific PDF is being parsed, you can run the parser with SPX_E
 docker compose exec -e SPX_ENABLED=1 php vendor/bin/phpunit tests/Samples/ --filter "gdocs-image-simple"
 ```
 
+If you want a more detailed profile, you can run the following command:
+
+```bash
+docker compose exec -e SPX_ENABLED=1 -e SPX_REPORT=full php vendor/bin/phpunit tests/Samples/ --filter "gdocs-image-simple"
+```
+
+you can then head to http://localhost, scroll down to the last run and click on it to view the full profile.
+
 ## Acquiring the specification document
 
 Because the specification document is not freely available, it cannot be included in this repository directly. The specification document is downloadable on two different places:

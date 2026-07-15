@@ -5,5 +5,8 @@ services:
     container_name: php
     volumes:
       - ./:/app
+      - ./docker/php.ini:/usr/local/etc/php/conf.d/99-custom.ini
     working_dir: /app
-    command: sleep infinity
+    command: php -S 0.0.0.0:80 -t /app /opt/spx/spx.php
+    ports:
+      - "80:80"
