@@ -17,7 +17,7 @@ readonly class TextSegment {
     public function getText(?DifferencesArrayValue $differences, ?EncodingNameValue $encoding, ?ToUnicodeCMap $toUnicodeCMap): string {
         $binaryString = $this->textString->getBinaryString();
         if (strlen($binaryString) === 1 && ($glyph = $differences?->getGlyph(ord($binaryString))) !== null) {
-            $text = $glyph->getChar();
+            $text = $glyph;
         } elseif (in_array($encoding, [EncodingNameValue::MacExpertEncoding, EncodingNameValue::WinAnsiEncoding], true)
             && $differences === null) {
             $text = $encoding->decodeString($binaryString);

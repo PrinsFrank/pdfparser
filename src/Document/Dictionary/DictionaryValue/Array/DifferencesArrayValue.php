@@ -9,6 +9,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 
 class DifferencesArrayValue implements DictionaryValue {
+    /** @var array<int, string|null> */
+    private array $glyphCache = [];
+
     /** @param list<DifferenceRange> $differenceRanges */
     public function __construct(
         private readonly array $differenceRanges,
@@ -44,13 +47,17 @@ class DifferencesArrayValue implements DictionaryValue {
         return new self($differenceRanges);
     }
 
-    public function getGlyph(int $int): ?AGlyphList {
+    public function getGlyph(int $codePoint): ?string {
+        if (array_key_exists($codePoint, $this->glyphCache)) {
+            return $this->glyphCache[$codePoint];
+        }
+
         foreach ($this->differenceRanges as $differenceRange) {
-            if ($differenceRange->contains($int)) {
-                return $differenceRange->getGlyph($int);
+            if ($differenceRange->contains($codePoint)) {
+                return $this->glyphCache[$codePoint] = $differenceRange->getGlyph($codePoint)?->getChar();
             }
         }
 
-        return null;
+        return $this->glyphCache[$codePoint] = null;
     }
 }
