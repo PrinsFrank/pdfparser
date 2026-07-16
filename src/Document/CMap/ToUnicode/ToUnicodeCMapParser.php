@@ -69,13 +69,18 @@ class ToUnicodeCMapParser {
             }
 
             foreach ($matchesBFRange as $matchBFRange) {
+                $targetString = trim($matchBFRange['targetString']);
+                if (str_starts_with($targetString, '[') && str_ends_with($targetString, ']')) {
+                    preg_match_all('/<\s*([^> ]+)\s*>/', $targetString, $hexMatches);
+                    $targetValues = $hexMatches[1];
+                } else {
+                    $targetValues = [trim($targetString, '<> ')];
+                }
+
                 $bfCharRangeInfo[$beginBFRangePos][] = new BFRange(
                     (int) hexdec(trim($matchBFRange['start'])),
                     (int) hexdec(trim($matchBFRange['end'])),
-                    array_map(
-                        fn(string $value) => trim($value),
-                        explode('><', rtrim(ltrim(str_replace(' ', '', $matchBFRange['targetString']), '[<'), '>]')),
-                    ),
+                    $targetValues,
                 );
             }
             $lastPos = $endBFRangePos;
