@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 require_once dirname(__DIR__, 2) . '/.al-custom.php';
+require_once dirname(__DIR__, 2) . '/vendor/prinsfrank/glyph-lists/src/AGlyphList.php';
 
 $sampleName = $argv[1] ?? throw new InvalidArgumentException('Missing sample name');
 if (preg_match('/^[a-zA-Z0-9_-]+$/', $sampleName) !== 1) {
