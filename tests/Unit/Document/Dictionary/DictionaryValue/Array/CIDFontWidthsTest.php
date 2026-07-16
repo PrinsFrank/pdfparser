@@ -60,6 +60,21 @@ class CIDFontWidthsTest extends TestCase {
         );
     }
 
+    public function testFromValueWithCompactBrackets(): void {
+        static::assertEquals(
+            new CIDFontWidths(
+                new ConsecutiveCIDWidth(3, [278]),
+                new ConsecutiveCIDWidth(18, [278]),
+                new ConsecutiveCIDWidth(46, [722]),
+                new ConsecutiveCIDWidth(72, [556]),
+                new ConsecutiveCIDWidth(80, [889]),
+                new RangeCIDWidth(81, 82, 611),
+                new ConsecutiveCIDWidth(88, [611]),
+            ),
+            CIDFontWidths::fromValue('[3[278] 18[278] 46[722] 72[556] 80[889] 81 82 611 88[611]]'),
+        );
+    }
+
     public function testFromValueAcceptsEmptyArray(): void {
         static::assertEquals(
             new CIDFontWidths(),
