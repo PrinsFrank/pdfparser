@@ -62,6 +62,31 @@ class ArrayValueTest extends TestCase {
                 EOD,
             ),
         );
+        static::assertEquals(
+            new ArrayValue([1, new ArrayValue([2, 3]), 4]),
+            ArrayValue::fromValue(
+                <<<EOD
+                [ 1 [ 2 3 ] 4 ]
+                EOD,
+            ),
+        );
+        static::assertEquals(
+            new ArrayValue([1, new ArrayValue([2, 3]), 4]),
+            ArrayValue::fromValue(
+                <<<EOD
+                [1[2 3]4]
+                EOD,
+            ),
+        );
+        static::assertEquals(
+            new ArrayValue([1, 2, new ArrayValue([3, new ArrayValue([9, 0]), 4]), new ArrayValue([5, 6]), 7, 8]),
+            ArrayValue::fromValue(
+                <<<EOD
+                [1 2 [ 3 [9 0 ] 4
+                ] [ 5 6 ] 7 8]
+                EOD,
+            ),
+        );
     }
 
     public function testToString(): void {
