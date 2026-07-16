@@ -74,4 +74,30 @@ class ToUnicodeCMapParserTest extends TestCase {
             ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes()),
         );
     }
+
+    public function testParseMultilineBFRange(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            begincmap
+            1 begincodespacerange
+            < 0000 > < FFFF >
+            endcodespacerange
+            1 beginbfrange
+            <20><FB>[
+            <0020><0021><0022><0023><0024><0025><0026><2019>]
+            endbfrange
+            endcmap
+            EOD,
+        );
+        static::assertEquals(
+            new ToUnicodeCMap(
+                [
+                    new CodeSpaceRange(0x0000, 0xFFFF),
+                ],
+                2,
+                new BFRange(32, 251, ['0020', '0021', '0022', '0023', '0024', '0025', '0026', '2019']),
+            ),
+            ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes()),
+        );
+    }
 }
