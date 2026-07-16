@@ -6,7 +6,6 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\Item\ConsecutiveCIDWidth;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\Item\RangeCIDWidth;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
-use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /** @see 9.7.4.3 Glyph metrics in CIDFonts */
 class CIDFontWidths implements DictionaryValue {
@@ -37,37 +36,33 @@ class CIDFontWidths implements DictionaryValue {
             return new self();
         }
 
-        if (preg_match_all('/(?<startingCID>[0-9]+)\s*(?<CIDS>[0-9]+\s*[0-9.]+|\[[0-9. ]+\])/', $valueString, $matches, PREG_SET_ORDER) <= 0) {
+        if (($arrayValue = ArrayValue::fromValue($valueString)) instanceof ArrayValue === false) {
             return null;
         }
 
         $widths = [];
-        foreach ($matches as $match) {
-            if ((string) ($startingCID = (int) $match['startingCID']) !== $match['startingCID']) {
+        $nrOfTopLevelItems = count($arrayValue->value);
+        for ($i = 0; $i < $nrOfTopLevelItems; $i++) {
+            $item = $arrayValue->value[$i];
+            if (is_int($item) === false) {
                 return null;
             }
 
-            if (str_starts_with($match['CIDS'], '[') && str_ends_with($match['CIDS'], ']')) {
-                $cidWidths = preg_split('/\s+/', trim(rtrim(ltrim($match['CIDS'], '['), ']')), -1, PREG_SPLIT_NO_EMPTY);
-                if ($cidWidths === false) {
-                    throw new RuntimeException('Something went wrong while splitting');
+            if (($nextItem = $arrayValue->value[$i + 1] ?? null) instanceof ArrayValue) {
+                foreach ($nextItem->value as $itemValue) {
+                    if (is_string($itemValue) === false && is_int($itemValue) === false) {
+                        return null;
+                    }
                 }
 
-                $widths[] = new ConsecutiveCIDWidth($startingCID, array_map('floatval', $cidWidths));
-
-                continue;
-            }
-
-            $arguments = explode(' ', $match['CIDS']);
-            if (count($arguments) !== 2) {
+                $widths[] = new ConsecutiveCIDWidth($item, array_map(fn(string|int $value) => is_string($value) ? (float) $value : $value, $nextItem->value));
+                $i++;
+            } elseif (is_int($nextItem) && (is_string($secondNextItem = $arrayValue->value[$i + 2] ?? null) || is_int($secondNextItem))) {
+                $widths[] = new RangeCIDWidth($item, $nextItem, (float) $secondNextItem);
+                $i += 2;
+            } else {
                 return null;
             }
-
-            if ((string) ($endCID = (int) $arguments[0]) !== $arguments[0] || (string) ($width = (float) $arguments[1]) !== $arguments[1]) {
-                return null;
-            }
-
-            $widths[] = new RangeCIDWidth($startingCID, $endCID, $width);
         }
 
         return new self(... $widths);

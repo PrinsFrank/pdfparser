@@ -26,9 +26,10 @@ readonly class ArrayValue implements DictionaryValue {
             return null;
         }
 
+        $sanitizedValueString = substr($sanitizedValueString, 1, -1);
         $sanitizedValueString = preg_replace('/(<[^>]*>)(?=<[^>]*>)/', '$1 $2', $sanitizedValueString)
             ?? throw new RuntimeException('An error occurred while sanitizing array value');
-        $sanitizedValueString = str_replace(['/', "\n"], [' /', ' '], rtrim(ltrim($sanitizedValueString, '[ '), ' ]'));
+        $sanitizedValueString = str_replace(['/', "\n"], [' /', ' '], $sanitizedValueString);
         $sanitizedValueString = preg_replace('/\s+/', ' ', $sanitizedValueString)
             ?? throw new RuntimeException('An error occurred while removing duplicate spaces from array value');
 

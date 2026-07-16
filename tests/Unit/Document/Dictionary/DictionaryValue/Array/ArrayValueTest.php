@@ -22,6 +22,10 @@ class ArrayValueTest extends TestCase {
             ArrayValue::fromValue('[42 43]'),
         );
         static::assertEquals(
+            new ArrayValue([new ArrayValue([42, 43])]),
+            ArrayValue::fromValue('[[42 43]]'),
+        );
+        static::assertEquals(
             new ArrayValue([42, 43]),
             ArrayValue::fromValue(' [42 43] '),
         );
