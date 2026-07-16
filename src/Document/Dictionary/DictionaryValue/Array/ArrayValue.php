@@ -31,7 +31,54 @@ readonly class ArrayValue implements DictionaryValue {
         $sanitizedValueString = str_replace(['/', "\n"], [' /', ' '], rtrim(ltrim($sanitizedValueString, '[ '), ' ]'));
         $sanitizedValueString = preg_replace('/\s+/', ' ', $sanitizedValueString)
             ?? throw new RuntimeException('An error occurred while removing duplicate spaces from array value');
-        $values = explode(' ', $sanitizedValueString);
+
+        $values = [];
+        $buffer = null;
+        $strlen = strlen($sanitizedValueString);
+        for ($i = 0; $i < $strlen; $i++) {
+            $char = $sanitizedValueString[$i];
+            if ($char === '[') {
+                if ($buffer !== null) {
+                    $values[] = $buffer;
+                    $buffer = null;
+                }
+
+                $nestingLevel = 0;
+                for ($j = $i + 1; $j < $strlen; $j++) {
+                    $char = $sanitizedValueString[$j];
+                    if ($char === '[') {
+                        $nestingLevel++;
+                        continue;
+                    }
+
+                    if ($char === ']') {
+                        if ($nestingLevel !== 0) {
+                            $nestingLevel--;
+                            continue;
+                        }
+
+                        $values[] = substr($sanitizedValueString, $i, $j - $i + 1);
+                        $i = $j;
+                        continue 2;
+                    }
+                }
+            }
+
+            if ($char === ' ') {
+                if ($buffer !== null) {
+                    $values[] = $buffer;
+                    $buffer = null;
+                }
+
+                continue;
+            }
+
+            $buffer .= $char;
+        }
+        if ($buffer !== null) {
+            $values[] = $buffer;
+        }
+
         if (count($values) % 3 === 0
             && array_key_exists(2, $values)
             && $values[2] === 'R'
