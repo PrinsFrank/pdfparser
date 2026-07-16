@@ -32,8 +32,11 @@ readonly class ArrayValue implements DictionaryValue {
         $sanitizedValueString = preg_replace('/\s+/', ' ', $sanitizedValueString)
             ?? throw new RuntimeException('An error occurred while removing duplicate spaces from array value');
         $values = explode(' ', $sanitizedValueString);
-        if (count($values) % 3 === 0 && array_key_exists(2, $values) && $values[2] === 'R') {
-            return ReferenceValueArray::fromValue($valueString);
+        if (count($values) % 3 === 0
+            && array_key_exists(2, $values)
+            && $values[2] === 'R'
+            && ($referenceValueArray = ReferenceValueArray::fromValue($valueString)) !== null) {
+            return $referenceValueArray;
         }
 
         $array = [];

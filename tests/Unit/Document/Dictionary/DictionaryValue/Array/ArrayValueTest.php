@@ -54,6 +54,14 @@ class ArrayValueTest extends TestCase {
             new ReferenceValueArray(new ReferenceValue(42, 0), new ReferenceValue(43, 0)),
             ArrayValue::fromValue('[42 0 R 43 0 R]'),
         );
+        static::assertEquals(
+            new ArrayValue(['459', '0', 'R', '/FitH', '10000']),
+            ArrayValue::fromValue(
+                <<<EOD
+                [ 459 0 R /FitH 10000]
+                EOD,
+            ),
+        );
     }
 
     public function testToString(): void {
