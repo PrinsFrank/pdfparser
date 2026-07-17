@@ -40,7 +40,7 @@ class ContentStreamParser {
             for ($index = 0; $index < $contentStreamSize; $index++) {
                 $char = $contentStream->read($index, 1);
                 if ($inComment === true) {
-                    if (in_array($char, ["\r", "\n"], true)) {
+                    if ($char === "\r" || $char === "\n") {
                         $endCommentOffset = $index + 1;
                         $inComment = false;
                     }
@@ -52,7 +52,7 @@ class ContentStreamParser {
                         $inStringLiteral = false;
                     }
                 } elseif ($inResourceName === true) {
-                    if (in_array($char, [' ', '<', '(', '/', "\r", "\n"], true) && $previousChar !== '\\') {
+                    if ($previousChar !== '\\' && ($char === ' ' || $char === '<' || $char === '(' || $char === '/' || $char === "\r" || $char === "\n")) {
                         $inResourceName = false;
                     }
                 } elseif ($inDictionary === true) {
@@ -98,9 +98,10 @@ class ContentStreamParser {
                         $operands .= $previousContentStream->read($startPreviousOperandIndex, $previousContentStream->getSizeInBytes() - $startPreviousOperandIndex);
                         $startPreviousOperandIndex = null;
                     }
-                    $operandLength = $index + 1 - $startCurrentOperandIndex - strlen($operator->value);
+                    $operatorLength = strlen($operator->value);
+                    $operandLength = $index + 1 - $startCurrentOperandIndex - $operatorLength;
                     if ($operandLength > 0) {
-                        $operandEndOffset = $index + 1 - strlen($operator->value);
+                        $operandEndOffset = $index + 1 - $operatorLength;
                         if ($endCommentOffset !== null
                             && $endCommentOffset < $operandEndOffset
                             && $startOfCommentOffset !== null
@@ -149,7 +150,7 @@ class ContentStreamParser {
             default => null,
         };
         if ($threeLetterMatch !== null) {
-            return in_array($thirdToLastChar, ['\\', '/'], true) ? null : $threeLetterMatch;
+            return ($thirdToLastChar === '\\' || $thirdToLastChar === '/') ? null : $threeLetterMatch;
         }
 
         $twoLetterMatch = match ($previousChar . $currentChar) {
@@ -195,7 +196,7 @@ class ContentStreamParser {
             default => null,
         };
         if ($twoLetterMatch !== null) {
-            return in_array($secondToLastChar, ['\\', '/'], true) ? null : $twoLetterMatch;
+            return ($secondToLastChar === '\\' || $secondToLastChar === '/') ? null : $twoLetterMatch;
         }
 
         $oneLetterMatch = match ($currentChar) {
@@ -230,7 +231,7 @@ class ContentStreamParser {
         };
 
         if ($oneLetterMatch !== null) {
-            return in_array($previousChar, ['\\', '/'], true) ? null : $oneLetterMatch;
+            return ($previousChar === '\\' || $previousChar === '/') ? null : $oneLetterMatch;
         }
 
         return null;
