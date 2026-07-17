@@ -14,6 +14,16 @@ readonly class TransformationMatrix {
 
     /** Please note that a concatenated transformation matrix of A B !== B A */
     public function multiplyWith(self $other): self {
+        if ($other->scaleX === 1.0
+            && $other->scaleY === 1.0
+            && $other->shearX === 0.0
+            && $other->shearY === 0.0
+            && $other->offsetX === 0.0
+            && $other->offsetY === 0.0
+        ) {
+            return $this; // When multiplying with the identity matrix, the current matrix is unchanged
+        }
+
         return new self(
             $this->scaleX * $other->scaleX + $this->shearX * $other->shearY,
             $this->scaleX * $other->shearX + $this->shearX * $other->scaleY,
