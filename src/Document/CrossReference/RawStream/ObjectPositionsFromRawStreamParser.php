@@ -22,16 +22,7 @@ class ObjectPositionsFromRawStreamParser {
                     $inObjNr = $inObjGenerationNumber = $pendingObjMarker = false;
                     $startObjNrOffset = $objNrBuffer = $objMarkerBuffer = null;
                 }
-            } elseif ($char === '0'
-                || $char === '1'
-                || $char === '2'
-                || $char === '3'
-                || $char === '4'
-                || $char === '5'
-                || $char === '6'
-                || $char === '7'
-                || $char === '8'
-                || $char === '9') {
+            } elseif (ctype_digit($char) === true) {
                 if ($pendingObjMarker === true) {
                     $pendingObjMarker = false;
                     $objNrBuffer = null;
