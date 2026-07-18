@@ -2,54 +2,30 @@
 
 namespace PrinsFrank\PdfParser\Document\CrossReference\RawStream;
 
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 class ObjectPositionsFromRawStreamParser {
+    private const CHUNK_SIZE = 1024 * 1024;
+    private const CHUNK_OVERLAP = 20;
+
     /** @return array<int, int> */
     public static function parse(Stream $stream): array {
-        $inObjNr = $inObjGenerationNumber = $pendingObjMarker = false;
-        $startObjNrOffset = $objNrBuffer = $objMarkerBuffer = null;
+        $nrOfChunks = ceil($stream->getSizeInBytes() / self::CHUNK_SIZE);
+
         $discoveredObjects = [];
-        foreach ($stream->chars(0, $stream->getSizeInBytes()) as $byteOffset => $char) {
-            if ($char === ' ') {
-                if ($inObjNr === true) {
-                    $inObjNr = false;
-                    $inObjGenerationNumber = true;
-                } elseif ($inObjGenerationNumber === true) {
-                    $inObjGenerationNumber = false;
-                    $pendingObjMarker = true;
-                } else {
-                    $inObjNr = $inObjGenerationNumber = $pendingObjMarker = false;
-                    $startObjNrOffset = $objNrBuffer = $objMarkerBuffer = null;
-                }
-            } elseif (ctype_digit($char) === true) {
-                if ($pendingObjMarker === true) {
-                    $pendingObjMarker = false;
-                    $objNrBuffer = null;
-                } elseif ($inObjGenerationNumber === true) {
-                } elseif ($inObjNr === false) {
-                    $inObjNr = true;
-                    $startObjNrOffset = $byteOffset;
-                    $objNrBuffer = $char;
-                } elseif ($inObjNr === true) {
-                    $objNrBuffer .= $char;
-                }
-            } elseif ($pendingObjMarker === true) {
-                if ($objMarkerBuffer === null && $char === 'o') { // @phpstan-ignore identical.alwaysTrue
-                    $objMarkerBuffer = $char;
-                } elseif ($objMarkerBuffer === 'o' && $char === 'b') { // @phpstan-ignore identical.alwaysFalse, booleanAnd.alwaysFalse
-                    $objMarkerBuffer .= $char;
-                } elseif ($objMarkerBuffer === 'ob' && $char === 'j') { // @phpstan-ignore identical.alwaysFalse, booleanAnd.alwaysFalse
-                    $discoveredObjects[(int) $objNrBuffer] = $startObjNrOffset;
-                    $inObjNr = $inObjGenerationNumber = $pendingObjMarker = false;
-                    $startObjNrOffset = $objNrBuffer = $objMarkerBuffer = null;
-                } else {
-                    $inObjNr = $inObjGenerationNumber = $pendingObjMarker = false;
-                    $startObjNrOffset = $objNrBuffer = $objMarkerBuffer = null;
-                }
-            } else {
-                $inObjNr = $inObjGenerationNumber = $pendingObjMarker = false;
-                $startObjNrOffset = $objNrBuffer = $objMarkerBuffer = null;
+        for ($chunkIndex = 0; $chunkIndex < $nrOfChunks; $chunkIndex++) {
+            $chunkContent = $stream->read(
+                $chunkStart = max(0, ($chunkIndex * self::CHUNK_SIZE) - self::CHUNK_OVERLAP),
+                self::CHUNK_OVERLAP + self::CHUNK_SIZE,
+            );
+
+            if (preg_match_all('/(\d+)\s+\d+\s+obj/', $chunkContent, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER) === false) {
+                throw new ParseFailureException();
+            }
+
+            foreach ($matches as $match) {
+                $discoveredObjects[(int) $match[1][0]] = $match[1][1] + $chunkStart;
             }
         }
 
