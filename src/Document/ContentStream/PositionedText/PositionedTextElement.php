@@ -63,7 +63,7 @@ readonly class PositionedTextElement {
     }
 
     public function getHeight(): float {
-        return ($this->textState->fontSize ?? 12)
+        return ($this->textState->getFontSize())
             * abs($this->absoluteMatrix->scaleY)
             * ($this->textState->scale / 100);
     }
@@ -79,7 +79,7 @@ readonly class PositionedTextElement {
     public function getAdvanceWidth(Document $document, Page $page): float {
         $font = $this->getFont($document, $page);
         $scaleX = $this->absoluteMatrix->scaleX;
-        $fontSize = $this->textState->fontSize ?? 10;
+        $fontSize = $this->textState->getFontSize();
 
         $glyphAdvance = $font->getWidthForChars($this->getCodePoints(), $this->textState, $this->absoluteMatrix); // Σ (w0·Tfs + Tc + Tw·[code 32]) · scaleX
         $offsetAdvance = -($this->getTotalOffset() / 1000) * $fontSize * $scaleX;                                 // − Σ(Tj)/1000 · Tfs · scaleX
