@@ -107,4 +107,8 @@ readonly class TextState {
             $rise,
         );
     }
+
+    public function getFontSize(): float {
+        return $this->fontSize ?? 10.0;
+    }
 }

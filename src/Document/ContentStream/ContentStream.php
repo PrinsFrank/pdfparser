@@ -102,7 +102,7 @@ readonly class ContentStream {
                         - $previousTextElementOnLine->absoluteMatrix->offsetX
                         - $previousTextElementOnLine->getAdvanceWidth($document, $page);
 
-                    $wordBreakThreshold = ($previousTextElementOnLine->textState->fontSize ?? 10)
+                    $wordBreakThreshold = $previousTextElementOnLine->textState->getFontSize()
                         * $previousTextElementOnLine->absoluteMatrix->scaleX
                         * ($previousTextElementOnLine->textState->scale / 100)
                         * PositionedTextElement::WORD_BREAK_THRESHOLD_EM;
