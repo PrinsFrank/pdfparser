@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=../../schema.json
+version: '1.7'
+userPassword: null
+ownerPassword: null
+fileEncryptionKey: null
+title: null
+producer: null
+author: null
+creator: null
+creationDate: null
+modificationDate: null
+pages:
+  -
+    content: ROT0
+  -
+    content: ROT30
+  -
+    content: ROT60
+  -
+    content: ROT90
+  -
+    content: ROT120
+  -
+    content: ROT150
+  -
+    content: ROT180
+  -
+    content: ROT210
+  -
+    content: ROT240
+  -
+    content: ROT270
+  -
+    content: ROT300
+  -
+    content: ROT330

@@ -63,28 +63,34 @@ readonly class PositionedTextElement {
     }
 
     public function getHeight(): float {
-        return ($this->textState->fontSize ?? 12)
-            * abs($this->absoluteMatrix->scaleY)
+        return $this->textState->getFontSize()
+            * hypot($this->absoluteMatrix->shearY, $this->absoluteMatrix->scaleY) // Length of the glyph's vertical axis: its extent perpendicular to the baseline
             * ($this->textState->scale / 100);
     }
 
     /**
-     * The horizontal distance, in device space, that showing this element advances the text cursor, per the
-     * displacement formula in the PDF spec §9.4.4:
+     * The distance, in device space, that showing this element advances the text cursor, per the displacement
+     * formula in the PDF spec §9.4.4:
      *
      *   ((w0 − Tj/1000)·Tfs + Tc + Tw·[single-byte code 32]) · Th , transformed by the text rendering matrix.
      *
-     * Reconstructed here because Tj/TJ do not advance the text matrix in this parser.
+     * Reconstructed here because Tj/TJ do not advance the text matrix in this parser. The text-space advance is
+     * horizontal; transformed by the matrix it becomes a page-space vector along the baseline. This returns that
+     * vector's signed projection onto the unit vector $direction -- a dot product, so it keeps its sign. The
+     * default direction is page X (Vector(1, 0)), giving the advance · scaleX exactly as before; pass a baseline
+     * unit vector to measure the advance along a rotated baseline.
      */
-    public function getAdvanceWidth(Document $document, Page $page): float {
+    public function getAdvanceWidth(Document $document, Page $page, Vector $direction = new Vector(1.0, 0.0)): float {
         $font = $this->getFont($document, $page);
-        $scaleX = $this->absoluteMatrix->scaleX;
-        $fontSize = $this->textState->fontSize ?? 10;
+        $fontSize = $this->textState->getFontSize();
 
-        $glyphAdvance = $font->getWidthForChars($this->getCodePoints(), $this->textState, $this->absoluteMatrix); // Σ (w0·Tfs + Tc + Tw·[code 32]) · scaleX
-        $offsetAdvance = -($this->getTotalOffset() / 1000) * $fontSize * $scaleX;                                 // − Σ(Tj)/1000 · Tfs · scaleX
+        $glyphAdvance = $font->getWidthForChars($this->getCodePoints(), $this->textState); // Σ (w0·Tfs + Tc + Tw·[code 32])
+        $offsetAdvance = -($this->getTotalOffset() / 1000) * $fontSize;                     // − Σ(Tj)/1000 · Tfs
 
-        return ($glyphAdvance + $offsetAdvance) * ($this->textState->scale / 100); // · Th
+        $textSpaceAdvance = ($glyphAdvance + $offsetAdvance) * ($this->textState->scale / 100); // · Th
+
+        // Project the page-space advance vector (the text-space advance along the baseline) onto $direction.
+        return $textSpaceAdvance * $this->absoluteMatrix->baselineVector()->dot($direction);
     }
 
     /** The sum of the TJ adjustment numbers in this element's segments, in thousandths of an em. */
