@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\Dictionary\DictionaryValue\Te
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 #[CoversClass(TextStringValue::class)]
 class TextStringValueTest extends TestCase {
@@ -128,6 +129,33 @@ class TextStringValueTest extends TestCase {
             '•€',
             (new TextStringValue('<80A0>'))->getText(),
         );
+    }
+
+    /** @see 7.3.4.3 — a final missing digit in a hexadecimal string is assumed to be 0 */
+    public function testGetBinaryStringPadsOddLengthHexString(): void {
+        static::assertSame(
+            "\x90\x1F\xA0",
+            (new TextStringValue('<901FA>'))->getBinaryString(),
+        );
+    }
+
+    /** @see 7.3.4.3 — white-space within a hexadecimal string is ignored */
+    public function testGetBinaryStringIgnoresWhitespaceInHexString(): void {
+        static::assertSame(
+            "\x90\x1F\xA3",
+            (new TextStringValue("<90 1F\tA3>"))->getBinaryString(),
+        );
+
+        static::assertSame(
+            'He',
+            (new TextStringValue("<FE FF 00 48\n00 65>"))->getText(),
+        );
+    }
+
+    /** @see 7.3.4.3 — a hexadecimal string with non-hex content is rejected */
+    public function testGetBinaryStringRejectsInvalidHexString(): void {
+        $this->expectException(ParseFailureException::class);
+        (new TextStringValue('<90ZZ>'))->getBinaryString();
     }
 
     /** @see 7.3.5, table 4 */
