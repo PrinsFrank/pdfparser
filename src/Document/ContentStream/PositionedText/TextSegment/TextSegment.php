@@ -16,20 +16,35 @@ readonly class TextSegment {
 
     public function getText(?DifferencesArrayValue $differences, ?EncodingNameValue $encoding, ?ToUnicodeCMap $toUnicodeCMap): string {
         $binaryString = $this->textString->getBinaryString();
-        if (strlen($binaryString) === 1 && ($glyph = $differences?->getGlyph(ord($binaryString))) !== null) {
-            $text = $glyph;
-        } elseif (in_array($encoding, [EncodingNameValue::MacExpertEncoding, EncodingNameValue::WinAnsiEncoding], true)
-            && $differences === null) {
-            $text = $encoding->decodeString($binaryString);
-        } elseif ($toUnicodeCMap !== null) {
-            $text = $toUnicodeCMap->textToUnicode(bin2hex($binaryString));
-        } elseif ($encoding !== null) {
-            $text = $encoding->decodeString($binaryString);
-        } else {
-            $text = $binaryString;
+        if ($differences === null) {
+            return $this->decode($binaryString, $encoding, $toUnicodeCMap);
+        }
+
+        $text = '';
+        for ($index = 0, $length = strlen($binaryString); $index < $length; $index++) {
+            $glyph = $differences->getGlyph(ord($binaryString[$index]));
+            $text .= $glyph !== null
+                ? $glyph
+                : $this->decode($binaryString[$index], $encoding, $toUnicodeCMap);
         }
 
         return $text;
+    }
+
+    private function decode(string $binaryString, ?EncodingNameValue $encoding, ?ToUnicodeCMap $toUnicodeCMap): string {
+        if (in_array($encoding, [EncodingNameValue::MacExpertEncoding, EncodingNameValue::WinAnsiEncoding], true)) {
+            return $encoding->decodeString($binaryString);
+        }
+
+        if ($toUnicodeCMap !== null) {
+            return $toUnicodeCMap->textToUnicode(bin2hex($binaryString));
+        }
+
+        if ($encoding !== null) {
+            return $encoding->decodeString($binaryString);
+        }
+
+        return $binaryString;
     }
 
     /** @return list<int> */
