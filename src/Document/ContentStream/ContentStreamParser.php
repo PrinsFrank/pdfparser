@@ -30,7 +30,7 @@ class ContentStreamParser {
      */
     public static function parse(array $contentsObjects): ContentStream {
         $content = [];
-        $inComment = $inStringLiteral = $inResourceName = $inDictionary = false;
+        $inComment = $inStringLiteral = $inResourceName = $inDictionary = $inInlineImage = false;
         $inArrayLevel = $inStringLevel = 0;
         $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = $previousContentStream = $startPreviousOperandIndex = $startOfCommentOffset = $endCommentOffset = null;
         foreach ($contentsObjects as $contentsObject) {
@@ -47,7 +47,11 @@ class ContentStreamParser {
                     continue;
                 }
 
-                if ($inStringLiteral === true) {
+                if ($inInlineImage === true) {
+                    if ($char === 'I' && $previousChar === 'E' && $secondToLastChar !== '\\') {
+                        $inInlineImage = false;
+                    }
+                } elseif ($inStringLiteral === true) {
                     if ($char === ')' && $previousChar !== '\\') {
                         $inStringLiteral = false;
                     }
@@ -88,6 +92,8 @@ class ContentStreamParser {
                         $content[] = $textObject;
                         $textObject = null;
                     }
+                } elseif ($char === 'D' && $previousChar === 'I' && $secondToLastChar !== '\\') {
+                    $inInlineImage = true;
                 } elseif ($char === 'C'
                     && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
                     $startCurrentOperandIndex = $index + 1;
