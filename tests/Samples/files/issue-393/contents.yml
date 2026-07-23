@@ -11,7 +11,7 @@ creationDate: 2026-06-04T11:31:22-05:00
 modificationDate: 2026-06-04T11:31:22-05:00
 pages:
   -
-    content: |-
+    text: |-
       HELLO PDF WORLD.
       THIS PDF USES CUSTOM ENCODING.
       VISIBLE TEXT IS WHAT YOU READ ABOVE.
