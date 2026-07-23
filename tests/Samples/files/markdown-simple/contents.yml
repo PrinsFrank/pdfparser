@@ -1,0 +1,50 @@
+# yaml-language-server: $schema=../../schema.json
+version: '1.4'
+userPassword: null
+ownerPassword: null
+fileEncryptionKey: null
+title: 'Markdown extraction sample'
+producer: 'Skia/PDF m152 Google Docs Renderer'
+author: null
+creator: null
+creationDate: null
+modificationDate: null
+pages:
+  -
+    text: |-
+      Header level A 
+      Header Level B 
+      Header Level C 
+       
+      Normal text 
+       
+      Bold text 
+       
+      Italic Text 
+       
+      Bold and italic text 
+       
+      ● Unordered list item 1 
+      ● Unordered list item 2 
+      ● Unordered list item 3 
+       
+      1. Ordered list item 1 
+      2. Ordered list item 2 
+      3. Ordered list item 3 
+       
+       
+       
+      Link 
+       
+      A B C 
+      D  E 
+       F  
+       
+       
+      A B C 
+      D  E 
+       F  
+       
+       
+       
+       
