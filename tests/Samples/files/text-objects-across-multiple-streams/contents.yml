@@ -11,7 +11,7 @@ creationDate: 2004-06-29T15:02:32+00:00
 modificationDate: 2004-06-29T11:08:11-04:00
 pages:
   -
-    content: |2-
+    text: |2-
        Application Note AN-6 
       MPK Router Control Interface to 7707DT   
        
@@ -68,7 +68,7 @@ pages:
        
        Revision 1.0 AN6-1 
   -
-    content: |-
+    text: |-
       Application Note AN-6 
       MPK Router Control Interface to 7707DT 
        
@@ -107,7 +107,7 @@ pages:
       Figure 3. MPK Interface Example 
       AN6-2 Revision 1.0 
   -
-    content: |2-
+    text: |2-
        Application Note AN-6 
       MPK Router Control Interface to 7707DT   
        
@@ -144,7 +144,7 @@ pages:
        
        Revision 1.0 AN6-3 
   -
-    content: |-
+    text: |-
       Application Note AN-6 
       MPK Router Control Interface to 7707DT 
        
@@ -177,7 +177,7 @@ pages:
       Figure 5. MPK Interface to RS-422. Incorrect Method 
       AN6-4 Revision 1.0 
   -
-    content: |2-
+    text: |2-
        Application Note AN-6 
       MPK Router Control Interface to 7707DT   
        
@@ -250,7 +250,7 @@ pages:
       Figure 6. MPK Interface to RS-422 
        Revision 1.0 AN6-5 
   -
-    content: |-
+    text: |-
       Application Note AN-6 
       MPK Router Control Interface to 7707DT 
        
@@ -295,7 +295,7 @@ pages:
        
       AN6-6 Revision 1.0 
   -
-    content: |2-
+    text: |2-
        Application Note AN-6 
       MPK Router Control Interface to 7707DT   
        
@@ -371,7 +371,7 @@ pages:
       Figure 8. MPK Interface to RS-485 
        Revision 1.0 AN6-7 
   -
-    content: |-
+    text: |-
       Application Note AN-6 
       MPK Router Control Interface to 7707DT 
        
@@ -398,7 +398,7 @@ pages:
       must first be enabled.  
       AN6-8 Revision 1.0 
   -
-    content: |2-
+    text: |2-
        Application Note AN-6 
       MPK Router Control Interface to 7707DT   
        

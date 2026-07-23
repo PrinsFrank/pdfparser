@@ -11,7 +11,7 @@ creationDate: null
 modificationDate: null
 pages:
   -
-    content: |-
+    text: |-
       Nam quod molestias vel corporis
       aperiam.
       Lorem ipsum dolor sit amet. Et omnis perferendis Et quisquam qui laboriosam explicabo et
@@ -45,7 +45,7 @@ pages:
       eos doloribus autem vel accusamus sequi et quidem reiciendis.
       ● Ut autem excepturi ut sequi laboriosam est quas debitis et placeat consequatur!
   -
-    content: |-
+    text: |-
       ● Qui autem voluptas eum deserunt dolor.
       ● In nesciunt quia qui asperiores corrupti sed perspiciatis tempora id minus architecto!
       ● Rem beatae quos aut fugit vero.

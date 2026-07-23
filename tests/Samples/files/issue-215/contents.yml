@@ -11,7 +11,7 @@ creationDate: 2025-09-01T16:24:09+02:00
 modificationDate: 2025-09-01T16:24:09+02:00
 pages:
   -
-    content: |-
+    text: |-
       Deutscher Bundestag Drucksache 21/1407
       21. Wahlperiode 28.08.2025
       Antwort 
@@ -57,7 +57,7 @@ pages:
       vom 28. August 2025 übermittelt.
       Die Drucksache enthält zusätzlich – in kleinerer Schrifttype – den Fragetext.
   -
-    content: |-
+    text: |-
       Drucksache 21/1407 – 2 – Deutscher Bundestag – 21. Wahlperiode
       BKA und BImA, sowie zur Gesamtverantwortlichkeit und Koordination des 
       geplanten BKA-Neubaus in Wiesbaden befragt.
@@ -104,7 +104,7 @@ pages:
       chenanforderung des Nutzers das Ostfeld als geeigneter Standort hervorgegan-
       gen.
   -
-    content: |-
+    text: |-
       Deutscher Bundestag – 21. Wahlperiode – 3 – Drucksache 21/1407
        3. Spielt die Nähe des US-Headquarters Europe und des NATO-Haupt-
       quartiers zur Koordinierung von Waffenlieferungen und Ausbildungsak-
@@ -142,7 +142,7 @@ pages:
       Aufgrund des noch frühen Planungsstadiums kann derzeit keine Aussage zu 
       den Gesamtkosten getätigt werden (siehe Vorbemerkung).
   -
-    content: |-
+    text: |-
       Drucksache 21/1407 – 4 – Deutscher Bundestag – 21. Wahlperiode
        9. Wie stellt sich die sicherlich vorgenommene umfassende Wirtschaftlich-
       keitsanalyse dar, die den Neubau mit einer Sanierung und Modernisie-
@@ -188,7 +188,7 @@ pages:
       14. Wie hat sich die Quote der mobilen Arbeit (Homeoffice) im BKA ent-
       wickelt (bitte eine jährliche Durchschnittsquote seit 2019 nennen)?
   -
-    content: |-
+    text: |-
       Deutscher Bundestag – 21. Wahlperiode – 5 – Drucksache 21/1407
       15. Mit welcher Quote der mobilen Arbeit (Homeoffice) rechnet das BKA in 
       Zukunft?
@@ -229,7 +229,7 @@ pages:
       nung geplant, und auf welcher Rechtsgrundlage findet eine mögliche 
       Enteignung statt?
   -
-    content: |-
+    text: |-
       Drucksache 21/1407 – 6 – Deutscher Bundestag – 21. Wahlperiode
       24. Welche Erkenntnisse liegen der Bundesregierung über die ökologischen 
       Auswirkungen des BKA-Neubaus im Ostfeld/Kalkofen vor, insbesondere 
@@ -277,7 +277,7 @@ pages:
       für jeden betroffenen Betrieb vorgesehen, und wie hoch sind die da-
       für veranschlagten Gesamtkosten?
   -
-    content: |-
+    text: |-
       Deutscher Bundestag – 21. Wahlperiode – 7 – Drucksache 21/1407
       b) Wie wird sichergestellt, dass diese Maßnahmen die Existenz der 
       landwirtschaftlichen Betriebe tatsächlich sichern und nicht nur kurz-
@@ -322,7 +322,7 @@ pages:
       Die RBBau sieht die Erstellung eines Risikoregisters vor, dieses wird regel-
       mäßig gemonitored und ist integraler Teil der Projektsteuerung.
   -
-    content: |-
+    text: |-
       Drucksache 21/1407 – 8 – Deutscher Bundestag – 21. Wahlperiode
       c) Welche Behörde leitet das BKA-Neubauprojekt federführend und trägt 
       damit die Gesamtverantwortung?

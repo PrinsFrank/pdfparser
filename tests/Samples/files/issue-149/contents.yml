@@ -11,12 +11,12 @@ creationDate: 2025-07-22T09:52:58+02:00
 modificationDate: 2025-07-22T09:52:58+02:00
 pages:
   -
-    content: ''
+    text: ''
     images:
       - page_0_image_0.tiff
       - page_0_image_1.jpg
   -
-    content: ''
+    text: ''
     images:
       - page_1_image_0.tiff
       - page_1_image_1.jpg

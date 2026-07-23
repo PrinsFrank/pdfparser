@@ -11,7 +11,7 @@ creationDate: 2025-12-01T16:55:05+01:00
 modificationDate: 2025-12-01T16:55:05+01:00
 pages:
   -
-    content: |-
+    text: |-
        
        
        
@@ -58,7 +58,7 @@ pages:
     images:
       - page_0_image_0.png
   -
-    content: |-
+    text: |-
        
       those apps. 
       Apple contends that the Netherlands court does not have jurisdiction to hear this case because the alleged harmful 
