@@ -37,7 +37,6 @@ class TextOverlapStrategy {
                 continue;
             }
 
-            /** @var PositionedTextElement $highestPositionedTextElement */
             $highestPositionedTextElement = $positionedTextElements[$i];
             $highestPositionedTextElementBottom = $highestPositionedTextElement->absoluteMatrix->offsetY;
             $highestPositionedTextElementHeight = $highestPositionedTextElement->getHeight();
