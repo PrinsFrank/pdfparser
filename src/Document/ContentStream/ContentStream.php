@@ -5,18 +5,14 @@ namespace PrinsFrank\PdfParser\Document\ContentStream;
 
 use PrinsFrank\PdfParser\Document\ContentStream\Command\ContentStreamCommand;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\GraphicsStateOperator;
-use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\ProducesPositionedTextElements;
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
-use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\LineGroupingStrategy\LineGroupingStrategy;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
-use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
-use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 /** @api */
 readonly class ContentStream {
@@ -75,52 +71,5 @@ readonly class ContentStream {
         }
 
         return $positionedTextElements;
-    }
-
-    /** @throws PdfParserException */
-    public function getText(Document $document, Page $page, LineGroupingStrategy $lineGroupingStrategy): string {
-        $text = '';
-        foreach ($lineGroupingStrategy->group($this->getPositionedTextElements()) as $i => $positionedTextElementsForLine) {
-            if ($i !== 0) {
-                $text .= "\n";
-            }
-
-            $previousTextElementOnLine = null;
-            foreach ($positionedTextElementsForLine as $positionedTextElement) {
-                $elementText = $positionedTextElement->getText($document, $page);
-                if ($elementText === '') {
-                    $previousTextElementOnLine = $positionedTextElement;
-                    continue;
-                }
-
-                if ($previousTextElementOnLine !== null) {
-                    // The gap between two elements is what remains of the horizontal distance once the previous
-                    // element's own advance is subtracted. That advance is reconstructed by getAdvanceWidth() because
-                    // Tj/TJ do not move the text matrix here; ignoring it (as the old next-element-font width did) left
-                    // the TJ kerning term in the gap and forced a slack threshold.
-                    $gap = $positionedTextElement->absoluteMatrix->offsetX
-                        - $previousTextElementOnLine->absoluteMatrix->offsetX
-                        - $previousTextElementOnLine->getAdvanceWidth($document, $page);
-
-                    $wordBreakThreshold = $previousTextElementOnLine->textState->getFontSize()
-                        * $previousTextElementOnLine->absoluteMatrix->scaleX
-                        * ($previousTextElementOnLine->textState->scale / 100)
-                        * PositionedTextElement::WORD_BREAK_THRESHOLD_EM;
-
-                    if (
-                        $gap >= $wordBreakThreshold
-                        && str_ends_with($text, ' ') === false
-                        && str_starts_with($elementText, ' ') === false
-                    ) {
-                        $text .= ' ';
-                    }
-                }
-
-                $text .= $elementText;
-                $previousTextElementOnLine = $positionedTextElement;
-            }
-        }
-
-        return $text;
     }
 }

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText\LineGroupingStrategy;
+namespace PrinsFrank\PdfParser\Extraction\Text\TextGrouping\LineGrouping;
 
 use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
@@ -25,9 +25,6 @@ class TextOverlapStrategy implements LineGroupingStrategy {
 
     #[Override]
     public function group(array $positionedTextElements): iterable {
-        // Order lines top to bottom by descending offsetY. Not abs(offsetY): a page whose MediaBox origin sits
-        // above its content (negative lower-left, e.g. [0 -792 612 0]) has all-negative offsetY with the topmost
-        // line the least negative, which abs() would reverse.
         usort(
             $positionedTextElements,
             fn(PositionedTextElement $a, PositionedTextElement $b): int => $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY,
