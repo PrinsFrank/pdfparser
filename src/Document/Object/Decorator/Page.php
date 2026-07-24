@@ -2,17 +2,18 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
-use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\LineGroupingStrategy\TextOverlapStrategy;
+use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
+use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
-use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
+use PrinsFrank\PdfParser\Extraction\Text\TextExtractor;
+use PrinsFrank\PdfParser\Extraction\Text\TextGrouping\LineGrouping\TextOverlapStrategy;
 
 class Page extends DecoratedObject {
     /**
@@ -26,8 +27,7 @@ class Page extends DecoratedObject {
 
     /** @throws PdfParserException */
     public function getText(): string {
-        return $this->getContentStream()
-            ?->getText($this->document, $this, new TextOverlapStrategy()) ?? '';
+        return TextExtractor::extractText($this->getPositionedTextElements(), $this->document, $this, new TextOverlapStrategy());
     }
 
     /** @throws PdfParserException */
