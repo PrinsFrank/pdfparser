@@ -13,7 +13,6 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Extraction\Text\TextExtractor;
-use PrinsFrank\PdfParser\Extraction\Text\TextGrouping\LineGrouping\TextOverlapStrategy;
 
 class Page extends DecoratedObject {
     /**
@@ -27,7 +26,7 @@ class Page extends DecoratedObject {
 
     /** @throws PdfParserException */
     public function getText(): string {
-        return TextExtractor::extractText($this->getPositionedTextElements(), $this->document, $this, new TextOverlapStrategy());
+        return TextExtractor::extractText($this->getPositionedTextElements(), $this->document, $this);
     }
 
     /** @throws PdfParserException */

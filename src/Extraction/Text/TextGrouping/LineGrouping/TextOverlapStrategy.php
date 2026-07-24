@@ -2,7 +2,6 @@
 
 namespace PrinsFrank\PdfParser\Extraction\Text\TextGrouping\LineGrouping;
 
-use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 
 /**
@@ -17,14 +16,14 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextEle
  * Strategy where we sort all positioned text elements, retrieve the very first text element from the page (highest)
  * And for each text element check if there is significant overlap above a threshold. Continue until all elements are processed
  */
-class TextOverlapStrategy implements LineGroupingStrategy {
-    /** @param int<0, 100> $overlapPercentage */
-    public function __construct(
-        private readonly int $overlapPercentage = 90,
-    ) {}
+class TextOverlapStrategy {
+    private const OVERLAP_PERCENTAGE = 90;
 
-    #[Override]
-    public function group(array $positionedTextElements): iterable {
+    /**
+     * @param list<PositionedTextElement> $positionedTextElements
+     * @return iterable<list<PositionedTextElement>>
+     */
+    public static function group(array $positionedTextElements): iterable {
         usort(
             $positionedTextElements,
             fn(PositionedTextElement $a, PositionedTextElement $b): int => $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY,
@@ -66,7 +65,7 @@ class TextOverlapStrategy implements LineGroupingStrategy {
                 }
 
                 $overlap = min($highestElementTop, $currentElementTop) - max($highestPositionedTextElementBottom, $currentElementBottom);
-                $belongsOnLine = $overlap / $smallestElementHeight * 100 >= $this->overlapPercentage;
+                $belongsOnLine = $overlap / $smallestElementHeight * 100 >= self::OVERLAP_PERCENTAGE;
                 $isEnclosedSubscript = $overlap > 0.0
                     && $positionedTextElementHeight < $highestPositionedTextElementHeight
                     && $positionedTextElement->absoluteMatrix->offsetX >= $lineLeftX

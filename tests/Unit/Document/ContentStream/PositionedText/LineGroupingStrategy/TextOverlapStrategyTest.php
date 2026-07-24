@@ -19,7 +19,7 @@ class TextOverlapStrategyTest extends TestCase {
 
         static::assertSame(
             [[$top], [$bottom]],
-            iterator_to_array((new TextOverlapStrategy())->group([$bottom, $top]), false),
+            iterator_to_array(TextOverlapStrategy::group([$bottom, $top]), false),
         );
     }
 
@@ -33,7 +33,7 @@ class TextOverlapStrategyTest extends TestCase {
 
         static::assertSame(
             [[$top], [$bottom]],
-            iterator_to_array((new TextOverlapStrategy())->group([$bottom, $top]), false),
+            iterator_to_array(TextOverlapStrategy::group([$bottom, $top]), false),
         );
     }
 }
