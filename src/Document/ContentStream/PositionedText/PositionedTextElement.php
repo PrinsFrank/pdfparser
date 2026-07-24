@@ -3,7 +3,6 @@
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
-use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -18,18 +17,18 @@ readonly class PositionedTextElement {
         public TextState $textState,
     ) {}
 
-    public function getFont(Document $document, Page $page): Font {
+    public function getFont(Page $page): Font {
         if ($this->textState->fontName === null) {
             throw new ParseFailureException('Unable to locate font for text element');
         }
 
-        return $page->getFontDictionary()?->getObjectForReference($document, $this->textState->fontName, Font::class)
+        return $page->getFontDictionary()?->getObjectForReference($page->document, $this->textState->fontName, Font::class)
             ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $this->textState->fontName->value));
     }
 
     /** @throws ParseFailureException */
-    public function getText(Document $document, Page $page): string {
-        $font = $this->getFont($document, $page);
+    public function getText(Page $page): string {
+        $font = $this->getFont($page);
         $differences = $font->getDifferences();
         $encoding = $font->getEncoding();
         $toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont();
@@ -76,8 +75,8 @@ readonly class PositionedTextElement {
      *
      * Reconstructed here because Tj/TJ do not advance the text matrix in this parser.
      */
-    public function getAdvanceWidth(Document $document, Page $page): float {
-        $font = $this->getFont($document, $page);
+    public function getAdvanceWidth(Page $page): float {
+        $font = $this->getFont($page);
         $scaleX = $this->absoluteMatrix->scaleX;
         $fontSize = $this->textState->getFontSize();
 

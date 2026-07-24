@@ -3,7 +3,6 @@
 namespace PrinsFrank\PdfParser\Extraction\Text;
 
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
-use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Extraction\Text\TextGrouping\LineGrouping\TextOverlapStrategy;
@@ -13,7 +12,7 @@ class TextExtractor {
      * @param list<PositionedTextElement> $positionedTextElements
      * @throws PdfParserException
      */
-    public static function extractText(array $positionedTextElements, Document $document, Page $page): string {
+    public static function extractText(array $positionedTextElements, Page $page): string {
         $lineGroupedElements = TextOverlapStrategy::group($positionedTextElements);
 
         $text = '';
@@ -24,7 +23,7 @@ class TextExtractor {
 
             $previousTextElementOnLine = null;
             foreach ($positionedTextElementsForLine as $positionedTextElement) {
-                $elementText = $positionedTextElement->getText($document, $page);
+                $elementText = $positionedTextElement->getText($page);
                 if ($elementText === '') {
                     $previousTextElementOnLine = $positionedTextElement;
                     continue;
@@ -33,7 +32,7 @@ class TextExtractor {
                 if ($previousTextElementOnLine !== null) {
                     $gap = $positionedTextElement->absoluteMatrix->offsetX
                         - $previousTextElementOnLine->absoluteMatrix->offsetX
-                        - $previousTextElementOnLine->getAdvanceWidth($document, $page);
+                        - $previousTextElementOnLine->getAdvanceWidth($page);
 
                     $wordBreakThreshold = $previousTextElementOnLine->textState->getFontSize()
                         * $previousTextElementOnLine->absoluteMatrix->scaleX

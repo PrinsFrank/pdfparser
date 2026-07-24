@@ -26,7 +26,7 @@ class Page extends DecoratedObject {
 
     /** @throws PdfParserException */
     public function getText(): string {
-        return TextExtractor::extractText($this->getPositionedTextElements(), $this->document, $this);
+        return TextExtractor::extractText($this->getPositionedTextElements(), $this);
     }
 
     /** @throws PdfParserException */
