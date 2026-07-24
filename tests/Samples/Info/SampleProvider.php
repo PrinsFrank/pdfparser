@@ -24,7 +24,7 @@ class SampleProvider {
                 throw new RuntimeException();
             }
 
-            /** @var object{version: float, userPassword: ?string, ownerPassword: ?string, fileEncryptionKey: ?string, title: ?string, producer: ?string, author: ?string, creator: ?string, creationDate: ?DateTimeImmutable, modificationDate: ?DateTimeImmutable, pages: list<object{text: string, images?: string[]}>} $content */
+            /** @var object{version: float, userPassword: ?string, ownerPassword: ?string, fileEncryptionKey: ?string, title: ?string, producer: ?string, author: ?string, creator: ?string, creationDate: ?DateTimeImmutable, modificationDate: ?DateTimeImmutable, pages: list<object{text: string, markdown: string, images?: string[]}>} $content */
             $content = Yaml::parseFile($contentsPath, Yaml::PARSE_OBJECT_FOR_MAP | Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE | Yaml::PARSE_DATETIME);
             yield $sampleName => [
                 new FileInfo(
@@ -40,9 +40,10 @@ class SampleProvider {
                     $content->creationDate,
                     $content->modificationDate,
                     array_map(
-                        /** @param object{text: string, images?: string[]} $page */
+                        /** @param object{text: string, markdown: string, images?: string[]} $page */
                         fn(object $page) => new Page(
                             $page->text,
+                            $page->markdown,
                             array_values(array_map(fn(string $relativePath) => sprintf('%s/images/%s', $sampleFolder, $relativePath), $page->images ?? [])),
                         ),
                         $content->pages,

@@ -12,17 +12,21 @@ modificationDate: null
 pages:
   -
     text: ''
+    markdown: ''
     images:
       - page_0_image_0.jpg
   -
     text: ''
+    markdown: ''
     images:
       - page_1_image_0.jpg
   -
     text: ''
+    markdown: ''
     images:
       - page_2_image_0.jpg
   -
     text: ''
+    markdown: ''
     images:
       - page_3_image_0.jpg

@@ -5,7 +5,8 @@ namespace PrinsFrank\PdfParser\Tests\Samples\Info;
 readonly class Page {
     /** @param list<string> $imagePaths */
     public function __construct(
-        public string $content,
+        public string $text,
+        public string $markdown,
         public array  $imagePaths,
     ) {}
 }

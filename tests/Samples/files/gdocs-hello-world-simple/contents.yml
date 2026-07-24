@@ -12,3 +12,4 @@ modificationDate: null
 pages:
   -
     text: 'Hello world'
+    markdown: 'Hello world'
