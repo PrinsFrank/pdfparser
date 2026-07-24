@@ -12,5 +12,6 @@ modificationDate: null
 pages:
   -
     text: ''
+    markdown: ''
     images:
       - page_0_image_0.jpg

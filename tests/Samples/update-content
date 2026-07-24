@@ -32,6 +32,7 @@ foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sa
     foreach ($parsedPDF->getPages() as $pageIndex => $page) {
         $pages[$pageIndex] = [
             'text' => $page->getText(),
+            'markdown' => $page->getText(),
         ];
 
         foreach ($page->getImages() as $imageIndex => $image) {

@@ -39,7 +39,8 @@ class SamplesTest extends TestCase {
         static::assertSame(count($fileInfo->pages ?? []), $document->getNumberOfPages());
         foreach ($fileInfo->pages ?? [] as $index => $expectedPage) {
             static::assertNotNull($page = $document->getPage($index + 1));
-            static::assertSame(trim($expectedPage->content), trim($page->getText()));
+            static::assertSame(trim($expectedPage->text), trim($page->getText()));
+            static::assertSame(trim($expectedPage->markdown), trim($page->getText()));
             foreach ($expectedPage->imagePaths as $imageIndex => $imagePath) {
                 self::assertImage(
                     $imagePath,
