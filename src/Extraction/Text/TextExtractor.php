@@ -6,16 +6,18 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextEle
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
-use PrinsFrank\PdfParser\Extraction\Text\TextGrouping\LineGrouping\LineGroupingStrategy;
+use PrinsFrank\PdfParser\Extraction\Text\TextGrouping\LineGrouping\TextOverlapStrategy;
 
 class TextExtractor {
     /**
      * @param list<PositionedTextElement> $positionedTextElements
      * @throws PdfParserException
      */
-    public static function extractText(array $positionedTextElements, Document $document, Page $page, LineGroupingStrategy $lineGroupingStrategy): string {
+    public static function extractText(array $positionedTextElements, Document $document, Page $page): string {
+        $lineGroupedElements = TextOverlapStrategy::group($positionedTextElements);
+
         $text = '';
-        foreach ($lineGroupingStrategy->group($positionedTextElements) as $i => $positionedTextElementsForLine) {
+        foreach ($lineGroupedElements as $i => $positionedTextElementsForLine) {
             if ($i !== 0) {
                 $text .= "\n";
             }
