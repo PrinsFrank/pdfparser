@@ -34,7 +34,7 @@
         "stan": "phpstan analyse --memory-limit 4G -v",
         "unit": "phpunit --testsuite=Unit",
         "feature": "phpunit --testsuite=Feature",
-        "update-content": "./tests/Samples/update-content"
+        "update-content": "php -d memory_limit=2G ./tests/Samples/update-content"
     },
     "config": {
         "sort-packages": true
