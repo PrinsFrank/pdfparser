@@ -21,16 +21,16 @@ class TextOverlapStrategy {
 
     /**
      * @param list<PositionedTextElement> $positionedTextElements
-     * @return iterable<list<PositionedTextElement>>
+     * @return list<list<PositionedTextElement>>
      */
-    public static function group(array $positionedTextElements): iterable {
+    public static function group(array $positionedTextElements): array {
         usort(
             $positionedTextElements,
             fn(PositionedTextElement $a, PositionedTextElement $b): int => $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY,
         );
 
         /** @var array<int, true> $processedIndices */
-        $processedIndices = [];
+        $processedIndices = $lines = [];
         $nrOfItems = count($positionedTextElements);
         for ($i = 0; $i < $nrOfItems; $i++) {
             if (isset($processedIndices[$i])) {
@@ -84,7 +84,9 @@ class TextOverlapStrategy {
                 static fn(PositionedTextElement $a, PositionedTextElement $b): int => $a->absoluteMatrix->offsetX <=> $b->absoluteMatrix->offsetX,
             );
 
-            yield $positionedTextElementsOnLine;
+            $lines[] = $positionedTextElementsOnLine;
         }
+
+        return $lines;
     }
 }
