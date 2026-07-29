@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Extraction\Text\TextGrouping\LineGrouping;
+namespace PrinsFrank\PdfParser\Extraction\Markdown\TextGrouping\LineGrouping;
 
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 

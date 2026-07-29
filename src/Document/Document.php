@@ -187,6 +187,23 @@ class Document {
     }
 
     /**
+     * @param ?string $pageSeparator an optional string to put between text of different pages
+     * @throws PdfParserException
+     */
+    public function getMarkdown(?string $pageSeparator = null): string {
+        $text = '';
+        foreach ($this->getPages() as $i => $page) {
+            if ($i !== 0) {
+                $text .= $pageSeparator !== null ? $pageSeparator : str_repeat(WhitespaceCharacter::LINE_FEED->value, 2);
+            }
+
+            $text .= $page->getMarkdown();
+        }
+
+        return $text;
+    }
+
+    /**
      * @throws PdfParserException
      * @return list<XObject>
      */
