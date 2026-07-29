@@ -9,7 +9,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextS
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
-use PrinsFrank\PdfParser\Extraction\Text\TextGrouping\LineGrouping\TextOverlapStrategy;
+use PrinsFrank\PdfParser\Extraction\Markdown\TextGrouping\LineGrouping\TextOverlapStrategy;
 
 #[CoversClass(TextOverlapStrategy::class)]
 class TextOverlapStrategyTest extends TestCase {

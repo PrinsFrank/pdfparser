@@ -2,6 +2,8 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
+use PrinsFrank\MarkDownDom\Renderer\MarkdownRenderer;
+use PrinsFrank\MarkDownDom\Renderer\TextRenderer;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
@@ -12,7 +14,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
-use PrinsFrank\PdfParser\Extraction\Text\TextExtractor;
+use PrinsFrank\PdfParser\Extraction\Markdown\MarkdownExtractor;
 
 class Page extends DecoratedObject {
     /**
@@ -26,7 +28,13 @@ class Page extends DecoratedObject {
 
     /** @throws PdfParserException */
     public function getText(): string {
-        return TextExtractor::extractText($this->getPositionedTextElements(), $this);
+        return (new TextRenderer())
+            ->render(MarkdownExtractor::extractContent($this->getPositionedTextElements(), $this));
+    }
+
+    public function getMarkdown(): string {
+        return (new MarkdownRenderer())
+            ->render(MarkdownExtractor::extractContent($this->getPositionedTextElements(), $this));
     }
 
     /** @throws PdfParserException */

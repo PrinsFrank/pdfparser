@@ -1,18 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Extraction\Text;
+namespace PrinsFrank\PdfParser\Extraction\Markdown;
 
+use PrinsFrank\MarkDownDom\Document;
+use PrinsFrank\MarkDownDom\Node\Block\Paragraph;
+use PrinsFrank\MarkDownDom\Node\Inline\Text;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
-use PrinsFrank\PdfParser\Extraction\Text\TextGrouping\LineGrouping\TextOverlapStrategy;
+use PrinsFrank\PdfParser\Extraction\Markdown\TextGrouping\LineGrouping\TextOverlapStrategy;
 
-class TextExtractor {
+class MarkdownExtractor {
     /**
      * @param list<PositionedTextElement> $positionedTextElements
      * @throws PdfParserException
      */
-    public static function extractText(array $positionedTextElements, Page $page): string {
+    public static function extractContent(array $positionedTextElements, Page $page): Document {
         $lineGroupedElements = TextOverlapStrategy::group($positionedTextElements);
 
         $text = '';
@@ -53,6 +56,6 @@ class TextExtractor {
             }
         }
 
-        return $text;
+        return new Document(new Paragraph(new Text($text)));
     }
 }

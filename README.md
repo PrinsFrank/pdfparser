@@ -55,6 +55,17 @@ $document = (new PdfParser())
 $document->getText();
 ```
 
+Or, if you prefer markdown:
+
+```php
+use PrinsFrank\PdfParser\PdfParser;
+
+$document = (new PdfParser())
+    ->parseFile($path);
+
+$document->getMarkdown();
+```
+
 ## 💖 Sponsorship
 
 If you depend on this package and want to support its maintenance, please consider sponsoring me. I'll continue maintaining and releasing updates regardless, but [sponsorships](https://github.com/sponsors/PrinsFrank) help cover the time it takes to review changes and keep everything accurate.
