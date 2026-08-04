@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=../../schema.json
+version: '1.7'
+userPassword: null
+ownerPassword: null
+fileEncryptionKey: null
+title: null
+producer: 'cairo 1.18.0 (https://cairographics.org)'
+author: null
+creator: 'Mozilla Firefox 151.0'
+creationDate: 2026-08-04T23:00:48+02:00
+modificationDate: null
+pages:
+  -
+    text: ''
+    markdown: ''
+  -
+    text: ''
+    markdown: ''
