@@ -2,11 +2,27 @@
 
 namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 
+use Override;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\IncludesXObjects;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
+
 /**
  * @internal
  *
  * @specification table 86 - XObject operator
  */
-enum XObjectOperator: string {
+enum XObjectOperator: string implements IncludesXObjects {
     case Paint = 'Do';
+
+    #[Override]
+    public function getPositionedTextElements(string $operands, TransformationMatrix $transformationMatrix, Page $page): array {
+        $xObject = $page->getXObjectByKey(ExtendedDictionaryKey::fromKeyString($operands));
+        if ($xObject === null || $xObject->isForm() === false) {
+            return [];
+        }
+
+        return $xObject->getPositionedTextElements($page, $transformationMatrix);
+    }
 }

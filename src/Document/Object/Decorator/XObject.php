@@ -3,6 +3,10 @@
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
 use Override;
+use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
+use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
@@ -17,6 +21,7 @@ use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpaceFactory;
 use PrinsFrank\PdfParser\Document\Image\ImageType;
 use PrinsFrank\PdfParser\Document\Image\RasterizedImage;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
@@ -47,6 +52,18 @@ class XObject extends DecoratedObject {
         return $this->getDictionary()
             ->getValueForKey($this->document, DictionaryKey::LENGTH, IntegerValue::class)
             ?->value;
+    }
+
+    /** @throws PdfParserException */
+    public function getResourceDictionary(): ?Dictionary {
+        return $this->getDictionary()
+            ->getSubDictionary($this->document, DictionaryKey::RESOURCES);
+    }
+
+    /** @throws PdfParserException */
+    public function getFontDictionary(): ?Dictionary {
+        return $this->getResourceDictionary()
+            ?->getSubDictionary($this->document, DictionaryKey::FONT);
     }
 
     public function getImageType(): ?ImageType {
@@ -136,5 +153,15 @@ class XObject extends DecoratedObject {
             $content,
             $this->document,
         );
+    }
+
+    /** @return list<PositionedTextElement> */
+    public function getPositionedTextElements(Page $page, TransformationMatrix $transformationMatrix): array {
+        if ($this->isForm() === false) {
+            return [];
+        }
+
+        return ContentStreamParser::parse([$this])
+            ->getPositionedTextElements($page, $transformationMatrix);
     }
 }

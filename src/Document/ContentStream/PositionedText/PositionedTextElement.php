@@ -22,7 +22,7 @@ readonly class PositionedTextElement {
             throw new ParseFailureException('Unable to locate font for text element');
         }
 
-        return $page->getFontDictionary()?->getObjectForReference($page->document, $this->textState->fontName, Font::class)
+        return $page->getFont($this->textState->fontName)
             ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $this->textState->fontName->value));
     }
 

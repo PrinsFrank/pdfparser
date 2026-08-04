@@ -13,6 +13,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMat
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Stream\FileStream;
 
 #[CoversClass(ContentStream::class)]
@@ -157,7 +158,7 @@ class ContentStreamTest extends TestCase {
                 new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 200.80728, 730.5896001075), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
                 new PositionedTextElement([new TextSegment(new TextStringValue('<0003>'), null)], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 716.0433351075001), new TextState(new ExtendedDictionaryKey('F4'), 14.666667)),
             ],
-            ContentStreamParser::parse([$decoratedObject])->getPositionedTextElements(),
+            ContentStreamParser::parse([$decoratedObject])->getPositionedTextElements($this->createMock(Page::class), new TransformationMatrix(1, 0, 0, 1, 0, 0)),
         );
     }
 
@@ -179,7 +180,7 @@ class ContentStreamTest extends TestCase {
                 new PositionedTextElement([new TextSegment(new TextStringValue('([Hello)'), null)], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState(new ExtendedDictionaryKey('F1'), 7)),
                 new PositionedTextElement([new TextSegment(new TextStringValue('(World])'), null)], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState(new ExtendedDictionaryKey('F1'), 7)),
             ],
-            ContentStreamParser::parse([$decoratedObject])->getPositionedTextElements(),
+            ContentStreamParser::parse([$decoratedObject])->getPositionedTextElements($this->createMock(Page::class), new TransformationMatrix(1, 0, 0, 1, 0, 0)),
         );
     }
 }
