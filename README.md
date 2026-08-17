@@ -11,6 +11,8 @@
 [![PHPStan Level](https://img.shields.io/badge/PHPStan-level%2010-brightgreen.svg?style=flat)](https://github.com/PrinsFrank/pdfparser/blob/main/phpstan.neon)
 [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/PrinsFrank)
 
+> **2.6x faster** and **5x less memory** than smalot/pdfparser. Actively maintained, MIT licensed, and built from scratch for PHP8.1+
+
 Maintainable, fast & low-memory; built from scratch
 
 ## Why this library?
@@ -21,12 +23,23 @@ Instead, this package allows for parsing of a wide variety of PDF files while no
 
 ## Comparison with `smalot/pdfparser`
 
-<picture>
-    <source srcset="https://prinsfrank.github.io/pdfparser-benchmarks/comparison_dark.png" media="(prefers-color-scheme: dark)">
-    <img src="https://prinsfrank.github.io/pdfparser-benchmarks/comparison_light.png" alt="Banner">
-</picture>
+| Metric             | prinsfrank/pdfparser               | smalot/pdfparser    |
+|--------------------|------------------------------------|---------------------|
+| Speed              | On average **2.6 times faster**    | baseline            |
+| Memory             | On average **5 times less memory** | baseline            |
+| PHP version        | PHP 8.1+                           | PHP 7.1+            |
+| Active development | Yes                                | Limited maintenance |
+| PHPStan Level      | 10 (max)                           | 3                   |
 
-See the [benchmark repository](https://github.com/PrinsFrank/pdfparser-benchmarks) for more details.
+<details>
+    <summary>View detailed benchmark results</summary>
+    <picture>
+        <source srcset="https://prinsfrank.github.io/pdfparser-benchmarks/comparison_dark.png" media="(prefers-color-scheme: dark)">
+        <img src="https://prinsfrank.github.io/pdfparser-benchmarks/comparison_light.png" alt="Banner">
+    </picture>
+</details>
+
+Or see the [benchmark repository](https://github.com/PrinsFrank/pdfparser-benchmarks) for more details.
 
 ## Setup
 
