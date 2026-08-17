@@ -13,8 +13,6 @@
 
 > **2.6x faster** and **5x less memory** than smalot/pdfparser. Actively maintained, MIT licensed, and built from scratch for PHP8.1+
 
-Maintainable, fast & low-memory; built from scratch
-
 ## Why this library?
 
 Previously, there wasn't a PDF library that allows parsing of PDFs that was open source, MIT licensed and under active development. The PDFParser by smalot, while having been very useful over the years isn't under active development anymore. The parser of Setasign is not MIT licensed and not open source. And several other packages rely on java/js/python dependencies being installed that are called by PHP behind the scenes, losing any type information and underlying structure.
@@ -23,13 +21,15 @@ Instead, this package allows for parsing of a wide variety of PDF files while no
 
 ## Comparison with `smalot/pdfparser`
 
-| Metric             | prinsfrank/pdfparser               | smalot/pdfparser    |
-|--------------------|------------------------------------|---------------------|
-| Speed              | On average **2.6 times faster**    | baseline            |
-| Memory             | On average **5 times less memory** | baseline            |
-| PHP version        | PHP 8.1+                           | PHP 7.1+            |
-| Active development | Yes                                | Limited maintenance |
-| PHPStan Level      | 10 (max)                           | 3                   |
+| Metric             | prinsfrank/pdfparser                                              | smalot/pdfparser    |
+|--------------------|-------------------------------------------------------------------|---------------------|
+| Speed              | On average **2.6x faster**, up to **110x faster on complex PDFs** | baseline            |
+| Memory             | On average **5x less memory**                                     | baseline            |
+| Success rate       | **100%** of test files                                            | 95.3%               |
+| Encrypted PDFs     | Supported                                                         | Not supported       |
+| PHP version        | PHP 8.1+                                                          | PHP 7.1+            |
+| Active development | Yes                                                               | Limited maintenance |
+| PHPStan Level      | 10 (max)                                                          | 3                   |
 
 <details>
     <summary>View detailed benchmark results</summary>
