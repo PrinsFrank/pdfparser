@@ -155,13 +155,16 @@ class XObject extends DecoratedObject {
         );
     }
 
-    /** @return list<PositionedTextElement> */
-    public function getPositionedTextElements(Page $page, TransformationMatrix $transformationMatrix): array {
+    /**
+     * @param list<int> $visitedObjectIds
+     * @return list<PositionedTextElement>
+     */
+    public function getPositionedTextElements(Page $page, TransformationMatrix $transformationMatrix, array $visitedObjectIds): array {
         if ($this->isForm() === false) {
             return [];
         }
 
         return ContentStreamParser::parse([$this])
-            ->getPositionedTextElements($page, $transformationMatrix);
+            ->getPositionedTextElements($page, $transformationMatrix, $visitedObjectIds);
     }
 }

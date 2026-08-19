@@ -16,13 +16,19 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 enum XObjectOperator: string implements IncludesXObjects {
     case Paint = 'Do';
 
+    /** @param list<int> $visitedObjectIds */
     #[Override]
-    public function getPositionedTextElements(string $operands, TransformationMatrix $transformationMatrix, Page $page): array {
+    public function getPositionedTextElements(string $operands, TransformationMatrix $transformationMatrix, Page $page, array $visitedObjectIds): array {
         $xObject = $page->getXObjectByKey(ExtendedDictionaryKey::fromKeyString($operands));
         if ($xObject === null || $xObject->isForm() === false) {
             return [];
         }
 
-        return $xObject->getPositionedTextElements($page, $transformationMatrix);
+        if (in_array($xObjectId = spl_object_id($xObject), $visitedObjectIds, true)) {
+            return [];
+        }
+
+        $visitedObjectIds[] = $xObjectId;
+        return $xObject->getPositionedTextElements($page, $transformationMatrix, $visitedObjectIds);
     }
 }
