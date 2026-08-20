@@ -347,6 +347,13 @@ class ContentStreamParserTest extends TestCase {
     }
 
     #[DataProvider('provideOperators')]
+    public function testOperatorChars(CompatibilityOperator|InlineImageOperator|MarkedContentOperator|TextObjectOperator|ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator $enumCase): void {
+        foreach (str_split($enumCase->value) as $char) {
+            static::assertTrue(isset(ContentStreamParser::OPERATOR_CHARS[$char]), 'Char "' . $char . '" is not in the operator char list');
+        }
+    }
+
+    #[DataProvider('provideOperators')]
     public function testGetOperator(CompatibilityOperator|InlineImageOperator|MarkedContentOperator|TextObjectOperator|ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator $enumCase): void {
         static::assertSame(
             $enumCase,

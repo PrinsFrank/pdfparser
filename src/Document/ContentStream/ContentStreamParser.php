@@ -24,6 +24,8 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @internal */
 class ContentStreamParser {
+    public const OPERATOR_CHARS = ['X' => true, 'x' => true, 'I' => true, 'D' => true, 'C' => true, 'T' => true, '*' => true, 'S' => true, 's' => true, 'N' => true, 'n' => true, 'G' => true, 'g' => true, 'K' => true, 'k' => true, 'm' => true, 'i' => true, 'e' => true, 'W' => true, 'w' => true, 'J' => true, 'j' => true, 'M' => true, 'd' => true, 'l' => true, 'c' => true, 'v' => true, 'y' => true, 'h' => true, 'f' => true, 'F' => true, 'B' => true, 'Q' => true, 'q' => true, '\'' => true, '"' => true, 'E' => true, 'P' => true, 'R' => true, 'r' => true, 'b' => true, 'z' => true, 'L' => true, 'o' => true, '1' => true, '0' => true];
+
     /**
      * @param list<DecoratedObject> $contentsObjects
      * @throws ParseFailureException
@@ -98,7 +100,8 @@ class ContentStreamParser {
                 } elseif ($char === 'C'
                     && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
                     $startCurrentOperandIndex = $index + 1;
-                } elseif (($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null
+                } elseif (isset(self::OPERATOR_CHARS[$char])
+                    && ($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null
                     && (($nextChar = $rawStream[$index + 1] ?? '') === '' || self::getOperator($nextChar, $char, $previousChar, $secondToLastChar) === null)) { // Skip the current hit if the next iteration is also a valid operator
                     $operands = '';
                     if ($previousContentStream !== null && $startPreviousOperandIndex !== null && $startPreviousOperandIndex < $previousContentStream->getSizeInBytes()) {
