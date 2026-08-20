@@ -7,6 +7,9 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMat
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 
 interface IncludesXObjects {
-    /** @return list<PositionedTextElement> */
-    public function getPositionedTextElements(string $operands, TransformationMatrix $transformationMatrix, Page $page): array;
+    /**
+     * @param list<int> $visitedObjectIds
+     * @return list<PositionedTextElement>
+     */
+    public function getPositionedTextElements(string $operands, TransformationMatrix $transformationMatrix, Page $page, array $visitedObjectIds): array;
 }

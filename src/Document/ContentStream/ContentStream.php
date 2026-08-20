@@ -28,8 +28,11 @@ readonly class ContentStream {
         $this->content = $content;
     }
 
-    /** @return list<PositionedTextElement> */
-    public function getPositionedTextElements(Page $page, TransformationMatrix $transformationMatrix): array {
+    /**
+     * @param list<int> $visitedObjectIds
+     * @return list<PositionedTextElement>
+     */
+    public function getPositionedTextElements(Page $page, TransformationMatrix $transformationMatrix, array $visitedObjectIds): array {
         $positionedTextElements = $transformationStateStack = $textStateStack = [];
         $textState = new TextState(null, null); // See table 103, Tf operator for initial value
         foreach ($this->content as $content) {
@@ -53,7 +56,7 @@ readonly class ContentStream {
                 }
 
                 if ($content->operator instanceof IncludesXObjects) {
-                    $positionedTextElements = [...$positionedTextElements, ...$content->operator->getPositionedTextElements($content->operands, $transformationMatrix, $page)];
+                    $positionedTextElements = [...$positionedTextElements, ...$content->operator->getPositionedTextElements($content->operands, $transformationMatrix, $page, $visitedObjectIds)];
                 }
 
                 continue;
