@@ -14,6 +14,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextEle
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
+use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @api */
@@ -32,7 +33,7 @@ readonly class ContentStream {
      * @param list<int> $visitedObjectIds
      * @return list<PositionedTextElement>
      */
-    public function getPositionedTextElements(Page $page, TransformationMatrix $transformationMatrix, array $visitedObjectIds): array {
+    public function getPositionedTextElements(Page|XObject $context, TransformationMatrix $transformationMatrix, array $visitedObjectIds): array {
         $positionedTextElements = $transformationStateStack = $textStateStack = [];
         $textState = new TextState(null, null); // See table 103, Tf operator for initial value
         foreach ($this->content as $content) {
@@ -56,7 +57,7 @@ readonly class ContentStream {
                 }
 
                 if ($content->operator instanceof IncludesXObjects) {
-                    $positionedTextElements = [...$positionedTextElements, ...$content->operator->getPositionedTextElements($content->operands, $transformationMatrix, $page, $visitedObjectIds)];
+                    $positionedTextElements = [...$positionedTextElements, ...$content->operator->getPositionedTextElements($content->operands, $transformationMatrix, $context, $visitedObjectIds)];
                 }
 
                 continue;

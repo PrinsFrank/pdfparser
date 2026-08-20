@@ -61,6 +61,12 @@ class XObject extends DecoratedObject {
     }
 
     /** @throws PdfParserException */
+    public function getXObjectsDictionary(): ?Dictionary {
+        return $this->getResourceDictionary()
+            ?->getSubDictionary($this->document, DictionaryKey::XOBJECT);
+    }
+
+    /** @throws PdfParserException */
     public function getFontDictionary(): ?Dictionary {
         return $this->getResourceDictionary()
             ?->getSubDictionary($this->document, DictionaryKey::FONT);
@@ -159,12 +165,12 @@ class XObject extends DecoratedObject {
      * @param list<int> $visitedObjectIds
      * @return list<PositionedTextElement>
      */
-    public function getPositionedTextElements(Page $page, TransformationMatrix $transformationMatrix, array $visitedObjectIds): array {
+    public function getPositionedTextElements(TransformationMatrix $transformationMatrix, array $visitedObjectIds): array {
         if ($this->isForm() === false) {
             return [];
         }
 
         return ContentStreamParser::parse([$this])
-            ->getPositionedTextElements($page, $transformationMatrix, $visitedObjectIds);
+            ->getPositionedTextElements($this, $transformationMatrix, $visitedObjectIds);
     }
 }

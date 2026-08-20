@@ -159,13 +159,4 @@ class Page extends DecoratedObject {
 
         return $this->getMediaBox();
     }
-
-    public function getXObjectByKey(ExtendedDictionaryKey $key): ?XObject {
-        $reference = $this->getXObjectsDictionary()
-            ?->getValueForKey($this->document, $key, ReferenceValue::class);
-
-        return $reference === null
-            ? null
-            : $this->document->getObject($reference->objectNumber, XObject::class);
-    }
 }
