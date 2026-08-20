@@ -3,6 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
 use Override;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\Object\TextObjectOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
@@ -167,6 +168,10 @@ class XObject extends DecoratedObject {
      */
     public function getPositionedTextElements(TransformationMatrix $transformationMatrix, array $visitedObjectIds): array {
         if ($this->isForm() === false) {
+            return [];
+        }
+
+        if (($stream = $this->getStream())->firstPos(TextObjectOperator::BEGIN, 0, $stream->getSizeInBytes()) === null) {
             return [];
         }
 

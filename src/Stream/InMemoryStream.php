@@ -4,6 +4,7 @@ namespace PrinsFrank\PdfParser\Stream;
 
 use Override;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMapOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\Object\TextObjectOperator;
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
@@ -57,7 +58,7 @@ class InMemoryStream extends AbstractStream {
     }
 
     #[Override]
-    public function firstPos(WhitespaceCharacter|DelimiterCharacter|ToUnicodeCMapOperator|Marker $needle, int $offsetFromStart, int $before): ?int {
+    public function firstPos(WhitespaceCharacter|DelimiterCharacter|ToUnicodeCMapOperator|Marker|TextObjectOperator $needle, int $offsetFromStart, int $before): ?int {
         $firstPos = strpos($this->content, $needle->value, $offsetFromStart);
         if ($firstPos === false || $firstPos > $before) {
             return null;
