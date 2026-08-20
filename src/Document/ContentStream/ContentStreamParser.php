@@ -37,8 +37,9 @@ class ContentStreamParser {
             $startCurrentOperandIndex = 0;
             $contentStream = $contentsObject->getStream();
             $contentStreamSize = $contentStream->getSizeInBytes();
+            $rawStream = $contentStream->toString();
             for ($index = 0; $index < $contentStreamSize; $index++) {
-                $char = $contentStream->read($index, 1);
+                $char = $rawStream[$index];
                 if ($inComment === true) {
                     if ($char === "\r" || $char === "\n") {
                         $endCommentOffset = $index + 1;
@@ -71,7 +72,7 @@ class ContentStreamParser {
                     $inArrayLevel++;
                 } elseif ($char === '<' && $previousChar === '<' && $secondToLastChar !== '\\') {
                     $inDictionary = true;
-                } elseif ($char === '<' && $previousChar !== '\\' && $contentStream->read($index + 1, 1) !== '<') {
+                } elseif ($char === '<' && $previousChar !== '\\' && $rawStream[$index + 1] !== '<') {
                     $inStringLevel++;
                 } elseif ($char === '(' && $previousChar !== '\\') {
                     $inStringLiteral = true;
@@ -98,7 +99,7 @@ class ContentStreamParser {
                     && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
                     $startCurrentOperandIndex = $index + 1;
                 } elseif (($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null
-                    && (($nextChar = $contentStream->read($index + 1, 1)) === '' || self::getOperator($nextChar, $char, $previousChar, $secondToLastChar) === null)) { // Skip the current hit if the next iteration is also a valid operator
+                    && (($nextChar = $rawStream[$index + 1] ?? '') === '' || self::getOperator($nextChar, $char, $previousChar, $secondToLastChar) === null)) { // Skip the current hit if the next iteration is also a valid operator
                     $operands = '';
                     if ($previousContentStream !== null && $startPreviousOperandIndex !== null && $startPreviousOperandIndex < $previousContentStream->getSizeInBytes()) {
                         $operands .= $previousContentStream->read($startPreviousOperandIndex, $previousContentStream->getSizeInBytes() - $startPreviousOperandIndex);
@@ -112,10 +113,10 @@ class ContentStreamParser {
                             && $endCommentOffset < $operandEndOffset
                             && $startOfCommentOffset !== null
                             && $startOfCommentOffset > $startCurrentOperandIndex) {
-                            $operands .= $contentStream->read($startCurrentOperandIndex, $startOfCommentOffset - $startCurrentOperandIndex);
-                            $operands .= $contentStream->read($endCommentOffset, $operandEndOffset - $endCommentOffset);
+                            $operands .= substr($rawStream, $startCurrentOperandIndex, $startOfCommentOffset - $startCurrentOperandIndex);
+                            $operands .= substr($rawStream, $endCommentOffset, $operandEndOffset - $endCommentOffset);
                         } else {
-                            $operands .= $contentStream->read($startCurrentOperandIndex, $operandLength);
+                            $operands .= substr($rawStream, $startCurrentOperandIndex, $operandLength);
                         }
                     }
 
