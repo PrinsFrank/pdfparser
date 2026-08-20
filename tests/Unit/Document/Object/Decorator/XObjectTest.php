@@ -24,7 +24,7 @@ class XObjectTest extends TestCase {
             ));
 
         static::assertTrue(
-            (new XObject($objectItem, $this->createMock(Document::class)))
+            (new XObject(42, $objectItem, $this->createMock(Document::class)))
                 ->isImage(),
         );
     }
@@ -38,7 +38,7 @@ class XObjectTest extends TestCase {
             ));
 
         static::assertFalse(
-            (new XObject($objectItem, $this->createMock(Document::class)))
+            (new XObject(42, $objectItem, $this->createMock(Document::class)))
                 ->isImage(),
         );
     }
@@ -50,7 +50,7 @@ class XObjectTest extends TestCase {
             ->willReturn(new Dictionary());
 
         static::assertFalse(
-            (new XObject($objectItem, $this->createMock(Document::class)))
+            (new XObject(42, $objectItem, $this->createMock(Document::class)))
                 ->isImage(),
         );
     }
@@ -64,7 +64,7 @@ class XObjectTest extends TestCase {
             ));
 
         static::assertTrue(
-            (new XObject($objectItem, $this->createMock(Document::class)))
+            (new XObject(42, $objectItem, $this->createMock(Document::class)))
                 ->isForm(),
         );
     }
@@ -78,7 +78,7 @@ class XObjectTest extends TestCase {
             ));
 
         static::assertFalse(
-            (new XObject($objectItem, $this->createMock(Document::class)))
+            (new XObject(42, $objectItem, $this->createMock(Document::class)))
                 ->isForm(),
         );
     }
@@ -90,7 +90,7 @@ class XObjectTest extends TestCase {
             ->willReturn(new Dictionary());
 
         static::assertFalse(
-            (new XObject($objectItem, $this->createMock(Document::class)))
+            (new XObject(42, $objectItem, $this->createMock(Document::class)))
                 ->isForm(),
         );
     }
@@ -103,7 +103,7 @@ class XObjectTest extends TestCase {
 
         static::assertSame(
             42,
-            (new XObject($objectItem, $this->createMock(Document::class)))
+            (new XObject(42, $objectItem, $this->createMock(Document::class)))
                 ->getWidth(),
         );
     }
@@ -115,7 +115,7 @@ class XObjectTest extends TestCase {
             ->willReturn(new Dictionary());
 
         static::assertNull(
-            (new XObject($objectItem, $this->createMock(Document::class)))
+            (new XObject(42, $objectItem, $this->createMock(Document::class)))
                 ->getWidth(),
         );
     }
@@ -128,7 +128,7 @@ class XObjectTest extends TestCase {
 
         static::assertSame(
             42,
-            (new XObject($objectItem, $this->createMock(Document::class)))
+            (new XObject(42, $objectItem, $this->createMock(Document::class)))
                 ->getHeight(),
         );
     }
@@ -140,7 +140,7 @@ class XObjectTest extends TestCase {
             ->willReturn(new Dictionary());
 
         static::assertNull(
-            (new XObject($objectItem, $this->createMock(Document::class)))
+            (new XObject(42, $objectItem, $this->createMock(Document::class)))
                 ->getHeight(),
         );
     }
@@ -153,7 +153,7 @@ class XObjectTest extends TestCase {
 
         static::assertSame(
             42,
-            (new XObject($objectItem, $this->createMock(Document::class)))
+            (new XObject(42, $objectItem, $this->createMock(Document::class)))
                 ->getLength(),
         );
     }
@@ -165,7 +165,7 @@ class XObjectTest extends TestCase {
             ->willReturn(new Dictionary());
 
         static::assertNull(
-            (new XObject($objectItem, $this->createMock(Document::class)))
+            (new XObject(42, $objectItem, $this->createMock(Document::class)))
                 ->getLength(),
         );
     }

@@ -24,11 +24,11 @@ enum XObjectOperator: string implements IncludesXObjects {
             return [];
         }
 
-        if (in_array($xObjectId = spl_object_id($xObject), $visitedObjectIds, true)) {
+        if (in_array($xObject->objectNumber, $visitedObjectIds, true)) {
             return [];
         }
 
-        $visitedObjectIds[] = $xObjectId;
+        $visitedObjectIds[] = $xObject->objectNumber;
         return $xObject->getPositionedTextElements($page, $transformationMatrix, $visitedObjectIds);
     }
 }
