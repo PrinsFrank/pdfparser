@@ -57,6 +57,7 @@ class H2MinimalTest extends TestCase {
         $obj1 = $document->getObject(1);
         static::assertEquals(
             new Catalog(
+                1,
                 new UncompressedObject(
                     $document,
                     1,
@@ -79,6 +80,7 @@ class H2MinimalTest extends TestCase {
         $obj2 = $document->getObject(2);
         static::assertEquals(
             new GenericObject(
+                2,
                 new UncompressedObject(
                     $document,
                     2,
@@ -100,6 +102,7 @@ class H2MinimalTest extends TestCase {
         $obj3 = $document->getObject(3);
         static::assertEquals(
             new Pages(
+                3,
                 new UncompressedObject(
                     $document,
                     3,
@@ -122,6 +125,7 @@ class H2MinimalTest extends TestCase {
         $obj4 = $document->getObject(4);
         static::assertEquals(
             new Page(
+                4,
                 new UncompressedObject(
                     $document,
                     4,
@@ -146,6 +150,7 @@ class H2MinimalTest extends TestCase {
         $obj5 = $document->getObject(5);
         static::assertEquals(
             new GenericObject(
+                5,
                 new UncompressedObject(
                     $document,
                     5,
@@ -166,6 +171,7 @@ class H2MinimalTest extends TestCase {
         $obj6 = $document->getObject(6);
         static::assertEquals(
             new GenericObject(
+                6,
                 new UncompressedObject(
                     $document,
                     6,
@@ -183,6 +189,7 @@ class H2MinimalTest extends TestCase {
         );
         static::assertEquals(
             new Catalog(
+                1,
                 new UncompressedObject(
                     $document,
                     1,
