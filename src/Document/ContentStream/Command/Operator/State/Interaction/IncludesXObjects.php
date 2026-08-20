@@ -5,11 +5,12 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Int
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
+use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
 
 interface IncludesXObjects {
     /**
      * @param list<int> $visitedObjectIds
      * @return list<PositionedTextElement>
      */
-    public function getPositionedTextElements(string $operands, TransformationMatrix $transformationMatrix, Page $page, array $visitedObjectIds): array;
+    public function getPositionedTextElements(string $operands, TransformationMatrix $transformationMatrix, Page|XObject $context, array $visitedObjectIds): array;
 }
