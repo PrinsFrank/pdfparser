@@ -19,7 +19,7 @@
         "ext-iconv": "*",
         "ext-zlib": "*",
         "prinsfrank/glyph-lists": "^1.0",
-        "prinsfrank/markdown-dom": "^0.1.0"
+        "prinsfrank/markdown-dom": "^0.2.1"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.65",
