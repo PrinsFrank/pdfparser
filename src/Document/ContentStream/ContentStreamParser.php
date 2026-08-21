@@ -143,6 +143,7 @@ class ContentStreamParser {
                     $inComment = true;
                     $startOfCommentOffset = $index;
                     $previousChar = $secondToLastChar = $thirdToLastChar = null;
+                    continue;
                 } elseif ($char === '[' && $previousChar !== '\\') {
                     $inArrayLevel++;
                 } elseif ($char === '<' && $previousChar === '<' && $secondToLastChar !== '\\') {
@@ -159,52 +160,53 @@ class ContentStreamParser {
                     } elseif ($inArrayLevel > 0 && $char === ']' && $previousChar !== '\\') {
                         $inArrayLevel--;
                     }
-                } elseif ($char === 'T' && $previousChar === 'B') { // TextObjectOperator::BEGIN
-                    $startCurrentOperandIndex = $index + 1;
-                    $textObject = new TextObject();
-                } elseif ($char === 'T' && $previousChar === 'E') { // TextObjectOperator::END
-                    $startCurrentOperandIndex = $index + 1;
-                    if ($textObject !== null) {
-                        $content[] = $textObject;
-                        $textObject = null;
-                    }
-                } elseif ($char === 'D' && $previousChar === 'I' && $secondToLastChar !== '\\') {
-                    $inInlineImage = true;
-                } elseif ($char === 'C'
-                    && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
-                    $startCurrentOperandIndex = $index + 1;
-                } elseif (isset(self::OPERATOR_CHARS[$char])
-                    && ($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null
-                    && (($nextChar = $rawStream[$index + 1] ?? '') === '' || self::getOperator($nextChar, $char, $previousChar, $secondToLastChar) === null)) { // Skip the current hit if the next iteration is also a valid operator
-                    $operands = '';
-                    if ($previousContentStream !== null && $startPreviousOperandIndex !== null && $startPreviousOperandIndex < $previousContentStream->getSizeInBytes()) {
-                        $operands .= $previousContentStream->read($startPreviousOperandIndex, $previousContentStream->getSizeInBytes() - $startPreviousOperandIndex);
-                        $startPreviousOperandIndex = null;
-                    }
-                    $operatorLength = strlen($operator->value);
-                    $operandLength = $index + 1 - $startCurrentOperandIndex - $operatorLength;
-                    if ($operandLength > 0) {
-                        $operandEndOffset = $index + 1 - $operatorLength;
-                        if ($endCommentOffset !== null
-                            && $endCommentOffset < $operandEndOffset
-                            && $startOfCommentOffset !== null
-                            && $startOfCommentOffset > $startCurrentOperandIndex) {
-                            $operands .= substr($rawStream, $startCurrentOperandIndex, $startOfCommentOffset - $startCurrentOperandIndex);
-                            $operands .= substr($rawStream, $endCommentOffset, $operandEndOffset - $endCommentOffset);
-                        } else {
-                            $operands .= substr($rawStream, $startCurrentOperandIndex, $operandLength);
+                } elseif (isset(self::OPERATOR_CHARS[$char])) {
+                    if ($char === 'T' && $previousChar === 'B') { // TextObjectOperator::BEGIN
+                        $startCurrentOperandIndex = $index + 1;
+                        $textObject = new TextObject();
+                    } elseif ($char === 'T' && $previousChar === 'E') { // TextObjectOperator::END
+                        $startCurrentOperandIndex = $index + 1;
+                        if ($textObject !== null) {
+                            $content[] = $textObject;
+                            $textObject = null;
                         }
-                    }
+                    } elseif ($char === 'D' && $previousChar === 'I' && $secondToLastChar !== '\\') {
+                        $inInlineImage = true;
+                    } elseif ($char === 'C'
+                        && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
+                        $startCurrentOperandIndex = $index + 1;
+                    } elseif (($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null
+                        && (($nextChar = $rawStream[$index + 1] ?? '') === '' || self::getOperator($nextChar, $char, $previousChar, $secondToLastChar) === null)) { // Skip the current hit if the next iteration is also a valid operator
+                        $operands = '';
+                        if ($previousContentStream !== null && $startPreviousOperandIndex !== null && $startPreviousOperandIndex < $previousContentStream->getSizeInBytes()) {
+                            $operands .= $previousContentStream->read($startPreviousOperandIndex, $previousContentStream->getSizeInBytes() - $startPreviousOperandIndex);
+                            $startPreviousOperandIndex = null;
+                        }
+                        $operatorLength = strlen($operator->value);
+                        $operandLength = $index + 1 - $startCurrentOperandIndex - $operatorLength;
+                        if ($operandLength > 0) {
+                            $operandEndOffset = $index + 1 - $operatorLength;
+                            if ($endCommentOffset !== null
+                                && $endCommentOffset < $operandEndOffset
+                                && $startOfCommentOffset !== null
+                                && $startOfCommentOffset > $startCurrentOperandIndex) {
+                                $operands .= substr($rawStream, $startCurrentOperandIndex, $startOfCommentOffset - $startCurrentOperandIndex);
+                                $operands .= substr($rawStream, $endCommentOffset, $operandEndOffset - $endCommentOffset);
+                            } else {
+                                $operands .= substr($rawStream, $startCurrentOperandIndex, $operandLength);
+                            }
+                        }
 
-                    $command = new ContentStreamCommand($operator, trim($operands));
-                    if ($textObject !== null) {
-                        $textObject->addContentStreamCommand($command);
-                    } else {
-                        $content[] = $command;
-                    }
+                        $command = new ContentStreamCommand($operator, trim($operands));
+                        if ($textObject !== null) {
+                            $textObject->addContentStreamCommand($command);
+                        } else {
+                            $content[] = $command;
+                        }
 
-                    $startCurrentOperandIndex = $index + 1;
-                    $endCommentOffset = $startOfCommentOffset = null;
+                        $startCurrentOperandIndex = $index + 1;
+                        $endCommentOffset = $startOfCommentOffset = null;
+                    }
                 }
 
                 $thirdToLastChar = $secondToLastChar;
