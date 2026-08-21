@@ -55,24 +55,12 @@ class NestingContext {
         return $this;
     }
 
-    public function removeFromKeyBuffer(int $nChars = 1): self {
-        $this->getKeyBuffer()->removeChar($nChars);
-
-        return $this;
-    }
-
     public function getValueBuffer(): InfiniteBuffer {
         return $this->valueBuffer[$this->currentLevel] ??= new InfiniteBuffer();
     }
 
     public function addToValueBuffer(string $char): self {
         $this->getValueBuffer()->addChar($char);
-
-        return $this;
-    }
-
-    public function removeFromValueBuffer(int $nChars = 1): self {
-        $this->getValueBuffer()->removeChar($nChars);
 
         return $this;
     }

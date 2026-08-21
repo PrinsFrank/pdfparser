@@ -23,6 +23,8 @@ class DictionaryParser {
     public static function parse(?EncryptionContext $encryptionContext, Stream $stream, int $startPos, int $nrOfBytes): Dictionary {
         $dictionaryArray = [];
         $nestingContext = (new NestingContext())->setContext(DictionaryParseContext::ROOT);
+        $keyBuffer = $nestingContext->getKeyBuffer();
+        $valueBuffer = $nestingContext->getValueBuffer();
         $arrayNestingLevel = 0;
         $previousChar = $secondToLastChar = $currentContext = $contextBeforeComment = $previousIndexLevelDecrease = $previousIndexLevelIncrease = null;
         foreach ($stream->chars($startPos, $nrOfBytes) as $index => $char) {
@@ -32,12 +34,14 @@ class DictionaryParser {
                 && $currentContext !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS
                 && $previousIndexLevelIncrease !== $index - 1) {
                 if ($currentContext === DictionaryParseContext::KEY) {
-                    $nestingContext->removeFromKeyBuffer();
+                    $keyBuffer->removeChar();
                 }
 
                 $previousIndexLevelIncrease = $index;
                 $nestingContext->setContext(DictionaryParseContext::DICTIONARY)->incrementNesting()->setContext(DictionaryParseContext::DICTIONARY);
                 $currentContext = DictionaryParseContext::DICTIONARY;
+                $keyBuffer = $nestingContext->getKeyBuffer();
+                $valueBuffer = $nestingContext->getValueBuffer();
             } elseif ($char === DelimiterCharacter::LESS_THAN_SIGN->value && $currentContext === DictionaryParseContext::KEY) {
                 $nestingContext->setContext(DictionaryParseContext::VALUE);
                 $currentContext = DictionaryParseContext::VALUE;
@@ -46,11 +50,13 @@ class DictionaryParser {
                 && $secondToLastChar !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value
                 && $currentContext !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS
                 && $previousIndexLevelDecrease !== $index - 1) {
-                $nestingContext->removeFromValueBuffer();
+                $valueBuffer->removeChar();
                 self::flush($dictionaryArray, $nestingContext);
                 $previousIndexLevelDecrease = $index;
                 $nestingContext->decrementNesting()->flush();
                 $currentContext = $nestingContext->getContext();
+                $keyBuffer = $nestingContext->getKeyBuffer();
+                $valueBuffer = $nestingContext->getValueBuffer();
             } elseif ($char === DelimiterCharacter::SOLIDUS->value
                 && $previousChar !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value
                 && $currentContext !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
@@ -112,11 +118,11 @@ class DictionaryParser {
             $secondToLastChar = $previousChar;
             $previousChar = $char;
             if ($currentContext === DictionaryParseContext::KEY) {
-                $nestingContext->addToKeyBuffer($char);
+                $keyBuffer->addChar($char);
             } elseif ($currentContext === DictionaryParseContext::VALUE_IN_PARENTHESES
                 || $currentContext === DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS
                 || $currentContext === DictionaryParseContext::VALUE) {
-                $nestingContext->addToValueBuffer($char);
+                $valueBuffer->addChar($char);
             }
         }
 
