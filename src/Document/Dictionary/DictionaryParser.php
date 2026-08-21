@@ -71,7 +71,6 @@ class DictionaryParser {
                     $currentContext = DictionaryParseContext::KEY_VALUE_SEPARATOR;
                 } elseif ($currentContext === DictionaryParseContext::VALUE) {
                     self::flush($dictionaryArray, $nestingContext);
-                    $currentContext = $nestingContext->getContext();
                 } elseif ($currentContext === DictionaryParseContext::COMMENT) {
                     $nestingContext->setContext($contextBeforeComment ?? DictionaryParseContext::DICTIONARY);
                     $currentContext = $contextBeforeComment ?? DictionaryParseContext::DICTIONARY;
@@ -82,7 +81,7 @@ class DictionaryParser {
                     self::flush($dictionaryArray, $nestingContext);
                     $contextBeforeComment = DictionaryParseContext::DICTIONARY;
                 } else {
-                    $contextBeforeComment = $nestingContext->getContext();
+                    $contextBeforeComment = $currentContext;
                 }
                 $nestingContext->setContext(DictionaryParseContext::COMMENT);
                 $currentContext = DictionaryParseContext::COMMENT;
@@ -112,13 +111,13 @@ class DictionaryParser {
 
             $secondToLastChar = $previousChar;
             $previousChar = $char;
-            match ($nestingContext->getContext()) {
-                DictionaryParseContext::KEY => $nestingContext->addToKeyBuffer($char),
-                DictionaryParseContext::VALUE_IN_PARENTHESES,
-                DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS,
-                DictionaryParseContext::VALUE => $nestingContext->addToValueBuffer($char),
-                default => null,
-            };
+            if ($currentContext === DictionaryParseContext::KEY) {
+                $nestingContext->addToKeyBuffer($char);
+            } elseif ($currentContext === DictionaryParseContext::VALUE_IN_PARENTHESES
+                || $currentContext === DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS
+                || $currentContext === DictionaryParseContext::VALUE) {
+                $nestingContext->addToValueBuffer($char);
+            }
         }
 
         return DictionaryFactory::fromArray($encryptionContext, $dictionaryArray);
