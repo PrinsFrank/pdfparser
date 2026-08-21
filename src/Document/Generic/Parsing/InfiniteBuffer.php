@@ -38,9 +38,9 @@ class InfiniteBuffer {
         return $this;
     }
 
-    public function removeChar(int $nChars): self {
+    public function removeChar(): self {
         if ($this->buffer !== '') {
-            $this->buffer = substr($this->buffer, 0, -$nChars);
+            $this->buffer = substr($this->buffer, 0, -1);
         }
 
         return $this;
