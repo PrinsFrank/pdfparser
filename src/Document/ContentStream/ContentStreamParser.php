@@ -25,6 +25,79 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 /** @internal */
 class ContentStreamParser {
     public const OPERATOR_CHARS = ['X' => true, 'x' => true, 'I' => true, 'D' => true, 'C' => true, 'T' => true, '*' => true, 'S' => true, 's' => true, 'N' => true, 'n' => true, 'G' => true, 'g' => true, 'K' => true, 'k' => true, 'm' => true, 'i' => true, 'e' => true, 'W' => true, 'w' => true, 'J' => true, 'j' => true, 'M' => true, 'd' => true, 'l' => true, 'c' => true, 'v' => true, 'y' => true, 'h' => true, 'f' => true, 'F' => true, 'B' => true, 'Q' => true, 'q' => true, '\'' => true, '"' => true, 'E' => true, 'P' => true, 'R' => true, 'r' => true, 'b' => true, 'z' => true, 'L' => true, 'o' => true, '1' => true, '0' => true];
+    private const OPERATOR_MAP = [
+        'BMC' => MarkedContentOperator::BeginMarkedContent,
+        'BDC' => MarkedContentOperator::BeginMarkedContentWithProperties,
+        'EMC' => MarkedContentOperator::EndMarkedContent,
+        'SCN' => ColorOperator::SetStrokingParams,
+        'scn' => ColorOperator::SetColorParams,
+        'BX' => CompatibilityOperator::BeginCompatibilitySection,
+        'EX' => CompatibilityOperator::EndCompatibilitySection,
+        'BI' => InlineImageOperator::Begin,
+        'ID' => InlineImageOperator::BeginImageData,
+        'EI' => InlineImageOperator::End,
+        'MD' => MarkedContentOperator::Tag,
+        'DP' => MarkedContentOperator::TagProperties,
+        'BT' => TextObjectOperator::BEGIN,
+        'ET' => TextObjectOperator::END,
+        'W*' => ClippingPathOperator::INTERSECT_EVEN_ODD,
+        'CS' => ColorOperator::SetName,
+        'cs' => ColorOperator::SetNameNonStroking,
+        'SC' => ColorOperator::SetStrokingColor,
+        'sc' => ColorOperator::SetColor,
+        'RG' => ColorOperator::SetStrokingColorDeviceRGB,
+        'rg' => ColorOperator::SetColorDeviceRGB,
+        'cm' => GraphicsStateOperator::ModifyCurrentTransformationMatrix,
+        'ri' => GraphicsStateOperator::SetIntent,
+        'gs' => GraphicsStateOperator::SetDictName,
+        're' => PathConstructionOperator::RECTANGLE,
+        'f*' => PathPaintingOperator::FILL_EVEN_ODD,
+        'B*' => PathPaintingOperator::FILL_STROKE_EVEN_ODD,
+        'b*' => PathPaintingOperator::CLOSE_FILL_STROKE,
+        'Td' => TextPositioningOperator::MOVE_OFFSET,
+        'TD' => TextPositioningOperator::MOVE_OFFSET_LEADING,
+        'Tm' => TextPositioningOperator::SET_MATRIX,
+        'T*' => TextPositioningOperator::NEXT_LINE,
+        'Tj' => TextShowingOperator::SHOW,
+        'TJ' => TextShowingOperator::SHOW_ARRAY,
+        'Tc' => TextStateOperator::CHAR_SPACE,
+        'Tw' => TextStateOperator::WORD_SPACE,
+        'Tz' => TextStateOperator::SCALE,
+        'TL' => TextStateOperator::LEADING,
+        'Tf' => TextStateOperator::FONT_SIZE,
+        'Tr' => TextStateOperator::RENDER,
+        'Ts' => TextStateOperator::RISE,
+        'd0' => Type3FontOperator::SetWidth,
+        'd1' => Type3FontOperator::SetWidthAndBoundingBox,
+        'Do' => XObjectOperator::Paint,
+        'W' => ClippingPathOperator::INTERSECT,
+        'G' => ColorOperator::SetStrokingColorSpace,
+        'g' => ColorOperator::SetColorSpace,
+        'K' => ColorOperator::SetStrokingColorDeviceCMYK,
+        'k' => ColorOperator::SetColorDeviceCMYK,
+        'q' => GraphicsStateOperator::SaveCurrentStateToStack,
+        'Q' => GraphicsStateOperator::RestoreMostRecentStateFromStack,
+        'w' => GraphicsStateOperator::SetLineWidth,
+        'J' => GraphicsStateOperator::SetLineCap,
+        'j' => GraphicsStateOperator::SetLineJoin,
+        'M' => GraphicsStateOperator::SetMiterJoin,
+        'd' => GraphicsStateOperator::SetLineDash,
+        'i' => GraphicsStateOperator::SetFlatness,
+        'm' => PathConstructionOperator::MOVE,
+        'l' => PathConstructionOperator::LINE,
+        'c' => PathConstructionOperator::CURVE_BEZIER_123,
+        'v' => PathConstructionOperator::CURVE_BEZIER_23,
+        'y' => PathConstructionOperator::CURVE_BEZIER_13,
+        'h' => PathConstructionOperator::CLOSE,
+        'S' => PathPaintingOperator::STROKE,
+        's' => PathPaintingOperator::CLOSE_STROKE,
+        'f' => PathPaintingOperator::FILL,
+        'F' => PathPaintingOperator::FILL_DEPRECATED,
+        'B' => PathPaintingOperator::FILL_STROKE,
+        'n' => PathPaintingOperator::END,
+        '\'' => TextShowingOperator::MOVE_SHOW,
+        '"' => TextShowingOperator::MOVE_SHOW_SPACING,
+    ];
 
     /**
      * @param list<DecoratedObject> $contentsObjects
@@ -146,102 +219,23 @@ class ContentStreamParser {
         return new ContentStream(...$content);
     }
 
-    /**
-     * This method uses three maps instead of calling $enum::tryFrom for all possible enums
-     * as operator retrieval happens possibly millions of times in a single file
-     */
     public static function getOperator(string $currentChar, ?string $previousChar, ?string $secondToLastChar, ?string $thirdToLastChar): CompatibilityOperator|InlineImageOperator|MarkedContentOperator|TextObjectOperator|ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator|null {
-        $threeLetterMatch = match ($secondToLastChar . $previousChar . $currentChar) {
-            'BMC' => MarkedContentOperator::BeginMarkedContent,
-            'BDC' => MarkedContentOperator::BeginMarkedContentWithProperties,
-            'EMC' => MarkedContentOperator::EndMarkedContent,
-            'SCN' => ColorOperator::SetStrokingParams,
-            'scn' => ColorOperator::SetColorParams,
-            default => null,
-        };
-        if ($threeLetterMatch !== null) {
-            return ($thirdToLastChar === '\\' || $thirdToLastChar === '/') ? null : $threeLetterMatch;
+        if ($secondToLastChar !== null && isset(self::OPERATOR_CHARS[$secondToLastChar]) && $previousChar !== null && isset(self::OPERATOR_CHARS[$previousChar])) {
+            $key = $secondToLastChar . $previousChar . $currentChar;
+            if (isset(self::OPERATOR_MAP[$key])) {
+                return ($thirdToLastChar === '\\' || $thirdToLastChar === '/') ? null : self::OPERATOR_MAP[$key];
+            }
         }
 
-        $twoLetterMatch = match ($previousChar . $currentChar) {
-            'BX' => CompatibilityOperator::BeginCompatibilitySection,
-            'EX' => CompatibilityOperator::EndCompatibilitySection,
-            'BI' => InlineImageOperator::Begin,
-            'ID' => InlineImageOperator::BeginImageData,
-            'EI' => InlineImageOperator::End,
-            'MD' => MarkedContentOperator::Tag,
-            'DP' => MarkedContentOperator::TagProperties,
-            'BT' => TextObjectOperator::BEGIN,
-            'ET' => TextObjectOperator::END,
-            'W*' => ClippingPathOperator::INTERSECT_EVEN_ODD,
-            'CS' => ColorOperator::SetName,
-            'cs' => ColorOperator::SetNameNonStroking,
-            'SC' => ColorOperator::SetStrokingColor,
-            'sc' => ColorOperator::SetColor,
-            'RG' => ColorOperator::SetStrokingColorDeviceRGB,
-            'rg' => ColorOperator::SetColorDeviceRGB,
-            'cm' => GraphicsStateOperator::ModifyCurrentTransformationMatrix,
-            'ri' => GraphicsStateOperator::SetIntent,
-            'gs' => GraphicsStateOperator::SetDictName,
-            're' => PathConstructionOperator::RECTANGLE,
-            'f*' => PathPaintingOperator::FILL_EVEN_ODD,
-            'B*' => PathPaintingOperator::FILL_STROKE_EVEN_ODD,
-            'b*' => PathPaintingOperator::CLOSE_FILL_STROKE,
-            'Td' => TextPositioningOperator::MOVE_OFFSET,
-            'TD' => TextPositioningOperator::MOVE_OFFSET_LEADING,
-            'Tm' => TextPositioningOperator::SET_MATRIX,
-            'T*' => TextPositioningOperator::NEXT_LINE,
-            'Tj' => TextShowingOperator::SHOW,
-            'TJ' => TextShowingOperator::SHOW_ARRAY,
-            'Tc' => TextStateOperator::CHAR_SPACE,
-            'Tw' => TextStateOperator::WORD_SPACE,
-            'Tz' => TextStateOperator::SCALE,
-            'TL' => TextStateOperator::LEADING,
-            'Tf' => TextStateOperator::FONT_SIZE,
-            'Tr' => TextStateOperator::RENDER,
-            'Ts' => TextStateOperator::RISE,
-            'd0' => Type3FontOperator::SetWidth,
-            'd1' => Type3FontOperator::SetWidthAndBoundingBox,
-            'Do' => XObjectOperator::Paint,
-            default => null,
-        };
-        if ($twoLetterMatch !== null) {
-            return ($secondToLastChar === '\\' || $secondToLastChar === '/') ? null : $twoLetterMatch;
+        if ($previousChar !== null && isset(self::OPERATOR_CHARS[$previousChar])) {
+            $key = $previousChar . $currentChar;
+            if (isset(self::OPERATOR_MAP[$key])) {
+                return ($secondToLastChar === '\\' || $secondToLastChar === '/') ? null : self::OPERATOR_MAP[$key];
+            }
         }
 
-        $oneLetterMatch = match ($currentChar) {
-            'W' => ClippingPathOperator::INTERSECT,
-            'G' => ColorOperator::SetStrokingColorSpace,
-            'g' => ColorOperator::SetColorSpace,
-            'K' => ColorOperator::SetStrokingColorDeviceCMYK,
-            'k' => ColorOperator::SetColorDeviceCMYK,
-            'q' => GraphicsStateOperator::SaveCurrentStateToStack,
-            'Q' => GraphicsStateOperator::RestoreMostRecentStateFromStack,
-            'w' => GraphicsStateOperator::SetLineWidth,
-            'J' => GraphicsStateOperator::SetLineCap,
-            'j' => GraphicsStateOperator::SetLineJoin,
-            'M' => GraphicsStateOperator::SetMiterJoin,
-            'd' => GraphicsStateOperator::SetLineDash,
-            'i' => GraphicsStateOperator::SetFlatness,
-            'm' => PathConstructionOperator::MOVE,
-            'l' => PathConstructionOperator::LINE,
-            'c' => PathConstructionOperator::CURVE_BEZIER_123,
-            'v' => PathConstructionOperator::CURVE_BEZIER_23,
-            'y' => PathConstructionOperator::CURVE_BEZIER_13,
-            'h' => PathConstructionOperator::CLOSE,
-            'S' => PathPaintingOperator::STROKE,
-            's' => PathPaintingOperator::CLOSE_STROKE,
-            'f' => PathPaintingOperator::FILL,
-            'F' => PathPaintingOperator::FILL_DEPRECATED,
-            'B' => PathPaintingOperator::FILL_STROKE,
-            'n' => PathPaintingOperator::END,
-            '\'' => TextShowingOperator::MOVE_SHOW,
-            '"' => TextShowingOperator::MOVE_SHOW_SPACING,
-            default => null,
-        };
-
-        if ($oneLetterMatch !== null) {
-            return ($previousChar === '\\' || $previousChar === '/') ? null : $oneLetterMatch;
+        if (isset(self::OPERATOR_MAP[$currentChar])) {
+            return ($previousChar === '\\' || $previousChar === '/') ? null : self::OPERATOR_MAP[$currentChar];
         }
 
         return null;
