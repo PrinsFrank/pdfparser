@@ -3,9 +3,6 @@
 namespace PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject;
 
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
@@ -19,9 +16,7 @@ class UncompressedObjectParser {
         $endObj = $document->stream->firstPos(Marker::END_OBJ, $startObj, $document->stream->getSizeInBytes())
             ?? throw new ParseFailureException('Unable to locate end of object');
         if (($startStream = $document->stream->getStartNextLineAfter(Marker::STREAM, $startObj, $endObj)) !== null) {
-            $dictionary = DictionaryParser::parse(null, $document->stream, $startObj, $startStream - $startObj);
-            $length = $dictionary->getValueForKey($document, DictionaryKey::LENGTH, IntegerValue::class)?->value;
-            $endStream = $document->stream->firstPos(Marker::END_STREAM, $startStream + ($length ?? 0), $document->stream->getSizeInBytes())
+            $endStream = $document->stream->firstPos(Marker::END_STREAM, $startStream, $document->stream->getSizeInBytes())
                 ?? throw new ParseFailureException('Unable to locate end of stream');
             $endObj = $document->stream->firstPos(Marker::END_OBJ, $endStream, $document->stream->getSizeInBytes())
                 ?? throw new ParseFailureException('Unable to locate end of object');
