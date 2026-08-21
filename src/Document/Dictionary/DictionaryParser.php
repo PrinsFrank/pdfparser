@@ -89,13 +89,13 @@ class DictionaryParser {
             } elseif (WhitespaceCharacter::tryFrom($char) !== null && $currentContext === DictionaryParseContext::KEY) {
                 $nestingContext->setContext(DictionaryParseContext::KEY_VALUE_SEPARATOR);
                 $currentContext = DictionaryParseContext::KEY_VALUE_SEPARATOR;
-            } elseif ($char === DelimiterCharacter::LEFT_PARENTHESIS->value && (in_array($currentContext, [DictionaryParseContext::KEY, DictionaryParseContext::KEY_VALUE_SEPARATOR, DictionaryParseContext::VALUE], true))) {
+            } elseif ($char === DelimiterCharacter::LEFT_PARENTHESIS->value && ($currentContext === DictionaryParseContext::KEY || $currentContext === DictionaryParseContext::KEY_VALUE_SEPARATOR || $currentContext === DictionaryParseContext::VALUE)) {
                 $nestingContext->setContext(DictionaryParseContext::VALUE_IN_PARENTHESES);
                 $currentContext = DictionaryParseContext::VALUE_IN_PARENTHESES;
             } elseif ($char === DelimiterCharacter::RIGHT_PARENTHESIS->value && $previousChar !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $currentContext === DictionaryParseContext::VALUE_IN_PARENTHESES) {
                 $nestingContext->setContext(DictionaryParseContext::VALUE);
                 $currentContext = DictionaryParseContext::VALUE;
-            } elseif ($char === DelimiterCharacter::LEFT_SQUARE_BRACKET->value && (in_array($currentContext, [DictionaryParseContext::KEY, DictionaryParseContext::KEY_VALUE_SEPARATOR, DictionaryParseContext::VALUE, DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS], true))) {
+            } elseif ($char === DelimiterCharacter::LEFT_SQUARE_BRACKET->value && ($currentContext === DictionaryParseContext::KEY || $currentContext === DictionaryParseContext::KEY_VALUE_SEPARATOR || $currentContext === DictionaryParseContext::VALUE || $currentContext === DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS)) {
                 $nestingContext->setContext(DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS);
                 $currentContext = DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS;
                 $arrayNestingLevel++;
