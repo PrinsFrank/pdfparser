@@ -7,7 +7,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
-use PrinsFrank\PdfParser\Document\Generic\Parsing\InfiniteBuffer;
 use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectContent\CompressedObjectContentParser;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -33,23 +32,20 @@ class CompressedObjectByteOffsetParser {
         $content = bin2hex(CompressedObjectContentParser::parseBinary(null, $stream, $startStreamPos, $length, $dictionary)->toString());
         $first = $dictionary->getValueForKey(null, DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
-        $buffer = new InfiniteBuffer();
+        $buffer = '';
         $previousObjectNumber = null;
         $byteOffsets = [];
         foreach (str_split(substr($content, 0, $first->value * 2), 2) as $char) {
             $decodedChar = mb_chr((int) hexdec($char));
             if (WhitespaceCharacter::tryFrom($decodedChar) !== null) {
-                $numberInBuffer = $buffer->__toString();
-                if (trim($numberInBuffer) === '') {
-                    $buffer->flush();
+                if (trim($buffer) === '') {
                     continue;
                 }
 
-                if ($numberInBuffer !== (string) (int) $numberInBuffer) {
-                    throw new ParseFailureException(sprintf('Number "%s" in buffer is not a valid number', $numberInBuffer));
+                if ($buffer !== (string) $numberInBuffer = (int) $buffer) {
+                    throw new ParseFailureException(sprintf('Number "%s" in buffer is not a valid number', $buffer));
                 }
 
-                $numberInBuffer = (int) $numberInBuffer;
                 if ($previousObjectNumber !== null) {
                     $byteOffsets[$previousObjectNumber] = $numberInBuffer;
                     $previousObjectNumber = null;
@@ -57,11 +53,11 @@ class CompressedObjectByteOffsetParser {
                     $previousObjectNumber = $numberInBuffer;
                 }
 
-                $buffer->flush();
+                $buffer = '';
                 continue;
             }
 
-            $buffer->addChar($decodedChar);
+            $buffer .= $decodedChar;
         }
 
         return new CompressedObjectByteOffsets($byteOffsets);
