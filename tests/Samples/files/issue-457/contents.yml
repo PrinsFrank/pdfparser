@@ -163,7 +163,7 @@ pages:
       relevant, use Heading 3. These divisions are not 
       area. Only headlines may be written with Arial 10 
       numbered. The style for Heading 3 is Arial 10 point 
-      point bold . The general rule is: DO NOT USE 
+      point bold. The general rule is: DO NOT USE 
       italic justified to the left margin, with 3 point 
       OTHER FONTS. (Papers prepared on other 
       spacing before and after the heading. Begin typing 
@@ -246,7 +246,7 @@ pages:
       template.
       the heading. Begin typing the text in the line 
       beneath the heading. 3 2
-      x +y =56
+      x + y = 56
       (1)
       2 [Conference name, place and date].
     markdown: |-
@@ -257,7 +257,7 @@ pages:
       relevant, use Heading 3. These divisions are not 
       area. Only headlines may be written with Arial 10 
       numbered. The style for Heading 3 is Arial 10 point 
-      point bold . The general rule is: DO NOT USE 
+      point bold. The general rule is: DO NOT USE 
       italic justified to the left margin, with 3 point 
       OTHER FONTS. (Papers prepared on other 
       spacing before and after the heading. Begin typing 
@@ -340,7 +340,7 @@ pages:
       template.
       the heading. Begin typing the text in the line 
       beneath the heading. 3 2
-      x +y =56
+      x + y = 56
       (1)
       2 [Conference name, place and date].
     images:
@@ -357,7 +357,7 @@ pages:
       tables e.g., Figure 1, Figure 2, Figure 3; Table 1, 
       Use italics for variables (u); bold for vectors (no 
       Table 2, Table 3. Map 1, Map 2, Map 3 etc. Use (a), 
-      arrows) ( u); bold italic for variable vectors (u) and 
+      arrows) (u); bold italic for variable vectors (u) and 
       (b), (c) to distinguish individual subjects in a 
       capital bold italic (U) for variable matrices. Use ith, 
       composite figure. See Figures 1 and 2 for examples 
@@ -411,7 +411,7 @@ pages:
       good contrast.
       When preparing figures and tables, make sure that 
       all lettering inside the figure is no smaller than the 
-      specified size of the paper text, i.e., 10 point. Do 
+      specified size of the paper text, i.e., 10 point . Do 
       not include any headlines in the diagrams, 
       graphics or tables. All headlines should be written 
       separately. See the examples below. Do not use 
@@ -433,7 +433,7 @@ pages:
       tables e.g., Figure 1, Figure 2, Figure 3; Table 1, 
       Use italics for variables (u); bold for vectors (no 
       Table 2, Table 3. Map 1, Map 2, Map 3 etc. Use (a), 
-      arrows) ( u); bold italic for variable vectors (u) and 
+      arrows) (u); bold italic for variable vectors (u) and 
       (b), (c) to distinguish individual subjects in a 
       capital bold italic (U) for variable matrices. Use ith, 
       composite figure. See Figures 1 and 2 for examples 
@@ -487,7 +487,7 @@ pages:
       good contrast.
       When preparing figures and tables, make sure that 
       all lettering inside the figure is no smaller than the 
-      specified size of the paper text, i.e., 10 point. Do 
+      specified size of the paper text, i.e., 10 point . Do 
       not include any headlines in the diagrams, 
       graphics or tables. All headlines should be written 
       separately. See the examples below. Do not use 

@@ -4,6 +4,8 @@ namespace PrinsFrank\PdfParser\Extraction\Markdown;
 
 use PrinsFrank\MarkDownDom\Document;
 use PrinsFrank\MarkDownDom\Node\Block\Paragraph;
+use PrinsFrank\MarkDownDom\Node\Inline\Bold;
+use PrinsFrank\MarkDownDom\Node\Inline\Italic;
 use PrinsFrank\MarkDownDom\Node\Inline\Text;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
@@ -54,7 +56,15 @@ class MarkdownExtractor {
                     }
                 }
 
-                $lineNodes[] = new Text(($insertSpace ? ' ' : '') . $elementText);
+                $lineNode = new Text(($insertSpace ? ' ' : '') . $elementText);
+                if ($font->isBold()) {
+                    $lineNode = new Bold($lineNode);
+                }
+                if ($font->isItalic()) {
+                    $lineNode = new Italic($lineNode);
+                }
+
+                $lineNodes[] = $lineNode;
                 $previousTextElementOnLine = $positionedTextElement;
                 $previousTextElementOnLineText = $elementText;
             }
