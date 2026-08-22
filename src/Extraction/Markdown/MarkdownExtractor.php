@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Extraction\Markdown;
 
+use PrinsFrank\MarkDownDom\Contract\InlineNode;
 use PrinsFrank\MarkDownDom\Document;
 use PrinsFrank\MarkDownDom\Node\Block\Paragraph;
 use PrinsFrank\MarkDownDom\Node\Inline\Bold;
@@ -80,6 +81,7 @@ class MarkdownExtractor {
         return new Document(new Paragraph(...$lineNodes));
     }
 
+    /** @param list<InlineNode> $lineNodes */
     private static function flushNodes(array &$lineNodes, string &$textBuffer, bool $previousElementIsBold, bool $previousElementIsItalic): void {
         if ($textBuffer === '') {
             return;
