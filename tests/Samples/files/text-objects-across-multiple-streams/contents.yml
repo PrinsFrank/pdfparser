@@ -296,7 +296,8 @@ pages:
       RS-422
       Control Panel output
       will contend with 7707DT
-      Incorrect Method output. Will not work.
+      Incorrect Method
+       output. Will not work.
       7707DT
       Set to
       RS-422
@@ -328,7 +329,9 @@ pages:
       RS-422
       Control Panel output
       will contend with 7707DT
-      **Incorrect Method** output. Will not work.
+      ##### **Incorrect Method**
+
+       output. Will not work.
       **7707DT**
       Set to
       RS-422
@@ -418,7 +421,8 @@ pages:
        
       **7707DT Channel 1 is configured**
       **Control Panel Control Panel to RS-422 for this example.**
-      **7707DT 7707DT**
+      ##### **7707DT 7707DT**
+
       **1 2 3 4 5**
       **GND - TX +RX --- ---**
       **6 7 8 9**
@@ -658,7 +662,8 @@ pages:
       **Control Panel Control Panel**
       **7707DT Channel 2 is configured**
       **to RS-485 @1200baud for this example.**
-      **7707DT 7707DT**
+      ##### **7707DT 7707DT**
+
       **1 2 3 4 5**
       **GND - TX +RX --- ---**
       **6 7 8 9**

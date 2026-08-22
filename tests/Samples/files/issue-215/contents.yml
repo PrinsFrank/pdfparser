@@ -12,7 +12,8 @@ modificationDate: 2025-09-01T16:24:09+02:00
 pages:
   -
     text: |-
-      Deutscher Bundestag Drucksache 21/1407
+      Deutscher Bundestag
+       Drucksache 21/1407
       21. Wahlperiode 28.08.2025
       Antwort 
       der Bundesregierung 
@@ -57,9 +58,13 @@ pages:
       vom 28. August 2025 übermittelt.
       Die Drucksache enthält zusätzlich – in kleinerer Schrifttype – den Fragetext.
     markdown: |-
-      **Deutscher Bundestag Drucksache** 21/**1407**
+      ##### **Deutscher Bundestag**
+
+       **Drucksache** ##### 21/**1407**
+
       **21. Wahlperiode** 28.08.2025
-      **Antwort** 
+      ##### **Antwort** 
+
       **der Bundesregierung** 
       **auf die Kleine Anfrage der Abgeordneten Jörg Cezanne, Desiree Becker, Violetta** 
       **Bock, Clara Bünger, Anne-Mieke Bremer, Katrin Fey, Dr. Gregor Gysi, Luke Hoß,** 

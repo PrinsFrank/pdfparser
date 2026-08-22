@@ -12,7 +12,8 @@ modificationDate: 2025-09-12T14:25:52+02:00
 pages:
   -
     text: |-
-      Deutscher Bundestag Drucksache 21/1576
+      Deutscher Bundestag
+       Drucksache 21/1576
       21. Wahlperiode 10.09.2025
       Antwort 
       der Bundesregierung 
@@ -55,9 +56,13 @@ pages:
       vom 9. September 2025 übermittelt.
       Die Drucksache enthält zusätzlich – in kleinerer Schrifttype – den Fragetext.
     markdown: |-
-      **Deutscher Bundestag Drucksache** 21/**1576**
+      ##### **Deutscher Bundestag**
+
+       **Drucksache** ##### 21/**1576**
+
       **21. Wahlperiode** 10.09.2025
-      **Antwort** 
+      ##### **Antwort** 
+
       **der Bundesregierung** 
       **auf die Kleine Anfrage der Abgeordneten Bodo Ramelow, Clara Bünger, Anne-**
       **Mieke Bremer, weiterer Abgeordneter und der Fraktion Die Linke**

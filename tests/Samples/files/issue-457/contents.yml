@@ -81,7 +81,8 @@ pages:
       Linköping University Electronic Press at [Link to webpage where published]. © The Author(s). This work is licensed 
       under the Choose licence.
     markdown: |-
-      **Main title**
+      ##### **Main title**
+
       **Subtitle (if available)**
       Anders Andersson 1 and Anna Annasson 2
       1Linköpings universitet, Devision and Department, Sweden namn.namn@liu.se

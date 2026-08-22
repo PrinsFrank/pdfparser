@@ -2,8 +2,11 @@
 
 namespace PrinsFrank\PdfParser\Extraction\Markdown;
 
+use PrinsFrank\MarkDownDom\Contract\BlockNode;
 use PrinsFrank\MarkDownDom\Contract\InlineNode;
 use PrinsFrank\MarkDownDom\Document;
+use PrinsFrank\MarkDownDom\Enum\HeadingLevel;
+use PrinsFrank\MarkDownDom\Node\Block\Heading;
 use PrinsFrank\MarkDownDom\Node\Block\Paragraph;
 use PrinsFrank\MarkDownDom\Node\Inline\Bold;
 use PrinsFrank\MarkDownDom\Node\Inline\Italic;
@@ -21,14 +24,20 @@ class MarkdownExtractor {
     public static function extractContent(array $positionedTextElements, Page $page): Document {
         $lineGroupedElements = TextOverlapStrategy::group($positionedTextElements);
 
-        $lineNodes = [];
+        $blockNodes = $inLineNodes = [];
         $textBuffer = '';
         $previousElementIsBold = $previousElementIsItalic = false;
+        $previousHeadingLevel = null;
         foreach ($lineGroupedElements as $i => $positionedTextElementsForLine) {
             if ($i !== 0) {
-                if ($previousElementIsBold || $previousElementIsItalic) {
-                    self::flushNodes($lineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
-                    $lineNodes[] = new Text("\n");
+                if ($previousHeadingLevel !== null) {
+                    self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+                    self::flushBlockNodes($blockNodes, $inLineNodes, $previousHeadingLevel);
+                    $previousHeadingLevel = null;
+                } elseif ($previousElementIsBold || $previousElementIsItalic) {
+                    self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+                    $inLineNodes[] = new Text("\n");
+                    $previousElementIsItalic = $previousElementIsBold = false;
                 } else {
                     $textBuffer .= "\n";
                 }
@@ -44,9 +53,12 @@ class MarkdownExtractor {
                 }
 
                 $font = $positionedTextElement->getFont($page);
-                if ($font->isBold() !== $previousElementIsBold
-                    || $font->isItalic() !== $previousElementIsItalic) {
-                    self::flushNodes($lineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+                $currentHeadingLevel = $font->getHeadingLevel($positionedTextElement->textState, $positionedTextElement->absoluteMatrix);
+                if ($previousHeadingLevel !== $currentHeadingLevel) {
+                    self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+                    self::flushBlockNodes($blockNodes, $inLineNodes, $previousHeadingLevel);
+                } elseif ($font->isBold() !== $previousElementIsBold || $font->isItalic() !== $previousElementIsItalic) {
+                    self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
                 }
 
                 if ($previousTextElementOnLine !== null) {
@@ -72,17 +84,33 @@ class MarkdownExtractor {
                 $previousTextElementEndsWithSpace = str_ends_with($elementText, ' ');
                 $previousElementIsItalic = $font->isItalic();
                 $previousElementIsBold = $font->isBold();
+                $previousHeadingLevel = $currentHeadingLevel;
                 $textBuffer .= $elementText;
             }
         }
 
-        self::flushNodes($lineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+        self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+        self::flushBlockNodes($blockNodes, $inLineNodes, $previousHeadingLevel);
 
-        return new Document(new Paragraph(...$lineNodes));
+        return new Document(...$blockNodes);
     }
 
-    /** @param list<InlineNode> $lineNodes */
-    private static function flushNodes(array &$lineNodes, string &$textBuffer, bool $previousElementIsBold, bool $previousElementIsItalic): void {
+    /**
+     * @param list<BlockNode> $blockNodes
+     * @param list<InlineNode> $inLineNodes
+     */
+    private static function flushBlockNodes(array &$blockNodes, array &$inLineNodes, ?HeadingLevel $previousHeadingLevel): void {
+        if ($previousHeadingLevel === null) {
+            $blockNodes[] = new Paragraph(...$inLineNodes);
+        } else {
+            $blockNodes[] = new Heading($previousHeadingLevel, ...$inLineNodes);
+        }
+
+        $inLineNodes = [];
+    }
+
+    /** @param list<InlineNode> $inLineNodes */
+    private static function flushInLineNodes(array &$inLineNodes, string &$textBuffer, bool $previousElementIsBold, bool $previousElementIsItalic): void {
         if ($textBuffer === '') {
             return;
         }
@@ -90,7 +118,7 @@ class MarkdownExtractor {
         $trailingWhitespace = null;
         if ($previousElementIsBold || $previousElementIsItalic) {
             if (str_starts_with($textBuffer, ' ')) {
-                $lineNodes[] = new Text(substr($textBuffer, 0, strlen($textBuffer) - strlen(ltrim($textBuffer))));
+                $inLineNodes[] = new Text(substr($textBuffer, 0, strlen($textBuffer) - strlen(ltrim($textBuffer))));
                 $textBuffer = ltrim($textBuffer);
             }
             if (str_ends_with($textBuffer, ' ')) {
@@ -99,18 +127,18 @@ class MarkdownExtractor {
             }
         }
 
-        $lineNode = new Text($textBuffer);
+        $inLineNode = new Text($textBuffer);
         if ($previousElementIsBold) {
-            $lineNode = new Bold($lineNode);
+            $inLineNode = new Bold($inLineNode);
         }
 
         if ($previousElementIsItalic) {
-            $lineNode = new Italic($lineNode);
+            $inLineNode = new Italic($inLineNode);
         }
 
-        $lineNodes[] = $lineNode;
+        $inLineNodes[] = $inLineNode;
         if ($trailingWhitespace !== null) {
-            $lineNodes[] = $trailingWhitespace;
+            $inLineNodes[] = $trailingWhitespace;
         }
         $textBuffer = '';
     }
