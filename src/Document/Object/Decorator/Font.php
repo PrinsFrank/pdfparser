@@ -288,4 +288,28 @@ class Font extends DecoratedObject {
         return $this->getDictionary()
             ->getValueForKey($this->document, DictionaryKey::FONT_DESCRIPTOR, ReferenceValue::class);
     }
+
+    public function isBold(): bool {
+        $baseFont = $this->getBaseFont();
+        if ($baseFont === null) {
+            return false;
+        }
+
+        $baseFont = strtolower($baseFont);
+        return str_contains($baseFont, 'bold')
+            || str_contains($baseFont, 'heavy')
+            || str_contains($baseFont, 'black');
+    }
+
+    public function isItalic(): bool {
+        $baseFont = $this->getBaseFont();
+        if ($baseFont === null) {
+            return false;
+        }
+
+        $baseFont = strtolower($baseFont);
+        return str_contains($baseFont, 'italic')
+            || str_contains($baseFont, 'oblique')
+            || str_contains($baseFont, 'slanted');
+    }
 }

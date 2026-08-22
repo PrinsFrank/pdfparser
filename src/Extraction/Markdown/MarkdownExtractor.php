@@ -18,13 +18,14 @@ class MarkdownExtractor {
     public static function extractContent(array $positionedTextElements, Page $page): Document {
         $lineGroupedElements = TextOverlapStrategy::group($positionedTextElements);
 
-        $text = '';
+        $lineNodes = [];
         foreach ($lineGroupedElements as $i => $positionedTextElementsForLine) {
             if ($i !== 0) {
-                $text .= "\n";
+                $lineNodes[] = new Text("\n");
             }
 
             $previousTextElementOnLine = null;
+            $previousTextElementOnLineText = '';
             foreach ($positionedTextElementsForLine as $positionedTextElement) {
                 $elementText = $positionedTextElement->getText($page);
                 if ($elementText === '') {
@@ -32,6 +33,7 @@ class MarkdownExtractor {
                     continue;
                 }
 
+                $insertSpace = false;
                 $font = $positionedTextElement->getFont($page);
                 if ($previousTextElementOnLine !== null) {
                     $gap = $positionedTextElement->absoluteMatrix->offsetX
@@ -45,18 +47,19 @@ class MarkdownExtractor {
 
                     if (
                         $gap >= $wordBreakThreshold
-                        && str_ends_with($text, ' ') === false
+                        && str_ends_with($previousTextElementOnLineText, ' ') === false
                         && str_starts_with($elementText, ' ') === false
                     ) {
-                        $text .= ' ';
+                        $insertSpace = true;
                     }
                 }
 
-                $text .= $elementText;
+                $lineNodes[] = new Text(($insertSpace ? ' ' : '') . $elementText);
                 $previousTextElementOnLine = $positionedTextElement;
+                $previousTextElementOnLineText = $elementText;
             }
         }
 
-        return new Document(new Paragraph(new Text($text)));
+        return new Document(new Paragraph(...$lineNodes));
     }
 }
