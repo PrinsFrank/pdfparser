@@ -21,9 +21,16 @@ class MarkdownExtractor {
         $lineGroupedElements = TextOverlapStrategy::group($positionedTextElements);
 
         $lineNodes = [];
+        $textBuffer = '';
+        $previousElementIsBold = $previousElementIsItalic = false;
         foreach ($lineGroupedElements as $i => $positionedTextElementsForLine) {
             if ($i !== 0) {
-                $lineNodes[] = new Text("\n");
+                if ($previousElementIsBold || $previousElementIsItalic) {
+                    self::flushNodes($lineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+                    $lineNodes[] = new Text("\n");
+                } else {
+                    $textBuffer .= "\n";
+                }
             }
 
             $previousTextElementOnLine = null;
@@ -35,8 +42,12 @@ class MarkdownExtractor {
                     continue;
                 }
 
-                $insertSpace = false;
                 $font = $positionedTextElement->getFont($page);
+                if ($font->isBold() !== $previousElementIsBold
+                    || $font->isItalic() !== $previousElementIsItalic) {
+                    self::flushNodes($lineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+                }
+
                 if ($previousTextElementOnLine !== null) {
                     $gap = $positionedTextElement->absoluteMatrix->offsetX
                         - $previousTextElementOnLine->absoluteMatrix->offsetX
@@ -52,24 +63,52 @@ class MarkdownExtractor {
                         && $previousTextElementEndsWithSpace === false
                         && str_starts_with($elementText, ' ') === false
                     ) {
-                        $insertSpace = true;
+                        $textBuffer .= ' ';
                     }
                 }
 
-                $lineNode = new Text(($insertSpace ? ' ' : '') . $elementText);
-                if ($font->isBold()) {
-                    $lineNode = new Bold($lineNode);
-                }
-                if ($font->isItalic()) {
-                    $lineNode = new Italic($lineNode);
-                }
-
-                $lineNodes[] = $lineNode;
                 $previousTextElementOnLine = $positionedTextElement;
                 $previousTextElementEndsWithSpace = str_ends_with($elementText, ' ');
+                $previousElementIsItalic = $font->isItalic();
+                $previousElementIsBold = $font->isBold();
+                $textBuffer .= $elementText;
             }
         }
 
+        self::flushNodes($lineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+
         return new Document(new Paragraph(...$lineNodes));
+    }
+
+    private static function flushNodes(array &$lineNodes, string &$textBuffer, bool $previousElementIsBold, bool $previousElementIsItalic): void {
+        if ($textBuffer === '') {
+            return;
+        }
+
+        $trailingWhitespace = null;
+        if ($previousElementIsBold || $previousElementIsItalic) {
+            if (str_starts_with($textBuffer, ' ')) {
+                $lineNodes[] = new Text(substr($textBuffer, strlen($textBuffer) - strlen(ltrim($textBuffer))));
+            }
+            if (str_ends_with($textBuffer, ' ')) {
+                $trailingWhitespace = new Text(substr($textBuffer, strlen(rtrim($textBuffer))));
+                $textBuffer = rtrim($textBuffer);
+            }
+        }
+
+        $lineNode = new Text($textBuffer);
+        if ($previousElementIsBold) {
+            $lineNode = new Bold($lineNode);
+        }
+
+        if ($previousElementIsItalic) {
+            $lineNode = new Italic($lineNode);
+        }
+
+        $lineNodes[] = $lineNode;
+        if ($trailingWhitespace !== null) {
+            $lineNodes[] = $trailingWhitespace;
+        }
+        $textBuffer = '';
     }
 }
