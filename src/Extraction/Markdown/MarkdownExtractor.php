@@ -32,10 +32,11 @@ class MarkdownExtractor {
                     continue;
                 }
 
+                $font = $positionedTextElement->getFont($page);
                 if ($previousTextElementOnLine !== null) {
                     $gap = $positionedTextElement->absoluteMatrix->offsetX
                         - $previousTextElementOnLine->absoluteMatrix->offsetX
-                        - $previousTextElementOnLine->getAdvanceWidth($page);
+                        - $previousTextElementOnLine->getAdvanceWidth($font);
 
                     $wordBreakThreshold = $previousTextElementOnLine->textState->getFontSize()
                         * $previousTextElementOnLine->absoluteMatrix->scaleX

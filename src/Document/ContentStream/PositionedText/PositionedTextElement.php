@@ -75,8 +75,7 @@ readonly class PositionedTextElement {
      *
      * Reconstructed here because Tj/TJ do not advance the text matrix in this parser.
      */
-    public function getAdvanceWidth(Page $page): float {
-        $font = $this->getFont($page);
+    public function getAdvanceWidth(Font $font): float {
         $scaleX = $this->absoluteMatrix->scaleX;
         $fontSize = $this->textState->getFontSize();
 
