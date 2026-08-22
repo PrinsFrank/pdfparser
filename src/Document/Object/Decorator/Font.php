@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
+use PrinsFrank\MarkDownDom\Enum\HeadingLevel;
 use PrinsFrank\PdfParser\Document\CMap\Registry\RegistryOrchestrator;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMap;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMapParser;
@@ -311,5 +312,18 @@ class Font extends DecoratedObject {
         return str_contains($baseFont, 'italic')
             || str_contains($baseFont, 'oblique')
             || str_contains($baseFont, 'slanted');
+    }
+
+    public function getHeadingLevel(TextState $textState, TransformationMatrix $transformationMatrix): ?HeadingLevel {
+        $effectiveFontSize = $textState->getFontSize() * $transformationMatrix->scaleX;
+
+        return match (true) {
+            $effectiveFontSize >= 30 => HeadingLevel::Level1,
+            $effectiveFontSize >= 26 => HeadingLevel::Level2,
+            $effectiveFontSize >= 22 => HeadingLevel::Level3,
+            $effectiveFontSize >= 18 => HeadingLevel::Level4,
+            $effectiveFontSize >= 14 => HeadingLevel::Level5,
+            default => null,
+        };
     }
 }
