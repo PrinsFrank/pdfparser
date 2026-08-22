@@ -39,8 +39,8 @@ readonly class ContentStream {
         foreach ($this->content as $content) {
             if ($content instanceof ContentStreamCommand) {
                 if ($content->operator === GraphicsStateOperator::SaveCurrentStateToStack) {
-                    $transformationStateStack[] = clone $transformationMatrix;
-                    $textStateStack[] = clone $textState;
+                    $transformationStateStack[] = $transformationMatrix;
+                    $textStateStack[] = $textState;
                 } elseif ($content->operator === GraphicsStateOperator::RestoreMostRecentStateFromStack) {
                     $transformationMatrix = array_pop($transformationStateStack)
                         ?? throw new ParseFailureException();
