@@ -9,6 +9,7 @@ use Symfony\Component\Yaml\Yaml;
 require dirname(__DIR__, 2) . '/vendor/autoload.php';
 
 foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sampleName) {
+    echo sprintf('Updating content of sample %s', $sampleName . PHP_EOL);
     $sampleFolder = $filesDir . DIRECTORY_SEPARATOR . $sampleName;
     if (!file_exists($pdfPath = $sampleFolder . DIRECTORY_SEPARATOR . 'file.pdf')) {
         throw new RuntimeException(sprintf('File "%s" does not exist', $pdfPath));
@@ -32,7 +33,7 @@ foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sa
     foreach ($parsedPDF->getPages() as $pageIndex => $page) {
         $pages[$pageIndex] = [
             'text' => $page->getText(),
-            'markdown' => $page->getText(),
+            'markdown' => $page->getMarkdown(),
         ];
 
         foreach ($page->getImages() as $imageIndex => $image) {

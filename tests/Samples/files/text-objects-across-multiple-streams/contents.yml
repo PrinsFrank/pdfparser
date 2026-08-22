@@ -68,11 +68,11 @@ pages:
        
        Revision 1.0 AN6-1 
     markdown: |2-
-       Application Note AN-6 
-      MPK Router Control Interface to 7707DT   
+       **Application Note AN-6** 
+      **MPK Router Control Interface to 7707DT**   
        
        
-      1. OVERVIEW 
+      **1. OVERVIEW** 
        
       Philips Broadcast implemented the MPK (message per keystroke) interface protocol for control panels 
       used in Jupiter router systems. Grass Valley has since become responsible for the Jupiter series of 
@@ -122,7 +122,7 @@ pages:
       wires. 
        
        
-       Revision 1.0 AN6-1 
+       Revision 1.0 **AN6-1** 
   -
     text: |-
       Application Note AN-6 
@@ -163,43 +163,43 @@ pages:
       Figure 3. MPK Interface Example 
       AN6-2 Revision 1.0 
     markdown: |-
-      Application Note AN-6 
-      MPK Router Control Interface to 7707DT 
+      **Application Note AN-6** 
+      **MPK Router Control Interface to 7707DT** 
        
        
        
-      RS-422 Device RS-422 Device
+      **RS-422 Device RS-422 Device**
        
        
-      Figure 1. RS-422 Interface Example 
+      **Figure 1. RS-422 Interface Example** 
        
          
        
        
-      RS-485 Device RS-485 Device RS-485 Device
+      **RS-485 Device RS-485 Device RS-485 Device**
       Each device ouputs
       data in-turn to all other
       devices.
-      RS-485 Device
+      **RS-485 Device**
        
        
-      Figure 2. RS-485 Interface Example 
+      **Figure 2. RS-485 Interface Example** 
+       ****
+       ****
        
        
-       
-       
-      Control Panel Control Panel Control Panel
+      **Control Panel Control Panel Control Panel**
       Each Control Panel
       ouputs data in-turn to the
       System Controller input.
       System Controller
-      Jupiter System Controller
+      **Jupiter System Controller**
       outputs identical data to
       all Control Panel inputs
        
-       
-      Figure 3. MPK Interface Example 
-      AN6-2 Revision 1.0 
+       ****
+      **Figure 3. MPK Interface Example** 
+      **AN6-2** Revision 1.0 
   -
     text: |2-
        Application Note AN-6 
@@ -238,12 +238,12 @@ pages:
        
        Revision 1.0 AN6-3 
     markdown: |2-
-       Application Note AN-6 
-      MPK Router Control Interface to 7707DT   
+       **Application Note AN-6** 
+      **MPK Router Control Interface to 7707DT**   
        
        
        
-      2. INTERFACE METHODS 
+      **2. INTERFACE METHODS** 
        
       From the above overview, it is apparent that special considerations are required when connecting MPK 
       interface signals to the RS-422 or RS-485 interface of the 7707DT. The issue at hand is the high-
@@ -254,7 +254,7 @@ pages:
       accommodates a single balanced connection per signal channel. The below two sections describe 
       special requirements for connecting the MPK interface to the RS-422 or RS-485 interfaces of the 
       7707DT. 
-      2.1. MPK Interface to RS-422 
+      **2.1. MPK Interface to RS-422** 
       The RS-422 interface format does not accommodate a high-impedance output state. The MPK 
       interface signal can, however, be connected to the RS-422 interface of the 7707DT. While the input to 
       the 7707DT is in a high-impedance state, the respective output of the companion 7707DT will assume 
@@ -272,7 +272,7 @@ pages:
       7707DT fiber link. Figures 4 and 5 describe correct and incorrect interface methods, respectively. 
       Figure 6 describes pin-for-pin connections for the correct method.  
        
-       Revision 1.0 AN6-3 
+       Revision 1.0 **AN6-3** 
   -
     text: |-
       Application Note AN-6 
@@ -307,37 +307,37 @@ pages:
       Figure 5. MPK Interface to RS-422. Incorrect Method 
       AN6-4 Revision 1.0 
     markdown: |-
-      Application Note AN-6 
-      MPK Router Control Interface to 7707DT 
+      **Application Note AN-6** 
+      **MPK Router Control Interface to 7707DT** 
        
-      Control Panel Control Panel Control Panel
+      **Control Panel Control Panel Control Panel**
       Set to
       RS-422
-      7707DT
+      **7707DT**
       Set to
       RS-422
-      Jupiter System Controller
-      7707DT
+      **Jupiter System Controller**
+      **7707DT**
        
        
-      Figure 4. MPK Interface to RS-422. Correct Method 
-       
-       
-      Control Panel Control Panel Control Panel
+      **Figure 4. MPK Interface to RS-422. Correct Method** 
+       ****
+       ****
+      **Control Panel Control Panel Control Panel**
       Set to
       RS-422
       Control Panel output
       will contend with 7707DT
-      Incorrect Method output. Will not work.
-      7707DT
+      **Incorrect Method** output. Will not work.
+      **7707DT**
       Set to
       RS-422
-      Jupiter System Controller
-      7707DT
+      **Jupiter System Controller**
+      **7707DT**
        
        
-      Figure 5. MPK Interface to RS-422. Incorrect Method 
-      AN6-4 Revision 1.0 
+      **Figure 5. MPK Interface to RS-422. Incorrect Method** 
+      **AN6-4** Revision 1.0 
   -
     text: |2-
        Application Note AN-6 
@@ -412,77 +412,77 @@ pages:
       Figure 6. MPK Interface to RS-422 
        Revision 1.0 AN6-5 
     markdown: |2-
-       Application Note AN-6 
-      MPK Router Control Interface to 7707DT   
+       **Application Note AN-6** 
+      **MPK Router Control Interface to 7707DT**   
        
        
-      7707DT Channel 1 is configured
-      Control Panel Control Panel to RS-422 for this example.
-      7707DT 7707DT
-      1 2 3 4 5
-      GND - TX +RX --- ---
-      6 7 8 9
-      --- +TX -RX ---
-      +RS485 +RS485
-      -RS422 OUT -RS422 OUT
-      +RS422 IN +RS422 IN
-      -RS485 -RS485
-      CH1
-      CH1
-      +RS422 OUT +RS422 OUT
-      RS-422
-      RS-422
-      -RS422 IN -RS422 IN
-      RS232 IN RS232 OUT RS232 IN RS232 OUT
-      CH1 CH1 CH1 CH1
-      GND GND GND GND
-      +RS485 +RS485
-      -RS422 OUT -RS422 OUT
-      +RS422 IN +RS422 IN
-      -RS485 -RS485
-      CH2
-      CH2
-      +RS422 OUT +RS422 OUT
-      -RS422 IN -RS422 IN
-      RS-422
-      RS-422
-      RS232 IN RS232 OUT RS232 IN RS232 OUT
-      CH2 CH2 CH2 CH2
-      GND GND GND GND
-      +RS485 +RS485
-      -RS422 OUT -RS422 OUT
-      +RS422 IN +RS422 IN
-      -RS485 -RS485
-      CH3
-      CH3
-      +RS422 OUT +RS422 OUT
-      RS-422
-      RS-422
-      -RS422 IN -RS422 IN
-      RS232 IN RS232 OUT RS232 IN RS232 OUT
-      CH3 CH3 CH3 CH3
-      GND GND GND GND
-      +RS485 +RS485
-      -RS422 OUT -RS422 OUT
-      +RS422 IN +RS422 IN
-      1 2 3 4 5
-      -RS485 -RS485
-      CH4
-      CH4
-      GND - RX +TX --- ---
-      +RS422 OUT +RS422 OUT
-      RS-422
-      RS-422
-      -RS422 IN -RS422 IN
-      6 7 8 9
-      --- +RX -TX ---
-      +LTC IN +LTC OUT +LTC IN +LTC OUT
-      GND GND GND GND
-      -LTC IN -LTC OUT -LTC IN -LTC OUT
-      Jupiter System Controller
+      **7707DT Channel 1 is configured**
+      **Control Panel Control Panel to RS-422 for this example.**
+      **7707DT 7707DT**
+      **1 2 3 4 5**
+      **GND - TX +RX --- ---**
+      **6 7 8 9**
+      **--- +TX -RX ---**
+      **+RS485 +RS485**
+      **-RS422 OUT -RS422 OUT**
+      **+RS422 IN +RS422 IN**
+      **-RS485 -RS485**
+      **CH1**
+      **CH1**
+      **+RS422 OUT +RS422 OUT**
+      **RS-422**
+      **RS-422**
+      **-RS422 IN -RS422 IN**
+      **RS232 IN RS232 OUT RS232 IN RS232 OUT**
+      **CH1 CH1 CH1 CH1**
+      **GND GND GND GND**
+      **+RS485 +RS485**
+      **-RS422 OUT -RS422 OUT**
+      **+RS422 IN +RS422 IN**
+      **-RS485 -RS485**
+      **CH2**
+      **CH2**
+      **+RS422 OUT +RS422 OUT**
+      **-RS422 IN -RS422 IN**
+      **RS-422**
+      **RS-422**
+      **RS232 IN RS232 OUT RS232 IN RS232 OUT**
+      **CH2 CH2 CH2 CH2**
+      **GND GND GND GND**
+      **+RS485 +RS485**
+      **-RS422 OUT -RS422 OUT**
+      **+RS422 IN +RS422 IN**
+      **-RS485 -RS485**
+      **CH3**
+      **CH3**
+      **+RS422 OUT +RS422 OUT**
+      **RS-422**
+      **RS-422**
+      **-RS422 IN -RS422 IN**
+      **RS232 IN RS232 OUT RS232 IN RS232 OUT**
+      **CH3 CH3 CH3 CH3**
+      **GND GND GND GND**
+      **+RS485 +RS485**
+      **-RS422 OUT -RS422 OUT**
+      **+RS422 IN +RS422 IN**
+      **1 2 3 4 5**
+      **-RS485 -RS485**
+      **CH4**
+      **CH4**
+      **GND - RX +TX --- ---**
+      **+RS422 OUT +RS422 OUT**
+      **RS-422**
+      **RS-422**
+      **-RS422 IN -RS422 IN**
+      **6 7 8 9**
+      **--- +RX -TX ---**
+      **+LTC IN +LTC OUT +LTC IN +LTC OUT**
+      **GND GND GND GND**
+      **-LTC IN -LTC OUT -LTC IN -LTC OUT**
+      **Jupiter System Controller**
        
-      Figure 6. MPK Interface to RS-422 
-       Revision 1.0 AN6-5 
+      **Figure 6. MPK Interface to RS-422** 
+       Revision 1.0 **AN6-5** 
   -
     text: |-
       Application Note AN-6 
@@ -529,10 +529,10 @@ pages:
        
       AN6-6 Revision 1.0 
     markdown: |-
-      Application Note AN-6 
-      MPK Router Control Interface to 7707DT 
+      **Application Note AN-6** 
+      **MPK Router Control Interface to 7707DT** 
        
-      2.2. MPK Interface to RS-485 
+      **2.2. MPK Interface to RS-485** 
       A second interface method exists, which allows Control Panels to be located on both ends of the 
       7707DT fiber link. This method is only advantageous should available ports be limited on the System 
       Controller. Otherwise, Control Panels connected on the System Controller side of the 7707DT fiber link 
@@ -552,26 +552,26 @@ pages:
       Figures 7 shows a block diagram describing this method of interface. Figure 8 describes pin-for-pin 
       connections. 
        
-      Control Panel Control Panel Control Panel
+      **Control Panel Control Panel Control Panel**
       Set to
       RS-422
       Set to
       RS-485
-      7707DT
+      **7707DT**
       Set to
       RS-422
       Set to
       RS-485
-      Jupiter System Controller
-      7707DT
+      **Jupiter System Controller**
+      **7707DT**
        
        
-      Figure 7. MPK Interface to RS-485 
+      **Figure 7. MPK Interface to RS-485** 
        
        
        
        
-      AN6-6 Revision 1.0 
+      **AN6-6** Revision 1.0 
   -
     text: |2-
        Application Note AN-6 
@@ -649,80 +649,80 @@ pages:
       Figure 8. MPK Interface to RS-485 
        Revision 1.0 AN6-7 
     markdown: |2-
-       Application Note AN-6 
-      MPK Router Control Interface to 7707DT   
+       **Application Note AN-6** 
+      **MPK Router Control Interface to 7707DT**   
        
        
-      7707DT Channel 1 is configured
-      to RS-422 for this example.
-      Control Panel Control Panel
-      7707DT Channel 2 is configured
-      to RS-485 @1200baud for this example.
-      7707DT 7707DT
-      1 2 3 4 5
-      GND - TX +RX --- ---
-      6 7 8 9
-      --- +TX -RX ---
-      +RS485 +RS485
-      -RS422 OUT -RS422 OUT
-      +RS422 IN +RS422 IN
-      -RS485 -RS485
-      CH1
-      CH1
-      +RS422 OUT +RS422 OUT
-      RS-422
-      RS-422
-      -RS422 IN -RS422 IN
-      RS232 IN RS232 OUT RS232 IN RS232 OUT
-      CH1 CH1 CH1 CH1
-      GND GND GND GND
-      +RS485 +RS485
-      -RS422 OUT -RS422 OUT
-      +RS422 IN +RS422 IN
-      -RS485 -RS485
-      CH2
-      CH2
-      +RS422 OUT +RS422 OUT
-      -RS422 IN -RS422 IN
-      RS-422
-      RS-422
-      RS232 IN RS232 OUT RS232 IN RS232 OUT
-      CH2 CH2 CH2 CH2
-      GND GND GND GND
-      +RS485 +RS485
-      -RS422 OUT -RS422 OUT
-      +RS422 IN +RS422 IN
-      -RS485 -RS485
-      CH3
-      CH3
-      +RS422 OUT +RS422 OUT
-      RS-422
-      RS-422
-      -RS422 IN -RS422 IN
-      RS232 IN RS232 OUT RS232 IN RS232 OUT
-      CH3 CH3 CH3 CH3
-      GND GND GND GND
-      +RS485 +RS485
-      -RS422 OUT -RS422 OUT
-      +RS422 IN +RS422 IN
-      1 2 3 4 5
-      -RS485 -RS485
-      CH4
-      CH4
-      GND - RX +TX --- ---
-      +RS422 OUT +RS422 OUT
-      RS-422
-      RS-422
-      -RS422 IN -RS422 IN
-      6 7 8 9
-      --- +RX -TX ---
-      +LTC IN +LTC OUT +LTC IN +LTC OUT
-      GND GND GND GND
-      -LTC IN -LTC OUT -LTC IN -LTC OUT
-      Jupiter System Controller Control Panel
+      **7707DT Channel 1 is configured**
+      **to RS-422 for this example.**
+      **Control Panel Control Panel**
+      **7707DT Channel 2 is configured**
+      **to RS-485 @1200baud for this example.**
+      **7707DT 7707DT**
+      **1 2 3 4 5**
+      **GND - TX +RX --- ---**
+      **6 7 8 9**
+      **--- +TX -RX ---**
+      **+RS485 +RS485**
+      **-RS422 OUT -RS422 OUT**
+      **+RS422 IN +RS422 IN**
+      **-RS485 -RS485**
+      **CH1**
+      **CH1**
+      **+RS422 OUT +RS422 OUT**
+      **RS-422**
+      **RS-422**
+      **-RS422 IN -RS422 IN**
+      **RS232 IN RS232 OUT RS232 IN RS232 OUT**
+      **CH1 CH1 CH1 CH1**
+      **GND GND GND GND**
+      **+RS485 +RS485**
+      **-RS422 OUT -RS422 OUT**
+      **+RS422 IN +RS422 IN**
+      **-RS485 -RS485**
+      **CH2**
+      **CH2**
+      **+RS422 OUT +RS422 OUT**
+      **-RS422 IN -RS422 IN**
+      **RS-422**
+      **RS-422**
+      **RS232 IN RS232 OUT RS232 IN RS232 OUT**
+      **CH2 CH2 CH2 CH2**
+      **GND GND GND GND**
+      **+RS485 +RS485**
+      **-RS422 OUT -RS422 OUT**
+      **+RS422 IN +RS422 IN**
+      **-RS485 -RS485**
+      **CH3**
+      **CH3**
+      **+RS422 OUT +RS422 OUT**
+      **RS-422**
+      **RS-422**
+      **-RS422 IN -RS422 IN**
+      **RS232 IN RS232 OUT RS232 IN RS232 OUT**
+      **CH3 CH3 CH3 CH3**
+      **GND GND GND GND**
+      **+RS485 +RS485**
+      **-RS422 OUT -RS422 OUT**
+      **+RS422 IN +RS422 IN**
+      **1 2 3 4 5**
+      **-RS485 -RS485**
+      **CH4**
+      **CH4**
+      **GND - RX +TX --- ---**
+      **+RS422 OUT +RS422 OUT**
+      **RS-422**
+      **RS-422**
+      **-RS422 IN -RS422 IN**
+      **6 7 8 9**
+      **--- +RX -TX ---**
+      **+LTC IN +LTC OUT +LTC IN +LTC OUT**
+      **GND GND GND GND**
+      **-LTC IN -LTC OUT -LTC IN -LTC OUT**
+      **Jupiter System Controller Control Panel**
        
-      Figure 8. MPK Interface to RS-485 
-       Revision 1.0 AN6-7 
+      **Figure 8. MPK Interface to RS-485** 
+       Revision 1.0 **AN6-7** 
   -
     text: |-
       Application Note AN-6 
@@ -737,7 +737,7 @@ pages:
       Signal terminations are used to eliminate distortion of signals traveling over long lengths of cable. If 
       problems are experienced, and signal distortion is suspected, then the user should enable the input 
       termination of the respective 7707DT. Input terminations are easily selectable through the card edge 
-      interface of the 7707DT, or via VistalinkTM, as described in the product manual. As a general rule, 
+      interface of the 7707DT, or via Vista linkTM, as described in the product manual. As a general rule, 
       terminations are most effective when placed at the far end of a cable. If more than two devices are 
       connected to the same cable, as could be the case with MPK interfaces, then it is recommended that 
       the 7707DT be located at the far end of the longest cable segment when possible.  
@@ -746,15 +746,15 @@ pages:
       bias, as it places the balanced input connections in a known logic state while no device is transmitting 
       to them. Any direct connection between a 7707DT input and a Control Panel may require a failsafe 
       bias, to compensate for ambient noise, long lengths of cable, or connection to many devices. Input 
-      failsafe bias is easily selectable through the card edge interface of the 7707DT, or via VistalinkTM, as 
+      failsafe bias is easily selectable through the card edge interface of the 7707DT, or via Vista linkTM, as 
       described in the product manual. To enable failsafe bias on any channel of the 7707DT, the termination 
       must first be enabled.  
       AN6-8 Revision 1.0 
     markdown: |-
-      Application Note AN-6 
-      MPK Router Control Interface to 7707DT 
+      **Application Note AN-6** 
+      **MPK Router Control Interface to 7707DT** 
        
-      3. TERMINATION AND FAILSAFE BIAS 
+      **3. TERMINATION AND FAILSAFE BIAS** 
        
       If signal cable lengths are kept to a minimum, then the above interface methods should work without 
       any requirement for terminations or failsafe bias. The 7707DT does provide selectable input 
@@ -763,7 +763,7 @@ pages:
       Signal terminations are used to eliminate distortion of signals traveling over long lengths of cable. If 
       problems are experienced, and signal distortion is suspected, then the user should enable the input 
       termination of the respective 7707DT. Input terminations are easily selectable through the card edge 
-      interface of the 7707DT, or via VistalinkTM, as described in the product manual. As a general rule, 
+      interface of the 7707DT, or via *Vista* linkTM, as described in the product manual. As a general rule, 
       terminations are most effective when placed at the far end of a cable. If more than two devices are 
       connected to the same cable, as could be the case with MPK interfaces, then it is recommended that 
       the 7707DT be located at the far end of the longest cable segment when possible.  
@@ -772,10 +772,10 @@ pages:
       bias, as it places the balanced input connections in a known logic state while no device is transmitting 
       to them. Any direct connection between a 7707DT input and a Control Panel may require a failsafe 
       bias, to compensate for ambient noise, long lengths of cable, or connection to many devices. Input 
-      failsafe bias is easily selectable through the card edge interface of the 7707DT, or via VistalinkTM, as 
+      failsafe bias is easily selectable through the card edge interface of the 7707DT, or via *Vista* linkTM, as 
       described in the product manual. To enable failsafe bias on any channel of the 7707DT, the termination 
       must first be enabled.  
-      AN6-8 Revision 1.0 
+      **AN6-8** Revision 1.0 
   -
     text: |2-
        Application Note AN-6 
@@ -812,8 +812,8 @@ pages:
        
        Revision 1.0 AN6-9 
     markdown: |2-
-       Application Note AN-6 
-      MPK Router Control Interface to 7707DT   
+       **Application Note AN-6** 
+      **MPK Router Control Interface to 7707DT**   
        
        
        
@@ -840,8 +840,8 @@ pages:
        
        
        
-      This page left intentionally blank 
+      *This page left intentionally blank* 
        
        
        
-       Revision 1.0 AN6-9 
+       Revision 1.0 **AN6-9** 
