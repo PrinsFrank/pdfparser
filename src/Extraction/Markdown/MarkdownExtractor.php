@@ -88,7 +88,8 @@ class MarkdownExtractor {
         $trailingWhitespace = null;
         if ($previousElementIsBold || $previousElementIsItalic) {
             if (str_starts_with($textBuffer, ' ')) {
-                $lineNodes[] = new Text(substr($textBuffer, strlen($textBuffer) - strlen(ltrim($textBuffer))));
+                $lineNodes[] = new Text(substr($textBuffer, 0, strlen($textBuffer) - strlen(ltrim($textBuffer))));
+                $textBuffer = ltrim($textBuffer);
             }
             if (str_ends_with($textBuffer, ' ')) {
                 $trailingWhitespace = new Text(substr($textBuffer, strlen(rtrim($textBuffer))));
