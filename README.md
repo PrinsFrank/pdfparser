@@ -21,15 +21,16 @@ Instead, this package allows for parsing of a wide variety of PDF files while no
 
 ## Comparison with `smalot/pdfparser`
 
-| Metric             | prinsfrank/pdfparser                                              | smalot/pdfparser    |
-|--------------------|-------------------------------------------------------------------|---------------------|
-| Speed              | On average **2.6x faster**, up to **110x faster on complex PDFs** | baseline            |
-| Memory             | On average **5x less memory**                                     | baseline            |
-| Success rate       | **100%** of test files                                            | 95.3%               |
-| Encrypted PDFs     | Supported                                                         | Not supported       |
-| PHP version        | PHP 8.1+                                                          | PHP 7.1+            |
-| Active development | Yes                                                               | Limited maintenance |
-| PHPStan Level      | 10 (max)                                                          | 3                   |
+| Metric              | prinsfrank/pdfparser                                              | smalot/pdfparser    |
+|---------------------|-------------------------------------------------------------------|---------------------|
+| Speed               | On average **2.6x faster**, up to **110x faster on complex PDFs** | baseline            |
+| Memory              | On average **5x less memory**                                     | baseline            |
+| Success rate        | **100%** of test files                                            | 95.3%               |
+| Encrypted PDFs      | Supported                                                         | Not supported       |
+| Extract as markdown | Yes, supported: Headings, Bold, Italic, more to come              | No                  |
+| PHP version         | PHP 8.1+                                                          | PHP 7.1+            |
+| Active development  | Yes                                                               | Limited maintenance |
+| PHPStan Level       | 10 (max)                                                          | 3                   |
 
 <details>
     <summary>View detailed benchmark results</summary>
