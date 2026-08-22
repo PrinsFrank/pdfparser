@@ -27,7 +27,7 @@ class MarkdownExtractor {
             }
 
             $previousTextElementOnLine = null;
-            $previousTextElementOnLineText = '';
+            $previousTextElementEndsWithSpace = false;
             foreach ($positionedTextElementsForLine as $positionedTextElement) {
                 $elementText = $positionedTextElement->getText($page);
                 if ($elementText === '') {
@@ -49,7 +49,7 @@ class MarkdownExtractor {
 
                     if (
                         $gap >= $wordBreakThreshold
-                        && str_ends_with($previousTextElementOnLineText, ' ') === false
+                        && $previousTextElementEndsWithSpace === false
                         && str_starts_with($elementText, ' ') === false
                     ) {
                         $insertSpace = true;
@@ -66,7 +66,7 @@ class MarkdownExtractor {
 
                 $lineNodes[] = $lineNode;
                 $previousTextElementOnLine = $positionedTextElement;
-                $previousTextElementOnLineText = $elementText;
+                $previousTextElementEndsWithSpace = str_ends_with($elementText, ' ');
             }
         }
 
