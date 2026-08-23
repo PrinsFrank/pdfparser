@@ -44,15 +44,17 @@ class MarkdownExtractor {
             }
 
             $previousTextElementOnLine = null;
+            $previousFontOnLine = null;
             $previousTextElementEndsWithSpace = false;
             foreach ($positionedTextElementsForLine as $positionedTextElement) {
                 $elementText = $positionedTextElement->getText($page);
+                $font = $positionedTextElement->getFont($page);
                 if ($elementText === '') {
                     $previousTextElementOnLine = $positionedTextElement;
+                    $previousFontOnLine = $font;
                     continue;
                 }
 
-                $font = $positionedTextElement->getFont($page);
                 $currentHeadingLevel = $font->getHeadingLevel($positionedTextElement->textState, $positionedTextElement->absoluteMatrix);
                 if ($previousHeadingLevel !== $currentHeadingLevel) {
                     self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
@@ -61,10 +63,10 @@ class MarkdownExtractor {
                     self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
                 }
 
-                if ($previousTextElementOnLine !== null) {
+                if ($previousTextElementOnLine !== null && $previousFontOnLine !== null) {
                     $gap = $positionedTextElement->absoluteMatrix->offsetX
                         - $previousTextElementOnLine->absoluteMatrix->offsetX
-                        - $previousTextElementOnLine->getAdvanceWidth($font);
+                        - $previousTextElementOnLine->getAdvanceWidth($previousFontOnLine);
 
                     $wordBreakThreshold = $previousTextElementOnLine->textState->getFontSize()
                         * $previousTextElementOnLine->absoluteMatrix->scaleX
@@ -81,6 +83,7 @@ class MarkdownExtractor {
                 }
 
                 $previousTextElementOnLine = $positionedTextElement;
+                $previousFontOnLine = $font;
                 $previousTextElementEndsWithSpace = str_ends_with($elementText, ' ');
                 $previousElementIsItalic = $font->isItalic();
                 $previousElementIsBold = $font->isBold();
