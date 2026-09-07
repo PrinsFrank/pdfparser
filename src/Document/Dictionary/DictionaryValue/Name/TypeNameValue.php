@@ -83,7 +83,7 @@ enum TypeNameValue: string implements NameValue {
     case METADATA = 'Metadata';
     case MIN_BIT_DEPTH = 'MinBitDepth';
     case MIN_SCREEN_SIZE = 'MinScreenSize';
-    case NAMESPACE = 'Namespace';
+    case _NAMESPACE = 'Namespace';
     case NAV_NODE = 'NavNode';
     case NAVIGATOR = 'Navigator';
     case NUMBER_FORMAT = 'NumberFormat';
