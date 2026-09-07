@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=../../schema.json
+version: '1.4'
+userPassword: null
+ownerPassword: null
+fileEncryptionKey: null
+title: null
+producer: Online2PDF.com
+author: null
+creator: Online2PDF.com
+creationDate: 2026-04-23T11:19:38+02:00
+modificationDate: null
+pages:
+  -
+    text: 'Test '
+    markdown: 'Test '
