@@ -21,5 +21,15 @@ class ReferenceValueTest extends TestCase {
             new ReferenceValue(42, 0),
             ReferenceValue::fromValue('42 0 R'),
         );
+        static::assertEquals(
+            new ReferenceValue(42, 0),
+            ReferenceValue::fromValue('42   0    R'),
+            'Reference value parts should be separated by whitespace, but any whitespace is allowed, see 7.3.10',
+        );
+        static::assertEquals(
+            new ReferenceValue(42, 0),
+            ReferenceValue::fromValue('42' . PHP_EOL . '0' . PHP_EOL . 'R'),
+            'Reference value parts should be separated by whitespace, but any whitespace is allowed, see 7.3.10',
+        );
     }
 }

@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference;
 
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @api */
 readonly class ReferenceValue implements DictionaryValue {
@@ -15,6 +16,9 @@ readonly class ReferenceValue implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
+        $valueString = preg_replace('/\s+/', ' ', $valueString)
+            ?? throw new ParseFailureException('An unexpected error occurred while sanitizing reference value array');
+
         $referenceParts = explode(' ', $valueString);
         if (count($referenceParts) !== 3) {
             return null;
