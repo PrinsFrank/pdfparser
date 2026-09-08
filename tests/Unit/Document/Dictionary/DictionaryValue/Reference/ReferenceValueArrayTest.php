@@ -54,6 +54,13 @@ class ReferenceValueArrayTest extends TestCase {
                 new ReferenceValue(42, 0),
                 new ReferenceValue(43, 0),
             ),
+            ReferenceValueArray::fromValue('[42   0   R    43   0   R]'),
+        );
+        static::assertEquals(
+            new ReferenceValueArray(
+                new ReferenceValue(42, 0),
+                new ReferenceValue(43, 0),
+            ),
             ReferenceValueArray::fromValue(
                 <<<EOD
                 [
