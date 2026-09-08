@@ -17,7 +17,7 @@ class DifferenceRangeTest extends TestCase {
         static::assertTrue($differenceRange->contains(2));
         static::assertFalse($differenceRange->contains(3));
 
-        $differenceRange = new DifferenceRange(1, [AGlyphList::adieresis, AGlyphList::a, AglyphList::ae]);
+        $differenceRange = new DifferenceRange(1, [AGlyphList::adieresis, AGlyphList::a, AGlyphList::ae]);
         static::assertFalse($differenceRange->contains(0));
         static::assertTrue($differenceRange->contains(1));
         static::assertTrue($differenceRange->contains(2));
