@@ -16,6 +16,8 @@ readonly class FileInfo {
         public ?string $producer,
         public ?string $author,
         public ?string $creator,
+        public ?string $subject,
+        public ?string $keywords,
         public ?DateTimeImmutable $creationDate,
         public ?DateTimeImmutable $modificationDate,
         public ?array $pages,

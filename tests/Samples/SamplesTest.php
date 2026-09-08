@@ -34,6 +34,8 @@ class SamplesTest extends TestCase {
         static::assertSame($fileInfo->producer, $document->getInformationDictionary()?->getProducer());
         static::assertSame($fileInfo->author, $document->getInformationDictionary()?->getAuthor());
         static::assertSame($fileInfo->creator, $document->getInformationDictionary()?->getCreator());
+        static::assertSame($fileInfo->subject, $document->getInformationDictionary()?->getSubject());
+        static::assertSame($fileInfo->keywords, $document->getInformationDictionary()?->getKeywords());
         static::assertEquals($fileInfo->creationDate, $document->getInformationDictionary()?->getCreationDate());
         static::assertEquals($fileInfo->modificationDate, $document->getInformationDictionary()?->getModificationDate());
         static::assertSame(count($fileInfo->pages ?? []), $document->getNumberOfPages());
