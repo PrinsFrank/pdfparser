@@ -7,6 +7,8 @@ title: 'Custom encoding extraction reproducer (control-char range)'
 producer: 'GPL Ghostscript 10.07.1'
 author: null
 creator: 'synthetic reproducer for PDF parser CFF/Custom encoding extraction'
+subject: null
+keywords: null
 creationDate: 2026-06-04T11:31:22-05:00
 modificationDate: 2026-06-04T11:31:22-05:00
 pages:

@@ -24,7 +24,7 @@ class SampleProvider {
                 throw new RuntimeException();
             }
 
-            /** @var object{version: float, userPassword: ?string, ownerPassword: ?string, fileEncryptionKey: ?string, title: ?string, producer: ?string, author: ?string, creator: ?string, creationDate: ?DateTimeImmutable, modificationDate: ?DateTimeImmutable, pages: list<object{text: string, markdown: string, images?: string[]}>} $content */
+            /** @var object{version: float, userPassword: ?string, ownerPassword: ?string, fileEncryptionKey: ?string, title: ?string, producer: ?string, author: ?string, creator: ?string, subject: ?string, keywords: ?string, creationDate: ?DateTimeImmutable, modificationDate: ?DateTimeImmutable, pages: list<object{text: string, markdown: string, images?: string[]}>} $content */
             $content = Yaml::parseFile($contentsPath, Yaml::PARSE_OBJECT_FOR_MAP | Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE | Yaml::PARSE_DATETIME);
             yield $sampleName => [
                 new FileInfo(
@@ -37,6 +37,8 @@ class SampleProvider {
                     $content->producer,
                     $content->author,
                     $content->creator,
+                    $content->subject,
+                    $content->keywords,
                     $content->creationDate,
                     $content->modificationDate,
                     array_map(

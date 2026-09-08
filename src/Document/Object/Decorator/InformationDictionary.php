@@ -38,6 +38,20 @@ class InformationDictionary extends DecoratedObject {
     }
 
     /** @throws PdfParserException */
+    public function getSubject(): ?string {
+        return $this->getDictionary()
+            ->getValueForKey($this->document, DictionaryKey::SUBJECT, TextStringValue::class)
+            ?->getText();
+    }
+
+    /** @throws PdfParserException */
+    public function getKeywords(): ?string {
+        return $this->getDictionary()
+            ->getValueForKey($this->document, DictionaryKey::KEYWORDS, TextStringValue::class)
+            ?->getText();
+    }
+
+    /** @throws PdfParserException */
     public function getCreationDate(): ?DateTimeImmutable {
         return $this->getDictionary()
             ->getValueForKey($this->document, DictionaryKey::CREATION_DATE, DateValue::class)
