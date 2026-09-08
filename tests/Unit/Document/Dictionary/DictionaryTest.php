@@ -30,7 +30,7 @@ class DictionaryTest extends TestCase {
 
     public function testGetSubType(): void {
         static::assertSame(
-            SubTypeNameValue::FORM,
+            SubtypeNameValue::FORM,
             (new Dictionary(new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::FORM)))
                 ->getSubType(null),
         );
@@ -38,7 +38,7 @@ class DictionaryTest extends TestCase {
 
     public function testGetSubTypeReturnsSubTypeFromSubDictionary(): void {
         static::assertSame(
-            SubTypeNameValue::FORM,
+            SubtypeNameValue::FORM,
             (new Dictionary(new DictionaryEntry(DictionaryKey::SUBTYPE, new Dictionary(new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::FORM)))))
                 ->getSubType(null),
         );
