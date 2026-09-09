@@ -1,7 +1,9 @@
 name: Release
+
 on:
-  release:
-    types: [ created ]
+  push:
+    tags:
+      - 'v*'
 
 permissions: {}
 
@@ -71,7 +73,7 @@ jobs:
       - name: Upload PHAR to release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_NAME: ${{ github.event.release.tag_name }}
+          TAG_NAME: ${{ github.ref_name }}
           REPO: ${{ github.repository }}
         run: |
           gh release upload "$TAG_NAME" pdfparser.phar --repo "$REPO"
