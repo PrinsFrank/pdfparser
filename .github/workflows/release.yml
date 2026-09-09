@@ -1,9 +1,11 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_dispatch: 
+    inputs:
+      tag_name:
+        description: 'tag name eg v1.1.1'
+        required: true
 
 permissions: {}
 
@@ -15,9 +17,34 @@ env:
   PHP_VERSION: '8.5'
 
 jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    name: Create draft release
+    permissions: 
+      contents: write # To be able to create a release
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Create draft release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ inputs.tag_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh release create "$TAG_NAME" \
+            --repo "$REPO" \
+            --notes-file ".github/release-notes-header.md" \
+            --generate-notes \
+            --draft
+
   build-phar:
     runs-on: ubuntu-latest
     name: Build PHAR
+    needs:
+      - create-release
     permissions:
       contents: read
     steps:
@@ -60,7 +87,6 @@ jobs:
     name: Publish PHAR
     needs:
       - build-phar
-    if: github.event_name == 'release'
     permissions:
       contents: write # To be able to update release
     steps:
@@ -73,7 +99,7 @@ jobs:
       - name: Upload PHAR to release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_NAME: ${{ github.ref_name }}
+          TAG_NAME: ${{ inputs.tag_name }}
           REPO: ${{ github.repository }}
         run: |
           gh release upload "$TAG_NAME" pdfparser.phar --repo "$REPO"
