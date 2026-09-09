@@ -52,10 +52,9 @@ composer require prinsfrank/pdfparser
 
 <details>
     <summary>Installation without Composer</summary>
-    <p>If you don't want to install this package using Composer, or cannot due to some constraints, you can still download the contents of the latest release and use this package directly.</p>
-    <p>As you don't have Composer to handle autoloading for you, you'll need to register the custom autoloader from this project. To do so, simply add the following line at the top of your custom bootstrap script or the file you want to parse PDFs in:</p>
-    <code>require 'path/to/package/directory/.al-custom.php';</code>
-    <p>This needs to point to the <code>.al-custom.php</code> file in the directory that the contents of this package is in.</p>
+    <p>If you don't want to install this package using Composer, or cannot due to some constraints, you can still download a phar file of the latest release, which bundles all the required dependencies. To do so, head to the "releases" section on the github repository, and click on "pdfparser.phar" under "Assets". Place the phar file somewhere you can access it from your code</p>
+    <p>As you don't have Composer to handle autoloading for you, you'll need to register the autoloader from the phar file. To do so, simply add the following line at the top of your custom bootstrap script or the file you want to parse PDFs in:</p>
+    <code>require 'phar://pdfparser.phar/vendor/autoload.php';</code>
 </details>
 
 The most common use case - extracting text from a document - is then just as simple as this;
