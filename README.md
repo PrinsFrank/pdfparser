@@ -13,6 +13,8 @@
 
 > **2.6x faster** and **5x less memory** than smalot/pdfparser. Actively maintained, MIT licensed, and built from scratch for PHP8.1+
 
+> :owl: This library is written by a human who understands all of its code. As such, it is small enough for a person to have a mental image of it, and no cognitive offloading is needed. AI-generated PRs are not rejected outright, but they should be [small and focused](CONTRIBUTING.md).
+
 ## Why this library?
 
 Previously, there wasn't a PDF library that allows parsing of PDFs that was open source, MIT licensed and under active development. The PDFParser by smalot, while having been very useful over the years isn't under active development anymore. The parser of Setasign is not MIT licensed and not open source. And several other packages rely on java/js/python dependencies being installed that are called by PHP behind the scenes, losing any type information and underlying structure.
