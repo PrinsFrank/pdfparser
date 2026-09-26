@@ -29,7 +29,7 @@ class Catalog extends DecoratedObject {
             $referenceArrayContent = $this->getDictionary()
                 ->getObjectForReference($this->document, DictionaryKey::AF, FileSpecification::class)
                 ?->getStream()->toString() ?? throw new ParseFailureException('Unable to retrieve AF object content');
-            if (($AFReferences = ReferenceValueArray::fromValue($referenceArrayContent)) instanceof ReferenceValueArray === false) {
+            if (($AFReferences = ReferenceValueArray::fromValue(trim($referenceArrayContent))) instanceof ReferenceValueArray === false) {
                 throw new ParseFailureException('AF object is not a reference array');
             }
 
