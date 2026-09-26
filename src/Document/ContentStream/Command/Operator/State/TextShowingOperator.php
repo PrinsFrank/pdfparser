@@ -11,7 +11,8 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextEle
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\HexadecimalStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @internal */
@@ -65,7 +66,12 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
 
         return new PositionedTextElement(
             array_map(
-                fn(array $match) => new TextSegment(new TextStringValue($match['chars']), $match['offset'] !== null ? (float) $match['offset'] : null),
+                fn(array $match) => new TextSegment(
+                    str_starts_with($match['chars'], '(')
+                        ? LiteralStringValue::fromValue($match['chars']) ?? throw new ParseFailureException()
+                        : HexadecimalStringValue::fromValue($match['chars']) ?? throw new ParseFailureException(),
+                    $match['offset'] !== null ? (float) $match['offset'] : null,
+                ),
                 $matches,
             ),
             $textMatrix->multiplyWith($globalTransformationMatrix),  // 9.4.4, Note 2 on Trm calculation

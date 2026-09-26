@@ -8,14 +8,14 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextEle
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
 use PrinsFrank\PdfParser\Extraction\Markdown\TextGrouping\LineGrouping\TextOverlapStrategy;
 
 #[CoversClass(TextOverlapStrategy::class)]
 class TextOverlapStrategyTest extends TestCase {
     public function testOrdersLinesTopToBottom(): void {
-        $top = new PositionedTextElement([new TextSegment(new TextStringValue('(top)'), null)], new TransformationMatrix(1, 0, 0, 1, 100, 700), new TextState(null, 10));
-        $bottom = new PositionedTextElement([new TextSegment(new TextStringValue('(bottom)'), null)], new TransformationMatrix(1, 0, 0, 1, 100, 100), new TextState(null, 10));
+        $top = new PositionedTextElement([new TextSegment(new LiteralStringValue('top'), null)], new TransformationMatrix(1, 0, 0, 1, 100, 700), new TextState(null, 10));
+        $bottom = new PositionedTextElement([new TextSegment(new LiteralStringValue('bottom'), null)], new TransformationMatrix(1, 0, 0, 1, 100, 100), new TextState(null, 10));
 
         static::assertSame(
             [[$top], [$bottom]],
@@ -28,8 +28,8 @@ class TextOverlapStrategyTest extends TestCase {
         // all-negative offsetY, with the topmost line the least negative. Ordering by descending offsetY keeps
         // reading order; ordering by abs(offsetY) -- as the code did before text positions were composed correctly
         // -- would reverse the page.
-        $top = new PositionedTextElement([new TextSegment(new TextStringValue('(top)'), null)], new TransformationMatrix(1, 0, 0, 1, 100, -50), new TextState(null, 10));
-        $bottom = new PositionedTextElement([new TextSegment(new TextStringValue('(bottom)'), null)], new TransformationMatrix(1, 0, 0, 1, 100, -300), new TextState(null, 10));
+        $top = new PositionedTextElement([new TextSegment(new LiteralStringValue('top'), null)], new TransformationMatrix(1, 0, 0, 1, 100, -50), new TextState(null, 10));
+        $bottom = new PositionedTextElement([new TextSegment(new LiteralStringValue('bottom'), null)], new TransformationMatrix(1, 0, 0, 1, 100, -300), new TextState(null, 10));
 
         static::assertSame(
             [[$top], [$bottom]],

@@ -14,7 +14,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValu
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\HexadecimalStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 
 readonly class ExtendedDictionaryKey implements DictionaryKeyInterface, DictionaryValue {
     public function __construct(
@@ -40,7 +42,9 @@ readonly class ExtendedDictionaryKey implements DictionaryKeyInterface, Dictiona
             Rectangle::class,
             ReferenceValue::class,
             ReferenceValueArray::class,
-            TextStringValue::class,
+            HexadecimalStringValue::class,
+            LiteralStringValue::class,
+            NameObjectStringValue::class,
         ];
     }
 

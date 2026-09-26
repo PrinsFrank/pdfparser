@@ -26,7 +26,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 use ValueError;
@@ -169,7 +170,7 @@ class DictionaryParserTest extends TestCase {
         static::assertEquals(
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FONT_DESCRIPTOR),
-                new DictionaryEntry(DictionaryKey::FONT_NAME, new TextStringValue('/TAIPAH+CMR10')),
+                new DictionaryEntry(DictionaryKey::FONT_NAME, new NameObjectStringValue('/TAIPAH+CMR10')),
                 new DictionaryEntry(DictionaryKey::FLAGS, new IntegerValue(4)),
                 new DictionaryEntry(DictionaryKey::FONT_BBOX, new Rectangle(-40, -250, 1009, 750)),
                 new DictionaryEntry(DictionaryKey::ASCENT, new IntegerValue(694)),
@@ -178,7 +179,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::ITALIC_ANGLE, new IntegerValue(0)),
                 new DictionaryEntry(DictionaryKey::STEM_V, new IntegerValue(69)),
                 new DictionaryEntry(DictionaryKey::XHEIGHT, new IntegerValue(431)),
-                new DictionaryEntry(DictionaryKey::CHAR_SET, new TextStringValue('(/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two)')),
+                new DictionaryEntry(DictionaryKey::CHAR_SET, new LiteralStringValue('/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two')),
                 new DictionaryEntry(DictionaryKey::FONT_FILE, new ReferenceValue(11, 0)),
             ),
             DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
@@ -202,12 +203,12 @@ class DictionaryParserTest extends TestCase {
         static::assertNotFalse($creationModificationDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s P', '2022-05-06 20:11:53 +02:00'));
         static::assertEquals(
             new Dictionary(
-                new DictionaryEntry(DictionaryKey::PRODUCER, new TextStringValue('(pdfTeX-1.40.18)')),
-                new DictionaryEntry(DictionaryKey::CREATOR, new TextStringValue('(TeX)')),
+                new DictionaryEntry(DictionaryKey::PRODUCER, new LiteralStringValue('pdfTeX-1.40.18')),
+                new DictionaryEntry(DictionaryKey::CREATOR, new LiteralStringValue('TeX')),
                 new DictionaryEntry(DictionaryKey::CREATION_DATE, new DateValue($creationModificationDate)),
                 new DictionaryEntry(DictionaryKey::MOD_DATE, new DateValue($creationModificationDate)),
                 new DictionaryEntry(DictionaryKey::TRAPPED, TrappedNameValue::FALSE),
-                new DictionaryEntry(DictionaryKey::PTEX_FULLBANNER, new TextStringValue('(This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)')),
+                new DictionaryEntry(DictionaryKey::PTEX_FULLBANNER, new LiteralStringValue('This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3')),
             ),
             DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
@@ -227,9 +228,9 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
-                new DictionaryEntry(DictionaryKey::PRODUCER, new TextStringValue('(pdfTeX-1.40.18)')),
-                new DictionaryEntry(new ExtendedDictionaryKey('Foo'), new TextStringValue('(Bar)')),
-                new DictionaryEntry(new ExtendedDictionaryKey('Bar'), new TextStringValue('(% this is not a comment but a string literal)')),
+                new DictionaryEntry(DictionaryKey::PRODUCER, new LiteralStringValue('pdfTeX-1.40.18')),
+                new DictionaryEntry(new ExtendedDictionaryKey('Foo'), new LiteralStringValue('Bar')),
+                new DictionaryEntry(new ExtendedDictionaryKey('Bar'), new LiteralStringValue('% this is not a comment but a string literal')),
             ),
             DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
@@ -254,7 +255,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::OPEN_ACTION, new ArrayValue([3, 0, 'R', '/Fit'])),
                 new DictionaryEntry(DictionaryKey::PAGE_MODE, PageModeNameValue::USE_OUTLINES),
                 new DictionaryEntry(DictionaryKey::PAGE_LABELS, new Dictionary(
-                    new DictionaryEntry(DictionaryKey::NUMS, new TextStringValue('[0<</S/r>>12<</S/D>>]')),
+                    new DictionaryEntry(DictionaryKey::NUMS, new ArrayValue(['0<<','/S','/r>>12<<','/S','/D>>'])),
                 )),
                 new DictionaryEntry(DictionaryKey::NAMES, new ReferenceValue(13164, 0)),
                 new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(13165, 0)),
@@ -380,7 +381,7 @@ class DictionaryParserTest extends TestCase {
                                 ),
                                 new DictionaryEntry(
                                     DictionaryKey::BASE_STATE,
-                                    new TextStringValue('/OFF'),
+                                    new NameObjectStringValue('/OFF'),
                                 ),
                                 new DictionaryEntry(
                                     DictionaryKey::ON,
@@ -493,7 +494,7 @@ class DictionaryParserTest extends TestCase {
                     new Dictionary(
                         new DictionaryEntry(
                             DictionaryKey::DA,
-                            new TextStringValue('(/Helv 0 Tf 0 g )'),
+                            new LiteralStringValue('/Helv 0 Tf 0 g '),
                         ),
                         new DictionaryEntry(
                             DictionaryKey::DR,
@@ -571,7 +572,7 @@ class DictionaryParserTest extends TestCase {
                 ),
                 new DictionaryEntry(
                     DictionaryKey::LANG,
-                    new TextStringValue('(de)'),
+                    new LiteralStringValue('de'),
                 ),
                 new DictionaryEntry(
                     DictionaryKey::MARK_INFO,

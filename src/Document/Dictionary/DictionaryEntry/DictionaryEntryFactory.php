@@ -13,7 +13,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Dictionary\Normalization\NameValueNormalizer;
 use PrinsFrank\PdfParser\Document\Encryption\RC4;
 use PrinsFrank\PdfParser\Document\Security\EncryptionContext;
@@ -67,8 +66,7 @@ class DictionaryEntryFactory {
         }
 
         foreach ($allowedValueTypes as $allowedValueType) {
-            if (!is_a($allowedValueType, DictionaryValue::class, true)
-                || $allowedValueType === TextStringValue::class) { // TextStrings accept everything, so we check that last
+            if (!is_a($allowedValueType, DictionaryValue::class, true)) {
                 continue;
             }
 
@@ -85,10 +83,6 @@ class DictionaryEntryFactory {
 
         if (in_array(ExtendedDictionaryKey::class, $allowedValueTypes, true) && is_string($value) && ($extendedDictionaryKey = ExtendedDictionaryKey::fromValue($value)) !== null) {
             return $extendedDictionaryKey;
-        }
-
-        if (in_array(TextStringValue::class, $allowedValueTypes, true) && is_string($value)) {
-            return TextStringValue::fromValue($value);
         }
 
         throw new ParseFailureException(sprintf('Value "%s" for dictionary key %s could not be parsed to a valid value type', is_array($value) ? 'array()' : $value, $dictionaryKey->value));

@@ -15,7 +15,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EventNameValue
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 
 #[CoversClass(DictionaryArrayValue::class)]
 class DictionaryArrayValueTest extends TestCase {
@@ -47,17 +48,17 @@ class DictionaryArrayValueTest extends TestCase {
             DictionaryArrayValue::fromValue('[<<>> <<>> null]'),
         );
         static::assertEquals(
-            new DictionaryArrayValue(new Dictionary(new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(106))), new Dictionary(new DictionaryEntry(DictionaryKey::TITLE, new TextStringValue('(Foo)')))),
+            new DictionaryArrayValue(new Dictionary(new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(106))), new Dictionary(new DictionaryEntry(DictionaryKey::TITLE, new LiteralStringValue('Foo')))),
             DictionaryArrayValue::fromValue('[<</Length 106>> <</Title(Foo)>>]'),
         );
         static::assertEquals(
             new DictionaryArrayValue(
                 new Dictionary(
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTPUT_INTENT),
-                    new DictionaryEntry(DictionaryKey::S, new TextStringValue('/GTS_PDFA1')),
-                    new DictionaryEntry(new ExtendedDictionaryKey('OutputConditionIdentifier'), new TextStringValue('(sRGB)')),
-                    new DictionaryEntry(new ExtendedDictionaryKey('RegistryName'), new TextStringValue('(http://www.color.org)')),
-                    new DictionaryEntry(DictionaryKey::INFO, new TextStringValue('(Creator: HP     Manufacturer:IEC    Model:sRGB)')),
+                    new DictionaryEntry(DictionaryKey::S, new NameObjectStringValue('/GTS_PDFA1')),
+                    new DictionaryEntry(new ExtendedDictionaryKey('OutputConditionIdentifier'), new LiteralStringValue('sRGB')),
+                    new DictionaryEntry(new ExtendedDictionaryKey('RegistryName'), new LiteralStringValue('http://www.color.org')),
+                    new DictionaryEntry(DictionaryKey::INFO, new LiteralStringValue('Creator: HP     Manufacturer:IEC    Model:sRGB')),
                     new DictionaryEntry(new ExtendedDictionaryKey('DestOutputProfile'), new ReferenceValue(361, 0)),
                 ),
             ),

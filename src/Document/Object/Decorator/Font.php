@@ -23,7 +23,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameVal
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\ToUnicodeCMapNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Font\FontWidths;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
@@ -37,8 +36,8 @@ class Font extends DecoratedObject {
     /** @throws PdfParserException */
     public function getBaseFont(): ?string {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::BASE_FONT, TextStringValue::class)
-            ?->textStringValue;
+            ->getStringValue($this->document, DictionaryKey::BASE_FONT)
+            ?->value;
     }
 
     public function getEncodingDictionary(): ?Dictionary {
@@ -111,8 +110,8 @@ class Font extends DecoratedObject {
 
             if (($CIDSystemInfo = $fontDictionary->getValueForKey($this->document, DictionaryKey::CIDSYSTEM_INFO, Dictionary::class)) !== null) {
                 $fontResource = RegistryOrchestrator::getForRegistryOrderingSupplement(
-                    $CIDSystemInfo->getValueForKey($this->document, DictionaryKey::REGISTRY, TextStringValue::class) ?? throw new ParseFailureException(),
-                    $CIDSystemInfo->getValueForKey($this->document, DictionaryKey::ORDERING, TextStringValue::class) ?? throw new ParseFailureException(),
+                    $CIDSystemInfo->getStringValue($this->document, DictionaryKey::REGISTRY) ?? throw new ParseFailureException(),
+                    $CIDSystemInfo->getStringValue($this->document, DictionaryKey::ORDERING) ?? throw new ParseFailureException(),
                     $CIDSystemInfo->getValueForKey($this->document, DictionaryKey::SUPPLEMENT, IntegerValue::class) ?? throw new ParseFailureException(),
                 );
 

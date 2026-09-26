@@ -15,6 +15,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\HexadecimalStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
@@ -99,8 +102,17 @@ readonly class Dictionary {
         return null;
     }
 
+    public function getStringValue(?Document $document, DictionaryKey|ExtendedDictionaryKey $dictionaryKey): HexadecimalStringValue|LiteralStringValue|NameObjectStringValue|null {
+        return match ($this->getTypeForKey($dictionaryKey)) {
+            HexadecimalStringValue::class => $this->getValueForKey($document, $dictionaryKey, HexadecimalStringValue::class),
+            LiteralStringValue::class => $this->getValueForKey($document, $dictionaryKey, LiteralStringValue::class),
+            NameObjectStringValue::class => $this->getValueForKey($document, $dictionaryKey, NameObjectStringValue::class),
+            default => null,
+        };
+    }
+
     /** @return class-string<DictionaryValue|NameValue|Dictionary> */
-    public function getTypeForKey(DictionaryKey $dictionaryKey): ?string {
+    public function getTypeForKey(DictionaryKey|ExtendedDictionaryKey $dictionaryKey): ?string {
         foreach ($this->dictionaryEntries as $dictionaryEntry) {
             if ($dictionaryEntry->key === $dictionaryKey) {
                 return $dictionaryEntry->value::class;

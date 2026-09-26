@@ -20,7 +20,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
@@ -220,8 +220,8 @@ class H3SimpleStringTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FONT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TYPE_1),
-                new DictionaryEntry(DictionaryKey::NAME, new TextStringValue('/F1')),
-                new DictionaryEntry(DictionaryKey::BASE_FONT, new TextStringValue('/Helvetica')),
+                new DictionaryEntry(DictionaryKey::NAME, new NameObjectStringValue('/F1')),
+                new DictionaryEntry(DictionaryKey::BASE_FONT, new NameObjectStringValue('/Helvetica')),
                 new DictionaryEntry(DictionaryKey::ENCODING, EncodingNameValue::MacRomanEncoding),
             ),
             $obj7?->getDictionary(),
