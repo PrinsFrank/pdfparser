@@ -16,6 +16,7 @@ readonly class ReferenceValue implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
+        $valueString = trim($valueString);
         $valueString = preg_replace('/\s+/', ' ', $valueString)
             ?? throw new ParseFailureException('An unexpected error occurred while sanitizing reference value array');
 

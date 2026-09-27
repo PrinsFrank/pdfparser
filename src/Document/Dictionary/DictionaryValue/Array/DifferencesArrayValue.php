@@ -19,6 +19,7 @@ class DifferencesArrayValue implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
+        $valueString = trim($valueString);
         if (($arrayValue = ArrayValue::fromValue($valueString)) === null || $arrayValue instanceof ReferenceValueArray) {
             return null;
         }
