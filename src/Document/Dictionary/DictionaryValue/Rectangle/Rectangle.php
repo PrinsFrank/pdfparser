@@ -26,6 +26,7 @@ readonly class Rectangle implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
+        $valueString = trim($valueString);
         if (!str_starts_with($valueString, '[') || !str_ends_with($valueString, ']')) {
             return null;
         }

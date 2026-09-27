@@ -26,6 +26,7 @@ readonly class ExtendedDictionaryKey implements DictionaryKeyInterface, Dictiona
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
+        $valueString = trim($valueString);
         if (str_starts_with($valueString, '/') === false) {
             return null;
         }

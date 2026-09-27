@@ -57,10 +57,10 @@ readonly class Dictionary {
                 if ($expectedValueType === Dictionary::class) {
                     $value = DictionaryParser::parse(null, $content, 0, $content->getSizeInBytes());
                 } elseif (is_a($expectedValueType, NameValue::class, true)) {
-                    $value = $expectedValueType::tryFrom(trim($content->toString()))
+                    $value = $expectedValueType::tryFrom($content->toString())
                         ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced object %d as %s', $content->toString(), $value->objectNumber, $expectedValueType));
                 } elseif (is_a($expectedValueType, DictionaryValue::class, true)) {
-                    $value = $expectedValueType::fromValue(trim($content->toString()))
+                    $value = $expectedValueType::fromValue($content->toString())
                         ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced object %d as %s', $content->toString(), $value->objectNumber, $expectedValueType));
                 }
             }
@@ -77,14 +77,14 @@ readonly class Dictionary {
                 if ($expectedValueType === Dictionary::class) {
                     $value = DictionaryParser::parse(null, $content, 0, $content->getSizeInBytes());
                 } elseif (is_a($expectedValueType, NameValue::class, true)) {
-                    $value = $expectedValueType::tryFrom(trim($content->toString()))
+                    $value = $expectedValueType::tryFrom($content->toString())
                         ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced value array', $content->toString()));
                 } elseif (is_a($expectedValueType, DictionaryValue::class, true)) {
                     if (in_array($expectedValueType, [Rectangle::class, ArrayValue::class], true)) {
                         $content = new InMemoryStream('[' . $content->toString() . ']');
                     }
 
-                    $value = $expectedValueType::fromValue(trim($content->toString()))
+                    $value = $expectedValueType::fromValue($content->toString())
                         ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced value array', $content->toString()));
                 }
             }

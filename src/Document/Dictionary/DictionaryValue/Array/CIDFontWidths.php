@@ -31,8 +31,8 @@ class CIDFontWidths implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
-        $valueString = str_replace("\n", ' ', $valueString);
-        if (str_starts_with($trimmedValueString = trim($valueString), '[') && str_ends_with($trimmedValueString, ']') && trim(rtrim(ltrim($trimmedValueString, '['), ']')) === '') {
+        $valueString = trim(str_replace("\n", ' ', $valueString));
+        if (str_starts_with($valueString, '[') && str_ends_with($valueString, ']') && trim(rtrim(ltrim($valueString, '['), ']')) === '') {
             return new self();
         }
 

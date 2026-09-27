@@ -18,6 +18,7 @@ readonly class DateValue implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
+        $valueString = trim($valueString);
         if (str_starts_with($valueString, '<') && str_ends_with($valueString, '>')) {
             $valueString = substr($valueString, 1, -1);
             if ($valueString === '') {

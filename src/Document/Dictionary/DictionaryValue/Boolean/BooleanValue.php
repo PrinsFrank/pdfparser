@@ -13,6 +13,7 @@ readonly class BooleanValue implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
+        $valueString = trim($valueString);
         if ($valueString === 'true') {
             return new self(true);
         }

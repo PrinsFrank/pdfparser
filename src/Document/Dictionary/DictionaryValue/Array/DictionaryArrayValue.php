@@ -24,6 +24,7 @@ readonly class DictionaryArrayValue implements DictionaryValue {
     #[Override]
     /** @throws PdfParserException */
     public static function fromValue(string $valueString): ?self {
+        $valueString = trim($valueString);
         $valueStringWithoutSpaces = str_replace([' ', "\r", "\n"], '', $valueString);
         if ((str_starts_with($valueStringWithoutSpaces, '[<<') === false && str_starts_with($valueStringWithoutSpaces, '[null') === false)
             || (str_ends_with($valueStringWithoutSpaces, '>>]') === false && str_ends_with($valueStringWithoutSpaces, 'null]') === false)) {

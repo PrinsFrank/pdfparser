@@ -16,6 +16,6 @@ enum SecurityAlgorithm: string implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
-        return self::tryFrom($valueString);
+        return self::tryFrom(trim($valueString));
     }
 }
