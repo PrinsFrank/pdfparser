@@ -14,6 +14,7 @@ readonly class FloatValue implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
+        $valueString = trim($valueString);
         $valueAsFloat = (float) $valueString;
         if (number_format($valueAsFloat, (int) strpos(strrev($valueString), ".")) !== $valueString) {
             return null;

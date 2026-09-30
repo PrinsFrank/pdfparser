@@ -13,17 +13,18 @@ class IntegerValueTest extends TestCase {
             new IntegerValue(42),
             IntegerValue::fromValue('42'),
         );
-
+        static::assertEquals(
+            new IntegerValue(42),
+            IntegerValue::fromValue('   42   '),
+        );
         static::assertEquals(
             new IntegerValue(42),
             IntegerValue::fromValue('00042'),
         );
-
         static::assertEquals(
             new IntegerValue(PHP_INT_MAX),
             IntegerValue::fromValue((string) PHP_INT_MAX),
         );
-
         static::assertNull(IntegerValue::fromValue('42.0'));
         static::assertNull(IntegerValue::fromValue('42,0'));
     }
