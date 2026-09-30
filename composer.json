@@ -27,7 +27,7 @@
         "phpstan/phpstan-deprecation-rules": "^2.0",
         "phpstan/phpstan-strict-rules": "^2",
         "phpunit/phpunit": "^11.5",
-        "symfony/yaml": "^7.3"
+        "symfony/yaml": "7.4.18"
     },
     "scripts": {
         "cs": "php-cs-fixer fix --allow-risky=yes --dry-run",
