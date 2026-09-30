@@ -55,6 +55,7 @@ readonly class DateValue implements DictionaryValue {
         }
 
         try {
+            $valueString = preg_replace('/Z(\d)/', '+$1', $valueString) ?? throw new ValueError();
             $parsedDate = DateTimeImmutable::createFromFormat(
                 preg_match('/^D:\d{14}$/', $valueString) === 1 ? '\D\:YmdHis' : '\D\:YmdHisP',
                 str_replace("'", '', $valueString),

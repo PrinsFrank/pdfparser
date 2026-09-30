@@ -37,11 +37,25 @@ class DateValueTest extends TestCase {
             DateValue::fromValue('(D:20000101120000+02\'00\')'),
         );
 
+        $dateTime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-01-01 12:00:00', new DateTimeZone('+02:00'));
+        static::assertNotFalse($dateTime);
+        static::assertEquals(
+            new DateValue($dateTime),
+            DateValue::fromValue('(D:20000101120000Z02\'00\')'),
+        );
+
         $dateTime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-01-01 12:00:00', new DateTimeZone('UTC'));
         static::assertNotFalse($dateTime);
         static::assertEquals(
             new DateValue($dateTime),
             DateValue::fromValue('(D:20000101120000)'),
+        );
+
+        $dateTime = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-01-01 12:00:00', new DateTimeZone('UTC'));
+        static::assertNotFalse($dateTime);
+        static::assertEquals(
+            new DateValue($dateTime),
+            DateValue::fromValue('(D:20000101120000Z)'),
         );
 
         static::assertNull(
