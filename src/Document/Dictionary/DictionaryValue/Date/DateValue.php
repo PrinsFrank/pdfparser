@@ -10,7 +10,11 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use ValueError;
 
-/** @api */
+/**
+ * @api
+ *
+ * @see 7.9.4
+ */
 readonly class DateValue implements DictionaryValue {
     public function __construct(
         public ?DateTimeImmutable $value,
@@ -56,6 +60,13 @@ readonly class DateValue implements DictionaryValue {
 
         try {
             $valueString = preg_replace('/Z(\d)/', '+$1', $valueString) ?? throw new ValueError();
+            $datePart = preg_match('/^D:(\d+)/', $valueString, $matches) === 1 ? $matches[1] : '';
+            if (in_array(strlen($datePart), [4, 6, 8, 10, 12, 14], true) === false) { // Only year, optionally month, day, hour, minute and second
+                return null;
+            }
+
+            $defaults = '0101000000';
+            $valueString = 'D:' . $datePart . substr($defaults, strlen($datePart) - 4) . substr($valueString, 2 + strlen($datePart));
             $parsedDate = DateTimeImmutable::createFromFormat(
                 preg_match('/^D:\d{14}$/', $valueString) === 1 ? '\D\:YmdHis' : '\D\:YmdHisP',
                 str_replace("'", '', $valueString),

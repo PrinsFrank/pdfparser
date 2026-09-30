@@ -16,7 +16,31 @@ class DateValueTest extends TestCase {
     public function testFromValueWithFullDateTime(): void {
         static::assertEquals(
             DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2024-11-22 22:23:57', new DateTimeZone('+01:00')),
+            DateValue::fromValue('(D:20241122222357+01\'00)')?->value,
+        );
+    }
+
+    /** @throws ValueError */
+    public function testFromValueWithFullDateTimeTrailingApostrophe(): void {
+        static::assertEquals(
+            DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2024-11-22 22:23:57', new DateTimeZone('+01:00')),
             DateValue::fromValue('(D:20241122222357+01\'00\')')?->value,
+        );
+    }
+
+    /** @throws ValueError */
+    public function testFromValueWithFullDateTimeAndHourOnlyOffset(): void {
+        static::assertEquals(
+            DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2024-11-22 22:23:57', new DateTimeZone('+01:00')),
+            DateValue::fromValue('(D:20241122222357+01)')?->value,
+        );
+    }
+
+    /** @throws ValueError */
+    public function testFromValueWithFullDateTimeAndHourOnlyOffsetWithTrailingApostrophe(): void {
+        static::assertEquals(
+            DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2024-11-22 22:23:57', new DateTimeZone('+01:00')),
+            DateValue::fromValue('(D:20241122222357+01\')')?->value,
         );
     }
 
@@ -24,7 +48,7 @@ class DateValueTest extends TestCase {
     public function testFromValueWithFullDateTimeUTC(): void {
         static::assertEquals(
             DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-01-01 12:00:00', new DateTimeZone('UTC')),
-            DateValue::fromValue('(D:20000101120000+00\'00\')')?->value,
+            DateValue::fromValue('(D:20000101120000+00\'00)')?->value,
         );
     }
 
@@ -32,7 +56,47 @@ class DateValueTest extends TestCase {
     public function testFromValueWithFullDateTimeWithZuluOffset(): void {
         static::assertEquals(
             DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-01-01 12:00:00', new DateTimeZone('+02:00')),
-            DateValue::fromValue('(D:20000101120000Z02\'00\')')?->value,
+            DateValue::fromValue('(D:20000101120000Z02\'00)')?->value,
+        );
+    }
+
+    /** @throws ValueError */
+    public function testFromValueWithOnlyYear(): void {
+        static::assertEquals(
+            DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00', new DateTimeZone('UTC')),
+            DateValue::fromValue('(D:2000)')?->value,
+        );
+    }
+
+    /** @throws ValueError */
+    public function testFromValueWithOnlyYearAndMonth(): void {
+        static::assertEquals(
+            DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-02-01 00:00:00', new DateTimeZone('UTC')),
+            DateValue::fromValue('(D:200002)')?->value,
+        );
+    }
+
+    /** @throws ValueError */
+    public function testFromValueWithOnlyYearMonthAndDay(): void {
+        static::assertEquals(
+            DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-02-02 00:00:00', new DateTimeZone('UTC')),
+            DateValue::fromValue('(D:20000202)')?->value,
+        );
+    }
+
+    /** @throws ValueError */
+    public function testFromValueWithOnlyYearMonthDayAndHour(): void {
+        static::assertEquals(
+            DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-02-02 02:00:00', new DateTimeZone('UTC')),
+            DateValue::fromValue('(D:2000020202)')?->value,
+        );
+    }
+
+    /** @throws ValueError */
+    public function testFromValueWithOnlyYearMonthDayHourAndMinute(): void {
+        static::assertEquals(
+            DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-02-02 02:02:00', new DateTimeZone('UTC')),
+            DateValue::fromValue('(D:200002020202)')?->value,
         );
     }
 
