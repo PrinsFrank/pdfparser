@@ -15,6 +15,10 @@ class FloatValueTest extends TestCase {
             FloatValue::fromValue('42'),
         );
         static::assertEquals(
+            new FloatValue(42),
+            FloatValue::fromValue('   42   '),
+        );
+        static::assertEquals(
             new FloatValue(42.0),
             FloatValue::fromValue('42.0'),
         );

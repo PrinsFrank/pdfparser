@@ -11,6 +11,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 class TextStringValueTest extends TestCase {
     public function testFromValue(): void {
         static::assertEquals(new TextStringValue('(foo)'), TextStringValue::fromValue('(foo)'));
+        static::assertEquals(new TextStringValue('(foo)'), TextStringValue::fromValue("\r" . '    (foo)   ' . "\n"));
     }
 
     /** @see 7.3.4.2, table 3 */

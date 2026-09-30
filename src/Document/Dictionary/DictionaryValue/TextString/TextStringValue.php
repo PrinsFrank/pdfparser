@@ -80,6 +80,6 @@ readonly class TextStringValue implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): self {
-        return new self($valueString);
+        return new self(trim($valueString));
     }
 }
