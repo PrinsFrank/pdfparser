@@ -51,6 +51,10 @@ class DictionaryParser {
                 $previousIndexLevelDecrease = $index;
                 $nestingContext->decrementNesting()->flush();
                 $currentContext = $nestingContext->getContext();
+
+                if ($nestingContext->isAtRootLevel()) {
+                    break;
+                }
             } elseif ($char === DelimiterCharacter::SOLIDUS->value
                 && $previousChar !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value
                 && $currentContext !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
