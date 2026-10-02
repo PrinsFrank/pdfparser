@@ -9,6 +9,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
 /** @see 9.7.4.3 Glyph metrics in CIDFonts */
 class CIDFontWidths implements DictionaryValue {
+    /** @var array<int, float|null> */
+    private array $widthCache = [];
+
     /** @var list<ConsecutiveCIDWidth|RangeCIDWidth> */
     private readonly array $widths;
 
@@ -20,13 +23,17 @@ class CIDFontWidths implements DictionaryValue {
     }
 
     public function getWidthForCharacter(int $characterCode): ?float {
+        if (array_key_exists($characterCode, $this->widthCache)) {
+            return $this->widthCache[$characterCode];
+        }
+
         foreach ($this->widths as $widthItem) {
             if (($widthForCharacterCode = $widthItem->getWidthForCharacterCode($characterCode)) !== null) {
-                return $widthForCharacterCode;
+                return $this->widthCache[$characterCode] = $widthForCharacterCode;
             }
         }
 
-        return null;
+        return $this->widthCache[$characterCode] = null;
     }
 
     #[Override]
