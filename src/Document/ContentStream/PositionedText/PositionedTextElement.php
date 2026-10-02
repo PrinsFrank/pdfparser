@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 readonly class PositionedTextElement {
+    private float $heightCache;
     public const WORD_BREAK_THRESHOLD_EM = 0.25;
 
     /** @param list<TextSegment> $textSegments */
@@ -62,7 +63,11 @@ readonly class PositionedTextElement {
     }
 
     public function getHeight(): float {
-        return ($this->textState->getFontSize())
+        if (isset($this->heightCache)) {
+            return $this->heightCache;
+        }
+
+        return $this->heightCache = ($this->textState->getFontSize())
             * abs($this->absoluteMatrix->scaleY)
             * ($this->textState->scale / 100);
     }
