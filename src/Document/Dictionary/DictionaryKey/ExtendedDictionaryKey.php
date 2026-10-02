@@ -4,8 +4,16 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey;
 
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Boolean\BooleanValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Float\FloatValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 
 readonly class ExtendedDictionaryKey implements DictionaryKeyInterface, DictionaryValue {
@@ -21,7 +29,19 @@ readonly class ExtendedDictionaryKey implements DictionaryKeyInterface, Dictiona
     /** @api */
     #[Override]
     public function getValueTypes(): array {
-        return [ReferenceValue::class, TextStringValue::class, Dictionary::class];
+        return [
+            Dictionary::class,
+            ArrayValue::class,
+            DictionaryArrayValue::class,
+            BooleanValue::class,
+            DateValue::class,
+            FloatValue::class,
+            IntegerValue::class,
+            Rectangle::class,
+            ReferenceValue::class,
+            ReferenceValueArray::class,
+            TextStringValue::class,
+        ];
     }
 
     #[Override]

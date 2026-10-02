@@ -6,7 +6,15 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Boolean\BooleanValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Float\FloatValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 
 #[CoversClass(ExtendedDictionaryKey::class)]
@@ -32,7 +40,19 @@ class ExtendedDictionaryKeyTest extends TestCase {
 
     public function testGetValueTypes(): void {
         static::assertSame(
-            [ReferenceValue::class, TextStringValue::class, Dictionary::class],
+            [
+                Dictionary::class,
+                ArrayValue::class,
+                DictionaryArrayValue::class,
+                BooleanValue::class,
+                DateValue::class,
+                FloatValue::class,
+                IntegerValue::class,
+                Rectangle::class,
+                ReferenceValue::class,
+                ReferenceValueArray::class,
+                TextStringValue::class,
+            ],
             ExtendedDictionaryKey::fromKeyString('Foo')->getValueTypes(),
         );
     }
