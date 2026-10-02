@@ -8,10 +8,13 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EventNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 
 #[CoversClass(DictionaryArrayValue::class)]
@@ -20,7 +23,7 @@ class DictionaryArrayValueTest extends TestCase {
         static::assertNull(DictionaryArrayValue::fromValue(''));
         static::assertNull(DictionaryArrayValue::fromValue('[]'));
         static::assertEquals(
-            new DictionaryArrayValue(new Dictionary()),
+            new DictionaryArrayValue(),
             DictionaryArrayValue::fromValue('[null]'),
         );
         static::assertEquals(
@@ -59,6 +62,36 @@ class DictionaryArrayValueTest extends TestCase {
                 ),
             ),
             DictionaryArrayValue::fromValue('[<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier(sRGB) /RegistryName(http://www.color.org) /Info(Creator: HP     Manufacturer:IEC    Model:sRGB) /DestOutputProfile 361 0 R>>]'),
+        );
+        static::assertEquals(
+            new DictionaryArrayValue(
+                new Dictionary(
+                    new DictionaryEntry(DictionaryKey::CATEGORY, new ArrayValue(['/Print'])),
+                    new DictionaryEntry(DictionaryKey::EVENT, EventNameValue::Print),
+                    new DictionaryEntry(DictionaryKey::OCGS, new ReferenceValueArray(new ReferenceValue(939, 0), new ReferenceValue(419, 0))),
+                ),
+                new Dictionary(
+                    new DictionaryEntry(DictionaryKey::CATEGORY, new ArrayValue(['/View'])),
+                    new DictionaryEntry(DictionaryKey::EVENT, EventNameValue::View),
+                    new DictionaryEntry(DictionaryKey::OCGS, new ReferenceValueArray(new ReferenceValue(939, 0), new ReferenceValue(419, 0))),
+                ),
+            ),
+            DictionaryArrayValue::fromValue(
+                <<<DICTIONARYARRAY
+                [
+                    <<
+                        /Category [/Print]
+                        /Event/Print
+                        /OCGs [939 0 R 419 0 R]
+                    >>
+                    <<
+                        /Category [/View]
+                        /Event/View
+                        /OCGs[939 0 R 419 0 R]
+                    >>
+                ]
+                DICTIONARYARRAY,
+            ),
         );
     }
 }

@@ -345,6 +345,23 @@ class DictionaryParserTest extends TestCase {
                                         new Dictionary(
                                             new DictionaryEntry(
                                                 DictionaryKey::CATEGORY,
+                                                new ArrayValue(['/Print']),
+                                            ),
+                                            new DictionaryEntry(
+                                                DictionaryKey::EVENT,
+                                                EventNameValue::Print,
+                                            ),
+                                            new DictionaryEntry(
+                                                DictionaryKey::OCGS,
+                                                new ReferenceValueArray(
+                                                    new ReferenceValue(939, 0),
+                                                    new ReferenceValue(419, 0),
+                                                ),
+                                            ),
+                                        ),
+                                        new Dictionary(
+                                            new DictionaryEntry(
+                                                DictionaryKey::CATEGORY,
                                                 new ArrayValue(['/View']),
                                             ),
                                             new DictionaryEntry(
