@@ -19,7 +19,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
@@ -268,7 +268,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
                 new DictionaryEntry(DictionaryKey::RECT, new Rectangle(44, 616, 162, 735)),
-                new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #1)')),
+                new DictionaryEntry(DictionaryKey::CONTENTS, new LiteralStringValue('Text #1')),
                 new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(true)),
             ),
             $obj8?->getDictionary(),
@@ -293,7 +293,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
                 new DictionaryEntry(DictionaryKey::RECT, new Rectangle(224, 668, 457, 735)),
-                new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #2)')),
+                new DictionaryEntry(DictionaryKey::CONTENTS, new LiteralStringValue('Text #2')),
                 new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(false)),
             ),
             $obj9?->getDictionary(),
@@ -318,7 +318,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
                 new DictionaryEntry(DictionaryKey::RECT, new Rectangle(239, 393, 328, 622)),
-                new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #3)')),
+                new DictionaryEntry(DictionaryKey::CONTENTS, new LiteralStringValue('Text #3')),
                 new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(true)),
             ),
             $obj10?->getDictionary(),
@@ -343,7 +343,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
                 new DictionaryEntry(DictionaryKey::RECT, new Rectangle(34, 398, 225, 575)),
-                new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #4)')),
+                new DictionaryEntry(DictionaryKey::CONTENTS, new LiteralStringValue('Text #4')),
                 new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(false)),
             ),
             $obj11?->getDictionary(),

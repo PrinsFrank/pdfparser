@@ -15,7 +15,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValu
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\HexadecimalStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 
 #[CoversClass(ExtendedDictionaryKey::class)]
 class ExtendedDictionaryKeyTest extends TestCase {
@@ -51,7 +53,9 @@ class ExtendedDictionaryKeyTest extends TestCase {
                 Rectangle::class,
                 ReferenceValue::class,
                 ReferenceValueArray::class,
-                TextStringValue::class,
+                HexadecimalStringValue::class,
+                LiteralStringValue::class,
+                NameObjectStringValue::class,
             ],
             ExtendedDictionaryKey::fromKeyString('Foo')->getValueTypes(),
         );

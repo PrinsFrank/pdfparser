@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\CMap\Registry\Adobe\Identity0;
 use PrinsFrank\PdfParser\Document\CMap\Registry\RegistryOrchestrator;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
 
 #[CoversClass(RegistryOrchestrator::class)]
 class RegistryOrchestratorTest extends TestCase {
@@ -15,29 +15,29 @@ class RegistryOrchestratorTest extends TestCase {
         static::assertEquals(
             new Identity0(),
             RegistryOrchestrator::getForRegistryOrderingSupplement(
-                new TextStringValue('(Adobe)'),
-                new TextStringValue('(Identity)'),
+                new LiteralStringValue('Adobe'),
+                new LiteralStringValue('Identity'),
                 new IntegerValue(0),
             ),
         );
         static::assertNull(
             RegistryOrchestrator::getForRegistryOrderingSupplement(
-                new TextStringValue('(Adobe)'),
-                new TextStringValue('(Identity)'),
+                new LiteralStringValue('Adobe'),
+                new LiteralStringValue('Identity'),
                 new IntegerValue(1),
             ),
         );
         static::assertNull(
             RegistryOrchestrator::getForRegistryOrderingSupplement(
-                new TextStringValue('(Adobe2)'),
-                new TextStringValue('(Identity)'),
+                new LiteralStringValue('Adobe2'),
+                new LiteralStringValue('Identity'),
                 new IntegerValue(0),
             ),
         );
         static::assertNull(
             RegistryOrchestrator::getForRegistryOrderingSupplement(
-                new TextStringValue('(Adobe)'),
-                new TextStringValue('(Identity2)'),
+                new LiteralStringValue('Adobe'),
+                new LiteralStringValue('Identity2'),
                 new IntegerValue(0),
             ),
         );

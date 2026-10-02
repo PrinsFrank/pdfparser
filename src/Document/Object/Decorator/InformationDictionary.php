@@ -5,49 +5,48 @@ namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 use DateTimeImmutable;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class InformationDictionary extends DecoratedObject {
     /** @throws PdfParserException */
     public function getTitle(): ?string {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::TITLE, TextStringValue::class)
+            ->getStringValue($this->document, DictionaryKey::TITLE)
             ?->getText();
     }
 
     /** @throws PdfParserException */
     public function getProducer(): ?string {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::PRODUCER, TextStringValue::class)
+            ->getStringValue($this->document, DictionaryKey::PRODUCER)
             ?->getText();
     }
 
     /** @throws PdfParserException */
     public function getAuthor(): ?string {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::AUTHOR, TextStringValue::class)
+            ->getStringValue($this->document, DictionaryKey::AUTHOR)
             ?->getText();
     }
 
     /** @throws PdfParserException */
     public function getCreator(): ?string {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::CREATOR, TextStringValue::class)
+            ->getStringValue($this->document, DictionaryKey::CREATOR)
             ?->getText();
     }
 
     /** @throws PdfParserException */
     public function getSubject(): ?string {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::SUBJECT, TextStringValue::class)
+            ->getStringValue($this->document, DictionaryKey::SUBJECT)
             ?->getText();
     }
 
     /** @throws PdfParserException */
     public function getKeywords(): ?string {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::KEYWORDS, TextStringValue::class)
+            ->getStringValue($this->document, DictionaryKey::KEYWORDS)
             ?->getText();
     }
 

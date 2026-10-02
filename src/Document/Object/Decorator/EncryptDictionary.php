@@ -6,7 +6,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Boolean\BooleanValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SecurityHandlerNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\HexadecimalStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
 use PrinsFrank\PdfParser\Document\Security\SecurityAlgorithm;
 use PrinsFrank\PdfParser\Document\Security\StandardSecurityHandlerRevision;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -33,8 +34,14 @@ class EncryptDictionary extends DecoratedObject {
     }
 
     public function getOwnerPasswordEntry(): string {
+        $userPasswordEntryType = $this->getDictionary()->getTypeForKey(DictionaryKey::O);
+        if ($userPasswordEntryType !== LiteralStringValue::class
+            && $userPasswordEntryType !== HexadecimalStringValue::class) {
+            throw new ParseFailureException();
+        }
+
         $binaryString = $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::O, TextStringValue::class)
+            ->getValueForKey($this->document, DictionaryKey::O, $userPasswordEntryType)
             ?->getBinaryString()
             ?? throw new ParseFailureException();
 
@@ -47,8 +54,14 @@ class EncryptDictionary extends DecoratedObject {
     }
 
     public function getUserPasswordEntry(): string {
+        $userPasswordEntryType = $this->getDictionary()->getTypeForKey(DictionaryKey::U);
+        if ($userPasswordEntryType !== LiteralStringValue::class
+            && $userPasswordEntryType !== HexadecimalStringValue::class) {
+            throw new ParseFailureException();
+        }
+
         $binaryString = $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::U, TextStringValue::class)
+            ->getValueForKey($this->document, DictionaryKey::U, $userPasswordEntryType)
             ?->getBinaryString()
             ?? throw new ParseFailureException();
 
