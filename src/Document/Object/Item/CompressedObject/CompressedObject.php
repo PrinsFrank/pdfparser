@@ -40,11 +40,26 @@ readonly class CompressedObject implements ObjectItem {
         }
 
         $content = $this->getContent($document);
+        $contentLength = $content->getSizeInBytes();
+        $firstNonWhitespaceCharOffset = null;
+        for ($offset = 0; $offset < $contentLength; $offset++) {
+            $char = $content->read($offset, 1);
+            if (in_array($char, ["\0", "\t", "\n", "\r", "\f", ' '], true) === false) {
+                $firstNonWhitespaceCharOffset = $offset;
+                break;
+            }
+        }
+
+        if ($firstNonWhitespaceCharOffset === null
+            || $content->read($firstNonWhitespaceCharOffset, 2) !== '<<') {
+            return new Dictionary();
+        }
+
         return $this->dictionary = DictionaryParser::parse(
             $this->storedInObject->getEncryptionContext(),
             $content,
-            0,
-            $content->getSizeInBytes(),
+            $firstNonWhitespaceCharOffset,
+            $content->getSizeInBytes() - $firstNonWhitespaceCharOffset,
         );
     }
 
