@@ -37,6 +37,10 @@ class NestingContext {
         return $this;
     }
 
+    public function isAtRootLevel(): bool {
+        return $this->currentLevel === '';
+    }
+
     public function setContext(DictionaryParseContext $dictionaryParseContext): self {
         $this->nestingContext[$this->currentLevel] = $dictionaryParseContext;
 
