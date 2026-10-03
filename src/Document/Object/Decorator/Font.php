@@ -92,11 +92,9 @@ class Font extends DecoratedObject {
     /** @throws PdfParserException */
     public function getToUnicodeCMap(): ?ToUnicodeCMap {
         if (isset($this->toUnicodeCMap)) {
-            if ($this->toUnicodeCMap === false) {
-                return null;
-            }
-
-            return $this->toUnicodeCMap;
+            return $this->toUnicodeCMap === false
+                ? null
+                : $this->toUnicodeCMap;
         }
 
         if ($this->getDictionary()->getTypeForKey(DictionaryKey::TO_UNICODE) === ToUnicodeCMapNameValue::class) {
