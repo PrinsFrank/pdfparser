@@ -26,8 +26,8 @@ class TextExtractor {
             $previousFontOnLine = null;
             $previousTextElementEndsWithSpace = false;
             foreach ($positionedTextElementsForLine as $positionedTextElement) {
-                $elementText = $positionedTextElement->getText($page);
                 $font = $positionedTextElement->getFont($page);
+                $elementText = $positionedTextElement->getText($font);
                 if ($elementText === '') {
                     $previousTextElementOnLine = $positionedTextElement;
                     $previousFontOnLine = $font;

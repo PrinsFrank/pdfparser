@@ -28,8 +28,7 @@ readonly class PositionedTextElement {
     }
 
     /** @throws ParseFailureException */
-    public function getText(Page $page): string {
-        $font = $this->getFont($page);
+    public function getText(Font $font): string {
         $differences = $font->getDifferences();
         $encoding = $font->getEncoding();
         $toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont();
