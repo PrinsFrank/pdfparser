@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Extraction\Markdown;
+namespace PrinsFrank\PdfParser\Extraction;
 
 use PrinsFrank\MarkDownDom\Contract\BlockNode;
 use PrinsFrank\MarkDownDom\Contract\InlineNode;
@@ -14,7 +14,8 @@ use PrinsFrank\MarkDownDom\Node\Inline\Text;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
-use PrinsFrank\PdfParser\Extraction\Markdown\TextGrouping\LineGrouping\TextOverlapStrategy;
+use PrinsFrank\PdfParser\Extraction\SpaceDetection\SpaceDetector;
+use PrinsFrank\PdfParser\Extraction\TextGrouping\LineGrouping\TextOverlapStrategy;
 
 class MarkdownExtractor {
     /**
@@ -63,23 +64,12 @@ class MarkdownExtractor {
                     self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
                 }
 
-                if ($previousTextElementOnLine !== null && $previousFontOnLine !== null) {
-                    $gap = $positionedTextElement->absoluteMatrix->offsetX
-                        - $previousTextElementOnLine->absoluteMatrix->offsetX
-                        - $previousTextElementOnLine->getAdvanceWidth($previousFontOnLine);
-
-                    $wordBreakThreshold = $previousTextElementOnLine->textState->getFontSize()
-                        * $previousTextElementOnLine->absoluteMatrix->scaleX
-                        * ($previousTextElementOnLine->textState->scale / 100)
-                        * PositionedTextElement::WORD_BREAK_THRESHOLD_EM;
-
-                    if (
-                        $gap >= $wordBreakThreshold
-                        && $previousTextElementEndsWithSpace === false
-                        && str_starts_with($elementText, ' ') === false
-                    ) {
-                        $textBuffer .= ' ';
-                    }
+                if ($previousTextElementEndsWithSpace === false
+                    && str_starts_with($elementText, ' ') === false
+                    && $previousTextElementOnLine !== null
+                    && $previousFontOnLine !== null
+                    && SpaceDetector::shouldContainExtraSpace($positionedTextElement, $previousTextElementOnLine, $previousFontOnLine)) {
+                    $textBuffer .= ' ';
                 }
 
                 $previousTextElementOnLine = $positionedTextElement;
