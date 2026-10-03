@@ -35,6 +35,7 @@ class Font extends DecoratedObject {
     private readonly ToUnicodeCMap|false $toUnicodeCMap;
     private readonly CIDFontWidths|FontWidths|false $widths;
     private readonly DifferencesArrayValue|false $differencesCache;
+    private readonly EncodingNameValue|false $encodingCache;
 
     /** @throws PdfParserException */
     public function getBaseFont(): ?string {
@@ -54,17 +55,23 @@ class Font extends DecoratedObject {
 
     /** @throws PdfParserException */
     public function getEncoding(): ?EncodingNameValue {
-        $encodingType = $this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING);
-        if ($encodingType === null) {
+        if (isset($this->encodingCache)) {
+            return $this->encodingCache === false ? null : $this->encodingCache;
+        }
+
+        if ($this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING) === EncodingNameValue::class) {
+            $encoding = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::ENCODING, EncodingNameValue::class);
+        } else {
+            $encoding = $this->getEncodingDictionary()
+                ?->getValueForKey($this->document, DictionaryKey::BASE_ENCODING, EncodingNameValue::class);
+        }
+
+        if ($encoding === null) {
+            $this->encodingCache = false;
             return null;
         }
 
-        if ($encodingType === EncodingNameValue::class) {
-            return $this->getDictionary()->getValueForKey($this->document, DictionaryKey::ENCODING, EncodingNameValue::class);
-        }
-
-        return $this->getEncodingDictionary()
-            ?->getValueForKey($this->document, DictionaryKey::BASE_ENCODING, EncodingNameValue::class);
+        return $this->encodingCache = $encoding;
     }
 
     public function getDifferences(): ?DifferencesArrayValue {
