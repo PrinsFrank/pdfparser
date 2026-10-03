@@ -26,7 +26,7 @@ class MarkdownExtractor {
     public static function extractContent(array $positionedTextElements, Page $page): Document {
         $lineGroupedElements = TextOverlapStrategy::group($positionedTextElements);
 
-        $blockNodes = $inLineNodes = [];
+        $blockNodes = $inLineNodes = $fontCache = [];
         $textBuffer = '';
         $previousElementIsBold = $previousElementIsItalic = false;
         $previousHeadingLevel = null;
@@ -49,8 +49,12 @@ class MarkdownExtractor {
             $previousFontOnLine = null;
             $previousTextElementEndsWithSpace = false;
             foreach ($positionedTextElementsForLine as $positionedTextElement) {
-                $font = $page->getFont($positionedTextElement->textState->fontName)
-                    ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $positionedTextElement->textState->fontName->value ?? 'null'));
+                if ($positionedTextElement->textState->fontName === null) {
+                    throw new ParseFailureException('Unable to locate font');
+                }
+
+                $font = $fontCache[$positionedTextElement->textState->fontName->value] ??= $page->getFont($positionedTextElement->textState->fontName)
+                    ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $positionedTextElement->textState->fontName->value));
                 $elementText = $positionedTextElement->getText($font);
                 if ($elementText === '') {
                     $previousTextElementOnLine = $positionedTextElement;
