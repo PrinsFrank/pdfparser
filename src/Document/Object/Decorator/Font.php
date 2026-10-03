@@ -140,22 +140,23 @@ class Font extends DecoratedObject {
             ?->value;
     }
 
-    public function getWidthForChar(int $characterCode, TextState $textState, TransformationMatrix $transformationMatrix): float {
-        $characterWidth = $this->getWidths()?->getWidthForCharacter($characterCode) ?? $this->getDefaultWidth();
-
-        // Word spacing (Tw) applies only to the single-byte character code 32, and never to composite (Type0) fonts (spec §9.3.3).
-        $wordSpace = ($characterCode === 32 && $this->getDescendantFonts() === []) ? $textState->wordSpace : 0.0;
-
-        return ($characterWidth * ($textState->getFontSize()) + $textState->charSpace + $wordSpace) * $transformationMatrix->scaleX;
-    }
-
     /** @param list<int> $chars */
-    public function getWidthForChars(array $chars, TextState $textState, TransformationMatrix $transformationMatrix): float {
-        $totalCharacterWidth = 0;
+    public function getWidthForChars(array $chars, float $wordSpace, float $charSpace, float $fontSize, float $scaleX): float {
+        if ($chars === []) {
+            return 0.0;
+        }
+
+        $defaultWidth = null;
+        $totalCharacterWidth = 0.0;
         $charWidthCache = [];
         foreach ($chars as $char) {
             if (isset($charWidthCache[$char]) === false) {
-                $charWidthCache[$char] = $this->getWidthForChar($char, $textState, $transformationMatrix);
+                $characterWidth = $this->getWidths()?->getWidthForCharacter($char) ?? ($defaultWidth ??= $this->getDefaultWidth());
+
+                // Word spacing (Tw) applies only to the single-byte character code 32, and never to composite (Type0) fonts (spec §9.3.3).
+                $wordSpaceForChar = ($char === 32 && $this->getDescendantFonts() === []) ? $wordSpace : 0.0;
+
+                $charWidthCache[$char] = ($characterWidth * $fontSize + $charSpace + $wordSpaceForChar) * $scaleX;
             }
 
             $totalCharacterWidth += $charWidthCache[$char];
