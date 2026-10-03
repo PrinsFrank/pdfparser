@@ -152,8 +152,13 @@ class Font extends DecoratedObject {
     /** @param list<int> $chars */
     public function getWidthForChars(array $chars, TextState $textState, TransformationMatrix $transformationMatrix): float {
         $totalCharacterWidth = 0;
+        $charWidthCache = [];
         foreach ($chars as $char) {
-            $totalCharacterWidth += $this->getWidthForChar($char, $textState, $transformationMatrix);
+            if (isset($charWidthCache[$char]) === false) {
+                $charWidthCache[$char] = $this->getWidthForChar($char, $textState, $transformationMatrix);
+            }
+
+            $totalCharacterWidth += $charWidthCache[$char];
         }
 
         return $totalCharacterWidth;
