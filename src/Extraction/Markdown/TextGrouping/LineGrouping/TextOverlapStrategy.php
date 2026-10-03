@@ -59,19 +59,20 @@ class TextOverlapStrategy {
                 $currentElementBottom = $positionedTextElement->absoluteMatrix->offsetY;
                 $currentElementTop = $currentElementBottom + $positionedTextElementHeight;
 
+                $overlap = min($highestElementTop, $currentElementTop) - max($highestPositionedTextElementBottom, $currentElementBottom);
+                if ($overlap <= 0.0) {
+                    continue;
+                }
+
                 $smallestElementHeight = min($positionedTextElementHeight, $highestPositionedTextElementHeight);
                 if ($smallestElementHeight === 0.0) {
                     continue;
                 }
 
-                $overlap = min($highestElementTop, $currentElementTop) - max($highestPositionedTextElementBottom, $currentElementBottom);
-                $belongsOnLine = $overlap / $smallestElementHeight >= self::OVERLAP_RATIO;
-                $isEnclosedSubscript = $overlap > 0.0
-                    && $positionedTextElementHeight < $highestPositionedTextElementHeight
+                if ($overlap / $smallestElementHeight >= self::OVERLAP_RATIO
+                    || ($positionedTextElementHeight < $highestPositionedTextElementHeight
                     && $positionedTextElement->absoluteMatrix->offsetX >= $lineLeftX
-                    && $positionedTextElement->absoluteMatrix->offsetX <= $lineRightX;
-
-                if ($belongsOnLine || $isEnclosedSubscript) {
+                    && $positionedTextElement->absoluteMatrix->offsetX <= $lineRightX)) {
                     $positionedTextElementsOnLine[] = $positionedTextElement;
                     $processedIndices[$j] = true;
                     $lineLeftX = min($lineLeftX, $positionedTextElement->absoluteMatrix->offsetX);
