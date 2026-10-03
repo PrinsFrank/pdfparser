@@ -4,7 +4,6 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 readonly class PositionedTextElement {
@@ -18,21 +17,12 @@ readonly class PositionedTextElement {
         public TextState $textState,
     ) {}
 
-    public function getFont(Page $page): Font {
-        if ($this->textState->fontName === null) {
-            throw new ParseFailureException('Unable to locate font for text element');
-        }
-
-        return $page->getFont($this->textState->fontName)
-            ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $this->textState->fontName->value));
-    }
-
     /** @throws ParseFailureException */
-    public function getText(Page $page): string {
-        $font = $this->getFont($page);
+    public function getText(Font $font): string {
         $differences = $font->getDifferences();
         $encoding = $font->getEncoding();
-        $toUnicodeCMap = $font->getToUnicodeCMap() ?? $font->getToUnicodeCMapDescendantFont();
+        $toUnicodeCMap = $font->getToUnicodeCMap()
+            ?? $font->getToUnicodeCMapDescendantFont();
 
         $text = '';
         $previousOffset = null;
