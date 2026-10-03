@@ -34,6 +34,7 @@ class Font extends DecoratedObject {
     private readonly array $descendantFontsCache;
     private readonly ToUnicodeCMap|false $toUnicodeCMap;
     private readonly CIDFontWidths|FontWidths|false $widths;
+    private readonly DifferencesArrayValue|false $differencesCache;
 
     /** @throws PdfParserException */
     public function getBaseFont(): ?string {
@@ -67,8 +68,18 @@ class Font extends DecoratedObject {
     }
 
     public function getDifferences(): ?DifferencesArrayValue {
-        return $this->getEncodingDictionary()
+        if (isset($this->differencesCache)) {
+            return $this->differencesCache === false ? null : $this->differencesCache;
+        }
+
+        $differences = $this->getEncodingDictionary()
             ?->getValueForKey($this->document, DictionaryKey::DIFFERENCES, DifferencesArrayValue::class);
+        if ($differences === null) {
+            $this->differencesCache = false;
+            return null;
+        }
+
+        return $this->differencesCache = $differences;
     }
 
     /** @throws PdfParserException */

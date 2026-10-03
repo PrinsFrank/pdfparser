@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Font;
 class FontWidths {
     /** @var array<int, float|null> */
     private array $widthCache = [];
+
     /** @param list<float> $widths */
     public function __construct(
         public readonly int   $firstChar,
