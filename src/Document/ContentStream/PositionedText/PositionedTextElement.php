@@ -21,8 +21,7 @@ readonly class PositionedTextElement {
     public function getText(Font $font): string {
         $differences = $font->getDifferences();
         $encoding = $font->getEncoding();
-        $toUnicodeCMap = $font->getToUnicodeCMap()
-            ?? $font->getToUnicodeCMapDescendantFont();
+        $toUnicodeCMap = $font->getToUnicodeCMap();
 
         $text = '';
         $previousOffset = null;

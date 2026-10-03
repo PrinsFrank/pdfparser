@@ -34,6 +34,8 @@ class Font extends DecoratedObject {
     private readonly array $descendantFontsCache;
     private readonly ToUnicodeCMap|false $toUnicodeCMap;
     private readonly CIDFontWidths|FontWidths|false $widths;
+    private readonly DifferencesArrayValue|false $differencesCache;
+    private readonly EncodingNameValue|false $encodingCache;
 
     /** @throws PdfParserException */
     public function getBaseFont(): ?string {
@@ -53,32 +55,46 @@ class Font extends DecoratedObject {
 
     /** @throws PdfParserException */
     public function getEncoding(): ?EncodingNameValue {
-        $encodingType = $this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING);
-        if ($encodingType === null) {
+        if (isset($this->encodingCache)) {
+            return $this->encodingCache === false ? null : $this->encodingCache;
+        }
+
+        if ($this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING) === EncodingNameValue::class) {
+            $encoding = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::ENCODING, EncodingNameValue::class);
+        } else {
+            $encoding = $this->getEncodingDictionary()
+                ?->getValueForKey($this->document, DictionaryKey::BASE_ENCODING, EncodingNameValue::class);
+        }
+
+        if ($encoding === null) {
+            $this->encodingCache = false;
             return null;
         }
 
-        if ($encodingType === EncodingNameValue::class) {
-            return $this->getDictionary()->getValueForKey($this->document, DictionaryKey::ENCODING, EncodingNameValue::class);
-        }
-
-        return $this->getEncodingDictionary()
-            ?->getValueForKey($this->document, DictionaryKey::BASE_ENCODING, EncodingNameValue::class);
+        return $this->encodingCache = $encoding;
     }
 
     public function getDifferences(): ?DifferencesArrayValue {
-        return $this->getEncodingDictionary()
+        if (isset($this->differencesCache)) {
+            return $this->differencesCache === false ? null : $this->differencesCache;
+        }
+
+        $differences = $this->getEncodingDictionary()
             ?->getValueForKey($this->document, DictionaryKey::DIFFERENCES, DifferencesArrayValue::class);
+        if ($differences === null) {
+            $this->differencesCache = false;
+            return null;
+        }
+
+        return $this->differencesCache = $differences;
     }
 
     /** @throws PdfParserException */
     public function getToUnicodeCMap(): ?ToUnicodeCMap {
         if (isset($this->toUnicodeCMap)) {
-            if ($this->toUnicodeCMap === false) {
-                return null;
-            }
-
-            return $this->toUnicodeCMap;
+            return $this->toUnicodeCMap === false
+                ? null
+                : $this->toUnicodeCMap;
         }
 
         if ($this->getDictionary()->getTypeForKey(DictionaryKey::TO_UNICODE) === ToUnicodeCMapNameValue::class) {
@@ -86,15 +102,18 @@ class Font extends DecoratedObject {
                 ->getValueForKey($this->document, DictionaryKey::TO_UNICODE, ToUnicodeCMapNameValue::class)
                 ?? throw new ParseFailureException();
 
-            return $this->toUnicodeCMap = $toUnicodeCMapNameValue
-                ->getToUnicodeCMap();
+            return $this->toUnicodeCMap = $toUnicodeCMapNameValue->getToUnicodeCMap();
         }
 
         $toUnicodeObject = $this->getDictionary()
             ->getObjectForReference($this->document, DictionaryKey::TO_UNICODE);
         if ($toUnicodeObject === null) {
-            $this->toUnicodeCMap = false;
+            $descendantUnicodeCMap = $this->getToUnicodeCMapDescendantFont();
+            if ($descendantUnicodeCMap !== null) {
+                return $this->toUnicodeCMap = $descendantUnicodeCMap;
+            }
 
+            $this->toUnicodeCMap = false;
             return null;
         }
 
@@ -106,7 +125,7 @@ class Font extends DecoratedObject {
         return $this->toUnicodeCMap = ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes());
     }
 
-    public function getToUnicodeCMapDescendantFont(): ?ToUnicodeCMap {
+    private function getToUnicodeCMapDescendantFont(): ?ToUnicodeCMap {
         foreach ($this->getDescendantFonts() as $descendantFont) {
             $fontDictionary = $descendantFont instanceof Dictionary ? $descendantFont : $descendantFont->getDictionary();
 
