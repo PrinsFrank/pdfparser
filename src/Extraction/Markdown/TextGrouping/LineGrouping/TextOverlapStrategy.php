@@ -17,7 +17,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextEle
  * And for each text element check if there is significant overlap above a threshold. Continue until all elements are processed
  */
 class TextOverlapStrategy {
-    private const OVERLAP_PERCENTAGE = 90;
+    private const OVERLAP_RATIO = .9;
 
     /**
      * @param list<PositionedTextElement> $positionedTextElements
@@ -65,7 +65,7 @@ class TextOverlapStrategy {
                 }
 
                 $overlap = min($highestElementTop, $currentElementTop) - max($highestPositionedTextElementBottom, $currentElementBottom);
-                $belongsOnLine = $overlap / $smallestElementHeight * 100 >= self::OVERLAP_PERCENTAGE;
+                $belongsOnLine = $overlap / $smallestElementHeight >= self::OVERLAP_RATIO;
                 $isEnclosedSubscript = $overlap > 0.0
                     && $positionedTextElementHeight < $highestPositionedTextElementHeight
                     && $positionedTextElement->absoluteMatrix->offsetX >= $lineLeftX
