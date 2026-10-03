@@ -104,7 +104,11 @@ class Page extends DecoratedObject {
             ?->getSubDictionary($this->document, DictionaryKey::FONT);
     }
 
-    public function getFont(DictionaryKey|ExtendedDictionaryKey $dictionaryKey): ?Font {
+    public function getFont(DictionaryKey|ExtendedDictionaryKey|null $dictionaryKey): ?Font {
+        if ($dictionaryKey === null) {
+            return null;
+        }
+
         $font = $this->getFontDictionary()
             ?->getObjectForReference($this->document, $dictionaryKey, Font::class);
         if ($font !== null) {

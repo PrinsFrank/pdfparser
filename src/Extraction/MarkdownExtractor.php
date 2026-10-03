@@ -13,6 +13,7 @@ use PrinsFrank\MarkDownDom\Node\Inline\Italic;
 use PrinsFrank\MarkDownDom\Node\Inline\Text;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Extraction\SpaceDetection\SpaceDetector;
 use PrinsFrank\PdfParser\Extraction\TextGrouping\LineGrouping\TextOverlapStrategy;
@@ -48,7 +49,8 @@ class MarkdownExtractor {
             $previousFontOnLine = null;
             $previousTextElementEndsWithSpace = false;
             foreach ($positionedTextElementsForLine as $positionedTextElement) {
-                $font = $positionedTextElement->getFont($page);
+                $font = $page->getFont($positionedTextElement->textState->fontName)
+                    ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $positionedTextElement->textState->fontName->value ?? 'null'));
                 $elementText = $positionedTextElement->getText($font);
                 if ($elementText === '') {
                     $previousTextElementOnLine = $positionedTextElement;
