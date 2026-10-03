@@ -84,7 +84,7 @@ readonly class PositionedTextElement {
         $scaleX = $this->absoluteMatrix->scaleX;
         $fontSize = $this->textState->getFontSize();
 
-        $glyphAdvance = $font->getWidthForChars($this->getCodePoints(), $this->textState, $this->absoluteMatrix); // Σ (w0·Tfs + Tc + Tw·[code 32]) · scaleX
+        $glyphAdvance = $font->getWidthForChars($this->getCodePoints(), $this->textState->wordSpace, $this->textState->charSpace, $fontSize, $scaleX); // Σ (w0·Tfs + Tc + Tw·[code 32]) · scaleX
         $offsetAdvance = -($this->getTotalOffset() / 1000) * $fontSize * $scaleX;                                 // − Σ(Tj)/1000 · Tfs · scaleX
 
         return ($glyphAdvance + $offsetAdvance) * ($this->textState->scale / 100); // · Th
