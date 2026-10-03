@@ -2,19 +2,25 @@
 
 namespace PrinsFrank\PdfParser\Document\Font;
 
-readonly class FontWidths {
+class FontWidths {
+    /** @var array<int, float|null> */
+    private array $widthCache = [];
     /** @param list<float> $widths */
     public function __construct(
-        public int   $firstChar,
-        public array $widths,
+        public readonly int   $firstChar,
+        public readonly array $widths,
     ) {}
 
     public function getWidthForCharacter(int $characterCode): ?float {
-        $width = $this->widths[$characterCode - $this->firstChar] ?? null;
-        if ($width === null) {
-            return null;
+        if (isset($this->widthCache[$characterCode])) {
+            return $this->widthCache[$characterCode];
         }
 
-        return $width / 1000;
+        $width = $this->widths[$characterCode - $this->firstChar] ?? null;
+        if ($width === null) {
+            return $this->widthCache[$characterCode] = null;
+        }
+
+        return $this->widthCache[$characterCode] = $width / 1000;
     }
 }
