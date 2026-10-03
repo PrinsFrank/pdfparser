@@ -30,6 +30,8 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 class Font extends DecoratedObject {
+    /** @var list<Font|Dictionary> */
+    private readonly array $descendantFontsCache;
     private readonly ToUnicodeCMap|false $toUnicodeCMap;
     private readonly CIDFontWidths|FontWidths|false $widths;
 
@@ -139,17 +141,10 @@ class Font extends DecoratedObject {
     }
 
     public function getWidthForChar(int $characterCode, TextState $textState, TransformationMatrix $transformationMatrix): float {
-        $fontWidths = $this->getWidths();
-        if ($fontWidths !== null && ($charWidth = $fontWidths->getWidthForCharacter($characterCode)) !== null) {
-            $characterWidth = $charWidth;
-        } else {
-            $characterWidth = $this->getDefaultWidth();
-        }
+        $characterWidth = $this->getWidths()?->getWidthForCharacter($characterCode) ?? $this->getDefaultWidth();
 
         // Word spacing (Tw) applies only to the single-byte character code 32, and never to composite (Type0) fonts (spec §9.3.3).
-        $wordSpace = ($textState->wordSpace !== 0.0 && $characterCode === 32 && $this->getDescendantFonts() === [])
-            ? $textState->wordSpace
-            : 0.0;
+        $wordSpace = ($characterCode === 32 && $this->getDescendantFonts() === []) ? $textState->wordSpace : 0.0;
 
         return ($characterWidth * ($textState->getFontSize()) + $textState->charSpace + $wordSpace) * $transformationMatrix->scaleX;
     }
@@ -166,9 +161,13 @@ class Font extends DecoratedObject {
 
     /** @return list<Font|Dictionary> */
     public function getDescendantFonts(): array {
+        if (isset($this->descendantFontsCache)) {
+            return $this->descendantFontsCache;
+        }
+
         $valueType = $this->getDictionary()->getTypeForKey(DictionaryKey::DESCENDANT_FONTS);
         if ($valueType === null) {
-            return [];
+            return $this->descendantFontsCache = [];
         }
 
         if ($valueType === ReferenceValue::class) {
@@ -180,7 +179,7 @@ class Font extends DecoratedObject {
         }
 
         if ($valueType === DictionaryArrayValue::class) {
-            return $this->getDictionary()->getValueForKey($this->document, DictionaryKey::DESCENDANT_FONTS, DictionaryArrayValue::class)->dictionaries ?? throw new ParseFailureException();
+            return $this->descendantFontsCache = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::DESCENDANT_FONTS, DictionaryArrayValue::class)->dictionaries ?? throw new ParseFailureException();
         }
 
         $descendantFonts = [];
@@ -189,7 +188,7 @@ class Font extends DecoratedObject {
                 ?? throw new ParseFailureException(sprintf('Descendant font with number %d could not be found', $referenceValue->objectNumber));
         }
 
-        return $descendantFonts;
+        return $this->descendantFontsCache = $descendantFonts;
     }
 
     public function isCIDFont(): bool {
