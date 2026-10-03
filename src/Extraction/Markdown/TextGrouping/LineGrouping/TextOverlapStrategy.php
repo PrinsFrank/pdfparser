@@ -33,50 +33,52 @@ class TextOverlapStrategy {
         $processedIndices = [];
         $nrOfItems = count($positionedTextElements);
         for ($i = 0; $i < $nrOfItems; $i++) {
-            if (isset($processedIndices[$i])) {
+            if ($processedIndices[$i] ?? false) {
                 continue;
             }
 
+            $processedIndices[$i] = true;
             /** @var PositionedTextElement $highestPositionedTextElement */
             $highestPositionedTextElement = $positionedTextElements[$i];
-            $highestPositionedTextElementBottom = $highestPositionedTextElement->absoluteMatrix->offsetY;
-            $highestPositionedTextElementHeight = $highestPositionedTextElement->getHeight();
-
             $positionedTextElementsOnLine = [$highestPositionedTextElement];
-            $processedIndices[$i] = true;
-            $lineLeftX = $highestPositionedTextElement->absoluteMatrix->offsetX;
-            $lineRightX = $highestPositionedTextElement->absoluteMatrix->offsetX;
+            $highestPositionedTextElementHeight = $highestPositionedTextElement->getHeight();
+            if ($highestPositionedTextElementHeight === 0.0) {
+                yield $positionedTextElementsOnLine;
+                continue;
+            }
+
+            $highestPositionedTextElementBottom = $highestPositionedTextElement->absoluteMatrix->offsetY;
+            $highestElementTop = $highestPositionedTextElementBottom + $highestPositionedTextElementHeight;
+            $lineLeftX = $lineRightX = $highestPositionedTextElement->absoluteMatrix->offsetX;
             for ($j = $i + 1; $j < $nrOfItems; $j++) {
-                if (isset($processedIndices[$j])) {
+                if ($processedIndices[$j] ?? false) {
                     continue;
                 }
 
                 $positionedTextElement = $positionedTextElements[$j];
-                $positionedTextElementHeight = $positionedTextElement->getHeight();
-
-                $highestElementTop = $highestPositionedTextElementBottom + $highestPositionedTextElementHeight;
-
                 $currentElementBottom = $positionedTextElement->absoluteMatrix->offsetY;
-                $currentElementTop = $currentElementBottom + $positionedTextElementHeight;
+                $currentHeight = $positionedTextElement->getHeight();
+                $currentElementTop = $currentElementBottom + $currentHeight;
+                if ($currentElementTop < $highestPositionedTextElementBottom) {
+                    break;
+                }
+
+                if ($currentHeight === 0.0) {
+                    continue;
+                }
 
                 $overlap = min($highestElementTop, $currentElementTop) - max($highestPositionedTextElementBottom, $currentElementBottom);
                 if ($overlap <= 0.0) {
                     continue;
                 }
 
-                $smallestElementHeight = min($positionedTextElementHeight, $highestPositionedTextElementHeight);
-                if ($smallestElementHeight === 0.0) {
-                    continue;
-                }
-
-                if ($overlap / $smallestElementHeight >= self::OVERLAP_RATIO
-                    || ($positionedTextElementHeight < $highestPositionedTextElementHeight
-                    && $positionedTextElement->absoluteMatrix->offsetX >= $lineLeftX
-                    && $positionedTextElement->absoluteMatrix->offsetX <= $lineRightX)) {
+                $offsetX = $positionedTextElement->absoluteMatrix->offsetX;
+                if ($overlap / min($currentHeight, $highestPositionedTextElementHeight) >= self::OVERLAP_RATIO
+                    || ($currentHeight < $highestPositionedTextElementHeight && $offsetX >= $lineLeftX && $offsetX <= $lineRightX)) {
                     $positionedTextElementsOnLine[] = $positionedTextElement;
                     $processedIndices[$j] = true;
-                    $lineLeftX = min($lineLeftX, $positionedTextElement->absoluteMatrix->offsetX);
-                    $lineRightX = max($lineRightX, $positionedTextElement->absoluteMatrix->offsetX);
+                    $lineLeftX = min($lineLeftX, $offsetX);
+                    $lineRightX = max($lineRightX, $offsetX);
                 }
             }
 
