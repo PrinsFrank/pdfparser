@@ -86,15 +86,18 @@ class Font extends DecoratedObject {
                 ->getValueForKey($this->document, DictionaryKey::TO_UNICODE, ToUnicodeCMapNameValue::class)
                 ?? throw new ParseFailureException();
 
-            return $this->toUnicodeCMap = $toUnicodeCMapNameValue
-                ->getToUnicodeCMap();
+            return $this->toUnicodeCMap = $toUnicodeCMapNameValue->getToUnicodeCMap();
         }
 
         $toUnicodeObject = $this->getDictionary()
             ->getObjectForReference($this->document, DictionaryKey::TO_UNICODE);
         if ($toUnicodeObject === null) {
-            $this->toUnicodeCMap = false;
+            $descendantUnicodeCMap = $this->getToUnicodeCMapDescendantFont();
+            if ($descendantUnicodeCMap !== null) {
+                return $this->toUnicodeCMap = $descendantUnicodeCMap;
+            }
 
+            $this->toUnicodeCMap = false;
             return null;
         }
 
@@ -106,7 +109,7 @@ class Font extends DecoratedObject {
         return $this->toUnicodeCMap = ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes());
     }
 
-    public function getToUnicodeCMapDescendantFont(): ?ToUnicodeCMap {
+    private function getToUnicodeCMapDescendantFont(): ?ToUnicodeCMap {
         foreach ($this->getDescendantFonts() as $descendantFont) {
             $fontDictionary = $descendantFont instanceof Dictionary ? $descendantFont : $descendantFont->getDictionary();
 
