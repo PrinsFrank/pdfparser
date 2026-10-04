@@ -11,7 +11,7 @@
 [![PHPStan Level](https://img.shields.io/badge/PHPStan-level%2010-brightgreen.svg?style=flat)](https://github.com/PrinsFrank/pdfparser/blob/main/phpstan.neon)
 [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/PrinsFrank)
 
-> **1.3x faster** and **4.4x less memory** than smalot/pdfparser. Actively maintained, MIT licensed, and built from scratch for PHP8.1+
+> **1.5x faster** and **4.4x less memory** than smalot/pdfparser. Actively maintained, MIT licensed, and built from scratch for PHP8.1+
 
 > :owl: This library is written by a human who understands all of its code. As such, it is small enough for a person to have a mental image of it, and no cognitive offloading is needed. AI-generated PRs are not rejected outright, but they should be [small and focused](CONTRIBUTING.md).
 
@@ -25,7 +25,7 @@ Instead, this package allows for parsing of a wide variety of PDF files while no
 
 | Metric              | prinsfrank/pdfparser                                              | smalot/pdfparser    |
 |---------------------|-------------------------------------------------------------------|---------------------|
-| Speed               | On average **1.3x faster**, up to **110x faster on complex PDFs** | baseline            |
+| Speed               | On average **1.5x faster**, up to **110x faster on complex PDFs** | baseline            |
 | Memory              | On average **4.4x less memory**                                   | baseline            |
 | Success rate        | **100%** of test files                                            | 95.3%               |
 | Encrypted PDFs      | Supported                                                         | Not supported       |
