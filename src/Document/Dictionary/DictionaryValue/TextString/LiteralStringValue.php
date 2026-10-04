@@ -45,6 +45,16 @@ readonly class LiteralStringValue implements DictionaryValue {
         );
     }
 
+    /** @return list<int> */
+    public function getCodePoints(): array {
+        $codePoints = [];
+        foreach (str_split($this->getBinaryString()) as $char) {
+            $codePoints[] = ord($char);
+        }
+
+        return $codePoints;
+    }
+
     #[Override]
     public static function fromValue(string $valueString): ?self {
         $valueString = trim($valueString);

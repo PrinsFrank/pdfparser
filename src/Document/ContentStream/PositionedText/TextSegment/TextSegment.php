@@ -7,7 +7,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DifferencesAr
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\HexadecimalStringValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
-use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 readonly class TextSegment {
     public function __construct(
@@ -46,22 +45,5 @@ readonly class TextSegment {
         }
 
         return $binaryString;
-    }
-
-    /** @return list<int> */
-    public function getCodePoints(): array {
-        if ($this->textString instanceof LiteralStringValue) {
-            $codePoints = [];
-            foreach (str_split($this->textString->getBinaryString()) as $char) {
-                $codePoints[] = ord($char);
-            }
-            return $codePoints;
-        }
-
-        $codePoints = [];
-        foreach (str_split($this->textString->value, 4) as $char) {
-            $codePoints[] = is_int($codePoint = hexdec($char)) ? $codePoint : throw new ParseFailureException();
-        }
-        return $codePoints;
     }
 }

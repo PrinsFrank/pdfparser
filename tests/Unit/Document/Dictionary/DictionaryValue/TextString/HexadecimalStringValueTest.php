@@ -79,4 +79,19 @@ class HexadecimalStringValueTest extends TestCase {
         $this->expectException(ParseFailureException::class);
         (new HexadecimalStringValue('90ZZ'))->getBinaryString();
     }
+
+    public function testGetCodePoints(): void {
+        static::assertSame(
+            [72, 101],
+            (new HexadecimalStringValue('00480065'))->getCodePoints(),
+        );
+        static::assertSame(
+            [72, 101],
+            (new HexadecimalStringValue('00 480065'))->getCodePoints(),
+        );
+        static::assertSame(
+            [72, 101],
+            (new HexadecimalStringValue('0048 0065'))->getCodePoints(),
+        );
+    }
 }

@@ -50,6 +50,18 @@ readonly class HexadecimalStringValue implements DictionaryValue {
         return $binaryValue;
     }
 
+    /** @return list<int> */
+    public function getCodePoints(): array {
+        $codePoints = [];
+        foreach (str_split($this->getBinaryString(), 2) as $char) {
+            $codePoints[] = is_int($codePoint = hexdec(bin2hex($char)))
+                ? $codePoint
+                : throw new ParseFailureException();
+        }
+
+        return $codePoints;
+    }
+
     #[Override]
     public static function fromValue(string $valueString): ?self {
         $valueString = trim($valueString);

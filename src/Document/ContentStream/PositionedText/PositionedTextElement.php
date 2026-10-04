@@ -45,7 +45,7 @@ readonly class PositionedTextElement {
     public function getCodePoints(): array {
         $codePoints = [];
         foreach ($this->textSegments as $textSegment) {
-            array_push($codePoints, ...$textSegment->getCodePoints());
+            array_push($codePoints, ...$textSegment->textString->getCodePoints());
         }
 
         return $codePoints;
