@@ -37,10 +37,10 @@ readonly class TextSegment {
         }
 
         if ($toUnicodeCMap !== null) {
-            return $toUnicodeCMap->textToUnicode(bin2hex($binaryString));
+            return $toUnicodeCMap->textToUnicode($binaryString);
         }
 
-        if ($encoding !== null) {
+        if ($encoding !== null && !in_array($encoding, [EncodingNameValue::IdentityH, EncodingNameValue::IdentityV], true)) {
             return $encoding->decodeString($binaryString);
         }
 

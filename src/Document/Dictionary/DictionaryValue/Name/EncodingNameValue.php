@@ -2,7 +2,6 @@
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name;
 
-use PrinsFrank\PdfParser\Document\CMap\Registry\Adobe\Identity0;
 use PrinsFrank\PdfParser\Document\Encoding\MacRoman;
 use PrinsFrank\PdfParser\Document\Encoding\WinAnsi;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -16,8 +15,6 @@ enum EncodingNameValue: string implements NameValue {
 
     public function decodeString(string $characterGroup): string {
         return match ($this) {
-            self::IdentityH,
-            self::IdentityV => (new Identity0())->getToUnicodeCMap()->textToUnicode($characterGroup),
             self::WinAnsiEncoding => WinAnsi::textToUnicode($characterGroup),
             self::MacRomanEncoding => MacRoman::textToUnicode($characterGroup),
             default => throw new ParseFailureException(sprintf('Unsupported encoding %s', $this->name)),
