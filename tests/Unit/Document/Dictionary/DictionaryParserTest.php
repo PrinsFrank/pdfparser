@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
@@ -170,7 +169,7 @@ class DictionaryParserTest extends TestCase {
         static::assertEquals(
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FONT_DESCRIPTOR),
-                new DictionaryEntry(DictionaryKey::FONT_NAME, new NameObjectStringValue('/TAIPAH+CMR10')),
+                new DictionaryEntry(DictionaryKey::FONT_NAME, new NameObjectStringValue('TAIPAH+CMR10')),
                 new DictionaryEntry(DictionaryKey::FLAGS, new IntegerValue(4)),
                 new DictionaryEntry(DictionaryKey::FONT_BBOX, new Rectangle(-40, -250, 1009, 750)),
                 new DictionaryEntry(DictionaryKey::ASCENT, new IntegerValue(694)),
@@ -229,8 +228,8 @@ class DictionaryParserTest extends TestCase {
         static::assertEquals(
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::PRODUCER, new LiteralStringValue('pdfTeX-1.40.18')),
-                new DictionaryEntry(new ExtendedDictionaryKey('Foo'), new LiteralStringValue('Bar')),
-                new DictionaryEntry(new ExtendedDictionaryKey('Bar'), new LiteralStringValue('% this is not a comment but a string literal')),
+                new DictionaryEntry(new NameObjectStringValue('Foo'), new LiteralStringValue('Bar')),
+                new DictionaryEntry(new NameObjectStringValue('Bar'), new LiteralStringValue('% this is not a comment but a string literal')),
             ),
             DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
         );
@@ -288,10 +287,10 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::RESOURCES, new Dictionary(
                     new DictionaryEntry(DictionaryKey::PROC_SET, new ArrayValue(['/PDF', '/Text', '/ImageB', '/ImageC', '/ImageI'])),
                     new DictionaryEntry(DictionaryKey::EXT_GSTATE, new Dictionary(
-                        new DictionaryEntry(new ExtendedDictionaryKey('G3'), new ReferenceValue(3, 0)),
+                        new DictionaryEntry(new NameObjectStringValue('G3'), new ReferenceValue(3, 0)),
                     )),
                     new DictionaryEntry(DictionaryKey::FONT, new Dictionary(
-                        new DictionaryEntry(new ExtendedDictionaryKey('F4'), new ReferenceValue(4, 0)),
+                        new DictionaryEntry(new NameObjectStringValue('F4'), new ReferenceValue(4, 0)),
                     )),
                 )),
                 new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0.0, 0.0, 596.0, 842.0)),
@@ -381,7 +380,7 @@ class DictionaryParserTest extends TestCase {
                                 ),
                                 new DictionaryEntry(
                                     DictionaryKey::BASE_STATE,
-                                    new NameObjectStringValue('/OFF'),
+                                    new NameObjectStringValue('OFF'),
                                 ),
                                 new DictionaryEntry(
                                     DictionaryKey::ON,
@@ -529,7 +528,7 @@ class DictionaryParserTest extends TestCase {
                                     DictionaryKey::XOBJECT,
                                     new Dictionary(
                                         new DictionaryEntry(
-                                            new ExtendedDictionaryKey('FRM'),
+                                            new NameObjectStringValue('FRM'),
                                             new ReferenceValue(31, 0),
                                         ),
                                     ),
@@ -549,14 +548,14 @@ class DictionaryParserTest extends TestCase {
                     ),
                 ),
                 new DictionaryEntry(
-                    new ExtendedDictionaryKey('DSS'),
+                    new NameObjectStringValue('DSS'),
                     new ReferenceValue(40, 0),
                 ),
                 new DictionaryEntry(
                     DictionaryKey::EXTENSIONS,
                     new Dictionary(
                         new DictionaryEntry(
-                            new ExtendedDictionaryKey('ADBE'),
+                            new NameObjectStringValue('ADBE'),
                             new Dictionary(
                                 new DictionaryEntry(
                                     DictionaryKey::BASE_VERSION,

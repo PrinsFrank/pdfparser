@@ -9,7 +9,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObje
 #[CoversClass(NameObjectStringValue::class)]
 class NameObjectStringValueTest extends TestCase {
     public function testFromValue(): void {
-        static::assertEquals(new NameObjectStringValue('/Foo'), NameObjectStringValue::fromValue('/Foo'));
+        static::assertEquals(new NameObjectStringValue('Foo'), NameObjectStringValue::fromValue('/Foo'));
     }
 
     /** @see 7.3.5, table 4 */

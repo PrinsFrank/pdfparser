@@ -5,10 +5,11 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\IncludesXObjects;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /**
  * @internal
@@ -22,7 +23,7 @@ enum XObjectOperator: string implements IncludesXObjects {
     #[Override]
     public function getPositionedTextElements(string $operands, TransformationMatrix $transformationMatrix, Page|XObject $context, array $visitedObjectIds): array {
         $reference = $context->getXObjectsDictionary()
-            ?->getValueForKey($context->document, ExtendedDictionaryKey::fromKeyString($operands), ReferenceValue::class);
+            ?->getValueForKey($context->document, NameObjectStringValue::fromValue($operands) ?? throw new ParseFailureException(), ReferenceValue::class);
         if ($reference === null) {
             return [];
         }

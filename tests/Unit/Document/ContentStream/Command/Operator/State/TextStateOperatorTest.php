@@ -7,22 +7,22 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextStateOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 #[CoversClass(TextStateOperator::class)]
 class TextStateOperatorTest extends TestCase {
     public function testApplyToTextState(): void {
         static::assertEquals(
-            new TextState(new ExtendedDictionaryKey('F0'), 12, 0, 0, 100, 0, 0, 0),
+            new TextState(new NameObjectStringValue('F0'), 12, 0, 0, 100, 0, 0, 0),
             TextStateOperator::FONT_SIZE->applyToTextState('/F0 12', new TextState(null, null)),
         );
         static::assertEquals(
-            new TextState(new ExtendedDictionaryKey('F0'), -12, 0, 0, 100, 0, 0, 0),
+            new TextState(new NameObjectStringValue('F0'), -12, 0, 0, 100, 0, 0, 0),
             TextStateOperator::FONT_SIZE->applyToTextState('/F0 -12', new TextState(null, null)),
         );
         static::assertEquals(
-            new TextState(new ExtendedDictionaryKey('F2+0'), 12, 0, 0, 100, 0, 0, 0),
+            new TextState(new NameObjectStringValue('F2+0'), 12, 0, 0, 100, 0, 0, 0),
             TextStateOperator::FONT_SIZE->applyToTextState('/F2+0 12', new TextState(null, null)),
         );
     }

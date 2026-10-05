@@ -7,12 +7,12 @@ use BackedEnum;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryFactory;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Document\Dictionary\Normalization\NameValueNormalizer;
 use PrinsFrank\PdfParser\Document\Encryption\RC4;
 use PrinsFrank\PdfParser\Document\Security\EncryptionContext;
@@ -27,7 +27,8 @@ class DictionaryEntryFactory {
      */
     public static function fromKeyValuePair(?EncryptionContext $encryptionContext, string $keyString, string|array $dictionaryValue): ?DictionaryEntry {
         $dictionaryKey = DictionaryKey::tryFromKeyString($keyString)
-            ?? ExtendedDictionaryKey::fromKeyString($keyString);
+            ?? NameObjectStringValue::fromValue($keyString)
+            ?? throw new ParseFailureException();
 
         return new DictionaryEntry($dictionaryKey, self::getValue($encryptionContext, $dictionaryKey, $dictionaryValue));
     }
@@ -36,7 +37,7 @@ class DictionaryEntryFactory {
      * @param string|array<string, mixed> $value
      * @throws PdfParserException
      */
-    protected static function getValue(?EncryptionContext $encryptionContext, DictionaryKey|ExtendedDictionaryKey $dictionaryKey, string|array $value): Dictionary|DictionaryValue|NameValue {
+    protected static function getValue(?EncryptionContext $encryptionContext, DictionaryKey|NameObjectStringValue $dictionaryKey, string|array $value): Dictionary|DictionaryValue|NameValue {
         if ($encryptionContext !== null && is_string($value)) {
             if (str_starts_with($value, '<') && str_ends_with($value, '>') && ($binaryValue = hex2bin(substr($value, 1, -1))) !== false) {
                 $value = '<' . bin2hex(RC4::crypt($encryptionContext->getObjectEncryptionKey(), $binaryValue)) . '>';
@@ -81,8 +82,8 @@ class DictionaryEntryFactory {
             return $referenceValueArray;
         }
 
-        if (in_array(ExtendedDictionaryKey::class, $allowedValueTypes, true) && is_string($value) && ($extendedDictionaryKey = ExtendedDictionaryKey::fromValue($value)) !== null) {
-            return $extendedDictionaryKey;
+        if (in_array(NameObjectStringValue::class, $allowedValueTypes, true) && is_string($value) && ($nameObjectStringValue = NameObjectStringValue::fromValue($value)) !== null) {
+            return $nameObjectStringValue;
         }
 
         throw new ParseFailureException(sprintf('Value "%s" for dictionary key %s could not be parsed to a valid value type', is_array($value) ? 'array()' : $value, $dictionaryKey->value));
