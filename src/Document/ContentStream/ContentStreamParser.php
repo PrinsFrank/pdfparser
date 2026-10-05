@@ -115,7 +115,7 @@ class ContentStreamParser {
             $rawStream = $contentStream->toString();
             for ($index = 0; $index < $contentStreamSize; $index++) {
                 $char = $rawStream[$index];
-                if ($inComment === true) {
+                if ($inComment) {
                     if ($char === "\r" || $char === "\n") {
                         $endCommentOffset = $index + 1;
                         $inComment = false;
@@ -123,19 +123,19 @@ class ContentStreamParser {
                     continue;
                 }
 
-                if ($inInlineImage === true) {
+                if ($inInlineImage) {
                     if ($char === 'I' && $previousChar === 'E' && $secondToLastChar !== '\\') {
                         $inInlineImage = false;
                     }
-                } elseif ($inStringLiteral === true) {
+                } elseif ($inStringLiteral) {
                     if ($char === ')' && $previousChar !== '\\') {
                         $inStringLiteral = false;
                     }
-                } elseif ($inResourceName === true) {
+                } elseif ($inResourceName) {
                     if ($previousChar !== '\\' && ($char === ' ' || $char === '<' || $char === '(' || $char === '/' || $char === "\r" || $char === "\n")) {
                         $inResourceName = false;
                     }
-                } elseif ($inDictionary === true) {
+                } elseif ($inDictionary) {
                     if ($char === '>' && $previousChar === '>' && $secondToLastChar !== '\\') {
                         $inDictionary = false;
                     }

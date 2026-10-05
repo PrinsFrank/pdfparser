@@ -19,7 +19,7 @@ class Pages extends DecoratedObject {
     public function getPageItems(array $visitedObjectNrs = []): array {
         $kids = [];
         foreach ($this->getDictionary()->getValueForKey($this->document, DictionaryKey::KIDS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
-            if (in_array($referenceValue->objectNumber, $visitedObjectNrs, true) === true) {
+            if (in_array($referenceValue->objectNumber, $visitedObjectNrs, true)) {
                 continue;
             }
 

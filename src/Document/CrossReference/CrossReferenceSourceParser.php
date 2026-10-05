@@ -65,7 +65,7 @@ class CrossReferenceSourceParser {
         $crossReferenceSections = [$currentCrossReferenceSection];
         $byteOffsets = [$byteOffsetLastCrossReferenceSection];
         while (($previous = $currentCrossReferenceSection->dictionary->getValueForKey(null, DictionaryKey::PREV, IntegerValue::class)) !== null && ($byteOffset = $previous->value) !== 0) {
-            if (in_array($byteOffset, $byteOffsets, true) === true) {
+            if (in_array($byteOffset, $byteOffsets, true)) {
                 break;
             }
 
