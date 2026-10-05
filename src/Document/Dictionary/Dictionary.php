@@ -5,7 +5,6 @@ namespace PrinsFrank\PdfParser\Document\Dictionary;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
@@ -41,10 +40,10 @@ readonly class Dictionary {
      * @param class-string<T> $expectedValueType
      * @return T
      */
-    public function getValueForKey(?Document $document, DictionaryKey|ExtendedDictionaryKey $dictionaryKey, string $expectedValueType): DictionaryValue|Dictionary|NameValue|null {
+    public function getValueForKey(?Document $document, DictionaryKey|NameObjectStringValue $dictionaryKey, string $expectedValueType): DictionaryValue|Dictionary|NameValue|null {
         foreach ($this->dictionaryEntries as $dictionaryEntry) {
             if (($dictionaryKey instanceof DictionaryKey && $dictionaryEntry->key === $dictionaryKey) === false
-                && ($dictionaryKey instanceof ExtendedDictionaryKey && $dictionaryEntry->key instanceof ExtendedDictionaryKey && $dictionaryEntry->key->value === $dictionaryKey->value) === false) {
+                && ($dictionaryKey instanceof NameObjectStringValue && $dictionaryEntry->key instanceof NameObjectStringValue && $dictionaryEntry->key->value === $dictionaryKey->value) === false) {
                 continue;
             }
 
@@ -102,7 +101,7 @@ readonly class Dictionary {
         return null;
     }
 
-    public function getStringValue(?Document $document, DictionaryKey|ExtendedDictionaryKey $dictionaryKey): HexadecimalStringValue|LiteralStringValue|NameObjectStringValue|null {
+    public function getStringValue(?Document $document, DictionaryKey|NameObjectStringValue $dictionaryKey): HexadecimalStringValue|LiteralStringValue|NameObjectStringValue|null {
         return match ($this->getTypeForKey($dictionaryKey)) {
             HexadecimalStringValue::class => $this->getValueForKey($document, $dictionaryKey, HexadecimalStringValue::class),
             LiteralStringValue::class => $this->getValueForKey($document, $dictionaryKey, LiteralStringValue::class),
@@ -112,7 +111,7 @@ readonly class Dictionary {
     }
 
     /** @return class-string<DictionaryValue|NameValue|Dictionary> */
-    public function getTypeForKey(DictionaryKey|ExtendedDictionaryKey $dictionaryKey): ?string {
+    public function getTypeForKey(DictionaryKey|NameObjectStringValue $dictionaryKey): ?string {
         foreach ($this->dictionaryEntries as $dictionaryEntry) {
             if ($dictionaryEntry->key === $dictionaryKey) {
                 return $dictionaryEntry->value::class;
@@ -153,7 +152,7 @@ readonly class Dictionary {
      * @param class-string<T>|null $expectedDecoratorFQN
      * @return ($expectedDecoratorFQN is null ? DecoratedObject : T)
      */
-    public function getObjectForReference(Document $document, DictionaryKey|ExtendedDictionaryKey $dictionaryKey, ?string $expectedDecoratorFQN = null): ?DecoratedObject {
+    public function getObjectForReference(Document $document, DictionaryKey|NameObjectStringValue $dictionaryKey, ?string $expectedDecoratorFQN = null): ?DecoratedObject {
         $reference = $this->getValueForKey($document, $dictionaryKey, ReferenceValue::class);
         if ($reference === null) {
             return null;
@@ -168,7 +167,7 @@ readonly class Dictionary {
      * @param class-string<T>|null $expectedDecoratorFQN
      * @return ($expectedDecoratorFQN is null ? list<DecoratedObject> : list<T>)
      */
-    public function getObjectsForReference(Document $document, DictionaryKey|ExtendedDictionaryKey $dictionaryKey, ?string $expectedDecoratorFQN = null): array {
+    public function getObjectsForReference(Document $document, DictionaryKey|NameObjectStringValue $dictionaryKey, ?string $expectedDecoratorFQN = null): array {
         $references = $this->getValueForKey($document, $dictionaryKey, ReferenceValueArray::class);
         if ($references === null) {
             return [];

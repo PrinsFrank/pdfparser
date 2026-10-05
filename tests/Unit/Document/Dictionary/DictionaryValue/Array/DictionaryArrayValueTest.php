@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
@@ -55,11 +54,11 @@ class DictionaryArrayValueTest extends TestCase {
             new DictionaryArrayValue(
                 new Dictionary(
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTPUT_INTENT),
-                    new DictionaryEntry(DictionaryKey::S, new NameObjectStringValue('/GTS_PDFA1')),
-                    new DictionaryEntry(new ExtendedDictionaryKey('OutputConditionIdentifier'), new LiteralStringValue('sRGB')),
-                    new DictionaryEntry(new ExtendedDictionaryKey('RegistryName'), new LiteralStringValue('http://www.color.org')),
+                    new DictionaryEntry(DictionaryKey::S, new NameObjectStringValue('GTS_PDFA1')),
+                    new DictionaryEntry(new NameObjectStringValue('OutputConditionIdentifier'), new LiteralStringValue('sRGB')),
+                    new DictionaryEntry(new NameObjectStringValue('RegistryName'), new LiteralStringValue('http://www.color.org')),
                     new DictionaryEntry(DictionaryKey::INFO, new LiteralStringValue('Creator: HP     Manufacturer:IEC    Model:sRGB')),
-                    new DictionaryEntry(new ExtendedDictionaryKey('DestOutputProfile'), new ReferenceValue(361, 0)),
+                    new DictionaryEntry(new NameObjectStringValue('DestOutputProfile'), new ReferenceValue(361, 0)),
                 ),
             ),
             DictionaryArrayValue::fromValue('[<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier(sRGB) /RegistryName(http://www.color.org) /Info(Creator: HP     Manufacturer:IEC    Model:sRGB) /DestOutputProfile 361 0 R>>]'),

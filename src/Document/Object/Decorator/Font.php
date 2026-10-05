@@ -10,7 +10,6 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CIDFontWidths;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CrossReferenceStreamByteSizes;
@@ -23,6 +22,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameVal
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\ToUnicodeCMapNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Document\Font\FontWidths;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
@@ -45,7 +45,7 @@ class Font extends DecoratedObject {
     }
 
     public function getEncodingDictionary(): ?Dictionary {
-        if (in_array($this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING), [null, EncodingNameValue::class, ExtendedDictionaryKey::class], true)) {
+        if (in_array($this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING), [null, EncodingNameValue::class, NameObjectStringValue::class], true)) {
             return null;
         }
 

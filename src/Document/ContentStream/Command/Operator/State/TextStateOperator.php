@@ -7,7 +7,7 @@ use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
@@ -51,7 +51,7 @@ enum TextStateOperator: string implements InteractsWithTextState {
             }
 
             return $textState->withFont(
-                DictionaryKey::tryFrom($matches['fontReference']) ?? new ExtendedDictionaryKey($matches['fontReference']),
+                DictionaryKey::tryFrom($matches['fontReference']) ?? new NameObjectStringValue($matches['fontReference']),
                 (float) $matches['FontSize'],
             );
         }

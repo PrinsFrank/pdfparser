@@ -12,7 +12,6 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
@@ -154,7 +153,7 @@ class H3SimpleStringTest extends TestCase {
                     new DictionaryEntry(
                         DictionaryKey::FONT,
                         new Dictionary(
-                            new DictionaryEntry(new ExtendedDictionaryKey('F1'), new ReferenceValue(7, 0)),
+                            new DictionaryEntry(new NameObjectStringValue('F1'), new ReferenceValue(7, 0)),
                         ),
                     ),
                 )),
@@ -220,8 +219,8 @@ class H3SimpleStringTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FONT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TYPE_1),
-                new DictionaryEntry(DictionaryKey::NAME, new NameObjectStringValue('/F1')),
-                new DictionaryEntry(DictionaryKey::BASE_FONT, new NameObjectStringValue('/Helvetica')),
+                new DictionaryEntry(DictionaryKey::NAME, new NameObjectStringValue('F1')),
+                new DictionaryEntry(DictionaryKey::BASE_FONT, new NameObjectStringValue('Helvetica')),
                 new DictionaryEntry(DictionaryKey::ENCODING, EncodingNameValue::MacRomanEncoding),
             ),
             $obj7?->getDictionary(),

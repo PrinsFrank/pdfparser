@@ -3,11 +3,11 @@
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 
 readonly class TextState {
     public function __construct(
-        public DictionaryKey|ExtendedDictionaryKey|null $fontName, // Tf
+        public DictionaryKey|NameObjectStringValue|null $fontName, // Tf
         public ?float $fontSize, // Tfs
         public float $charSpace = 0,      // Tc
         public float $wordSpace = 0,      // Tw
@@ -17,7 +17,7 @@ readonly class TextState {
         public float $rise = 0,           // Trise
     ) {}
 
-    public function withFont(DictionaryKey|ExtendedDictionaryKey|null $fontName, ?float $fontSize): self {
+    public function withFont(DictionaryKey|NameObjectStringValue|null $fontName, ?float $fontSize): self {
         return new TextState(
             $fontName,
             $fontSize,

@@ -9,9 +9,9 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextEle
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -104,7 +104,7 @@ class Page extends DecoratedObject {
             ?->getSubDictionary($this->document, DictionaryKey::FONT);
     }
 
-    public function getFont(DictionaryKey|ExtendedDictionaryKey $dictionaryKey): ?Font {
+    public function getFont(DictionaryKey|NameObjectStringValue $dictionaryKey): ?Font {
         $font = $this->getFontDictionary()
             ?->getObjectForReference($this->document, $dictionaryKey, Font::class);
         if ($font !== null) {
