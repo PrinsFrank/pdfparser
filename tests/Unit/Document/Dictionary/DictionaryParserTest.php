@@ -33,6 +33,28 @@ use ValueError;
 
 #[CoversClass(DictionaryParser::class)]
 class DictionaryParserTest extends TestCase {
+    public function testNullObjectAsValueForDictionaryKeyShallBeTreatedAsOmittingTheKey(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            1 0 obj
+            <<
+            /Metadata null
+            /Length NULL
+            /Root NuLl
+            /DecodeParms <<
+                /Columns NUll
+            >>
+            >>
+            EOD,
+        );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::DECODE_PARMS, new Dictionary()),
+            ),
+            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+        );
+    }
+
     public function testParseCrossReference(): void {
         $stream = new InMemoryStream(
             <<<EOD

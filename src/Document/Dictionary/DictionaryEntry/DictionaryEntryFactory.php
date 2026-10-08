@@ -34,8 +34,12 @@ class DictionaryEntryFactory {
             if (str_starts_with($dictionaryValue, '<') && str_ends_with($dictionaryValue, '>') && ($binaryValue = hex2bin(substr($dictionaryValue, 1, -1))) !== false) {
                 $dictionaryValue = '<' . bin2hex(RC4::crypt($encryptionContext->getObjectEncryptionKey(), $binaryValue)) . '>';
             } elseif (str_starts_with($dictionaryValue, '(') && str_ends_with($dictionaryValue, ')')) {
-                $dictionaryValue = '(' . RC4::crypt($encryptionContext->getObjectEncryptionKey(), str_replace(['\\\\', '\n', '\r', '\t', '\b', '\f', '\(', '\)'], ['\\', "\n", "\r", "\t", "\x08", "\f", '(', ')'], substr($value, 1, -1))) . ')';
+                $dictionaryValue = '(' . RC4::crypt($encryptionContext->getObjectEncryptionKey(), str_replace(['\\\\', '\n', '\r', '\t', '\b', '\f', '\(', '\)'], ['\\', "\n", "\r", "\t", "\x08", "\f", '(', ')'], substr($dictionaryValue, 1, -1))) . ')';
             }
+        }
+
+        if (is_string($dictionaryValue) && strlen($trimmedValue = trim($dictionaryValue)) === 4 && strtolower($trimmedValue) === 'null') {
+            return null; // @see 7.3.9, null objects as value for dictionary entry shall be equivalent to omitting the entry entirely
         }
 
         return new DictionaryEntry($dictionaryKey, self::getValue($encryptionContext, $dictionaryKey, $dictionaryValue));
