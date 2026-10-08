@@ -30,6 +30,18 @@ class DictionaryEntryFactory {
             ?? NameObjectStringValue::fromValue($keyString)
             ?? throw new ParseFailureException();
 
+        if ($encryptionContext !== null && is_string($dictionaryValue)) {
+            if (str_starts_with($dictionaryValue, '<') && str_ends_with($dictionaryValue, '>') && ($binaryValue = hex2bin(substr($dictionaryValue, 1, -1))) !== false) {
+                $dictionaryValue = '<' . bin2hex(RC4::crypt($encryptionContext->getObjectEncryptionKey(), $binaryValue)) . '>';
+            } elseif (str_starts_with($dictionaryValue, '(') && str_ends_with($dictionaryValue, ')')) {
+                $dictionaryValue = '(' . RC4::crypt($encryptionContext->getObjectEncryptionKey(), str_replace(['\\\\', '\n', '\r', '\t', '\b', '\f', '\(', '\)'], ['\\', "\n", "\r", "\t", "\x08", "\f", '(', ')'], substr($dictionaryValue, 1, -1))) . ')';
+            }
+        }
+
+        if (is_string($dictionaryValue) && strlen($trimmedValue = trim($dictionaryValue)) === 4 && strtolower($trimmedValue) === 'null') {
+            return null; // @see 7.3.9, null objects as value for dictionary entry shall be equivalent to omitting the entry entirely
+        }
+
         return new DictionaryEntry($dictionaryKey, self::getValue($encryptionContext, $dictionaryKey, $dictionaryValue));
     }
 
@@ -38,14 +50,6 @@ class DictionaryEntryFactory {
      * @throws PdfParserException
      */
     protected static function getValue(?EncryptionContext $encryptionContext, DictionaryKey|NameObjectStringValue $dictionaryKey, string|array $value): Dictionary|DictionaryValue|NameValue {
-        if ($encryptionContext !== null && is_string($value)) {
-            if (str_starts_with($value, '<') && str_ends_with($value, '>') && ($binaryValue = hex2bin(substr($value, 1, -1))) !== false) {
-                $value = '<' . bin2hex(RC4::crypt($encryptionContext->getObjectEncryptionKey(), $binaryValue)) . '>';
-            } elseif (str_starts_with($value, '(') && str_ends_with($value, ')')) {
-                $value = '(' . RC4::crypt($encryptionContext->getObjectEncryptionKey(), str_replace(['\\\\', '\n', '\r', '\t', '\b', '\f', '\(', '\)'], ['\\', "\n", "\r", "\t", "\x08", "\f", '(', ')'], substr($value, 1, -1))) . ')';
-            }
-        }
-
         $allowedValueTypes = $dictionaryKey->getValueTypes();
         if ((in_array(Dictionary::class, $allowedValueTypes, true) || in_array(ArrayValue::class, $allowedValueTypes, true))
             && is_array($value)) {
