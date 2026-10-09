@@ -111,7 +111,7 @@ class CrossReferenceSourceParser {
             return CrossReferenceType::Table;
         }
 
-        if (preg_match('/^[0-9]*\s*[0-9]*\s*obj(?:<<.*)?$/', $startCrossReferenceContent) === 1) {
+        if (preg_match('/^[0-9]*\s*[0-9]*\s*obj/', $startCrossReferenceContent) === 1) {
             return CrossReferenceType::Stream;
         }
 
