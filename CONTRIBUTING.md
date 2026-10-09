@@ -65,3 +65,13 @@ There are some acceptable reasons to add comments:
 Pull requests should be **reviewable in under an hour**. This means:
 - Less than 200 lines of actual code changes (excluding tests)
 - Single logical change. Either one new feature or one bugfix per PR
+
+## Handling of edge cases
+
+This library is written without assumptions and following the PDF specification for a conforming reader. If there is a scenario that is not as expected, we throw an exception and halt operations. This way, we prevent PDFs from being read partially or incorrectly.
+
+There are some fallbacks for PDFs that have been created incorrectly. In those cases, we must have a sample of the incorrectly generated PDF available. This parser doesn't handle scenarios that are not occurring in the real world.
+
+Keep that in mind when writing new code or adapting existing code: If there is something that needs to be checked to prevent continuing on assumptions, do the check and throw an exception if something is not in an expected state, and only try recovery from those states when we have real-world examples of how we could recover.
+
+As such, please don't add fallback logic for hypothetical scenarios or artificially corrupted test files.
