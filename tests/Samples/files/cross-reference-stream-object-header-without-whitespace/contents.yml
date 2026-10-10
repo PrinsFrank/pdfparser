@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../../schema.json
+version: '1.5'
+userPassword: null
+ownerPassword: null
+fileEncryptionKey: null
+title: null
+producer: null
+author: null
+creator: null
+subject: null
+keywords: null
+creationDate: null
+modificationDate: null
+pages:
+  -
+    text: 'Page 1'
+    markdown: |+
+      ### Page 1
+
+  -
+    text: 'Page 2'
+    markdown: |+
+      ### Page 2
