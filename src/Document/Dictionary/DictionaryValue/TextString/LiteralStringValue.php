@@ -32,10 +32,16 @@ readonly class LiteralStringValue implements DictionaryValue {
 
     /** @throws ParseFailureException */
     public function getBinaryString(): string {
+        $value = preg_replace(
+            '/(?<!\\\\)((?:\\\\\\\\)*)\\\\(?:\r\n|\r|\n)/',
+            '$1',
+            $this->value,
+        ) ?? throw new ParseFailureException();
+
         $value = preg_replace_callback(
             '/\\\\([0-7]{1,3})/',
             fn(array $matches) => chr((int) octdec($matches[1])),
-            $this->value,
+            $value,
         ) ?? throw new ParseFailureException();
 
         return str_replace(

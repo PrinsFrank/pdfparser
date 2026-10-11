@@ -108,6 +108,30 @@ class LiteralStringValueTest extends TestCase {
         );
     }
 
+    /** @see 7.3.4.2 */
+    public function testGetTextIgnoresEndOfLineLineContinuation(): void {
+        static::assertSame(
+            'under',
+            (new LiteralStringValue("un\\\rder"))->getText(),
+        );
+        static::assertSame(
+            'under',
+            (new LiteralStringValue("un\\\nder"))->getText(),
+        );
+        static::assertSame(
+            'under',
+            (new LiteralStringValue("un\\\r\nder"))->getText(),
+        );
+        static::assertSame(
+            "\\\n",
+            (new LiteralStringValue("\\\\\n"))->getText(),
+        );
+        static::assertSame(
+            '\\',
+            (new LiteralStringValue("\\\\\\\n"))->getText(),
+        );
+    }
+
     /** @see 7.3.4.2 Example 4 */
     public function testExample4WithOctalCharacters(): void {
         static::assertSame(
