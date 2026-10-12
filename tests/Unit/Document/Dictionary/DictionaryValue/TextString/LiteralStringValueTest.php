@@ -48,12 +48,76 @@ class LiteralStringValueTest extends TestCase {
         );
     }
 
-    /** @see 7.3.4 */
-    public function testGetTextWithOctalCharacters(): void {
+    public function testExample1(): void {
+        static::assertSame(
+            'This is a string',
+            (new LiteralStringValue('This is a string'))->getText(),
+        );
+        static::assertSame(
+            <<<RAW
+            Strings can contain newlines
+            and such.
+            RAW,
+            (new LiteralStringValue(
+                <<<RAW
+                Strings can contain newlines
+                and such.
+                RAW,
+            ))->getText(),
+        );
+        static::assertSame(
+            <<<RAW
+            Strings can contain balanced parentheses ()
+            and special characters ( * ! & } ^ %and so on) .
+            RAW,
+            (new LiteralStringValue(
+                <<<RAW
+                Strings can contain balanced parentheses ()
+                and special characters ( * ! & } ^ %and so on) .
+                RAW,
+            ))->getText(),
+        );
+        static::assertSame(
+            'The following is an empty string .',
+            (new LiteralStringValue('The following is an empty string .'))->getText(),
+        );
+        static::assertSame(
+            '',
+            (new LiteralStringValue(''))->getText(),
+        );
+        static::assertSame(
+            'It has zero (0) length.',
+            (new LiteralStringValue('It has zero (0) length.'))->getText(),
+        );
+    }
+
+    /** @see 7.3.4.2 Example 3 */
+    public function testExample3Newlines(): void {
+        static::assertSame(
+            'This string has an end-of-line at the end of it.' . "\n",
+            (new LiteralStringValue(
+                <<<RAW
+                This string has an end-of-line at the end of it.
+
+                RAW,
+            ))->getText(),
+        );
+        static::assertSame(
+            'So does this one.' . "\n",
+            (new LiteralStringValue('So does this one.\n'))->getText(),
+        );
+    }
+
+    /** @see 7.3.4.2 Example 4 */
+    public function testExample4WithOctalCharacters(): void {
         static::assertSame(
             'This string contains ¥two octal charactersÇ.',
             (new LiteralStringValue('This string contains \245two octal characters\307.'))->getText(),
         );
+    }
+
+    /** @see 7.3.4 */
+    public function testGetTextWithOctalCharacters(): void {
         static::assertSame(
             "\005",
             (new LiteralStringValue('\005'))->getText(),
