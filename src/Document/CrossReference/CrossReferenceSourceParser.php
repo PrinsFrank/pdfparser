@@ -68,7 +68,8 @@ class CrossReferenceSourceParser {
             $byteOffsets[] = $byteOffset;
             $eolPosByteOffset = $stream->getEndOfCurrentLine($byteOffset + 1, $stream->getSizeInBytes())
                 ?? throw new ParseFailureException('Expected a newline after byte offset for cross reference stream');
-            $crossReferenceType = self::getCrossReferenceType($stream, $byteOffset, $eolPosByteOffset) ?? $crossReferenceType;
+            $crossReferenceType = self::getCrossReferenceType($stream, $byteOffset, $eolPosByteOffset)
+                ?? throw new ParseFailureException('Unable to determine crossReferenceType');
             $currentCrossReferenceSection = self::parseSection($stream, $crossReferenceType, $byteOffset, $eolPosByteOffset);
             $crossReferenceSections[] = $currentCrossReferenceSection;
         }
@@ -93,8 +94,9 @@ class CrossReferenceSourceParser {
             return CrossReferenceTableParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset);
         }
 
-        $objMarkerPos = $stream->firstPos(Marker::OBJ, $byteOffset, $eolPosByteOffset);
-        $startOfDictionary = $objMarkerPos === null ? $eolPosByteOffset : $objMarkerPos + strlen(Marker::OBJ->value);
+        $objMarkerPos = $stream->firstPos(Marker::OBJ, $byteOffset, $eolPosByteOffset)
+            ?? throw new ParseFailureException('"obj" marker was not found anymore, while this was verified to be a crossReferenceStream. This should never happen.');
+        $startOfDictionary = $objMarkerPos + strlen(Marker::OBJ->value);
         $endCrossReferenceSection = $stream->firstPos(Marker::END_OBJ, $startOfDictionary, $stream->getSizeInBytes())
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_OBJ->value));
 
