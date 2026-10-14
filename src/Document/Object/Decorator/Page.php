@@ -158,4 +158,10 @@ class Page extends DecoratedObject {
 
         return $this->getMediaBox();
     }
+
+    /** @return list<Annotation> */
+    public function getAnnotations(): array {
+        return $this->getDictionary()
+            ->getObjectsForReference($this->document, DictionaryKey::ANNOTS, Annotation::class);
+    }
 }
