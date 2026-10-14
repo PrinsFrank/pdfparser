@@ -35,7 +35,7 @@ class Page extends DecoratedObject {
 
     public function getMarkdown(): string {
         return (new MarkdownRenderer())
-            ->render(MarkdownExtractor::extractContent($this->getPositionedTextElements(), $this));
+            ->render(MarkdownExtractor::extractContent($this->getPositionedTextElements(), $this->getAnnotations(), $this));
     }
 
     /** @throws PdfParserException */

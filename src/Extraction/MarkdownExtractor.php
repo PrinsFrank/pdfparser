@@ -10,8 +10,10 @@ use PrinsFrank\MarkDownDom\Node\Block\Heading;
 use PrinsFrank\MarkDownDom\Node\Block\Paragraph;
 use PrinsFrank\MarkDownDom\Node\Inline\Bold;
 use PrinsFrank\MarkDownDom\Node\Inline\Italic;
+use PrinsFrank\MarkDownDom\Node\Inline\Link;
 use PrinsFrank\MarkDownDom\Node\Inline\Text;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Annotation;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -21,23 +23,25 @@ use PrinsFrank\PdfParser\Extraction\TextGrouping\LineGrouping\TextOverlapStrateg
 class MarkdownExtractor {
     /**
      * @param list<PositionedTextElement> $positionedTextElements
+     * @param list<Annotation> $annotations
      * @throws PdfParserException
      */
-    public static function extractContent(array $positionedTextElements, Page $page): Document {
+    public static function extractContent(array $positionedTextElements, array $annotations, Page $page): Document {
+        $linkAnnotations = array_values(array_filter($annotations, fn(Annotation $annotation) => $annotation->isLink() && $annotation->getLinkLocation() !== null));
         $lineGroupedElements = TextOverlapStrategy::group($positionedTextElements);
 
         $blockNodes = $inLineNodes = $fontCache = [];
         $textBuffer = '';
         $previousElementIsBold = $previousElementIsItalic = false;
-        $previousHeadingLevel = null;
+        $previousHeadingLevel = $previousLinkUrl = null;
         foreach ($lineGroupedElements as $i => $positionedTextElementsForLine) {
             if ($i !== 0) {
                 if ($previousHeadingLevel !== null) {
-                    self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+                    self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic, $previousLinkUrl);
                     self::flushBlockNodes($blockNodes, $inLineNodes, $previousHeadingLevel);
                     $previousHeadingLevel = null;
                 } elseif ($previousElementIsBold || $previousElementIsItalic) {
-                    self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+                    self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic, $previousLinkUrl);
                     $inLineNodes[] = new Text("\n");
                     $previousElementIsItalic = $previousElementIsBold = false;
                 } else {
@@ -62,12 +66,13 @@ class MarkdownExtractor {
                     continue;
                 }
 
+                $linkUrl = self::getLinkForElement($positionedTextElement, $linkAnnotations);
                 $currentHeadingLevel = $font->getHeadingLevel($positionedTextElement->textState, $positionedTextElement->absoluteMatrix);
                 if ($previousHeadingLevel !== $currentHeadingLevel) {
-                    self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+                    self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic, $previousLinkUrl);
                     self::flushBlockNodes($blockNodes, $inLineNodes, $previousHeadingLevel);
-                } elseif ($font->isBold() !== $previousElementIsBold || $font->isItalic() !== $previousElementIsItalic) {
-                    self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+                } elseif ($font->isBold() !== $previousElementIsBold || $font->isItalic() !== $previousElementIsItalic || $linkUrl !== $previousLinkUrl) {
+                    self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic, $previousLinkUrl);
                 }
 
                 if ($previousTextElementEndsWithSpace === false
@@ -84,11 +89,12 @@ class MarkdownExtractor {
                 $previousElementIsItalic = $font->isItalic();
                 $previousElementIsBold = $font->isBold();
                 $previousHeadingLevel = $currentHeadingLevel;
+                $previousLinkUrl = $linkUrl;
                 $textBuffer .= $elementText;
             }
         }
 
-        self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic);
+        self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic, $previousLinkUrl);
         self::flushBlockNodes($blockNodes, $inLineNodes, $previousHeadingLevel);
 
         return new Document(...$blockNodes);
@@ -109,7 +115,7 @@ class MarkdownExtractor {
     }
 
     /** @param list<InlineNode> $inLineNodes */
-    private static function flushInLineNodes(array &$inLineNodes, string &$textBuffer, bool $previousElementIsBold, bool $previousElementIsItalic): void {
+    private static function flushInLineNodes(array &$inLineNodes, string &$textBuffer, bool $previousElementIsBold, bool $previousElementIsItalic, ?string $linkUrl): void {
         if ($textBuffer === '') {
             return;
         }
@@ -126,7 +132,12 @@ class MarkdownExtractor {
             }
         }
 
-        $inLineNode = new Text($textBuffer);
+        if ($linkUrl !== null) {
+            $inLineNode = new Link($textBuffer, $linkUrl);
+        } else {
+            $inLineNode = new Text($textBuffer);
+        }
+
         if ($previousElementIsBold) {
             $inLineNode = new Bold($inLineNode);
         }
@@ -140,5 +151,21 @@ class MarkdownExtractor {
             $inLineNodes[] = $trailingWhitespace;
         }
         $textBuffer = '';
+    }
+
+    /** @param list<Annotation> $linkAnnotations */
+    private static function getLinkForElement(PositionedTextElement $positionedTextElement, array $linkAnnotations): ?string {
+        foreach ($linkAnnotations as $linkAnnotation) {
+            if (($rectangle = $linkAnnotation->getRect()) === null
+                || ($linkLocation = $linkAnnotation->getLinkLocation()) === null) {
+                continue;
+            }
+
+            if ($positionedTextElement->startsWithinRectangle($rectangle)) {
+                return $linkLocation->getText();
+            }
+        }
+
+        return null;
     }
 }

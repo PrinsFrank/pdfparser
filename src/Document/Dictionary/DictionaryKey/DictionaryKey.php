@@ -853,7 +853,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::FDF => [Dictionary::class],
             self::FF => [IntegerValue::class],
             self::FFILTER => [FilterNameValue::class, ArrayValue::class],
-            self::FIELDS => [DictionaryArrayValue::class],
+            self::FIELDS => [DictionaryArrayValue::class, ArrayValue::class],
             self::FILTER => [FilterNameValue::class, SecurityHandlerNameValue::class, ArrayValue::class],
             self::FIRST => [IntegerValue::class, Dictionary::class],
             self::FIRST_CHAR => [IntegerValue::class],

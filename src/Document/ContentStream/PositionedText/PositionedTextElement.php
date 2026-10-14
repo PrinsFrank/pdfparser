@@ -3,6 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
@@ -89,5 +90,12 @@ readonly class PositionedTextElement {
         }
 
         return $totalOffset;
+    }
+
+    public function startsWithinRectangle(Rectangle $rectangle): bool {
+        return $this->absoluteMatrix->offsetX <= $rectangle->xBottomRight
+            && $this->absoluteMatrix->offsetX >= $rectangle->xTopLeft
+            && $this->absoluteMatrix->offsetY >= $rectangle->yTopLeft
+            && $this->absoluteMatrix->offsetY <= $rectangle->yBottomRight;
     }
 }

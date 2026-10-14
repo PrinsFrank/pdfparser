@@ -168,6 +168,10 @@ readonly class Dictionary {
      * @return ($expectedDecoratorFQN is null ? list<DecoratedObject> : list<T>)
      */
     public function getObjectsForReference(Document $document, DictionaryKey|NameObjectStringValue $dictionaryKey, ?string $expectedDecoratorFQN = null): array {
+        if ($this->getTypeForKey($dictionaryKey) === ReferenceValue::class) {
+            return [$this->getObjectForReference($document, $dictionaryKey, $expectedDecoratorFQN) ?? throw new ParseFailureException()];
+        }
+
         $references = $this->getValueForKey($document, $dictionaryKey, ReferenceValueArray::class);
         if ($references === null) {
             return [];
