@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name;
 
+use PrinsFrank\PdfParser\Document\Object\Decorator\Annotation;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Document\Object\Decorator\EmbeddedFile;
@@ -146,6 +147,7 @@ enum TypeNameValue: string implements NameValue {
     /** @return class-string<DecoratedObject> */
     public function getDecoratorFQN(): string {
         return match ($this) {
+            TypeNameValue::ANNOT => Annotation::class,
             TypeNameValue::CATALOG => Catalog::class,
             TypeNameValue::EMBEDDED_FILE => EmbeddedFile::class,
             TypeNameValue::ENCRYPT => EncryptDictionary::class,
