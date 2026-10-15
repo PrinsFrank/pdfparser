@@ -134,18 +134,13 @@ pages:
        
       RS-422 Device RS-422 Device
        
-       
       Figure 1. RS-422 Interface Example 
        
          
        
        
       RS-485 Device RS-485 Device RS-485 Device
-      Each device ouputs
-      data in-turn to all other
-      devices.
       RS-485 Device
-       
        
       Figure 2. RS-485 Interface Example 
        
@@ -153,17 +148,22 @@ pages:
        
        
       Control Panel Control Panel Control Panel
-      Each Control Panel
-      ouputs data in-turn to the
-      System Controller input.
       System Controller
       Jupiter System Controller
       outputs identical data to
       all Control Panel inputs
        
-       
       Figure 3. MPK Interface Example 
       AN6-2 Revision 1.0 
+       
+      Each device ouputs
+      data in-turn to all other
+      devices.
+       
+      Each Control Panel
+      ouputs data in-turn to the
+      System Controller input.
+       
     markdown: |-
       **Application Note AN-6** 
       **MPK Router Control Interface to 7707DT** 
@@ -172,18 +172,13 @@ pages:
        
       **RS-422 Device RS-422 Device**
        
-       
       **Figure 1. RS-422 Interface Example** 
        
          
        
        
       **RS-485 Device RS-485 Device RS-485 Device**
-      Each device ouputs
-      data in-turn to all other
-      devices.
       **RS-485 Device**
-       
        
       **Figure 2. RS-485 Interface Example** 
        ****
@@ -191,17 +186,22 @@ pages:
        
        
       **Control Panel Control Panel Control Panel**
-      Each Control Panel
-      ouputs data in-turn to the
-      System Controller input.
       System Controller
       **Jupiter System Controller**
       outputs identical data to
       all Control Panel inputs
-       
        ****
       **Figure 3. MPK Interface Example** 
       **AN6-2** Revision 1.0 
+       
+      Each device ouputs
+      data in-turn to all other
+      devices.
+       
+      Each Control Panel
+      ouputs data in-turn to the
+      System Controller input.
+       
   -
     text: |2-
        Application Note AN-6 
@@ -305,9 +305,9 @@ pages:
       Jupiter System Controller
       7707DT
        
-       
       Figure 5. MPK Interface to RS-422. Incorrect Method 
       AN6-4 Revision 1.0 
+       
     markdown: |-
       **Application Note AN-6** 
       **MPK Router Control Interface to 7707DT** 
@@ -339,14 +339,15 @@ pages:
       **Jupiter System Controller**
       **7707DT**
        
-       
       **Figure 5. MPK Interface to RS-422. Incorrect Method** 
       **AN6-4** Revision 1.0 
+       
   -
     text: |2-
+       
+       
        Application Note AN-6 
       MPK Router Control Interface to 7707DT   
-       
        
       7707DT Channel 1 is configured
       Control Panel Control Panel to RS-422 for this example.
@@ -414,11 +415,12 @@ pages:
       Jupiter System Controller
        
       Figure 6. MPK Interface to RS-422 
-       Revision 1.0 AN6-5 
+      Revision 1.0 AN6-5 
     markdown: |2-
+       
+       
        **Application Note AN-6** 
       **MPK Router Control Interface to 7707DT**   
-       
        
       **7707DT Channel 1 is configured**
       **Control Panel Control Panel to RS-422 for this example.**
@@ -487,7 +489,7 @@ pages:
       **Jupiter System Controller**
        
       **Figure 6. MPK Interface to RS-422** 
-       Revision 1.0 **AN6-5** 
+      Revision 1.0 **AN6-5** 
   -
     text: |-
       Application Note AN-6 
@@ -579,9 +581,10 @@ pages:
       **AN6-6** Revision 1.0 
   -
     text: |2-
+       
+       
        Application Note AN-6 
       MPK Router Control Interface to 7707DT   
-       
        
       7707DT Channel 1 is configured
       to RS-422 for this example.
@@ -652,11 +655,12 @@ pages:
       Jupiter System Controller Control Panel
        
       Figure 8. MPK Interface to RS-485 
-       Revision 1.0 AN6-7 
+      Revision 1.0 AN6-7 
     markdown: |2-
+       
+       
        **Application Note AN-6** 
       **MPK Router Control Interface to 7707DT**   
-       
        
       **7707DT Channel 1 is configured**
       **to RS-422 for this example.**
@@ -728,7 +732,7 @@ pages:
       **Jupiter System Controller Control Panel**
        
       **Figure 8. MPK Interface to RS-485** 
-       Revision 1.0 **AN6-7** 
+      Revision 1.0 **AN6-7** 
   -
     text: |-
       Application Note AN-6 
@@ -784,6 +788,12 @@ pages:
       **AN6-8** Revision 1.0 
   -
     text: |2-
+       
+       
+       
+       
+       
+       
        Application Note AN-6 
       MPK Router Control Interface to 7707DT   
        
@@ -809,15 +819,16 @@ pages:
        
        
        
-       
-       
-       
       This page left intentionally blank 
        
-       
-       
-       Revision 1.0 AN6-9 
+      Revision 1.0 AN6-9 
     markdown: |2-
+       
+       
+       
+       
+       
+       
        **Application Note AN-6** 
       **MPK Router Control Interface to 7707DT**   
        
@@ -843,11 +854,6 @@ pages:
        
        
        
-       
-       
-       
       *This page left intentionally blank* 
        
-       
-       
-       Revision 1.0 **AN6-9** 
+      Revision 1.0 **AN6-9** 
