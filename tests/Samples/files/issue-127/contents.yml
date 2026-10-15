@@ -908,26 +908,26 @@ pages:
   -
     text: |-
       Tabelle 1: Schulden der niedersächsischen Gemeinden und Gemeindeverbände und deren Fonds, Einrichtungen und Unternehmen (FEU) 2023 und 2024 nach Art der Schulden in 1.000 Euro
-      2023 2024 Veränderung 2023 zu 2024
-      Gebietskörperschaften Gebietskörperschaften Gebietskörperschaften
-      Extra- sonstige Extra- sonstige 
+      2023 2024
+      Gebietskörperschaften Gebietskörperschaften
+      Extra-
       Extra- sonstige 
       Art der Schulden
-      kreisfreie Samt- kreisfreie Samt- 2) 2) kreisfreie Samt- 2) 2)
+      kreisfreie Samt- kreisfreie Samt- 2)
       haushalte FEU
-      haushalte FEU haushalte FEU
-      Insgesamt Landkreise Gemeinden Insgesamt Landkreise Gemeinden Insgesamt Landkreise Gemeinden
-      Städte gemeinden Städte gemeinden Städte gemeinden
-      in 1.000 Euro in Prozent
-      Schulden beim nicht-öffentlichen Bereich 15.129.166 3.406.209 2.219.196 1.082.638 8.421.124 1.622.573 16.043.635 17.478.238 4.210.994 2.554.320 1.198.910 9.514.014 g g +15,5 +23,6 +15,1 +10,7 +13,0 x x
-      davon Kassenkredite 973.606 169.622 187.393 25.376 591.215 6.398 644.427 1.754.857 509.372 375.948 50.464 819.072 g g +80,2 +200,3 +100,6 +98,9 +38,5 x x
-      davon Wertpapierschulden u. Kredite 14.155.560 3.236.587 2.031.803 1.057.262 7.829.909 1.616.176 15.399.208 15.723.382 3.701.622 2.178.372 1.148.446 8.694.942 g g +11,1 +14,4 +7,2 +8,6 +11,0 x x
+      haushalte
+      Insgesamt Landkreise Gemeinden Insgesamt Landkreise Gemeinden
+      Städte gemeinden Städte gemeinden
+      in 1.000 Euro
+      Schulden beim nicht-öffentlichen Bereich 15.129.166 3.406.209 2.219.196 1.082.638 8.421.124 1.622.573 16.043.635 17.478.238 4.210.994 2.554.320 1.198.910 9.514.014 g
+      davon Kassenkredite 973.606 169.622 187.393 25.376 591.215 6.398 644.427 1.754.857 509.372 375.948 50.464 819.072 g
+      davon Wertpapierschulden u. Kredite 14.155.560 3.236.587 2.031.803 1.057.262 7.829.909 1.616.176 15.399.208 15.723.382 3.701.622 2.178.372 1.148.446 8.694.942 g
       1)
-      Schulden beim öffentlichen Bereich1) 961.509 74.851 14.424 73.031 799.203 1.792.088 4.475.428 1.214.517 93.984 13.024 48.468 1.059.041 g g +26,3 +25,6 -9,7 -33,6 +32,5 x x
-      davon Kassenkredite 443.012 23.973 2.064 28.936 388.038 32.928 203.824 586.893 48.750 2.064 3.487 532.591 g g +32,5 +103,4 +0,0 -87,9 +37,3 x x
-      davon Kredite 518.498 50.878 12.360 44.095 411.165 1.759.160 4.271.604 627.624 45.234 10.960 44.981 526.450 g g +21,0 -11,1 -11,3 +2,0 +28,0 x x
+      Schulden beim öffentlichen Bereich1) 961.509 74.851 14.424 73.031 799.203 1.792.088 4.475.428 1.214.517 93.984 13.024 48.468 1.059.041 g
+      davon Kassenkredite 443.012 23.973 2.064 28.936 388.038 32.928 203.824 586.893 48.750 2.064 3.487 532.591 g
+      davon Kredite 518.498 50.878 12.360 44.095 411.165 1.759.160 4.271.604 627.624 45.234 10.960 44.981 526.450 g
       1)
-      Gesamtverschuldung 16.090.675 3.481.060 2.233.620 1.155.668 9.220.327 3.414.662 20.519.063 18.692.755 4.304.978 2.567.344 1.247.377 10.573.055 g g +16,2 +23,7 +14,9 +7,9 +14,7 x x
+      Gesamtverschuldung 16.090.675 3.481.060 2.233.620 1.155.668 9.220.327 3.414.662 20.519.063 18.692.755 4.304.978 2.567.344 1.247.377 10.573.055 g
       1) Nicht konsolidiert, enthält Doppelzählungen. Aufgrund der eingeschränkten Belastbarkeit und zur besseren Vergleichbarkeit der Angaben für 2023 und 2024. Darstellung ohne Schulden aus Cash-Pooling und der gemeinsamen Kassenbewirtschaftung der Samtgemeinden.
       2) Keine Angabe auf Grundlage der vierteljährlichen Kassenstatistik 2024 möglich. Angaben aus der Jährlichen Schuldenstatistik 2024 lagen zum Zeitpunkt der Erstellung der Tabelle noch nicht vor.
       Quelle: 2023 jährliche Schuldenstatistik, 2024 vierteljährliche kommunale Kassenstatistik 4. Quartal 2024
@@ -935,28 +935,79 @@ pages:
       x = Keine sinnvolle Aussage möglich.
       © Landesamt für Statistik Niedersachsen, Hannover 2025
       Vervielfältigung und Verbreitung, auch auszugsweise, mit Quellenangabe gestattet.
+      sonstige 
+      2)
+      FEU
+      g
+      g
+      g
+      g
+      g
+      g
+      g
+      Insgesamt
+      +15,5
+      +80,2
+      +11,1
+      +26,3
+      +32,5
+      +21,0
+      +16,2
+      Veränderung 2023 zu 2024
+      Gebietskörperschaften
+      kreisfreie Samt-
+      Landkreise Gemeinden
+      Städte gemeinden
+      in Prozent
+      +23,6 +15,1 +10,7 +13,0
+      +200,3 +100,6 +98,9 +38,5
+      +14,4 +7,2 +8,6 +11,0
+      +25,6 -9,7 -33,6 +32,5
+      +103,4 +0,0 -87,9 +37,3
+      -11,1 -11,3 +2,0 +28,0
+      +23,7 +14,9 +7,9 +14,7
+      Extra-
+      2)
+      haushalte
+      x
+      x
+      x
+      x
+      x
+      x
+      x
+      sonstige 
+      2)
+      FEU
+      x
+      x
+      x
+      x
+      x
+      x
+      x
     markdown: |-
       **Tabelle 1: Schulden der niedersächsischen Gemeinden und Gemeindeverbände und deren Fonds, Einrichtungen und Unternehmen (FEU) 2023 und 2024 nach Art der Schulden in 1.000 Euro**
-      2023 2024 Veränderung 2023 zu 2024
-      Gebietskörperschaften Gebietskörperschaften Gebietskörperschaften
-      Extra- sonstige Extra- sonstige 
+      2023 2024
+      Gebietskörperschaften Gebietskörperschaften
+      Extra-
       Extra- sonstige 
       Art der Schulden
-      kreisfreie Samt- kreisfreie Samt- 2) 2) kreisfreie Samt- 2) 2)
+      kreisfreie Samt- kreisfreie Samt- 2)
       haushalte FEU
-      haushalte FEU haushalte FEU
-      **Insgesamt** Landkreise Gemeinden **Insgesamt** Landkreise Gemeinden **Insgesamt** Landkreise Gemeinden
-      Städte gemeinden Städte gemeinden Städte gemeinden
-      in 1.000 Euro in Prozent
-      **Schulden beim nicht-öffentlichen Bereich 15.129.166 3.406.209 2.219.196 1.082.638 8.421.124 1.622.573 16.043.635 17.478.238 4.210.994 2.554.320 1.198.910 9.514.014 g g +15,5 +23,6 +15,1 +10,7 +13,0 x x**
-      davon Kassenkredite **973.606** 169.622 187.393 25.376 591.215 6.398 644.427 **1.754.857** 509.372 375.948 50.464 819.072 g g **+80,2** +200,3 +100,6 +98,9 +38,5 x x
-      davon Wertpapierschulden u. Kredite **14.155.560** 3.236.587 2.031.803 1.057.262 7.829.909 1.616.176 15.399.208 **15.723.382** 3.701.622 2.178.372 1.148.446 8.694.942 g g **+11,1** +14,4 +7,2 +8,6 +11,0 x x
+      haushalte
+      **Insgesamt** Landkreise Gemeinden **Insgesamt** Landkreise Gemeinden
+      Städte gemeinden Städte gemeinden
+      in 1.000 Euro
+      **Schulden beim nicht-öffentlichen Bereich 15.129.166 3.406.209 2.219.196 1.082.638 8.421.124 1.622.573 16.043.635 17.478.238 4.210.994 2.554.320 1.198.910 9.514.014 g**
+      davon Kassenkredite **973.606** 169.622 187.393 25.376 591.215 6.398 644.427 **1.754.857** 509.372 375.948 50.464 819.072 g
+      davon Wertpapierschulden u. Kredite **14.155.560** 3.236.587 2.031.803 1.057.262 7.829.909 1.616.176 15.399.208 **15.723.382** 3.701.622 2.178.372 1.148.446 8.694.942 g
       **1)**
-      **Schulden beim öffentlichen Bereich**1) **961.509 74.851 14.424 73.031 799.203 1.792.088 4.475.428 1.214.517 93.984 13.024 48.468 1.059.041 g g +26,3 +25,6 -9,7 -33,6 +32,5 x x**
-      davon Kassenkredite **443.012** 23.973 2.064 28.936 388.038 32.928 203.824 **586.893** 48.750 2.064 3.487 532.591 g g **+32,5** +103,4 +0,0 -87,9 +37,3 x x
-      davon Kredite **518.498** 50.878 12.360 44.095 411.165 1.759.160 4.271.604 **627.624** 45.234 10.960 44.981 526.450 g g **+21,0** -11,1 -11,3 +2,0 +28,0 x x
+      **Schulden beim öffentlichen Bereich**1) **961.509 74.851 14.424 73.031 799.203 1.792.088 4.475.428 1.214.517 93.984 13.024 48.468 1.059.041 g**
+      davon Kassenkredite **443.012** 23.973 2.064 28.936 388.038 32.928 203.824 **586.893** 48.750 2.064 3.487 532.591 g
+      davon Kredite **518.498** 50.878 12.360 44.095 411.165 1.759.160 4.271.604 **627.624** 45.234 10.960 44.981 526.450 g
       **1)**
-      **Gesamtverschuldung 16.090.675 3.481.060 2.233.620 1.155.668 9.220.327 3.414.662 20.519.063 18.692.755 4.304.978 2.567.344 1.247.377 10.573.055 g g +16,2 +23,7 +14,9 +7,9 +14,7 x x**
+      **Gesamtverschuldung 16.090.675 3.481.060 2.233.620 1.155.668 9.220.327 3.414.662 20.519.063 18.692.755 4.304.978 2.567.344 1.247.377 10.573.055 g**
       1) Nicht konsolidiert, enthält Doppelzählungen. Aufgrund der eingeschränkten Belastbarkeit und zur besseren Vergleichbarkeit der Angaben für 2023 und 2024. Darstellung ohne Schulden aus Cash-Pooling und der gemeinsamen Kassenbewirtschaftung der Samtgemeinden.
       2) Keine Angabe auf Grundlage der vierteljährlichen Kassenstatistik 2024 möglich. Angaben aus der Jährlichen Schuldenstatistik 2024 lagen zum Zeitpunkt der Erstellung der Tabelle noch nicht vor.
       Quelle: 2023 jährliche Schuldenstatistik, 2024 vierteljährliche kommunale Kassenstatistik 4. Quartal 2024
@@ -964,3 +1015,54 @@ pages:
       x = Keine sinnvolle Aussage möglich.
       © Landesamt für Statistik Niedersachsen, Hannover 2025
       Vervielfältigung und Verbreitung, auch auszugsweise, mit Quellenangabe gestattet.
+      sonstige 
+      2)
+      FEU
+      **g**
+      g
+      g
+      **g**
+      g
+      g
+      **g**
+      **Insgesamt**
+      **+15,5**
+      **+80,2**
+      **+11,1**
+      **+26,3**
+      **+32,5**
+      **+21,0**
+      **+16,2**
+      Veränderung 2023 zu 2024
+      Gebietskörperschaften
+      kreisfreie Samt-
+      Landkreise Gemeinden
+      Städte gemeinden
+      in Prozent
+      **+23,6 +15,1 +10,7 +13,0**
+      +200,3 +100,6 +98,9 +38,5
+      +14,4 +7,2 +8,6 +11,0
+      **+25,6 -9,7 -33,6 +32,5**
+      +103,4 +0,0 -87,9 +37,3
+      -11,1 -11,3 +2,0 +28,0
+      **+23,7 +14,9 +7,9 +14,7**
+      Extra-
+      2)
+      haushalte
+      **x**
+      x
+      x
+      **x**
+      x
+      x
+      **x**
+      sonstige 
+      2)
+      FEU
+      **x**
+      x
+      x
+      **x**
+      x
+      x
+      **x**

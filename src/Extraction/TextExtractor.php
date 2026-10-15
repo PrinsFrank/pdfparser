@@ -7,7 +7,7 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Extraction\SpaceDetection\SpaceDetector;
-use PrinsFrank\PdfParser\Extraction\TextGrouping\LineGrouping\TextOverlapStrategy;
+use PrinsFrank\PdfParser\Extraction\TextGrouping\TextGrouping;
 
 class TextExtractor {
     /**
@@ -15,11 +15,9 @@ class TextExtractor {
      * @throws PdfParserException
      */
     public static function extractContent(array $positionedTextElements, Page $page): string {
-        $lineGroupedElements = TextOverlapStrategy::group($positionedTextElements);
-
         $fontCache = [];
         $textBuffer = '';
-        foreach ($lineGroupedElements as $i => $positionedTextElementsForLine) {
+        foreach (TextGrouping::group($positionedTextElements, $page) as $i => $positionedTextElementsForLine) {
             if ($i !== 0) {
                 $textBuffer .= "\n";
             }
