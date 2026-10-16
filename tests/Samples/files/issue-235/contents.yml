@@ -288,10 +288,11 @@ pages:
       mern 1.1.1. bis 1.1.10 des Runderlasses , Ausbildung der Freiwilligen Feuerwehren; Feuerwehr-Dienst-
       vorschrift 2ʻ des Ministeriums für Inneres und Sport vom 17. November 2023 (Nds. MBl. S. 974 – im 
       Folgenden: Erlass-FwDV 2) durchgeführt mit den Basis- und Ergänzungsmodulen nach den Num-
-      mern 1.2.1 bis 1.2.1.4 Erlass-FwDV 2 und mit dem Kompetenznachweis nach Nummer 1.2.1.5 Erlass -
+      mern 1.2.1 bis 1.2.1.4 Erlass-FwDV 2 und mit dem Kompetenznachweis nach Nummer 1.2.1.5 Erlass
       FwDV 2 abgeschlossen. 
       § 8 
       Technische Ausbildung 
+      -
       (1) 1Voraussetzung für die technische Ausbildung ist der Abschluss der modularen Grundlagenaus-
       bildung. 2Sie wird mit den Ausbildungslehrgängen nach den Nummern 3.1 bis 3.9 Anlage 1 Erlass-
       FwDV 2, insbesondere den Ausbildungslehrgängen , Atemschutzgeräteträgerʻ, ,Gerätewarteʻ , ,Atem-
@@ -340,10 +341,11 @@ pages:
       mern 1.1.1. bis 1.1.10 des Runderlasses , Ausbildung der Freiwilligen Feuerwehren; Feuerwehr-Dienst-
       vorschrift 2ʻ des Ministeriums für Inneres und Sport vom 17. November 2023 (Nds. MBl. S. 974 – im 
       Folgenden: Erlass-FwDV 2) durchgeführt mit den Basis- und Ergänzungsmodulen nach den Num-
-      mern 1.2.1 bis 1.2.1.4 Erlass-FwDV 2 und mit dem Kompetenznachweis nach Nummer 1.2.1.5 Erlass -
+      mern 1.2.1 bis 1.2.1.4 Erlass-FwDV 2 und mit dem Kompetenznachweis nach Nummer 1.2.1.5 Erlass
       FwDV 2 abgeschlossen. 
       § 8 
       Technische Ausbildung 
+      -
       (1) 1Voraussetzung für die technische Ausbildung ist der Abschluss der modularen Grundlagenaus-
       bildung. 2Sie wird mit den Ausbildungslehrgängen nach den Nummern 3.1 bis 3.9 Anlage 1 Erlass-
       FwDV 2, insbesondere den Ausbildungslehrgängen , Atemschutzgeräteträgerʻ, ,Gerätewarteʻ , ,Atem-
@@ -385,8 +387,9 @@ pages:
       Ausbildungslehrgangs ,Gruppenführerʻ. 2Die Ausbildung erfolgt in einem Ausbildungslehrgang 
   -
     text: |-
-      Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 5 
+      Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
        
+      Seite 5 
       (Ausbildungslehrgang ,Zugführerʻ). 3Der Ausbildungslehrgang ,Zugführerʻ soll die Befähigung zum Füh-
       ren eines Zuges, und zur Leitung von Einsätzen mit höchstens 22 Mitgliedern der Einsatzabteilung ver-
       mitteln. 
@@ -438,8 +441,9 @@ pages:
       kann der Träger der Feuerwehr den Zeitraum der kommissarischen Wahrnehmung der Regelfunktion 
       einmalig um längstens zwei weitere Jahre verlängern. 3Der Träger der Feuerwehr hat darauf 
     markdown: |-
-      Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 5 
+      Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
        
+      Seite 5 
       (Ausbildungslehrgang ,Zugführerʻ). 3Der Ausbildungslehrgang ,Zugführerʻ soll die Befähigung zum Füh-
       ren eines Zuges, und zur Leitung von Einsätzen mit höchstens 22 Mitgliedern der Einsatzabteilung ver-
       mitteln. 
@@ -690,11 +694,13 @@ pages:
       (11) Dienstgrade begründen keine Weisungsbefugnisse. 
   -
     text: |-
-      Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 8 
+      Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
        
       Dritter Teil 
-      Persönliche Ausrüstung, Dienstkleidung, Dienstgradabzeichen 
+      Persönliche Ausrüstung, Dienstkleidung, Dienstgradabzeichen
       § 12 
+      Seite 8 
+       
       Persönliche Ausrüstung und Dienstkleidung der Mitglieder 
       der Freiwilligen Feuerwehr oder Pflichtfeuerwehr 
       (1) 1Die Mitglieder der Einsatzabteilung der Freiwilligen Feuerwehr oder Pflichtfeuerwehr tragen im 
@@ -738,11 +744,13 @@ pages:
       wehr oder Pflichtfeuerwehr die nach Anlage 10 gekennzeichneten und der jeweiligen Ausbildung der 
       Beamtinnen und Beamten zugeordneten Feuerwehrhelme.  
     markdown: |-
-      Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 8 
+      Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
        
       Dritter Teil 
-      **Persönliche Ausrüstung, Dienstkleidung, Dienstgradabzeichen** 
+      **Persönliche Ausrüstung, Dienstkleidung, Dienstgradabzeichen**
       § 12 
+      Seite 8 
+       
       Persönliche Ausrüstung und Dienstkleidung der Mitglieder 
       der Freiwilligen Feuerwehr oder Pflichtfeuerwehr 
       (1) 1Die Mitglieder der Einsatzabteilung der Freiwilligen Feuerwehr oder Pflichtfeuerwehr tragen im 
@@ -1165,24 +1173,12 @@ pages:
       meinde oder eines 
       Landkreises) 
         
-       
-      X 
-      X 
-      X 
-      X 
-      X 
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
+         
+      X   
+      X   
+      X   
+      X   
+      X   
       Seite 12 
       Abschluss der  
       Ausbildungslehr-
@@ -1268,24 +1264,12 @@ pages:
       meinde oder eines 
       Landkreises) 
         
-       
-      X 
-      X 
-      X 
-      X 
-      X 
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
+         
+      X   
+      X   
+      X   
+      X   
+      X   
       Seite 12 
       Abschluss der  
       Ausbildungslehr-
@@ -1341,43 +1325,54 @@ pages:
       Voraussetzung für die Übertragung der Regelfunktion 
       Regelfunktion 
        Abschluss 
-      der modula- Abschluss 
+      der modula-
       Abschluss Abschluss Abschluss Abschluss 
-      ren Grund- des Ausbil-
+      ren Grund-
       des Ausbil- des  des Ausbil- des Ausbil-
-      lagenaus- dungslehr-
+      lagenaus-
       dungs- Ausbil- dungslehr- dungslehr-
-      bildung zur gangs ,Ein-
+      bildung zur 
       lehrgangs dungs- gangs  gangs  
-      Truppführe- führung in 
+      Truppführe-
       ,Gruppen- lehrgangs  ,Leiter einer  ,Verbands- 
-      rin oder die Stabs-
+      rin oder 
       führerʻ  ,Zugführerʻ  Feuerwehrʻ  führerʻ  
-      zum Trupp- arbeitʼ  
+      zum Trupp-
       führer 
       Stellvertretende 
       Ortsbrandmeisterin 
-      oder Stellvertreten- X X     
+      oder Stellvertreten- X X    
       der Ortsbrandmeis-
       ter 
       Ortsbrandmeisterin 
-      oder Ortsbrand- X X X1) X   
+      oder Ortsbrand- X X X1) X  
       meister 
       Stellvertretende 
       Gemeinde- oder 
       Stadtbrandmeiste-
-      rin oder Stellvertre- X X X X   
+      rin oder Stellvertre- X X X X  
       tender Gemeinde- 
       oder Stadtbrand-
       meister 
       Gemeinde- oder 
       Stadtbrandmeiste-
-      rin oder Gemeinde- X X X X X  
+      rin oder Gemeinde- X X X X X 
       oder Stadtbrand-
       meister 
        
       1) Abschluss des Ausbildungslehrgangs nicht erforderlich, wenn die Regelfunktion in einer Grundausstattungsfeu-
       erwehr nach § 1 Abs. 1 Nr. 1 übertragen wird. 
+      Abschluss 
+      des Ausbil-
+      dungslehr-
+      gangs ,Ein-
+      führung in 
+      die Stabs-
+      arbeitʼ  
+       
+       
+       
+       
     markdown: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 13 
        
@@ -1399,109 +1394,101 @@ pages:
       Voraussetzung für die Übertragung der Regelfunktion 
       Regelfunktion 
        Abschluss 
-      der modula- Abschluss 
+      der modula-
       Abschluss Abschluss Abschluss Abschluss 
-      ren Grund- des Ausbil-
+      ren Grund-
       des Ausbil- des  des Ausbil- des Ausbil-
-      lagenaus- dungslehr-
+      lagenaus-
       dungs- Ausbil- dungslehr- dungslehr-
-      bildung zur gangs ,Ein-
+      bildung zur 
       lehrgangs dungs- gangs  gangs  
-      Truppführe- führung in 
+      Truppführe-
       ,Gruppen- lehrgangs  ,Leiter einer  ,Verbands- 
-      rin oder die Stabs-
+      rin oder 
       führerʻ  ,Zugführerʻ  Feuerwehrʻ  führerʻ  
-      zum Trupp- arbeitʼ  
+      zum Trupp-
       führer 
       Stellvertretende 
       Ortsbrandmeisterin 
-      oder Stellvertreten- X X     
+      oder Stellvertreten- X X    
       der Ortsbrandmeis-
       ter 
       Ortsbrandmeisterin 
-      oder Ortsbrand- X X X1) **X   
+      oder Ortsbrand- X X X1) **X  
       meister 
       Stellvertretende 
       Gemeinde- oder 
       Stadtbrandmeiste-
-      rin oder Stellvertre- X X X X   
+      rin oder Stellvertre- X X X X  
       tender Gemeinde- 
       oder Stadtbrand-
       meister 
       Gemeinde- oder 
       Stadtbrandmeiste-
-      rin oder Gemeinde- X X X X X  
+      rin oder Gemeinde- X X X X X 
       oder Stadtbrand-
       meister 
        
       1) Abschluss des Ausbildungslehrgangs nicht erforderlich, wenn die Regelfunktion in einer Grundausstattungsfeu-
       erwehr nach § 1 Abs. 1 Nr. 1 übertragen wird. 
+      Abschluss 
+      des Ausbil-
+      dungslehr-
+      gangs ,Ein-
+      führung in 
+      die Stabs-
+      arbeitʼ  
+       
+       
+       
+       
   -
     text: |-
-      Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 14 
+      Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
        
-      Abschnittsleiterin     
+      Abschnittsleiterin 
        
       oder Abschnittslei-
-          
        
       ter und Stellvertre-
-      X2) X X X 
       tende Abschnittslei- X 
       terin oder Stellver-
-          
        
       tretender Ab-
-          
        
       schnittsleiter 
-          
        
       oder 
-          
        
       Stellvertretende 
       Stadtbrandmeiste-
-          
        
       rin oder Stellvertre-
-      X2) X X X 
       X 
       tender Stadtbrand-
       meister in Städten 
-          
        
       mit Berufsfeuer-
-          
        
       wehr 
        
-          
-       
       oder 
-          
        
       Stellvertretende 
       Stadtbrandmeiste-
-          
        
       rin oder Stellvertre-
-      X2) X X X 
       X 
       tender Stadtbrand-
-      meister in kreis-    
+      meister in kreis-
        
       freien Städten ohne 
-          
        
       Berufsfeuerwehr 
-          
        
       oder 
-          
        
       Stadtbrandmeiste-
-      X2) X X X 
       rin oder Stadt- X 
       brandmeister in 
        
@@ -1511,94 +1498,132 @@ pages:
       Kreisbrandmeiste-
       rin oder Kreis-
       brandmeister und 
-      Stellvertretende X X2) X X X X 
+      Stellvertretende 
+      X 
       Kreisbrandmeiste-
-            
+       
       rin oder Stellvertre-
-      tender Kreisbrand-      
+      tender Kreisbrand- 
       meister 
-            
+       
       oder 
-            
+       
       Stadtbrandmeiste-
-            
+       
       rin oder Stadt-
-      X X2) X X X X 
+      X 
       brandmeister in 
       kreisfreien Städten 
       ohne Berufsfeuer-
       wehr 
        
+         
+         
+      X2) X X 
+         
+         
+         
+         
+         
+      X2) X X 
+         
+         
+         
+         
+         
+      X2) X X 
+         
+         
+         
+         
+      X2) X X 
+      X2) X X 
+         
+         
+         
+         
+         
+      X2) X X 
+      Seite 14 
+       
+       
+      X 
+       
+       
+       
+       
+       
+      X 
+       
+       
+       
+       
+       
+       
+      X 
+       
+       
+       
+       
+      X 
+      X X 
+        
+        
+        
+        
+        
+      X X 
       2) Sonstige Voraussetzungen: Zweijährige Mindestdienstzeit in einer Regelfunktion als Stellvertretende Orts-
       brandmeisterin oder Stellvertretender Ortsbrandmeister, Ortsbrandmeisterin oder Ortsbrandmeister, Stellver-
       tretende Gemeinde- oder Stadtbrandmeisterin oder Stellvertretender Gemeinde- oder Stadtbrandmeister, Ge-
       meinde- oder Stadtbrandmeisterin oder Gemeinde- oder Stadtbrandmeister sowie eine Gesamtdienstzeit von 
       mindestens zehn Jahren ab dem Datum der erstmaligen Verleihung eines Dienstgrades. 
     markdown: |-
-      Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 14 
+      Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
        
-      Abschnittsleiterin     
+      Abschnittsleiterin 
        
       oder Abschnittslei-
-          
        
       ter und Stellvertre-
-      X2) X X X 
       tende Abschnittslei- X 
       terin oder Stellver-
-          
        
       tretender Ab-
-          
        
       schnittsleiter 
-          
        
       oder 
-          
        
       Stellvertretende 
       Stadtbrandmeiste-
-          
        
       rin oder Stellvertre-
-      X2) X X X 
       X 
       tender Stadtbrand-
       meister in Städten 
-          
        
       mit Berufsfeuer-
-          
        
       wehr 
        
-          
-       
       oder 
-          
        
       Stellvertretende 
       Stadtbrandmeiste-
-          
        
       rin oder Stellvertre-
-      X2) X X X 
       X 
       tender Stadtbrand-
-      meister in kreis-    
+      meister in kreis-
        
       freien Städten ohne 
-          
        
       Berufsfeuerwehr 
-          
        
       oder 
-          
        
       Stadtbrandmeiste-
-      X2) X X X 
       rin oder Stadt- X 
       brandmeister in 
        
@@ -1608,24 +1633,81 @@ pages:
       Kreisbrandmeiste-
       rin oder Kreis-
       brandmeister und 
-      Stellvertretende X X2) X X X X 
+      Stellvertretende 
+      X 
       Kreisbrandmeiste-
-            
+       
       rin oder Stellvertre-
-      tender Kreisbrand-      
+      tender Kreisbrand- 
       meister 
-            
+       
       oder 
-            
+       
       Stadtbrandmeiste-
-            
+       
       rin oder Stadt-
-      X X2) X X X X 
+      X 
       brandmeister in 
       kreisfreien Städten 
       ohne Berufsfeuer-
       wehr 
        
+         
+         
+      X2) X X 
+         
+         
+         
+         
+         
+      X2) X X 
+         
+         
+         
+         
+         
+      X2) X X 
+         
+         
+         
+         
+      X2) X X 
+      X2) X X 
+         
+         
+         
+         
+         
+      X2) X X 
+      Seite 14 
+       
+       
+      X 
+       
+       
+       
+       
+       
+      X 
+       
+       
+       
+       
+       
+       
+      X 
+       
+       
+       
+       
+      X 
+      X X 
+        
+        
+        
+        
+        
+      X X 
       2) Sonstige Voraussetzungen: Zweijährige Mindestdienstzeit in einer Regelfunktion als Stellvertretende Orts-
       brandmeisterin oder Stellvertretender Ortsbrandmeister, Ortsbrandmeisterin oder Ortsbrandmeister, Stellver-
       tretende Gemeinde- oder Stadtbrandmeisterin oder Stellvertretender Gemeinde- oder Stadtbrandmeister, Ge-
@@ -1637,15 +1719,40 @@ pages:
        
       Regierungsbrand-
       meisterin oder Re-
-      X X2) X X X X 
       gierungsbrand-
       meister 
       Teil C  
-      Einsatzspezifische Funktionen nach § 10 Abs. 4 
       Bezeichnung der ein-
-      satzspezifischen Voraussetzung für die Übertragung der einsatzspezifischen Funktion 
+      satzspezifischen 
       Funktion 
-       Abschluss der 
+       
+      Truppführerin  
+      oder Truppführer 
+      eines  
+      selbständigen 
+      Trupps 
+      Maschinistin  
+      oder Maschinist 
+      Staffelführerin  
+      oder Staffelführer 
+      Truppführerin  
+      oder Truppführer 
+      in einer Staffel 
+      oder einer Gruppe 
+      (auch als Teilein-
+      heiten eines  
+      Zuges)  
+      Gruppenführerin  
+      oder  
+      Gruppenführer 
+      Melderin oder  
+      Melder 
+      Zugführerin  
+      oder Zugführer 
+      X X2) X X X X 
+      Einsatzspezifische Funktionen nach § 10 Abs. 4 
+      Voraussetzung für die Übertragung der einsatzspezifischen Funktion 
+      Abschluss der 
       Abschluss der 
       modularen Abschluss des Abschluss des 
       modularen Abschluss des 
@@ -1658,52 +1765,59 @@ pages:
       oder zum führerʻ führerʻ 
       Truppmitglied 
       Truppführer 
-      Truppführerin   
-      oder Truppführer 
-      eines  X X X  
-      selbständigen 
-      Trupps 
        
-      Maschinistin  
-      X    
-      oder Maschinist 
-       
-      Staffelführerin  
       X X X  
-      oder Staffelführer 
-      Truppführerin   
-      oder Truppführer 
-      in einer Staffel 
-      oder einer Gruppe X X   
-      (auch als Teilein-
-      heiten eines  
-      Zuges)  
        
-      Gruppenführerin  
-      oder  X X X  
-      Gruppenführer 
+      X    
        
-      Melderin oder  
+      X X X  
+       
       X X   
-      Melder 
        
-      Zugführerin  
+      X X X  
+       
+      X X   
+       
       X X X X 
-      oder Zugführer 
     markdown: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 15 
        
       Regierungsbrand-
       meisterin oder Re-
-      X X2) X X X X 
       gierungsbrand-
       meister 
       **Teil C**  
-      **Einsatzspezifische Funktionen nach § 10 Abs. 4** 
       Bezeichnung der ein-
-      satzspezifischen Voraussetzung für die Übertragung der einsatzspezifischen Funktion 
+      satzspezifischen 
       Funktion 
-       Abschluss der 
+       
+      Truppführerin  
+      oder Truppführer 
+      eines  
+      selbständigen 
+      Trupps 
+      Maschinistin  
+      oder Maschinist 
+      Staffelführerin  
+      oder Staffelführer 
+      Truppführerin  
+      oder Truppführer 
+      in einer Staffel 
+      oder einer Gruppe 
+      (auch als Teilein-
+      heiten eines  
+      Zuges)  
+      Gruppenführerin  
+      oder  
+      Gruppenführer 
+      Melderin oder  
+      Melder 
+      Zugführerin  
+      oder Zugführer 
+      X X2) X X X X 
+      **Einsatzspezifische Funktionen nach § 10 Abs. 4** 
+      Voraussetzung für die Übertragung der einsatzspezifischen Funktion 
+      Abschluss der 
       Abschluss der 
       modularen Abschluss des Abschluss des 
       modularen Abschluss des 
@@ -1716,38 +1830,20 @@ pages:
       oder zum führerʻ führerʻ 
       Truppmitglied 
       Truppführer 
-      Truppführerin   
-      oder Truppführer 
-      eines  X X X  
-      selbständigen 
-      Trupps 
        
-      Maschinistin  
-      X    
-      oder Maschinist 
-       
-      Staffelführerin  
       X X X  
-      oder Staffelführer 
-      Truppführerin   
-      oder Truppführer 
-      in einer Staffel 
-      oder einer Gruppe X X   
-      (auch als Teilein-
-      heiten eines  
-      Zuges)  
        
-      Gruppenführerin  
-      oder  X X X  
-      Gruppenführer 
+      X    
        
-      Melderin oder  
+      X X X  
+       
       X X   
-      Melder 
        
-      Zugführerin  
+      X X X  
+       
+      X X   
+       
       X X X X 
-      oder Zugführer 
   -
     text: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
@@ -2058,17 +2154,17 @@ pages:
        
       Teil B: Verleihung von Dienstgraden aufgrund der Übertragung einer Regelfunktion  
       I. Erste Dienstgradgruppe , Feuerwehrfrau oder Feuerwehrmannʻ 
-      Dienst- Alter Dienstgrad 
-      grad- Dienstgrad Abkürzung Voraussetzungen für die Verleihung nach früherem 
-      stufe Recht 
-      1 2 3 4 5 
-      1. Hauptfeuer- HFF oder a) Gerätebeauftragte oder Gerätebeauftrag- Hauptfeuer-
-      wehrfrau HFM ter wehrfrau  
-      oder  oder  
+      Dienst-
+      grad- Dienstgrad Abkürzung Voraussetzungen für die Verleihung 
+      stufe 
+      1 2 3 4 
+      1. Hauptfeuer- HFF oder a) Gerätebeauftragte oder Gerätebeauftrag-
+      wehrfrau HFM ter 
+      oder  
       b) Atemschutzbeauftragte oder Atemschutz-
-      Hauptfeuer- Hauptfeuer-
+      Hauptfeuer-
       beauftragter 
-      wehrmann wehrmann 
+      wehrmann 
       c) Schriftführerin oder Schriftführer 
       d) Stellvertretende Gerätewartin oder Stell-
       vertretender Gerätewart 
@@ -2081,17 +2177,16 @@ pages:
       g) Stellvertretende Sicherheitsbeauftragte 
       oder Stellvertretender Sicherheitsbeauf-
       tragter auf Ebene eines Ortsteils 
-      2. Erste EHFF a) Gerätewartin oder Gerätewart Erste Haupt-
-      Haupt- oder feuerwehrfrau  
+      2. Erste EHFF a) Gerätewartin oder Gerätewart 
+      Haupt- oder 
       b) Atemschutzgerätewartin oder Atem-
-      feuerwehr- EHFM oder  
+      feuerwehr- EHFM 
       schutzgerätewart 
-      frau  Erster Haupt-
+      frau  
       c) Pressesprecherin oder Pressesprecher 
-      oder  feuerwehr-
+      oder  
       auf Ebene eines Ortsteils 
-      Erster mann 
-       
+      Erster 
       Haupt- 
       d) Sicherheitsbeauftragte oder Sicherheits-
       feuerwehr-
@@ -2104,22 +2199,38 @@ pages:
       oder Stellvertretender Kinderfeuerwehr-
       wart auf Ebene eines Ortsteils 
         
+      Alter Dienstgrad 
+      nach früherem 
+      Recht 
+      5 
+      Hauptfeuer-
+      wehrfrau  
+      oder  
+      Hauptfeuer-
+      wehrmann 
+      Erste Haupt-
+      feuerwehrfrau  
+      oder  
+      Erster Haupt-
+      feuerwehr-
+      mann 
+       
     markdown: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 18 
        
       **Teil B: Verleihung von Dienstgraden aufgrund der Übertragung einer Regelfunktion**  
       **I. Erste Dienstgradgruppe , Feuerwehrfrau oder Feuerwehrmannʻ** 
-      Dienst- Alter Dienstgrad 
-      grad- Dienstgrad Abkürzung Voraussetzungen für die Verleihung nach früherem 
-      stufe Recht 
-      1 2 3 4 5 
-      1. Hauptfeuer- HFF oder a) Gerätebeauftragte oder Gerätebeauftrag- Hauptfeuer-
-      wehrfrau HFM ****ter wehrfrau  
-      oder  oder  
+      Dienst-
+      grad- Dienstgrad Abkürzung Voraussetzungen für die Verleihung 
+      stufe 
+      1 2 3 4 
+      1. Hauptfeuer- HFF oder a) Gerätebeauftragte oder Gerätebeauftrag-
+      wehrfrau HFM ****ter 
+      oder  
       b) Atemschutzbeauftragte oder Atemschutz-
-      Hauptfeuer- Hauptfeuer-
+      Hauptfeuer-
       beauftragter 
-      wehrmann ****wehrmann 
+      wehrmann ****
       c) Schriftführerin oder Schriftführer 
       d) Stellvertretende Gerätewartin oder Stell-
       vertretender Gerätewart 
@@ -2132,17 +2243,16 @@ pages:
       g) Stellvertretende Sicherheitsbeauftragte 
       oder Stellvertretender Sicherheitsbeauf-
       tragter auf Ebene eines Ortsteils 
-      2. Erste EHFF a) Gerätewartin oder Gerätewart Erste Haupt-
-      Haupt- oder feuerwehrfrau  
+      2. Erste EHFF a) Gerätewartin oder Gerätewart 
+      Haupt- oder 
       b) Atemschutzgerätewartin oder Atem-
-      feuerwehr- EHFM oder  
+      feuerwehr- EHFM 
       schutzgerätewart 
-      frau  Erster Haupt-
+      frau  
       c) Pressesprecherin oder Pressesprecher 
-      oder  feuerwehr-
+      oder  
       auf Ebene eines Ortsteils 
-      Erster mann 
-       
+      Erster 
       Haupt- 
       d) Sicherheitsbeauftragte oder Sicherheits-
       feuerwehr-
@@ -2155,6 +2265,22 @@ pages:
       oder Stellvertretender Kinderfeuerwehr-
       wart auf Ebene eines Ortsteils 
         
+      Alter Dienstgrad 
+      nach früherem 
+      Recht 
+      5 
+      Hauptfeuer-
+      wehrfrau  
+      oder  
+      Hauptfeuer-
+      wehrmann 
+      Erste Haupt-
+      feuerwehrfrau  
+      oder  
+      Erster Haupt-
+      feuerwehr-
+      mann 
+       
   -
     text: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
@@ -2796,37 +2922,48 @@ pages:
       wehr- 
       emblem 
        
-      – Das Feuerwehremblem besteht aus der altsilberfarbigen Darstellung eines Feu-
-      erwehrhelms mit Kinnriemen und Nackenleder und einer hinter dem Helm mit ei-
-      nem Feuerwehrbeil gekreuzten Picke.  
-      – Es wird am oberen Rand der Schirmmütze in der Mitte des Vorderteils auf den 
-      zur Montage angebrachten unteren Druckknopfhälften oder dem Platzhalter ge-
-      tragen 
-      – Die Beamtinnen und Beamten des Feuerwehrdienstes können anstatt des Feu-
-      erwehremblems eine schwarz-rot-goldene Kokarde tragen. 
-      – In der Dienstgradgruppe ,Brandschutzleiterinnen oder Brandschutzleiterʻ und in 
-      den Sonderdienstgraden nach § 11 Abs. 10 wird ein goldfarbiges Feuerweh-
-      remblem getragen. 
+      – 
+      – 
+      – 
+      – 
       Landes- 
       emblem 
        
-      – Das Landesemblem führt das Niedersachsenross in silberfarbiger Darstellung 
+      – 
+      – 
+      – 
+      – 
+      – 
+      – 
+       
+      Das Feuerwehremblem besteht aus der altsilberfarbigen Darstellung eines Feu-
+      erwehrhelms mit Kinnriemen und Nackenleder und einer hinter dem Helm mit ei-
+      nem Feuerwehrbeil gekreuzten Picke.  
+      Es wird am oberen Rand der Schirmmütze in der Mitte des Vorderteils auf den 
+      zur Montage angebrachten unteren Druckknopfhälften oder dem Platzhalter ge-
+      tragen 
+      Die Beamtinnen und Beamten des Feuerwehrdienstes können anstatt des Feu-
+      erwehremblems eine schwarz-rot-goldene Kokarde tragen. 
+      In der Dienstgradgruppe ,Brandschutzleiterinnen oder Brandschutzleiterʻ und in 
+      den Sonderdienstgraden nach § 11 Abs. 10 wird ein goldfarbiges Feuerweh-
+      remblem getragen. 
+      Das Landesemblem führt das Niedersachsenross in silberfarbiger Darstellung 
       auf rotem Untergrund. 
-      – Größe des Landesemblems: 18 mm (Breite) x 21 mm (Höhe) 
-      – Das Landesemblem ist umgeben von einem 5 mm breiten, oben offenen Kranz 
+      Größe des Landesemblems: 18 mm (Breite) x 21 mm (Höhe) 
+      Das Landesemblem ist umgeben von einem 5 mm breiten, oben offenen Kranz 
       aus metallenen Eichenblättern. Der Kranz ist auf beiden Seiten von 
       mehrflächigen, der Mützenform entsprechend nach innen gebogenen, 
       metallenen Flügeln begrenzt.  
-      – Das Abzeichen ist aus Emaille Tombak und aus altsilberfarbigem Metall 
+      Das Abzeichen ist aus Emaille Tombak und aus altsilberfarbigem Metall 
       hergestellt und mit farblosem Lack überzogen. Auf der Rückseite sind zwei 
       obere Druckknopfhälften bzw. Durchstechsplinte angebracht. 
-      – Es wird in der Mitte der Mütze mittig zwischen dem Feuerwehremblem und der 
+      Es wird in der Mitte der Mütze mittig zwischen dem Feuerwehremblem und der 
       Mützenkordel getragen. 
-      – In der Dienstgradgruppe ,Brandschutzleiterinnen oder Brandschutzleiterʻ und in 
+      In der Dienstgradgruppe ,Brandschutzleiterinnen oder Brandschutzleiterʻ und in 
       den Sonderdienstgraden nach § 11 Abs. 10 wird das Landesemblem auf einem 
       Abzeichen aus goldfarbigem Metall mit dem Niedersachsenross in 
       metallgoldfarbiger Darstellung auf rotem Untergrund getragen. 
-        
+       
     markdown: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 24 
        
@@ -2834,37 +2971,48 @@ pages:
       wehr- 
       emblem 
        
-      – Das Feuerwehremblem besteht aus der altsilberfarbigen Darstellung eines Feu-
-      erwehrhelms mit Kinnriemen und Nackenleder und einer hinter dem Helm mit ei-
-      nem Feuerwehrbeil gekreuzten Picke.  
-      – Es wird am oberen Rand der Schirmmütze in der Mitte des Vorderteils auf den 
-      zur Montage angebrachten unteren Druckknopfhälften oder dem Platzhalter ge-
-      tragen 
-      – Die Beamtinnen und Beamten des Feuerwehrdienstes können anstatt des Feu-
-      erwehremblems eine schwarz-rot-goldene Kokarde tragen. 
-      – In der Dienstgradgruppe ,Brandschutzleiterinnen oder Brandschutzleiterʻ und in 
-      den Sonderdienstgraden nach § 11 Abs. 10 wird ein goldfarbiges Feuerweh-
-      remblem getragen. 
+      – 
+      – 
+      – 
+      – 
       Landes- 
       emblem 
        
-      – Das Landesemblem führt das Niedersachsenross in silberfarbiger Darstellung 
+      – 
+      – 
+      – 
+      – 
+      – 
+      – 
+       
+      Das Feuerwehremblem besteht aus der altsilberfarbigen Darstellung eines Feu-
+      erwehrhelms mit Kinnriemen und Nackenleder und einer hinter dem Helm mit ei-
+      nem Feuerwehrbeil gekreuzten Picke.  
+      Es wird am oberen Rand der Schirmmütze in der Mitte des Vorderteils auf den 
+      zur Montage angebrachten unteren Druckknopfhälften oder dem Platzhalter ge-
+      tragen 
+      Die Beamtinnen und Beamten des Feuerwehrdienstes können anstatt des Feu-
+      erwehremblems eine schwarz-rot-goldene Kokarde tragen. 
+      In der Dienstgradgruppe ,Brandschutzleiterinnen oder Brandschutzleiterʻ und in 
+      den Sonderdienstgraden nach § 11 Abs. 10 wird ein goldfarbiges Feuerweh-
+      remblem getragen. 
+      Das Landesemblem führt das Niedersachsenross in silberfarbiger Darstellung 
       auf rotem Untergrund. 
-      – Größe des Landesemblems: 18 mm (Breite) x 21 mm (Höhe) 
-      – Das Landesemblem ist umgeben von einem 5 mm breiten, oben offenen Kranz 
+      Größe des Landesemblems: 18 mm (Breite) x 21 mm (Höhe) 
+      Das Landesemblem ist umgeben von einem 5 mm breiten, oben offenen Kranz 
       aus metallenen Eichenblättern. Der Kranz ist auf beiden Seiten von 
       mehrflächigen, der Mützenform entsprechend nach innen gebogenen, 
       metallenen Flügeln begrenzt.  
-      – Das Abzeichen ist aus Emaille Tombak und aus altsilberfarbigem Metall 
+      Das Abzeichen ist aus Emaille Tombak und aus altsilberfarbigem Metall 
       hergestellt und mit farblosem Lack überzogen. Auf der Rückseite sind zwei 
       obere Druckknopfhälften bzw. Durchstechsplinte angebracht. 
-      – Es wird in der Mitte der Mütze mittig zwischen dem Feuerwehremblem und der 
+      Es wird in der Mitte der Mütze mittig zwischen dem Feuerwehremblem und der 
       Mützenkordel getragen. 
-      – In der Dienstgradgruppe ,Brandschutzleiterinnen oder Brandschutzleiterʻ und in 
+      In der Dienstgradgruppe ,Brandschutzleiterinnen oder Brandschutzleiterʻ und in 
       den Sonderdienstgraden nach § 11 Abs. 10 wird das Landesemblem auf einem 
       Abzeichen aus goldfarbigem Metall mit dem Niedersachsenross in 
       metallgoldfarbiger Darstellung auf rotem Untergrund getragen. 
-        
+       
     images:
       - page_23_image_0.jpg
       - page_23_image_1.jpg
@@ -2972,77 +3120,46 @@ pages:
       Nummer 2 Buchst. b) 
       3. a) Hemd lang für  
       männliche Mitglieder 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
       Seite 26 
-      Stoff aus Mischgewebe 
-      dunkelblau 
-      einreihig 
-      Damenschnitt mit drei Knöpfen zum Durchknöpfen 
-      Knöpfe silberfarbig, Hammerschlagoberfläche oder gekörnt 
-      Kragen aus Jackenstoff für offene Trageweise 
-      zwei blinde Paspeltaschen beidseitig  
-      Schriftzug ,Feuerwehrʻ unterhalb der linken Paspeltasche 
-      zwei eingesetzte Seitentaschen mit Patten  
-      ab Dienstgrad , Abschnittsbrandinspektorinʻ oder ,Abschnitts-
+      – Stoff aus Mischgewebe 
+      – dunkelblau 
+      – einreihig 
+      – Damenschnitt mit drei Knöpfen zum Durchknöpfen 
+      – Knöpfe silberfarbig, Hammerschlagoberfläche oder gekörnt 
+      – Kragen aus Jackenstoff für offene Trageweise 
+      – zwei blinde Paspeltaschen beidseitig  
+      – Schriftzug ,Feuerwehrʻ unterhalb der linken Paspeltasche 
+      – zwei eingesetzte Seitentaschen mit Patten  
+      – ab Dienstgrad , Abschnittsbrandinspektorinʻ oder ,Abschnitts-
       brandinspektorʻ Knöpfe goldfarbig, Hammerschlagoberfläche 
       oder gekörnt 
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch 
-      Gewebetunnel links und rechts zur Aufnahme der Schulter-
+      – Gewebetunnel links und rechts zur Aufnahme der Schulter-
       klappen 
-      im gleichen Stoff und in der gleichen Farbe wie die Uniform- 
+      – im gleichen Stoff und in der gleichen Farbe wie die Uniform- 
       jacke nach Nummer 1 Buchst. a  
-      Herrenschnitt   
-      Gürtelschlaufen 
-      zwei Seitentaschen als Flügeltaschen 
-      eine Gesäßtasche rechts als Paspeltasche 
-      im gleichen Stoff und in der gleichen Farbe wie die Uniform- 
+      – Herrenschnitt   
+      – Gürtelschlaufen 
+      – zwei Seitentaschen als Flügeltaschen 
+      – eine Gesäßtasche rechts als Paspeltasche 
+      – im gleichen Stoff und in der gleichen Farbe wie die Uniform- 
       jacke nach Nummer 1 Buchst. b 
-      Damenschnitt  
-      Gürtelschlaufen 
-      zwei Seitentaschen als Flügeltaschen 
-      im gleichen Stoff und in der gleichen Farbe wie die Uniform- 
+      – Damenschnitt  
+      – Gürtelschlaufen 
+      – zwei Seitentaschen als Flügeltaschen 
+      – im gleichen Stoff und in der gleichen Farbe wie die Uniform- 
       jacke nach Nummer 1 Buchst. b 
-      gerader Schnitt 
-      knielang  
-      Bewegungsschlitz hinten  
-      weiß 
-      1/1 Armlänge 
-      Kentkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      nach Festlegung des Trägers der Feuerwehr zusätzliche Pas-
+      – gerader Schnitt 
+      – knielang  
+      – Bewegungsschlitz hinten  
+      – weiß 
+      – 1/1 Armlänge 
+      – Kentkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – nach Festlegung des Trägers der Feuerwehr zusätzliche Pas-
       peltasche linksseitig 
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch  
     markdown: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
@@ -3062,77 +3179,46 @@ pages:
       Nummer 2 Buchst. b) 
       3. a) Hemd lang für  
       männliche Mitglieder 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
       Seite 26 
-      Stoff aus Mischgewebe 
-      dunkelblau 
-      einreihig 
-      Damenschnitt mit drei Knöpfen zum Durchknöpfen 
-      Knöpfe silberfarbig, Hammerschlagoberfläche oder gekörnt 
-      Kragen aus Jackenstoff für offene Trageweise 
-      zwei blinde Paspeltaschen beidseitig  
-      Schriftzug ,Feuerwehrʻ unterhalb der linken Paspeltasche 
-      zwei eingesetzte Seitentaschen mit Patten  
-      ab Dienstgrad , Abschnittsbrandinspektorinʻ oder ,Abschnitts-
+      – Stoff aus Mischgewebe 
+      – dunkelblau 
+      – einreihig 
+      – Damenschnitt mit drei Knöpfen zum Durchknöpfen 
+      – Knöpfe silberfarbig, Hammerschlagoberfläche oder gekörnt 
+      – Kragen aus Jackenstoff für offene Trageweise 
+      – zwei blinde Paspeltaschen beidseitig  
+      – Schriftzug ,Feuerwehrʻ unterhalb der linken Paspeltasche 
+      – zwei eingesetzte Seitentaschen mit Patten  
+      – ab Dienstgrad , Abschnittsbrandinspektorinʻ oder ,Abschnitts-
       brandinspektorʻ Knöpfe goldfarbig, Hammerschlagoberfläche 
       oder gekörnt 
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch 
-      Gewebetunnel links und rechts zur Aufnahme der Schulter-
+      – Gewebetunnel links und rechts zur Aufnahme der Schulter-
       klappen 
-      im gleichen Stoff und in der gleichen Farbe wie die Uniform- 
+      – im gleichen Stoff und in der gleichen Farbe wie die Uniform- 
       jacke nach Nummer 1 Buchst. a  
-      Herrenschnitt   
-      Gürtelschlaufen 
-      zwei Seitentaschen als Flügeltaschen 
-      eine Gesäßtasche rechts als Paspeltasche 
-      im gleichen Stoff und in der gleichen Farbe wie die Uniform- 
+      – Herrenschnitt   
+      – Gürtelschlaufen 
+      – zwei Seitentaschen als Flügeltaschen 
+      – eine Gesäßtasche rechts als Paspeltasche 
+      – im gleichen Stoff und in der gleichen Farbe wie die Uniform- 
       jacke nach Nummer 1 Buchst. b 
-      Damenschnitt  
-      Gürtelschlaufen 
-      zwei Seitentaschen als Flügeltaschen 
-      im gleichen Stoff und in der gleichen Farbe wie die Uniform- 
+      – Damenschnitt  
+      – Gürtelschlaufen 
+      – zwei Seitentaschen als Flügeltaschen 
+      – im gleichen Stoff und in der gleichen Farbe wie die Uniform- 
       jacke nach Nummer 1 Buchst. b 
-      gerader Schnitt 
-      knielang  
-      Bewegungsschlitz hinten  
-      weiß 
-      1/1 Armlänge 
-      Kentkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      nach Festlegung des Trägers der Feuerwehr zusätzliche Pas-
+      – gerader Schnitt 
+      – knielang  
+      – Bewegungsschlitz hinten  
+      – weiß 
+      – 1/1 Armlänge 
+      – Kentkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – nach Festlegung des Trägers der Feuerwehr zusätzliche Pas-
       peltasche linksseitig 
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch  
   -
     text: |-
@@ -3154,78 +3240,49 @@ pages:
       6. Socken 
       7. Krawatte 
       8. Gürtel 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
       Seite 27 
-      Gewebetunnel links und rechts zur für Schulterklappenadapter 
+      – Gewebetunnel links und rechts zur für Schulterklappenadapter 
       zur Aufnahme der Überziehschlaufen; alternativ Schulterklap-
       pen zur Aufnahme der Überziehschlaufen 
-      weiß 
-      1/1 Armlänge 
-      Blusenkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – weiß 
+      – 1/1 Armlänge 
+      – Blusenkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter z ur 
+      – Gewebetunnel links und rechts für Schulterklappenadapter z ur 
       Aufnahme der Überziehschlaufen; alternativ Schulterklappen 
       zur Aufnahme der Überziehschlaufen 
-      weiß 
-      1/2 Armlänge 
-      Kentkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      nach Festlegung des Trägers der Feuerwehr zusätzliche Pas-
+      – weiß 
+      – 1/2 Armlänge 
+      – Kentkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – nach Festlegung des Trägers der Feuerwehr zusätzliche Pas-
       peltasche linksseitig  
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter zur 
+      – Gewebetunnel links und rechts für Schulterklappenadapter zur 
       Aufnahme der Überziehschlaufen; alternativ Schulterklappen 
       zur Aufnahme der Überziehschlaufen 
-      weiß 
-      1/2 Armlänge 
-      Blusenkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – weiß 
+      – 1/2 Armlänge 
+      – Blusenkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter zur 
+      – Gewebetunnel links und rechts für Schulterklappenadapter zur 
       Aufnahme der Überziehschlaufen; alternativ Schulterklappen 
       zur Aufnahme der Überziehschlaufen 
-      schwarz 
-      Halbschuhe 
-      schwarz 
-      Halbschuhe oder Pumps 
-      schwarz  
-      in der gleichen Farbe wie Uniformjacke nach Nummer 1 
+      – schwarz 
+      – Halbschuhe 
+      – schwarz 
+      – Halbschuhe oder Pumps 
+      – schwarz  
+      – in der gleichen Farbe wie Uniformjacke nach Nummer 1 
       Buchst. a ohne Aufdrucke 
-      Ledergürtel (oder Alternativmaterial in Lederoptik) 
-      schwarz 
-      40 mm breit 
+      – Ledergürtel (oder Alternativmaterial in Lederoptik) 
+      – schwarz 
+      – 40 mm breit 
     markdown: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
        
@@ -3245,78 +3302,49 @@ pages:
       6. Socken 
       7. Krawatte 
       8. Gürtel 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
       Seite 27 
-      Gewebetunnel links und rechts zur für Schulterklappenadapter 
+      – Gewebetunnel links und rechts zur für Schulterklappenadapter 
       zur Aufnahme der Überziehschlaufen; alternativ Schulterklap-
       pen zur Aufnahme der Überziehschlaufen 
-      weiß 
-      1/1 Armlänge 
-      Blusenkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – weiß 
+      – 1/1 Armlänge 
+      – Blusenkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter z ur 
+      – Gewebetunnel links und rechts für Schulterklappenadapter z ur 
       Aufnahme der Überziehschlaufen; alternativ Schulterklappen 
       zur Aufnahme der Überziehschlaufen 
-      weiß 
-      1/2 Armlänge 
-      Kentkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      nach Festlegung des Trägers der Feuerwehr zusätzliche Pas-
+      – weiß 
+      – 1/2 Armlänge 
+      – Kentkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – nach Festlegung des Trägers der Feuerwehr zusätzliche Pas-
       peltasche linksseitig  
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter zur 
+      – Gewebetunnel links und rechts für Schulterklappenadapter zur 
       Aufnahme der Überziehschlaufen; alternativ Schulterklappen 
       zur Aufnahme der Überziehschlaufen 
-      weiß 
-      1/2 Armlänge 
-      Blusenkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – weiß 
+      – 1/2 Armlänge 
+      – Blusenkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter zur 
+      – Gewebetunnel links und rechts für Schulterklappenadapter zur 
       Aufnahme der Überziehschlaufen; alternativ Schulterklappen 
       zur Aufnahme der Überziehschlaufen 
-      schwarz 
-      Halbschuhe 
-      schwarz 
-      Halbschuhe oder Pumps 
-      schwarz  
-      in der gleichen Farbe wie Uniformjacke nach Nummer 1 
+      – schwarz 
+      – Halbschuhe 
+      – schwarz 
+      – Halbschuhe oder Pumps 
+      – schwarz  
+      – in der gleichen Farbe wie Uniformjacke nach Nummer 1 
       Buchst. a ohne Aufdrucke 
-      Ledergürtel (oder Alternativmaterial in Lederoptik) 
-      schwarz 
-      40 mm breit 
+      – Ledergürtel (oder Alternativmaterial in Lederoptik) 
+      – schwarz 
+      – 40 mm breit 
   -
     text: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
@@ -3330,72 +3358,43 @@ pages:
       weibliche Mitglieder 
         2.  a) Softshelljacke für 
       männliche Mitglieder 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
       Seite 28 
       Tagesdienstkleidung 
       Beschreibung  
-      dunkelblau 
-      Herrenschnitt 
-      Zwei-Wege- Reißverschluss, abgedeckt  
-      zwei paspelierte Brusttaschen mit Reißverschluss 
-      Schriftzug ,Feuerwehrʻ auf der linken Brustseite 
-      Ärmelabschluss mit Reißverschluss zur Weitenregulierung 
-      Saumabschluss mit Kordel zur Weitenregulierung 
-      Wappen werden auf dem linken Oberärmel getragen, mit 
+      – dunkelblau 
+      – Herrenschnitt 
+      – Zwei-Wege- Reißverschluss, abgedeckt  
+      – zwei paspelierte Brusttaschen mit Reißverschluss 
+      – Schriftzug ,Feuerwehrʻ auf der linken Brustseite 
+      – Ärmelabschluss mit Reißverschluss zur Weitenregulierung 
+      – Saumabschluss mit Kordel zur Weitenregulierung 
+      – Wappen werden auf dem linken Oberärmel getragen, mit 
       Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von Über-
+      – Schulterklappen links und rechts zur Aufnahme von Über-
       ziehschlaufen 
-      dunkelblau 
-      Damenschnitt 
-      Zwei-Wege- Reißverschluss, abgedeckt  
-      zwei paspelierte Brusttaschen mit Reißverschluss 
-      Schriftzug ,Feuerwehrʻ auf der linken Brustseite  
-      Ärmelabschluss mit Reißverschluss zur Weitenregulierung 
-      Saumabschluss mit Kordel zur Weitenregulierung 
-      Wappen werden auf dem linken Oberärmel getragen, mit 
+      – dunkelblau 
+      – Damenschnitt 
+      – Zwei-Wege- Reißverschluss, abgedeckt  
+      – zwei paspelierte Brusttaschen mit Reißverschluss 
+      – Schriftzug ,Feuerwehrʻ auf der linken Brustseite  
+      – Ärmelabschluss mit Reißverschluss zur Weitenregulierung 
+      – Saumabschluss mit Kordel zur Weitenregulierung 
+      – Wappen werden auf dem linken Oberärmel getragen, mit 
       Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von Über-
+      – Schulterklappen links und rechts zur Aufnahme von Über-
       ziehschlaufen 
-      dunkelblau 
-      Herrenschnitt 
-      Reißverschluss, abgedeckt  
-      unter der Reißverschlussabdeckung eine Napoleontasche 
-      zwei Brusttaschen mit Patten mit Klettflauschverschluss 
-      Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
-      zwei schräge Leistentaschen mit Reißverschluss 
-      Ärmelabschluss mit Manschette zur Weitenregulierung 
-      nach Festlegung des Trägers der Feuerwehr mit Kapuze 
-      Wappen werden auf dem linken Oberärmel getragen, mit 
+      – dunkelblau 
+      – Herrenschnitt 
+      – Reißverschluss, abgedeckt  
+      – unter der Reißverschlussabdeckung eine Napoleontasche 
+      – zwei Brusttaschen mit Patten mit Klettflauschverschluss 
+      – Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
+      – zwei schräge Leistentaschen mit Reißverschluss 
+      – Ärmelabschluss mit Manschette zur Weitenregulierung 
+      – nach Festlegung des Trägers der Feuerwehr mit Kapuze 
+      – Wappen werden auf dem linken Oberärmel getragen, mit 
       Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von Über-
+      – Schulterklappen links und rechts zur Aufnahme von Über-
       ziehschlaufen 
     markdown: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
@@ -3409,72 +3408,43 @@ pages:
       weibliche Mitglieder 
         2.  a) Softshelljacke für 
       männliche Mitglieder 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
       Seite 28 
       **Tagesdienstkleidung** 
       Beschreibung  
-      dunkelblau 
-      Herrenschnitt 
-      Zwei-Wege- Reißverschluss, abgedeckt  
-      zwei paspelierte Brusttaschen mit Reißverschluss 
-      Schriftzug ,Feuerwehrʻ auf der linken Brustseite 
-      Ärmelabschluss mit Reißverschluss zur Weitenregulierung 
-      Saumabschluss mit Kordel zur Weitenregulierung 
-      Wappen werden auf dem linken Oberärmel getragen, mit 
+      – dunkelblau 
+      – Herrenschnitt 
+      – Zwei-Wege- Reißverschluss, abgedeckt  
+      – zwei paspelierte Brusttaschen mit Reißverschluss 
+      – Schriftzug ,Feuerwehrʻ auf der linken Brustseite 
+      – Ärmelabschluss mit Reißverschluss zur Weitenregulierung 
+      – Saumabschluss mit Kordel zur Weitenregulierung 
+      – Wappen werden auf dem linken Oberärmel getragen, mit 
       Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von Über-
+      – Schulterklappen links und rechts zur Aufnahme von Über-
       ziehschlaufen 
-      dunkelblau 
-      Damenschnitt 
-      Zwei-Wege- Reißverschluss, abgedeckt  
-      zwei paspelierte Brusttaschen mit Reißverschluss 
-      Schriftzug ,Feuerwehrʻ auf der linken Brustseite  
-      Ärmelabschluss mit Reißverschluss zur Weitenregulierung 
-      Saumabschluss mit Kordel zur Weitenregulierung 
-      Wappen werden auf dem linken Oberärmel getragen, mit 
+      – dunkelblau 
+      – Damenschnitt 
+      – Zwei-Wege- Reißverschluss, abgedeckt  
+      – zwei paspelierte Brusttaschen mit Reißverschluss 
+      – Schriftzug ,Feuerwehrʻ auf der linken Brustseite  
+      – Ärmelabschluss mit Reißverschluss zur Weitenregulierung 
+      – Saumabschluss mit Kordel zur Weitenregulierung 
+      – Wappen werden auf dem linken Oberärmel getragen, mit 
       Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von Über-
+      – Schulterklappen links und rechts zur Aufnahme von Über-
       ziehschlaufen 
-      dunkelblau 
-      Herrenschnitt 
-      Reißverschluss, abgedeckt  
-      unter der Reißverschlussabdeckung eine Napoleontasche 
-      zwei Brusttaschen mit Patten mit Klettflauschverschluss 
-      Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
-      zwei schräge Leistentaschen mit Reißverschluss 
-      Ärmelabschluss mit Manschette zur Weitenregulierung 
-      nach Festlegung des Trägers der Feuerwehr mit Kapuze 
-      Wappen werden auf dem linken Oberärmel getragen, mit 
+      – dunkelblau 
+      – Herrenschnitt 
+      – Reißverschluss, abgedeckt  
+      – unter der Reißverschlussabdeckung eine Napoleontasche 
+      – zwei Brusttaschen mit Patten mit Klettflauschverschluss 
+      – Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
+      – zwei schräge Leistentaschen mit Reißverschluss 
+      – Ärmelabschluss mit Manschette zur Weitenregulierung 
+      – nach Festlegung des Trägers der Feuerwehr mit Kapuze 
+      – Wappen werden auf dem linken Oberärmel getragen, mit 
       Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von Über-
+      – Schulterklappen links und rechts zur Aufnahme von Über-
       ziehschlaufen 
   -
     text: |-
@@ -3487,80 +3457,47 @@ pages:
        
       b) Blouson für  
       weibliche Mitglieder 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
       Seite 29 
-      dunkelblau 
-      Damenschnitt 
-      Reißverschluss, abgedeckt  
-      unter der Reißverschlussabdeckung eine Napoleontasche 
-      zwei Brusttasche mit Patten mit Klettflauschverschluss 
-      Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
-      zwei schräge Leistentaschen mit Reißverschluss 
-      Ärmelabschluss mit Manschette zur Weitenregulierung 
-      nach Festlegung des Trägers der Feuerwehr mit Kapuze 
-      Wappen werden auf dem linken Oberärmel getragen,  
+      – dunkelblau 
+      – Damenschnitt 
+      – Reißverschluss, abgedeckt  
+      – unter der Reißverschlussabdeckung eine Napoleontasche 
+      – zwei Brusttasche mit Patten mit Klettflauschverschluss 
+      – Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
+      – zwei schräge Leistentaschen mit Reißverschluss 
+      – Ärmelabschluss mit Manschette zur Weitenregulierung 
+      – nach Festlegung des Trägers der Feuerwehr mit Kapuze 
+      – Wappen werden auf dem linken Oberärmel getragen,  
       mit Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von  
+      – Schulterklappen links und rechts zur Aufnahme von  
       Überziehschlaufen 
-      dunkelblau 
-      Herrenschnitt 
-      Reißverschluss, abgedeckt  
-      unter der Reißverschlussabdeckung eine Napoleontasche 
-      zwei Brusttaschen mit Patten mit Klettflauschverschluss 
-      Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
-      zwei schräge Leistentaschen 
-      Ärmelabschluss mit Manschette zur Weitenregulierung 
-      Saumabschluss mit Blousonbündchen mit seitlichen  
+      – dunkelblau 
+      – Herrenschnitt 
+      – Reißverschluss, abgedeckt  
+      – unter der Reißverschlussabdeckung eine Napoleontasche 
+      – zwei Brusttaschen mit Patten mit Klettflauschverschluss 
+      – Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
+      – zwei schräge Leistentaschen 
+      – Ärmelabschluss mit Manschette zur Weitenregulierung 
+      – Saumabschluss mit Blousonbündchen mit seitlichen  
       Gummizügen 
-      Wappen werden auf dem linken Oberärmel getragen,  
+      – Wappen werden auf dem linken Oberärmel getragen,  
       mit Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von  
+      – Schulterklappen links und rechts zur Aufnahme von  
       Überziehschlaufen 
-      dunkelblau 
-      Damenschnitt 
-      Reißverschluss, abgedeckt  
-      unter der Reißverschlussabdeckung eine Napoleontasche 
-      zwei Brusttaschen mit Patten mit Klettflauschverschluss 
-      Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
-      zwei schräge Leistentaschen 
-      Ärmelabschluss mit Manschette zur Weitenregulierung 
-      Saumabschluss mit Blousonbündchen mit seitlichen  
+      – dunkelblau 
+      – Damenschnitt 
+      – Reißverschluss, abgedeckt  
+      – unter der Reißverschlussabdeckung eine Napoleontasche 
+      – zwei Brusttaschen mit Patten mit Klettflauschverschluss 
+      – Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
+      – zwei schräge Leistentaschen 
+      – Ärmelabschluss mit Manschette zur Weitenregulierung 
+      – Saumabschluss mit Blousonbündchen mit seitlichen  
       Gummizügen 
-      Wappen werden auf dem linken Oberärmel getragen,  
+      – Wappen werden auf dem linken Oberärmel getragen,  
       mit Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von  
+      – Schulterklappen links und rechts zur Aufnahme von  
       Überziehschlaufen 
     markdown: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
@@ -3572,80 +3509,47 @@ pages:
        
       b) Blouson für  
       weibliche Mitglieder 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
       Seite 29 
-      dunkelblau 
-      Damenschnitt 
-      Reißverschluss, abgedeckt  
-      unter der Reißverschlussabdeckung eine Napoleontasche 
-      zwei Brusttasche mit Patten mit Klettflauschverschluss 
-      Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
-      zwei schräge Leistentaschen mit Reißverschluss 
-      Ärmelabschluss mit Manschette zur Weitenregulierung 
-      nach Festlegung des Trägers der Feuerwehr mit Kapuze 
-      Wappen werden auf dem linken Oberärmel getragen,  
+      – dunkelblau 
+      – Damenschnitt 
+      – Reißverschluss, abgedeckt  
+      – unter der Reißverschlussabdeckung eine Napoleontasche 
+      – zwei Brusttasche mit Patten mit Klettflauschverschluss 
+      – Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
+      – zwei schräge Leistentaschen mit Reißverschluss 
+      – Ärmelabschluss mit Manschette zur Weitenregulierung 
+      – nach Festlegung des Trägers der Feuerwehr mit Kapuze 
+      – Wappen werden auf dem linken Oberärmel getragen,  
       mit Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von  
+      – Schulterklappen links und rechts zur Aufnahme von  
       Überziehschlaufen 
-      dunkelblau 
-      Herrenschnitt 
-      Reißverschluss, abgedeckt  
-      unter der Reißverschlussabdeckung eine Napoleontasche 
-      zwei Brusttaschen mit Patten mit Klettflauschverschluss 
-      Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
-      zwei schräge Leistentaschen 
-      Ärmelabschluss mit Manschette zur Weitenregulierung 
-      Saumabschluss mit Blousonbündchen mit seitlichen  
+      – dunkelblau 
+      – Herrenschnitt 
+      – Reißverschluss, abgedeckt  
+      – unter der Reißverschlussabdeckung eine Napoleontasche 
+      – zwei Brusttaschen mit Patten mit Klettflauschverschluss 
+      – Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
+      – zwei schräge Leistentaschen 
+      – Ärmelabschluss mit Manschette zur Weitenregulierung 
+      – Saumabschluss mit Blousonbündchen mit seitlichen  
       Gummizügen 
-      Wappen werden auf dem linken Oberärmel getragen,  
+      – Wappen werden auf dem linken Oberärmel getragen,  
       mit Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von  
+      – Schulterklappen links und rechts zur Aufnahme von  
       Überziehschlaufen 
-      dunkelblau 
-      Damenschnitt 
-      Reißverschluss, abgedeckt  
-      unter der Reißverschlussabdeckung eine Napoleontasche 
-      zwei Brusttaschen mit Patten mit Klettflauschverschluss 
-      Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
-      zwei schräge Leistentaschen 
-      Ärmelabschluss mit Manschette zur Weitenregulierung 
-      Saumabschluss mit Blousonbündchen mit seitlichen  
+      – dunkelblau 
+      – Damenschnitt 
+      – Reißverschluss, abgedeckt  
+      – unter der Reißverschlussabdeckung eine Napoleontasche 
+      – zwei Brusttaschen mit Patten mit Klettflauschverschluss 
+      – Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche  
+      – zwei schräge Leistentaschen 
+      – Ärmelabschluss mit Manschette zur Weitenregulierung 
+      – Saumabschluss mit Blousonbündchen mit seitlichen  
       Gummizügen 
-      Wappen werden auf dem linken Oberärmel getragen,  
+      – Wappen werden auf dem linken Oberärmel getragen,  
       mit Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von  
+      – Schulterklappen links und rechts zur Aufnahme von  
       Überziehschlaufen 
   -
     text: |-
@@ -3659,73 +3563,44 @@ pages:
       weibliche Mitglieder 
         6. a) Hemd lang für  
       männliche Mitglieder 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
       Seite 30 
-      dunkelblau 
-      Reißverschluss 
-      aufstellbarer Kragen 
-      Brusttasche links mit Patte 
-      Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche 
-      Ärmelabschluss zur Längenregulierung 
-      Schultern, Seitennähte und Unterarme durch Gewebebe-
+      – dunkelblau 
+      – Reißverschluss 
+      – aufstellbarer Kragen 
+      – Brusttasche links mit Patte 
+      – Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche 
+      – Ärmelabschluss zur Längenregulierung 
+      – Schultern, Seitennähte und Unterarme durch Gewebebe-
       satz verstärkt 
-      Wappen werden auf dem linken Oberärmel getragen,  
+      – Wappen werden auf dem linken Oberärmel getragen,  
       mit Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von Über-
+      – Schulterklappen links und rechts zur Aufnahme von Über-
       ziehschlaufen 
-      dunkelblau 
-      Herrenschnitt 
-      Cargohose  
-      zwei schräge Leistentaschen vorne 
-      zwei Gesäßtaschen mit Knopfverschluss 
-      zwei seitlich auf den Hosenbeinen aufgesetzte Taschen mit 
+      – dunkelblau 
+      – Herrenschnitt 
+      – Cargohose  
+      – zwei schräge Leistentaschen vorne 
+      – zwei Gesäßtaschen mit Knopfverschluss 
+      – zwei seitlich auf den Hosenbeinen aufgesetzte Taschen mit 
       Patten und verdeckten Druckknöpfen oder Klettverschluss  
-      nach Festlegung des Trägers der Feuerwehr mit Bundwei-
+      – nach Festlegung des Trägers der Feuerwehr mit Bundwei-
       tenregulierung 
-      dunkelblau 
-      Damenschnitt  
-      Cargohose  
-      zwei schräge Leistentaschen vorne 
-      zwei Gesäßtaschen mit Knopfverschluss 
-      zwei seitlich auf den Hosenbeinen aufgesetzte Taschen mit  
+      – dunkelblau 
+      – Damenschnitt  
+      – Cargohose  
+      – zwei schräge Leistentaschen vorne 
+      – zwei Gesäßtaschen mit Knopfverschluss 
+      – zwei seitlich auf den Hosenbeinen aufgesetzte Taschen mit  
       Patten und verdeckten Druckknöpfen oder Klettverschluss  
-      weiß oder dunkelblau 
-      1/1 Armlänge 
-      Kentkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      nach Festlegung des Trägers der Feuerwehr zusätzliche  
+      – weiß oder dunkelblau 
+      – 1/1 Armlänge 
+      – Kentkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – nach Festlegung des Trägers der Feuerwehr zusätzliche  
       Paspeltasche linksseitig  
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter 
+      – Gewebetunnel links und rechts für Schulterklappenadapter 
       zur Aufnahme der Überziehschlaufen; alternativ Schulter-
       klappen zur Aufnahme der Überziehschlaufen 
     markdown: |-
@@ -3739,73 +3614,44 @@ pages:
       weibliche Mitglieder 
         6. a) Hemd lang für  
       männliche Mitglieder 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
       Seite 30 
-      dunkelblau 
-      Reißverschluss 
-      aufstellbarer Kragen 
-      Brusttasche links mit Patte 
-      Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche 
-      Ärmelabschluss zur Längenregulierung 
-      Schultern, Seitennähte und Unterarme durch Gewebebe-
+      – dunkelblau 
+      – Reißverschluss 
+      – aufstellbarer Kragen 
+      – Brusttasche links mit Patte 
+      – Schriftzug ,Feuerwehrʻ auf der Patte der linken Brusttasche 
+      – Ärmelabschluss zur Längenregulierung 
+      – Schultern, Seitennähte und Unterarme durch Gewebebe-
       satz verstärkt 
-      Wappen werden auf dem linken Oberärmel getragen,  
+      – Wappen werden auf dem linken Oberärmel getragen,  
       mit Ärmelflausch 
-      Schulterklappen links und rechts zur Aufnahme von Über-
+      – Schulterklappen links und rechts zur Aufnahme von Über-
       ziehschlaufen 
-      dunkelblau 
-      Herrenschnitt 
-      Cargohose  
-      zwei schräge Leistentaschen vorne 
-      zwei Gesäßtaschen mit Knopfverschluss 
-      zwei seitlich auf den Hosenbeinen aufgesetzte Taschen mit 
+      – dunkelblau 
+      – Herrenschnitt 
+      – Cargohose  
+      – zwei schräge Leistentaschen vorne 
+      – zwei Gesäßtaschen mit Knopfverschluss 
+      – zwei seitlich auf den Hosenbeinen aufgesetzte Taschen mit 
       Patten und verdeckten Druckknöpfen oder Klettverschluss  
-      nach Festlegung des Trägers der Feuerwehr mit Bundwei-
+      – nach Festlegung des Trägers der Feuerwehr mit Bundwei-
       tenregulierung 
-      dunkelblau 
-      Damenschnitt  
-      Cargohose  
-      zwei schräge Leistentaschen vorne 
-      zwei Gesäßtaschen mit Knopfverschluss 
-      zwei seitlich auf den Hosenbeinen aufgesetzte Taschen mit  
+      – dunkelblau 
+      – Damenschnitt  
+      – Cargohose  
+      – zwei schräge Leistentaschen vorne 
+      – zwei Gesäßtaschen mit Knopfverschluss 
+      – zwei seitlich auf den Hosenbeinen aufgesetzte Taschen mit  
       Patten und verdeckten Druckknöpfen oder Klettverschluss  
-      weiß oder dunkelblau 
-      1/1 Armlänge 
-      Kentkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      nach Festlegung des Trägers der Feuerwehr zusätzliche  
+      – weiß oder dunkelblau 
+      – 1/1 Armlänge 
+      – Kentkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – nach Festlegung des Trägers der Feuerwehr zusätzliche  
       Paspeltasche linksseitig  
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter 
+      – Gewebetunnel links und rechts für Schulterklappenadapter 
       zur Aufnahme der Überziehschlaufen; alternativ Schulter-
       klappen zur Aufnahme der Überziehschlaufen 
   -
@@ -3822,75 +3668,49 @@ pages:
       weibliche Mitglieder 
         8. Weitere Oberteile 
         9. Wollmütze 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
       Seite 31 
-      weiß oder dunkelblau 
-      1/1 Armlänge 
-      Blusenkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      Wappen werden auf dem linken Oberärmel getragen, mit 
+      – weiß oder dunkelblau 
+      – 1/1 Armlänge 
+      – Blusenkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – Wappen werden auf dem linken Oberärmel getragen, mit 
       Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter 
+      – Gewebetunnel links und rechts für Schulterklappenadapter 
       zur Aufnahme der Überziehschlaufen; alternativ Schulter-
       klappen zur Aufnahme der Überziehschlaufen 
-      weiß oder dunkelblau 
-      1/2 Armlänge 
-      Kentkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      nach Festlegung des Trägers der Feuerwehr zusätzliche 
+      – weiß oder dunkelblau 
+      – 1/2 Armlänge 
+      – Kentkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – nach Festlegung des Trägers der Feuerwehr zusätzliche 
       Paspeltasche linksseitig  
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter 
+      – Gewebetunnel links und rechts für Schulterklappenadapter 
       zur Aufnahme der Überziehschlaufen; alternativ Schulter-
       klappen zur Aufnahme der Überziehschlaufen 
-      weiß oder dunkelblau 
-      1/2 Armlänge 
-      Blusenkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      Wappen werden auf dem linken Oberärmel getragen,  
+      – weiß oder dunkelblau 
+      – 1/2 Armlänge 
+      – Blusenkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – Wappen werden auf dem linken Oberärmel getragen,  
       mit Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter 
+      – Gewebetunnel links und rechts für Schulterklappenadapter 
       zur Aufnahme der Überziehschlaufen; alternativ Schulter-
       klappen zur Aufnahme der Überziehschlaufen 
-      T-Shirt, Polo-Shirt, Sweat-Shirt, Baumwollpullover oder  
+      – T-Shirt, Polo-Shirt, Sweat-Shirt, Baumwollpullover oder  
       Fleecejacke nach Festlegung des Trägers der Feuerwehr 
-      dunkelblau 
-      Schriftzug ,Feuerwehrʻ 
-      Rückseite: nach Festlegung des Trägers der Feuerwehr 
+      – dunkelblau 
+      – Schriftzug ,Feuerwehrʻ 
+      – Rückseite: nach Festlegung des Trägers der Feuerwehr 
       weißer Schriftzug ,Feuerwehrʻ und Name der jeweiligen 
       Kommune,  
       Freiwillige Feuerwehr und Name der jeweiligen Kommune, 
       Werkfeuerwehr und Name der jeweiligen Kommune,  
       Berufsfeuerwehr und Name der jeweiligen Kommune 
-      Strickausführung  
-      dunkelblau  
-      Schriftzug ,Feuerwehrʻ 
+      – Strickausführung  
+      – dunkelblau  
+      – Schriftzug ,Feuerwehrʻ 
     markdown: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  
        
@@ -3904,75 +3724,49 @@ pages:
       weibliche Mitglieder 
         8. Weitere Oberteile 
         9. Wollmütze 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
-      – 
       Seite 31 
-      weiß oder dunkelblau 
-      1/1 Armlänge 
-      Blusenkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      Wappen werden auf dem linken Oberärmel getragen, mit 
+      – weiß oder dunkelblau 
+      – 1/1 Armlänge 
+      – Blusenkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – Wappen werden auf dem linken Oberärmel getragen, mit 
       Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter 
+      – Gewebetunnel links und rechts für Schulterklappenadapter 
       zur Aufnahme der Überziehschlaufen; alternativ Schulter-
       klappen zur Aufnahme der Überziehschlaufen 
-      weiß oder dunkelblau 
-      1/2 Armlänge 
-      Kentkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      nach Festlegung des Trägers der Feuerwehr zusätzliche 
+      – weiß oder dunkelblau 
+      – 1/2 Armlänge 
+      – Kentkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – nach Festlegung des Trägers der Feuerwehr zusätzliche 
       Paspeltasche linksseitig  
-      Wappen werden auf dem linken Oberärmel getragen, mit  
+      – Wappen werden auf dem linken Oberärmel getragen, mit  
       Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter 
+      – Gewebetunnel links und rechts für Schulterklappenadapter 
       zur Aufnahme der Überziehschlaufen; alternativ Schulter-
       klappen zur Aufnahme der Überziehschlaufen 
-      weiß oder dunkelblau 
-      1/2 Armlänge 
-      Blusenkragen 
-      zwei aufgesetzte Brusttaschen mit Knopfverschluss 
-      Wappen werden auf dem linken Oberärmel getragen,  
+      – weiß oder dunkelblau 
+      – 1/2 Armlänge 
+      – Blusenkragen 
+      – zwei aufgesetzte Brusttaschen mit Knopfverschluss 
+      – Wappen werden auf dem linken Oberärmel getragen,  
       mit Ärmelflausch  
-      Gewebetunnel links und rechts für Schulterklappenadapter 
+      – Gewebetunnel links und rechts für Schulterklappenadapter 
       zur Aufnahme der Überziehschlaufen; alternativ Schulter-
       klappen zur Aufnahme der Überziehschlaufen 
-      T-Shirt, Polo-Shirt, Sweat-Shirt, Baumwollpullover oder  
+      – T-Shirt, Polo-Shirt, Sweat-Shirt, Baumwollpullover oder  
       Fleecejacke nach Festlegung des Trägers der Feuerwehr 
-      dunkelblau 
-      Schriftzug ,Feuerwehrʻ 
-      Rückseite: nach Festlegung des Trägers der Feuerwehr 
+      – dunkelblau 
+      – Schriftzug ,Feuerwehrʻ 
+      – Rückseite: nach Festlegung des Trägers der Feuerwehr 
       weißer Schriftzug ,Feuerwehrʻ und Name der jeweiligen 
       Kommune,  
       Freiwillige Feuerwehr und Name der jeweiligen Kommune, 
       Werkfeuerwehr und Name der jeweiligen Kommune,  
       Berufsfeuerwehr und Name der jeweiligen Kommune 
-      Strickausführung  
-      dunkelblau  
-      Schriftzug ,Feuerwehrʻ 
+      – Strickausführung  
+      – dunkelblau  
+      – Schriftzug ,Feuerwehrʻ 
   -
     text: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 32 

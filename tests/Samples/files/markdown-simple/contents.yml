@@ -49,18 +49,12 @@ pages:
        
        
        
-      B 
-       
-      F 
-      B 
-       
-      F 
-      C 
-      E 
-       
-      C 
-      E 
-       
+      B C 
+       E 
+      F  
+      B C 
+       E 
+      F  
        
     markdown: |-
       #### Header level A 
@@ -100,16 +94,10 @@ pages:
        
        
        
-      B 
-       
-      F 
-      B 
-       
-      F 
-      C 
-      E 
-       
-      C 
-      E 
-       
+      B C 
+       E 
+      F  
+      B C 
+       E 
+      F  
        
