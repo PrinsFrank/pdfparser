@@ -7,6 +7,9 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class ColumnGroupingStrategy {
+    private const GUTTER = 7;
+    private const MIN_COLUMN_WIDTH = 100;
+
     /**
      * @param list<PositionedTextElement> $positionedTextElements
      * @return list<list<PositionedTextElement>>
@@ -16,35 +19,82 @@ class ColumnGroupingStrategy {
             return [];
         }
 
-        usort(
-            $positionedTextElements,
-            fn(PositionedTextElement $a, PositionedTextElement $b): int => $a->absoluteMatrix->offsetX <=> $b->absoluteMatrix->offsetX,
-        );
-
-        $columnIndex = 0;
-        $columns = $fontCache = [];
-
-        $font = $fontCache[$positionedTextElements[0]->textState->fontName->value ?? ''] = $page->getFont($positionedTextElements[0]->textState->fontName ?? throw new ParseFailureException('Unable to locate font'))
-            ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $positionedTextElements[0]->textState->fontName->value));
-        $currentColumnLeft = $positionedTextElements[0]->absoluteMatrix->offsetX;
-        $currentColumnRight = $positionedTextElements[0]->absoluteMatrix->offsetX + $positionedTextElements[0]->getAdvanceWidth($font);
+        usort($positionedTextElements, fn($a, $b) => $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY);
+        $positionedElementsGroupedByLine = [];
         foreach ($positionedTextElements as $positionedTextElement) {
-            $font = $fontCache[$positionedTextElement->textState->fontName->value ?? ''] ??= $page->getFont($positionedTextElement->textState->fontName ?? throw new ParseFailureException('Unable to locate font'))
-                ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $positionedTextElement->textState->fontName->value));
-            $left = $positionedTextElement->absoluteMatrix->offsetX;
-            $right = $positionedTextElement->absoluteMatrix->offsetX + $positionedTextElement->getAdvanceWidth($font);
-            if ($left - $currentColumnRight > 5) {
-                $currentColumnLeft = $left;
-                $currentColumnRight = $right;
-                $columnIndex++;
-            } else {
-                $currentColumnLeft = min($currentColumnLeft, $left);
-                $currentColumnRight = max($currentColumnRight, $right);
+            if ($positionedElementsGroupedByLine === [] || $positionedElementsGroupedByLine[count($positionedElementsGroupedByLine) - 1][0]->absoluteMatrix->offsetY - $positionedTextElement->absoluteMatrix->offsetY > 3) {
+                $positionedElementsGroupedByLine[] = [];
             }
-
-            $columns[$columnIndex][] = $positionedTextElement;
+            $positionedElementsGroupedByLine[count($positionedElementsGroupedByLine) - 1][] = $positionedTextElement;
         }
 
-        return array_values($columns);
+        $columnSplitCandidateX = [];
+        foreach ($positionedElementsGroupedByLine as $line) {
+            usort($line, fn($a, $b) => $a->absoluteMatrix->offsetX <=> $b->absoluteMatrix->offsetX);
+            $prevRight = null;
+            foreach ($line as $e) {
+                $left = $e->absoluteMatrix->offsetX;
+                if ($prevRight !== null && $left - $prevRight > self::GUTTER) {
+                    $columnSplitCandidateX[] = ($prevRight + $left) / 2;
+                }
+                $prevRight = $prevRight !== null ? max($prevRight, self::getRight($e, $page)) : self::getRight($e, $page);
+            }
+        }
+
+        $indexFirstColumnStart = $indexLastColumnEnd = $bestGutter = null;
+        $bestLength = 0;
+        foreach (array_unique($columnSplitCandidateX) as $candidateX) {
+            $runStart = null;
+            foreach ($positionedElementsGroupedByLine as $i => $positionedTextElementsOnLine) {
+                if (array_filter($positionedTextElementsOnLine, static fn(PositionedTextElement $e) => $e->absoluteMatrix->offsetX < $candidateX && self::getRight($e, $page) > $candidateX) === []) {
+                    $runStart ??= $i;
+                    if ($i - $runStart + 1 > $bestLength) {
+                        $bestLength = $i - $runStart + 1;
+                        $indexFirstColumnStart = $runStart;
+                        $indexLastColumnEnd = $i;
+                        $bestGutter = $candidateX;
+                    }
+                } else {
+                    $runStart = null;
+                }
+            }
+        }
+
+        if ($indexFirstColumnStart === null || $indexLastColumnEnd === null || $bestGutter === null || $bestLength < 2) {
+            return [array_merge(...$positionedElementsGroupedByLine)];
+        }
+
+        $positionedTextElementsBody = array_merge(...array_slice($positionedElementsGroupedByLine, $indexFirstColumnStart, $indexLastColumnEnd - $indexFirstColumnStart + 1));
+        usort($positionedTextElementsBody, fn($a, $b) => $a->absoluteMatrix->offsetX <=> $b->absoluteMatrix->offsetX);
+        $columns = [];
+        $index = 0;
+        $columnLeft = $columnRight = null;
+        foreach ($positionedTextElementsBody as $positionedTextElementBody) {
+            if ($columnRight !== null
+                && $columnLeft !== null
+                && $positionedTextElementBody->absoluteMatrix->offsetX - $columnRight > self::GUTTER
+                && $columnRight - $columnLeft >= self::MIN_COLUMN_WIDTH) {
+                $index++;
+                $columnLeft = $positionedTextElementBody->absoluteMatrix->offsetX;
+            }
+            if ($columnLeft === null) {
+                $columnLeft = $positionedTextElementBody->absoluteMatrix->offsetX;
+            }
+            $columnRight = $columnRight === null ? self::getRight($positionedTextElementBody, $page) : max($columnRight, self::getRight($positionedTextElementBody, $page));
+            $columns[$index][] = $positionedTextElementBody;
+        }
+
+        return array_values(array_filter([
+            ($positionedTextElementsHeader = array_slice($positionedElementsGroupedByLine, 0, $indexFirstColumnStart)) === [] ? [] : array_merge(...$positionedTextElementsHeader),
+            ...array_values($columns),
+            ($positionedTextElementsFooter = array_slice($positionedElementsGroupedByLine, $indexLastColumnEnd + 1)) === [] ? [] : array_merge(...$positionedTextElementsFooter),
+        ]));
+    }
+
+    private static function getRight(PositionedTextElement $positionedTextElement, Page $page): float {
+        $font = $page->getFont($positionedTextElement->textState->fontName ?? throw new ParseFailureException('Unable to locate font'))
+            ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $positionedTextElement->textState->fontName->value));
+
+        return $positionedTextElement->absoluteMatrix->offsetX + $positionedTextElement->getAdvanceWidth($font);
     }
 }
