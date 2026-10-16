@@ -38,6 +38,9 @@
         "update-content": "php -d memory_limit=2G ./tests/Samples/update-content"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "8.2"
+        }
     }
 }

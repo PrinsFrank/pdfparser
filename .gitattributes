@@ -11,6 +11,7 @@
 /.php-cs-fixer.php  export-ignore
 /.typos.toml        export-ignore
 /compose.yml        export-ignore
+/composer.lock      export-ignore
 /CONTRIBUTING.md    export-ignore
 /phpstan.neon       export-ignore
 /phpunit.xml.dist   export-ignore
