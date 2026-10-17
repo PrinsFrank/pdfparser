@@ -161,10 +161,10 @@ pages:
        
       Figure 3. MPK Interface Example 
       Revision 1.0 
-       
       Each Control Panel
       ouputs data in-turn to the
       System Controller input.
+       
        
     markdown: |-
       **Application Note AN-6** 
@@ -201,10 +201,10 @@ pages:
        ****
       **Figure 3. MPK Interface Example** 
       Revision 1.0 
-       
       Each Control Panel
       ouputs data in-turn to the
       System Controller input.
+       
        
   -
     text: |2-
@@ -295,16 +295,18 @@ pages:
        
        
       Figure 4. MPK Interface to RS-422. Correct Method 
-       
-       
-      Control Panel Control Panel Control Panel
+      Control Panel
       Set to
       RS-422
-      7707DT Incorrect Method
-      Set to
-      RS-422
-      Jupiter System Controller
       7707DT
+      Set to
+      RS-422
+      7707DT
+       
+       
+      Control Panel Control Panel
+      Incorrect Method
+      Jupiter System Controller
        
       Control Panel output
       will contend with 7707DT
@@ -327,17 +329,19 @@ pages:
        
        
       **Figure 4. MPK Interface to RS-422. Correct Method** 
-       ****
-       ****
-      **Control Panel Control Panel Control Panel**
+      **Control Panel**
       Set to
       RS-422
-      **7707DT**#####  **Incorrect Method**
-
-      Set to
-      RS-422
-      **Jupiter System Controller**
       **7707DT**
+      Set to
+      RS-422
+      **7707DT**
+       ****
+       ****
+      **Control Panel Control Panel**
+      ##### **Incorrect Method**
+
+      **Jupiter System Controller**
        
       Control Panel output
       will contend with 7707DT
@@ -595,25 +599,27 @@ pages:
       Figures 7 shows a block diagram describing this method of interface. Figure 8 describes pin-for-pin 
       connections. 
        
-      Control Panel Control Panel Control Panel
+      Control Panel
       Set to
       RS-422
-      Set to
-      RS-485
       7707DT
       Set to
       RS-422
+      7707DT
+       
+       
+       
+       
+       
+      AN6-6 
+      Control Panel Control Panel
+      Set to
+      RS-485
       Set to
       RS-485
       Jupiter System Controller
-      7707DT
-       
       Figure 7. MPK Interface to RS-485 
-       
-       
-       
-       
-      AN6-6 Revision 1.0 
+      Revision 1.0 
        
     markdown: |-
       **Application Note AN-6** 
@@ -639,25 +645,27 @@ pages:
       Figures 7 shows a block diagram describing this method of interface. Figure 8 describes pin-for-pin 
       connections. 
        
-      **Control Panel Control Panel Control Panel**
+      **Control Panel**
       Set to
       RS-422
-      Set to
-      RS-485
       **7707DT**
       Set to
       RS-422
+      **7707DT**
+       
+       
+       
+       
+       
+      **AN6-6** 
+      **Control Panel Control Panel**
+      Set to
+      RS-485
       Set to
       RS-485
       **Jupiter System Controller**
-      **7707DT**
-       
       **Figure 7. MPK Interface to RS-485** 
-       
-       
-       
-       
-      **AN6-6** Revision 1.0 
+      Revision 1.0 
        
   -
     text: |2-
