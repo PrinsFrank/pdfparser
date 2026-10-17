@@ -669,67 +669,31 @@ pages:
       - page_3_image_3.png
   -
     text: |-
+      HEADING 1 Heading 2 9.1.1 Heading 3
+      Arial or Helvetica Arial or Helvetica Arial or Helvetica
       Font
-      Style
-      Numbering
+      10 point 10 point 10 point
+      Style BOLD ALL CAPS Bold Italic
+      Numbering 1, 2, 3, .... 1.1, 1.2, 1.3, ... None
+      Single-spaced, Single-spaced, Single-spaced,
+      3 points after, 3 points before, 3 points before,
       Spacing
-      HEADING 1
-      Arial or Helvetica
-      10 point
-      BOLD ALL CAPS
-      1, 2, 3, ....
-      Single-spaced, 
-      3 points after, 
-      Normal carriage 
+      Normal carriage 3 points after 3 points after
       return before
-      Heading 2
-      Arial or Helvetica
-      10 point
-      Bold
-      1.1, 1.2, 1.3, ...
-      Single-spaced,
-      3 points before,
-      3 points after
-      9.1.1 Heading 3
-      Arial or Helvetica
-      10 point
-      Italic
-      None
-      Single-spaced,
-      3 points before,
-      3 points after
       Table 2: Example of table centred across two columns.
       [Conference name, place and date]. 5
     markdown: |-
+      **HEADING 1 Heading 2** 9.1.1 Heading 3
+      Arial or Helvetica Arial or Helvetica Arial or Helvetica
       Font
-      Style
-      Numbering
+      10 point 10 point 10 point
+      Style **BOLD ALL CAPS Bold** *Italic*
+      Numbering 1, 2, 3, .... 1.1, 1.2, 1.3, ... None
+      Single-spaced, Single-spaced, Single-spaced,
+      3 points after, 3 points before, 3 points before,
       Spacing
-      **HEADING 1**
-      Arial or Helvetica
-      10 point
-      **BOLD ALL CAPS**
-      1, 2, 3, ....
-      Single-spaced, 
-      3 points after, 
-      Normal carriage 
+      Normal carriage 3 points after 3 points after
       return before
-      **Heading 2**
-      Arial or Helvetica
-      10 point
-      **Bold**
-      1.1, 1.2, 1.3, ...
-      Single-spaced,
-      3 points before,
-      3 points after
-      9.1.1 Heading 3
-      Arial or Helvetica
-      10 point
-      *Italic*
-      None
-      Single-spaced,
-      3 points before,
-      3 points after
       **Table 2**: Example of table centred across two columns.
       [Conference name, place and date]. 5
     images:
