@@ -8,7 +8,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class ColumnGroupingStrategy {
     private const GUTTER = 2;
-    private const MIN_COLUMN_WIDTH = 30;
+    private const MIN_COLUMN_WIDTH_PERCENTAGE = .2;
     private const NR_OF_LINES_TO_BE_CONSIDERED_COLUMN = 10;
 
     /**
@@ -70,11 +70,15 @@ class ColumnGroupingStrategy {
         $columns = [];
         $index = 0;
         $columnLeft = $columnRight = null;
+        $minColumnWidth = ($page->getCropBox()?->getWidth() ?? 600) * self::MIN_COLUMN_WIDTH_PERCENTAGE;
         foreach ($positionedTextElementsBody as $positionedTextElementBody) {
             if ($columnRight !== null
                 && $columnLeft !== null
-                && $positionedTextElementBody->absoluteMatrix->offsetX - $columnRight > self::GUTTER
-                && $columnRight - $columnLeft >= self::MIN_COLUMN_WIDTH) {
+                && $positionedTextElementBody->absoluteMatrix->offsetX - $columnRight > self::GUTTER) {
+                if ($columnRight - $columnLeft < $minColumnWidth) {
+                    return [array_merge(...$positionedElementsGroupedByLine)];
+                }
+
                 $index++;
                 $columnLeft = $positionedTextElementBody->absoluteMatrix->offsetX;
             }
