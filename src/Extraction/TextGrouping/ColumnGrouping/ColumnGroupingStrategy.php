@@ -7,8 +7,8 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class ColumnGroupingStrategy {
-    private const GUTTER = 7;
-    private const MIN_COLUMN_WIDTH = 100;
+    private const GUTTER = 2;
+    private const MIN_COLUMN_WIDTH = 30;
     private const NR_OF_LINES_TO_BE_CONSIDERED_COLUMN = 10;
 
     /**
