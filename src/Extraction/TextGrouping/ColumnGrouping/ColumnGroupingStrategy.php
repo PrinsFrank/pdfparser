@@ -70,13 +70,18 @@ class ColumnGroupingStrategy {
         $columns = [];
         $index = 0;
         $columnLeft = $columnRight = null;
-        $minColumnWidth = ($page->getCropBox()?->getWidth() ?? 600) * self::MIN_COLUMN_WIDTH_PERCENTAGE;
+        $minColumnWidth = (($cropBox = $page->getCropBox())?->getWidth() ?? 600) * self::MIN_COLUMN_WIDTH_PERCENTAGE;
         foreach ($positionedTextElementsBody as $positionedTextElementBody) {
             if ($columnRight !== null
                 && $columnLeft !== null
                 && $positionedTextElementBody->absoluteMatrix->offsetX - $columnRight > self::GUTTER) {
                 if ($columnRight - $columnLeft < $minColumnWidth) {
                     return [array_merge(...$positionedElementsGroupedByLine)];
+                }
+
+                if (($cropBox->xBottomRight ?? 600) - $positionedTextElementBody->absoluteMatrix->offsetX < $minColumnWidth) {
+                    $columns[$index][] = $positionedTextElementBody;
+                    continue;
                 }
 
                 $index++;
