@@ -14,12 +14,10 @@ modificationDate: 2025-09-01T16:24:09+02:00
 pages:
   -
     text: |-
-      Deutscher Bundestag
-      21. Wahlperiode
+      Deutscher Bundestag Drucksache 21/1407
+      21. Wahlperiode 28.08.2025
       Antwort 
       der Bundesregierung 
-      Drucksache 21/1407
-      28.08.2025
       auf die Kleine Anfrage der Abgeordneten Jörg Cezanne, Desiree Becker, Violetta 
       Bock, Clara Bünger, Anne-Mieke Bremer, Katrin Fey, Dr. Gregor Gysi, Luke Hoß, 
       Ferat Koçak, Jan Köstering, Sonja Lemke, Tamara Mazzi, Bodo Ramelow, David 
@@ -63,13 +61,12 @@ pages:
     markdown: |-
       ##### **Deutscher Bundestag**
 
-      **21. Wahlperiode**
+       **Drucksache** ##### 21/**1407**
+
+      **21. Wahlperiode** 28.08.2025
       ##### **Antwort** 
 
       **der Bundesregierung** 
-      **Drucksache** ##### 21/**1407**
-
-      28.08.2025
       **auf die Kleine Anfrage der Abgeordneten Jörg Cezanne, Desiree Becker, Violetta** 
       **Bock, Clara Bünger, Anne-Mieke Bremer, Katrin Fey, Dr. Gregor Gysi, Luke Hoß,** 
       **Ferat Koçak, Jan Köstering, Sonja Lemke, Tamara Mazzi, Bodo Ramelow, David** 

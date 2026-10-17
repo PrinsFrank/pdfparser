@@ -13,13 +13,13 @@ creationDate: 2004-06-29T15:02:32+00:00
 modificationDate: 2004-06-29T11:08:11-04:00
 pages:
   -
-    text: |-
+    text: |2-
+       Application Note AN-6 
+      MPK Router Control Interface to 7707DT   
        
        
       1. OVERVIEW 
        
-       Application Note AN-6 
-      MPK Router Control Interface to 7707DT   
       Philips Broadcast implemented the MPK (message per keystroke) interface protocol for control panels 
       used in Jupiter router systems. Grass Valley has since become responsible for the Jupiter series of 
       router systems. The MPK control interface uses a proprietary method of signaling, for which special 
@@ -69,13 +69,13 @@ pages:
        
        
        Revision 1.0 AN6-1 
-    markdown: |-
+    markdown: |2-
+       **Application Note AN-6** 
+      **MPK Router Control Interface to 7707DT**   
        
        
       **1. OVERVIEW** 
        
-       **Application Note AN-6** 
-      **MPK Router Control Interface to 7707DT**   
       Philips Broadcast implemented the MPK (message per keystroke) interface protocol for control panels 
       used in Jupiter router systems. Grass Valley has since become responsible for the Jupiter series of 
       router systems. The MPK control interface uses a proprietary method of signaling, for which special 
@@ -208,11 +208,11 @@ pages:
        
   -
     text: |2-
-       
-       
-       
        Application Note AN-6 
       MPK Router Control Interface to 7707DT   
+       
+       
+       
       2. INTERFACE METHODS 
        
       From the above overview, it is apparent that special considerations are required when connecting MPK 
@@ -244,11 +244,11 @@ pages:
        
        Revision 1.0 AN6-3 
     markdown: |2-
-       
-       
-       
        **Application Note AN-6** 
       **MPK Router Control Interface to 7707DT**   
+       
+       
+       
       **2. INTERFACE METHODS** 
        
       From the above overview, it is apparent that special considerations are required when connecting MPK 

@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 class ColumnGroupingStrategy {
     private const GUTTER = 7;
     private const MIN_COLUMN_WIDTH = 100;
+    private const NR_OF_LINES_TO_BE_CONSIDERED_COLUMN = 10;
 
     /**
      * @param list<PositionedTextElement> $positionedTextElements
@@ -42,14 +43,14 @@ class ColumnGroupingStrategy {
         }
 
         $indexFirstColumnStart = $indexLastColumnEnd = $bestGutter = null;
-        $bestLength = 0;
+        $bestNrOfLines = 0;
         foreach (array_unique($columnSplitCandidateX) as $candidateX) {
             $runStart = null;
             foreach ($positionedElementsGroupedByLine as $i => $positionedTextElementsOnLine) {
                 if (array_filter($positionedTextElementsOnLine, static fn(PositionedTextElement $e) => $e->absoluteMatrix->offsetX < $candidateX && self::getRight($e, $page) > $candidateX) === []) {
                     $runStart ??= $i;
-                    if ($i - $runStart + 1 > $bestLength) {
-                        $bestLength = $i - $runStart + 1;
+                    if ($i - $runStart + 1 > $bestNrOfLines) {
+                        $bestNrOfLines = $i - $runStart + 1;
                         $indexFirstColumnStart = $runStart;
                         $indexLastColumnEnd = $i;
                         $bestGutter = $candidateX;
@@ -60,7 +61,7 @@ class ColumnGroupingStrategy {
             }
         }
 
-        if ($indexFirstColumnStart === null || $indexLastColumnEnd === null || $bestGutter === null || $bestLength < 2) {
+        if ($indexFirstColumnStart === null || $indexLastColumnEnd === null || $bestGutter === null || $bestNrOfLines < self::NR_OF_LINES_TO_BE_CONSIDERED_COLUMN) {
             return [array_merge(...$positionedElementsGroupedByLine)];
         }
 
