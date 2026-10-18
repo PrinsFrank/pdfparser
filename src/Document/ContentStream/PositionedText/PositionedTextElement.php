@@ -9,6 +9,8 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 readonly class PositionedTextElement {
     private float $heightCache;
+    private float $advanceWidthCache;
+    private float $rightCache;
     public const WORD_BREAK_THRESHOLD_EM = 0.25;
 
     /** @param list<TextSegment> $textSegments */
@@ -71,13 +73,25 @@ readonly class PositionedTextElement {
      * Reconstructed here because Tj/TJ do not advance the text matrix in this parser.
      */
     public function getAdvanceWidth(Font $font): float {
+        if (isset($this->advanceWidthCache)) {
+            return $this->advanceWidthCache;
+        }
+
         $scaleX = $this->absoluteMatrix->scaleX;
         $fontSize = $this->textState->getFontSize();
 
         $glyphAdvance = $font->getWidthForChars($this->getCodePoints(), $this->textState->wordSpace, $this->textState->charSpace, $fontSize, $scaleX); // Σ (w0·Tfs + Tc + Tw·[code 32]) · scaleX
         $offsetAdvance = -($this->getTotalOffset() / 1000) * $fontSize * $scaleX;                                 // − Σ(Tj)/1000 · Tfs · scaleX
 
-        return ($glyphAdvance + $offsetAdvance) * ($this->textState->scale / 100); // · Th
+        return $this->advanceWidthCache = ($glyphAdvance + $offsetAdvance) * ($this->textState->scale / 100); // · Th
+    }
+
+    public function getRight(Font $font): float {
+        if (isset($this->rightCache)) {
+            return $this->rightCache;
+        }
+
+        return $this->rightCache = $this->absoluteMatrix->offsetX + $this->getAdvanceWidth($font);
     }
 
     /** The sum of the TJ adjustment numbers in this element's segments, in thousandths of an em. */

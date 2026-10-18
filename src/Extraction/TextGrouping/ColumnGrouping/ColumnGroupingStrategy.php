@@ -112,6 +112,6 @@ class ColumnGroupingStrategy {
         $font = $page->getFont($positionedTextElement->textState->fontName ?? throw new ParseFailureException('Unable to locate font'))
             ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $positionedTextElement->textState->fontName->value));
 
-        return $positionedTextElement->absoluteMatrix->offsetX + $positionedTextElement->getAdvanceWidth($font);
+        return $positionedTextElement->getRight($font);
     }
 }
