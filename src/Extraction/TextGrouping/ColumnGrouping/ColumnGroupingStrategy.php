@@ -70,7 +70,9 @@ class ColumnGroupingStrategy {
         $columns = [];
         $index = 0;
         $columnLeft = $columnRight = null;
-        $minColumnWidth = (($cropBox = $page->getCropBox())?->getWidth() ?? 600) * self::MIN_COLUMN_WIDTH_PERCENTAGE;
+        $pageRight = $page->getCropBox()->xBottomRight ?? ($positionedTextElementsBody !== [] ? max(array_map(fn(PositionedTextElement $e) => self::getRight($e, $page), $positionedTextElementsBody)) : 600);
+        $pageLeft = $page->getCropBox()->xTopLeft ?? ($positionedTextElementsBody !== [] ? min(array_map(fn(PositionedTextElement $e) => $e->absoluteMatrix->offsetX, $positionedTextElementsBody)) : 0);
+        $minColumnWidth = ($pageRight - $pageLeft) * self::MIN_COLUMN_WIDTH_PERCENTAGE;
         foreach ($positionedTextElementsBody as $positionedTextElementBody) {
             if ($columnRight !== null
                 && $columnLeft !== null
@@ -79,8 +81,9 @@ class ColumnGroupingStrategy {
                     return [array_merge(...$positionedElementsGroupedByLine)];
                 }
 
-                if (($cropBox->xBottomRight ?? 600) - $positionedTextElementBody->absoluteMatrix->offsetX < $minColumnWidth) {
+                if ($pageRight - $positionedTextElementBody->absoluteMatrix->offsetX < $minColumnWidth) {
                     $columns[$index][] = $positionedTextElementBody;
+                    $columnRight = max($columnRight, self::getRight($positionedTextElementBody, $page));
                     continue;
                 }
 
@@ -92,6 +95,10 @@ class ColumnGroupingStrategy {
             }
             $columnRight = $columnRight === null ? self::getRight($positionedTextElementBody, $page) : max($columnRight, self::getRight($positionedTextElementBody, $page));
             $columns[$index][] = $positionedTextElementBody;
+        }
+
+        if ($columnRight !== null && $columnLeft !== null && $columnRight - $columnLeft < $minColumnWidth) {
+            return [array_merge(...$positionedElementsGroupedByLine)];
         }
 
         return array_values(array_filter([
