@@ -33,7 +33,7 @@ class MarkdownExtractor {
         $textBuffer = '';
         $previousElementIsBold = $previousElementIsItalic = false;
         $previousHeadingLevel = $previousLinkUrl = null;
-        foreach (TextGrouping::group($positionedTextElements, $page) as $i => $positionedTextElementsForLine) {
+        foreach (TextGrouping::group($positionedTextElements, $page, $fontCache) as $i => $positionedTextElementsForLine) {
             if ($i !== 0) {
                 if ($previousHeadingLevel !== null) {
                     self::flushInLineNodes($inLineNodes, $textBuffer, $previousElementIsBold, $previousElementIsItalic, $previousLinkUrl);
