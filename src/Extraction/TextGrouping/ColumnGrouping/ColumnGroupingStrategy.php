@@ -3,11 +3,8 @@
 namespace PrinsFrank\PdfParser\Extraction\TextGrouping\ColumnGrouping;
 
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
-use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class ColumnGroupingStrategy {
     private const GUTTER = 2;
@@ -23,14 +20,6 @@ class ColumnGroupingStrategy {
         if ($positionedTextElements === []) {
             return [];
         }
-
-        $getFont = static function (DictionaryKey|NameObjectStringValue|null $fontName) use (&$fontCache, $page): Font {
-            if ($fontName === null) {
-                throw new ParseFailureException('Unable to locate font');
-            }
-
-            return $fontCache[$fontName->value] ??= $page->getFont($fontName);
-        };
 
         usort($positionedTextElements, fn($a, $b) => $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY);
         $positionedElementsGroupedByLine = [];
@@ -50,7 +39,7 @@ class ColumnGroupingStrategy {
                 if ($prevRight !== null && $left - $prevRight > self::GUTTER) {
                     $columnSplitCandidateX[] = ($prevRight + $left) / 2;
                 }
-                $prevRight = $prevRight !== null ? max($prevRight, $e->getRight($getFont($e->textState->fontName))) : $e->getRight($getFont($e->textState->fontName));
+                $prevRight = $prevRight !== null ? max($prevRight, $e->getRight($page, $fontCache)) : $e->getRight($page, $fontCache);
             }
         }
 
@@ -59,7 +48,7 @@ class ColumnGroupingStrategy {
         foreach (array_unique($columnSplitCandidateX) as $candidateX) {
             $runStart = null;
             foreach ($positionedElementsGroupedByLine as $i => $positionedTextElementsOnLine) {
-                if (array_filter($positionedTextElementsOnLine, static fn(PositionedTextElement $e) => $e->absoluteMatrix->offsetX < $candidateX && $e->getRight($getFont($e->textState->fontName)) > $candidateX) === []) {
+                if (array_filter($positionedTextElementsOnLine, static fn(PositionedTextElement $e) => $e->absoluteMatrix->offsetX < $candidateX && $e->getRight($page, $fontCache) > $candidateX) === []) {
                     $runStart ??= $i;
                     if ($i - $runStart + 1 > $bestNrOfLines) {
                         $bestNrOfLines = $i - $runStart + 1;
@@ -82,7 +71,7 @@ class ColumnGroupingStrategy {
         $columns = [];
         $index = 0;
         $columnLeft = $columnRight = null;
-        $pageRight = $page->getCropBox()->xBottomRight ?? ($positionedTextElementsBody !== [] ? max(array_map(fn(PositionedTextElement $e) => $e->getRight($getFont($e->textState->fontName)), $positionedTextElementsBody)) : 600);
+        $pageRight = $page->getCropBox()->xBottomRight ?? ($positionedTextElementsBody !== [] ? max(array_map(fn(PositionedTextElement $e) => $e->getRight($page, $fontCache), $positionedTextElementsBody)) : 600);
         $pageLeft = $page->getCropBox()->xTopLeft ?? ($positionedTextElementsBody !== [] ? min(array_map(fn(PositionedTextElement $e) => $e->absoluteMatrix->offsetX, $positionedTextElementsBody)) : 0);
         $minColumnWidth = ($pageRight - $pageLeft) * self::MIN_COLUMN_WIDTH_PERCENTAGE;
         foreach ($positionedTextElementsBody as $positionedTextElementBody) {
@@ -95,7 +84,7 @@ class ColumnGroupingStrategy {
 
                 if ($pageRight - $positionedTextElementBody->absoluteMatrix->offsetX < $minColumnWidth) {
                     $columns[$index][] = $positionedTextElementBody;
-                    $columnRight = max($columnRight, $positionedTextElementBody->getRight($getFont($positionedTextElementBody->textState->fontName)));
+                    $columnRight = max($columnRight, $positionedTextElementBody->getRight($page, $fontCache));
                     continue;
                 }
 
@@ -105,7 +94,7 @@ class ColumnGroupingStrategy {
             if ($columnLeft === null) {
                 $columnLeft = $positionedTextElementBody->absoluteMatrix->offsetX;
             }
-            $columnRight = $columnRight === null ? $positionedTextElementBody->getRight($getFont($positionedTextElementBody->textState->fontName)) : max($columnRight, $positionedTextElementBody->getRight($getFont($positionedTextElementBody->textState->fontName)));
+            $columnRight = $columnRight === null ? $positionedTextElementBody->getRight($page, $fontCache) : max($columnRight, $positionedTextElementBody->getRight($page, $fontCache));
             $columns[$index][] = $positionedTextElementBody;
         }
 
