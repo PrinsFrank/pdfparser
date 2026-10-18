@@ -104,7 +104,8 @@ class Page extends DecoratedObject {
             ?->getSubDictionary($this->document, DictionaryKey::FONT);
     }
 
-    public function getFont(DictionaryKey|NameObjectStringValue $dictionaryKey): ?Font {
+    /** @throws PdfParserException */
+    public function getFont(DictionaryKey|NameObjectStringValue $dictionaryKey): Font {
         $font = $this->getFontDictionary()
             ?->getObjectForReference($this->document, $dictionaryKey, Font::class);
         if ($font !== null) {
@@ -119,7 +120,7 @@ class Page extends DecoratedObject {
             }
         }
 
-        return null;
+        throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $dictionaryKey->value));
     }
 
     /** @return list<FileSpecification> */
