@@ -17,7 +17,7 @@ class TextExtractor {
     public static function extractContent(array $positionedTextElements, Page $page): string {
         $fontCache = [];
         $textBuffer = '';
-        foreach (TextGrouping::group($positionedTextElements, $page) as $i => $positionedTextElementsForLine) {
+        foreach (TextGrouping::group($positionedTextElements, $page, $fontCache) as $i => $positionedTextElementsForLine) {
             if ($i !== 0) {
                 $textBuffer .= "\n";
             }

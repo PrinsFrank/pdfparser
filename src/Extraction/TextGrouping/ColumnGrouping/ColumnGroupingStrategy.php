@@ -3,6 +3,9 @@
 namespace PrinsFrank\PdfParser\Extraction\TextGrouping\ColumnGrouping;
 
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
@@ -13,12 +16,21 @@ class ColumnGroupingStrategy {
 
     /**
      * @param list<PositionedTextElement> $positionedTextElements
+     * @param array<string, Font> $fontCache
      * @return list<list<PositionedTextElement>>
      */
-    public static function group(array $positionedTextElements, Page $page): array {
+    public static function group(array $positionedTextElements, Page $page, array &$fontCache): array {
         if ($positionedTextElements === []) {
             return [];
         }
+
+        $getFont = static function (DictionaryKey|NameObjectStringValue|null $fontName) use (&$fontCache, $page): Font {
+            if ($fontName === null) {
+                throw new ParseFailureException('Unable to locate font');
+            }
+
+            return $fontCache[$fontName->value] ??= $page->getFont($fontName);
+        };
 
         usort($positionedTextElements, fn($a, $b) => $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY);
         $positionedElementsGroupedByLine = [];
@@ -38,7 +50,7 @@ class ColumnGroupingStrategy {
                 if ($prevRight !== null && $left - $prevRight > self::GUTTER) {
                     $columnSplitCandidateX[] = ($prevRight + $left) / 2;
                 }
-                $prevRight = $prevRight !== null ? max($prevRight, $e->getRight($page->getFont($e->textState->fontName ?? throw new ParseFailureException('Unable to locate font')))) : $e->getRight($page->getFont($e->textState->fontName ?? throw new ParseFailureException('Unable to locate font')));
+                $prevRight = $prevRight !== null ? max($prevRight, $e->getRight($getFont($e->textState->fontName))) : $e->getRight($getFont($e->textState->fontName));
             }
         }
 
@@ -47,7 +59,7 @@ class ColumnGroupingStrategy {
         foreach (array_unique($columnSplitCandidateX) as $candidateX) {
             $runStart = null;
             foreach ($positionedElementsGroupedByLine as $i => $positionedTextElementsOnLine) {
-                if (array_filter($positionedTextElementsOnLine, static fn(PositionedTextElement $e) => $e->absoluteMatrix->offsetX < $candidateX && $e->getRight($page->getFont($e->textState->fontName ?? throw new ParseFailureException('Unable to locate font'))) > $candidateX) === []) {
+                if (array_filter($positionedTextElementsOnLine, static fn(PositionedTextElement $e) => $e->absoluteMatrix->offsetX < $candidateX && $e->getRight($getFont($e->textState->fontName)) > $candidateX) === []) {
                     $runStart ??= $i;
                     if ($i - $runStart + 1 > $bestNrOfLines) {
                         $bestNrOfLines = $i - $runStart + 1;
@@ -70,7 +82,7 @@ class ColumnGroupingStrategy {
         $columns = [];
         $index = 0;
         $columnLeft = $columnRight = null;
-        $pageRight = $page->getCropBox()->xBottomRight ?? ($positionedTextElementsBody !== [] ? max(array_map(fn(PositionedTextElement $e) => $e->getRight($page->getFont($e->textState->fontName ?? throw new ParseFailureException('Unable to locate font'))), $positionedTextElementsBody)) : 600);
+        $pageRight = $page->getCropBox()->xBottomRight ?? ($positionedTextElementsBody !== [] ? max(array_map(fn(PositionedTextElement $e) => $e->getRight($getFont($e->textState->fontName)), $positionedTextElementsBody)) : 600);
         $pageLeft = $page->getCropBox()->xTopLeft ?? ($positionedTextElementsBody !== [] ? min(array_map(fn(PositionedTextElement $e) => $e->absoluteMatrix->offsetX, $positionedTextElementsBody)) : 0);
         $minColumnWidth = ($pageRight - $pageLeft) * self::MIN_COLUMN_WIDTH_PERCENTAGE;
         foreach ($positionedTextElementsBody as $positionedTextElementBody) {
@@ -83,7 +95,7 @@ class ColumnGroupingStrategy {
 
                 if ($pageRight - $positionedTextElementBody->absoluteMatrix->offsetX < $minColumnWidth) {
                     $columns[$index][] = $positionedTextElementBody;
-                    $columnRight = max($columnRight, $positionedTextElementBody->getRight($page->getFont($positionedTextElementBody->textState->fontName ?? throw new ParseFailureException('Unable to locate font'))));
+                    $columnRight = max($columnRight, $positionedTextElementBody->getRight($getFont($positionedTextElementBody->textState->fontName)));
                     continue;
                 }
 
@@ -93,7 +105,7 @@ class ColumnGroupingStrategy {
             if ($columnLeft === null) {
                 $columnLeft = $positionedTextElementBody->absoluteMatrix->offsetX;
             }
-            $columnRight = $columnRight === null ? $positionedTextElementBody->getRight($page->getFont($positionedTextElementBody->textState->fontName ?? throw new ParseFailureException('Unable to locate font'))) : max($columnRight, $positionedTextElementBody->getRight($page->getFont($positionedTextElementBody->textState->fontName ?? throw new ParseFailureException('Unable to locate font'))));
+            $columnRight = $columnRight === null ? $positionedTextElementBody->getRight($getFont($positionedTextElementBody->textState->fontName)) : max($columnRight, $positionedTextElementBody->getRight($getFont($positionedTextElementBody->textState->fontName)));
             $columns[$index][] = $positionedTextElementBody;
         }
 
