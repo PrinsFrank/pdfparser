@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 readonly class PositionedTextElement {
@@ -86,10 +87,17 @@ readonly class PositionedTextElement {
         return $this->advanceWidthCache = ($glyphAdvance + $offsetAdvance) * ($this->textState->scale / 100); // · Th
     }
 
-    public function getRight(Font $font): float {
+    /** @param array<string, Font> $fontCache */
+    public function getRight(Page $page, array &$fontCache): float {
         if (isset($this->rightCache)) {
             return $this->rightCache;
         }
+
+        if ($this->textState->fontName === null) {
+            throw new ParseFailureException('Unable to locate font');
+        }
+
+        $font = $fontCache[$this->textState->fontName->value] ??= $page->getFont($this->textState->fontName);
 
         return $this->rightCache = $this->absoluteMatrix->offsetX + $this->getAdvanceWidth($font);
     }
