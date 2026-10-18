@@ -9,7 +9,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 class ColumnGroupingStrategy {
     private const GUTTER = 2;
     private const MIN_COLUMN_WIDTH_PERCENTAGE = .2;
-    private const NR_OF_LINES_TO_BE_CONSIDERED_COLUMN = 10;
+    private const NR_OF_LINES_TO_BE_CONSIDERED_COLUMN = 25;
 
     /**
      * @param list<PositionedTextElement> $positionedTextElements
