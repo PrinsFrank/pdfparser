@@ -30,25 +30,29 @@ class ColumnGroupingStrategy {
             $positionedElementsGroupedByLine[count($positionedElementsGroupedByLine) - 1][] = $positionedTextElement;
         }
 
-        $columnSplitCandidateX = [];
-        foreach ($positionedElementsGroupedByLine as $line) {
+        $columnSplitCandidateX = $lineSegments = [];
+        foreach ($positionedElementsGroupedByLine as $lineIndex => $line) {
             usort($line, fn($a, $b) => $a->absoluteMatrix->offsetX <=> $b->absoluteMatrix->offsetX);
             $prevRight = null;
+            $segments = [];
             foreach ($line as $e) {
                 $left = $e->absoluteMatrix->offsetX;
+                $right = $e->getRight($page, $fontCache);
+                $segments[] = [$left, $right];
                 if ($prevRight !== null && $left - $prevRight > self::GUTTER) {
                     $columnSplitCandidateX[] = ($prevRight + $left) / 2;
                 }
-                $prevRight = $prevRight !== null ? max($prevRight, $e->getRight($page, $fontCache)) : $e->getRight($page, $fontCache);
+                $prevRight = $prevRight !== null ? max($prevRight, $right) : $right;
             }
+            $lineSegments[$lineIndex] = $segments;
         }
 
         $indexFirstColumnStart = $indexLastColumnEnd = $bestGutter = null;
         $bestNrOfLines = 0;
         foreach (array_unique($columnSplitCandidateX) as $candidateX) {
             $runStart = null;
-            foreach ($positionedElementsGroupedByLine as $i => $positionedTextElementsOnLine) {
-                if (array_filter($positionedTextElementsOnLine, static fn(PositionedTextElement $e) => $e->absoluteMatrix->offsetX < $candidateX && $e->getRight($page, $fontCache) > $candidateX) === []) {
+            foreach ($lineSegments as $i => $segments) {
+                if (!self::segmentsCrossX($segments, $candidateX)) {
                     $runStart ??= $i;
                     if ($i - $runStart + 1 > $bestNrOfLines) {
                         $bestNrOfLines = $i - $runStart + 1;
@@ -107,5 +111,20 @@ class ColumnGroupingStrategy {
             ...array_values($columns),
             ($positionedTextElementsFooter = array_slice($positionedElementsGroupedByLine, $indexLastColumnEnd + 1)) === [] ? [] : array_merge(...$positionedTextElementsFooter),
         ]));
+    }
+
+    /** @param list<array{float, float}> $segments */
+    private static function segmentsCrossX(array $segments, float $candidateX): bool {
+        foreach ($segments as [$left, $right]) {
+            if ($left >= $candidateX) {
+                return false;
+            }
+
+            if ($right > $candidateX) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
