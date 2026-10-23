@@ -7,6 +7,7 @@ use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\ProducesPositionedTextElements;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\ColorState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
@@ -57,7 +58,13 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
     }
 
     #[Override]
-    public function getPositionedTextElement(string $operands, TransformationMatrix $textMatrix, TransformationMatrix $globalTransformationMatrix, TextState $textState): PositionedTextElement {
+    public function getPositionedTextElement(
+        string $operands,
+        TransformationMatrix $textMatrix,
+        TransformationMatrix $globalTransformationMatrix,
+        TextState $textState,
+        ColorState $colorState,
+    ): PositionedTextElement {
         if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $operands, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL)) === false) {
             throw new ParseFailureException(sprintf('Error with regex'));
         } elseif ($result === 0) {
