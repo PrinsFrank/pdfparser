@@ -5,11 +5,28 @@ namespace PrinsFrank\PdfParser\Extraction\TextGrouping\ColumnGrouping;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Extraction\TextGrouping\LineGrouping\TextOverlapStrategy;
+use ValueError;
 
+/**
+ * Take all the left and right offsets of all positioned text elements. Exclude the leftmost and rightmost as we know
+ * there is a "gutter" there. Round them down for left, up for right, and divide by the minimum gutter width to reduce
+ * the number of gutter candidates.
+ *
+ * Iterate over all gutter candidates. Check how many horizontal text lines contain elements that cross the gutter.
+ * Keep track of the longest streak of misses per gutter, and on what line index that streak starts. If there is no
+ * candidate with a streak of more than the minimum number of lines, return early. Prune consecutive gutter candidates
+ * that live in the same gutter. Exit when any of the columns is less than the minimum column width percentage.
+ *
+ * Reduce the gutter candidates to only those within 2 of the highest line count. Take the last line number of the
+ * header, and the first line of the footer if either exists. Group the elements in between those by column, then return
+ * the header, column(1)...column(n), footer as groups.
+ */
 class ColumnGroupingStrategy {
-    private const GUTTER = 2;
-    private const MIN_COLUMN_WIDTH_PERCENTAGE = .2;
-    private const NR_OF_LINES_TO_BE_CONSIDERED_COLUMN = 25;
+    private const MINIMUM_GUTTER_WIDTH = 10;
+    private const MINIMUM_COLUMN_WIDTH_PERCENTAGE = 20;
+    private const NR_OF_LINES_TO_BE_CONSIDERED_COLUMNS = 25;
 
     /**
      * @param list<PositionedTextElement> $positionedTextElements
@@ -21,106 +38,119 @@ class ColumnGroupingStrategy {
             return [];
         }
 
-        usort($positionedTextElements, fn($a, $b) => $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY);
-        $positionedElementsGroupedByLine = [];
-        foreach ($positionedTextElements as $positionedTextElement) {
-            if ($positionedElementsGroupedByLine === [] || $positionedElementsGroupedByLine[count($positionedElementsGroupedByLine) - 1][0]->absoluteMatrix->offsetY - $positionedTextElement->absoluteMatrix->offsetY > 3) {
-                $positionedElementsGroupedByLine[] = [];
-            }
-            $positionedElementsGroupedByLine[count($positionedElementsGroupedByLine) - 1][] = $positionedTextElement;
-        }
-
-        $columnSplitCandidateX = $lineSegments = [];
-        foreach ($positionedElementsGroupedByLine as $lineIndex => $line) {
-            usort($line, fn($a, $b) => $a->absoluteMatrix->offsetX <=> $b->absoluteMatrix->offsetX);
-            $prevRight = null;
-            $segments = [];
-            foreach ($line as $e) {
-                $left = $e->absoluteMatrix->offsetX;
-                $right = $e->getRight($page, $fontCache);
-                $segments[] = [$left, $right];
-                if ($prevRight !== null && $left - $prevRight > self::GUTTER) {
-                    $columnSplitCandidateX[] = ($prevRight + $left) / 2;
-                }
-                $prevRight = $prevRight !== null ? max($prevRight, $right) : $right;
-            }
-            $lineSegments[$lineIndex] = $segments;
-        }
-
-        $indexFirstColumnStart = $indexLastColumnEnd = $bestGutter = null;
-        $bestNrOfLines = 0;
-        foreach (array_unique($columnSplitCandidateX) as $candidateX) {
-            $runStart = null;
-            foreach ($lineSegments as $i => $segments) {
-                if (!self::segmentsCrossX($segments, $candidateX)) {
-                    $runStart ??= $i;
-                    if ($i - $runStart + 1 > $bestNrOfLines) {
-                        $bestNrOfLines = $i - $runStart + 1;
-                        $indexFirstColumnStart = $runStart;
-                        $indexLastColumnEnd = $i;
-                        $bestGutter = $candidateX;
-                    }
+        $pageLeft = min(
+            $elementsLeft = array_map(
+                static fn(PositionedTextElement $e) => floor($e->absoluteMatrix->offsetX / self::MINIMUM_GUTTER_WIDTH) * self::MINIMUM_GUTTER_WIDTH,
+                $positionedTextElements,
+            ),
+        );
+        $pageRight = max(
+            $elementsRight = array_map(
+                static fn(PositionedTextElement $e) => ceil($e->getRight($page, $fontCache) / self::MINIMUM_GUTTER_WIDTH) * self::MINIMUM_GUTTER_WIDTH,
+                $positionedTextElements,
+            ),
+        );
+        $xCandidates = array_diff(array_unique([...$elementsLeft, ...$elementsRight]), [$pageLeft, $pageRight]);
+        $positionedElementsGroupedByLine = iterator_to_array(TextOverlapStrategy::group($positionedTextElements), false);
+        $nrOfLines = count($positionedElementsGroupedByLine);
+        $elementMissCounts = $headerEndLineIndices = [];
+        sort($xCandidates);
+        foreach ($xCandidates as $xCandidateIndex => $xCandidate) {
+            $currentMissCount = $maxStreakCount = 0;
+            $currentStreakStart = $maxStreakStart = null;
+            foreach ($positionedElementsGroupedByLine as $lineIndex => $positionedTextElementsOnLine) {
+                if (self::elementOnLineCrossesX($positionedTextElementsOnLine, $xCandidate, $page, $fontCache)) {
+                    $currentMissCount = 0;
+                    $currentStreakStart = null;
                 } else {
-                    $runStart = null;
+                    $currentStreakStart ??= $lineIndex;
+                    $currentMissCount++;
+                    if ($currentMissCount > $maxStreakCount) {
+                        $maxStreakCount = $currentMissCount;
+                        $maxStreakStart = $currentStreakStart;
+                    }
                 }
+            }
+            $elementMissCounts[$xCandidateIndex] = $maxStreakCount;
+            $headerEndLineIndices[$xCandidateIndex] = $maxStreakStart;
+        }
+
+        if ($elementMissCounts === []
+            || ($maxMissCount = max($elementMissCounts)) < self::NR_OF_LINES_TO_BE_CONSIDERED_COLUMNS) {
+            return [$positionedTextElements];
+        }
+
+        $elementMissCounts = array_filter($elementMissCounts, fn(int $missCount) => $missCount >= $maxMissCount - 2);
+        $pruneIndices = [];
+        arsort($elementMissCounts);
+        foreach ($elementMissCounts as $candidateXIndex => $elementMissCount) {
+            if (array_key_exists($candidateXIndex + 1, $elementMissCounts) && $elementMissCount === $elementMissCounts[$candidateXIndex + 1]) {
+                $pruneIndices[] = $candidateXIndex;
             }
         }
 
-        if ($indexFirstColumnStart === null || $indexLastColumnEnd === null || $bestGutter === null || $bestNrOfLines < self::NR_OF_LINES_TO_BE_CONSIDERED_COLUMN) {
-            return [array_merge(...$positionedElementsGroupedByLine)];
+        $elementMissCounts = array_diff_key($elementMissCounts, array_flip($pruneIndices));
+        $headerEndLineIndices = array_intersect_key($headerEndLineIndices, $elementMissCounts);
+        $xGutters = array_intersect_key($xCandidates, $elementMissCounts);
+        $minimumColumnWidth = ($pageRight - $pageLeft) / 100 * self::MINIMUM_COLUMN_WIDTH_PERCENTAGE;
+        foreach (($zeroIndexedGutters = array_values($xGutters)) as $xGutterIndex => $xGutter) {
+            if ($xGutter < ($zeroIndexedGutters[$xGutterIndex - 1] ?? $pageLeft) + $minimumColumnWidth) {
+                return [$positionedTextElements];
+            }
         }
 
-        $positionedTextElementsBody = array_merge(...array_slice($positionedElementsGroupedByLine, $indexFirstColumnStart, $indexLastColumnEnd - $indexFirstColumnStart + 1));
-        usort($positionedTextElementsBody, fn($a, $b) => $a->absoluteMatrix->offsetX <=> $b->absoluteMatrix->offsetX);
+        try {
+            $footerStartLineIndices = array_combine(
+                array_keys($headerEndLineIndices),
+                array_map(
+                    static fn(?int $headerEndLineIndex, int $elementMissCount): int => ($headerEndLineIndex ?? 0) + $elementMissCount,
+                    $headerEndLineIndices,
+                    $elementMissCounts,
+                ),
+            );
+        } catch (ValueError) {
+            throw new ParseFailureException();
+        }
+        $indexFirstColumnStart = (int) max(0, ...$headerEndLineIndices);
+        $indexLastColumnEnd = min($nrOfLines, ...$footerStartLineIndices);
         $columns = [];
-        $index = 0;
-        $columnLeft = $columnRight = null;
-        $pageRight = $page->getCropBox()->xBottomRight ?? ($positionedTextElementsBody !== [] ? max(array_map(fn(PositionedTextElement $e) => $e->getRight($page, $fontCache), $positionedTextElementsBody)) : 600);
-        $pageLeft = $page->getCropBox()->xTopLeft ?? ($positionedTextElementsBody !== [] ? min(array_map(fn(PositionedTextElement $e) => $e->absoluteMatrix->offsetX, $positionedTextElementsBody)) : 0);
-        $minColumnWidth = ($pageRight - $pageLeft) * self::MIN_COLUMN_WIDTH_PERCENTAGE;
-        foreach ($positionedTextElementsBody as $positionedTextElementBody) {
-            if ($columnRight !== null
-                && $columnLeft !== null
-                && $positionedTextElementBody->absoluteMatrix->offsetX - $columnRight > self::GUTTER) {
-                if ($columnRight - $columnLeft < $minColumnWidth) {
-                    return [array_merge(...$positionedElementsGroupedByLine)];
+        foreach (array_slice($positionedElementsGroupedByLine, $indexFirstColumnStart, $indexLastColumnEnd - $indexFirstColumnStart) as $positionedElementsLineInColumn) {
+            foreach ($positionedElementsLineInColumn as $positionedTextElement) {
+                $elementLeft = $positionedTextElement->absoluteMatrix->offsetX;
+                $elementRight = $positionedTextElement->getRight($page, $fontCache);
+                $elementCenter = ($elementLeft + $elementRight) / 2;
+                $columnIndex = count($xGutters);
+                foreach (array_values($xGutters) as $xGutterIndex => $xGutter) {
+                    if ($elementCenter < $xGutter) {
+                        $columnIndex = $xGutterIndex;
+                        break;
+                    }
                 }
 
-                if ($pageRight - $positionedTextElementBody->absoluteMatrix->offsetX < $minColumnWidth) {
-                    $columns[$index][] = $positionedTextElementBody;
-                    $columnRight = max($columnRight, $positionedTextElementBody->getRight($page, $fontCache));
-                    continue;
-                }
-
-                $index++;
-                $columnLeft = $positionedTextElementBody->absoluteMatrix->offsetX;
+                $columns[$columnIndex][] = $positionedTextElement;
             }
-            if ($columnLeft === null) {
-                $columnLeft = $positionedTextElementBody->absoluteMatrix->offsetX;
-            }
-            $columnRight = $columnRight === null ? $positionedTextElementBody->getRight($page, $fontCache) : max($columnRight, $positionedTextElementBody->getRight($page, $fontCache));
-            $columns[$index][] = $positionedTextElementBody;
         }
 
-        if ($columnRight !== null && $columnLeft !== null && $columnRight - $columnLeft < $minColumnWidth) {
-            return [array_merge(...$positionedElementsGroupedByLine)];
-        }
-
+        ksort($columns);
         return array_values(array_filter([
-            ($positionedTextElementsHeader = array_slice($positionedElementsGroupedByLine, 0, $indexFirstColumnStart)) === [] ? [] : array_merge(...$positionedTextElementsHeader),
+            ($positionedTextElementsHeader = array_slice($positionedElementsGroupedByLine, 0, $indexFirstColumnStart)) === []
+                ? []
+                : array_merge(...$positionedTextElementsHeader),
             ...array_values($columns),
-            ($positionedTextElementsFooter = array_slice($positionedElementsGroupedByLine, $indexLastColumnEnd + 1)) === [] ? [] : array_merge(...$positionedTextElementsFooter),
+            ($positionedTextElementsFooter = array_slice($positionedElementsGroupedByLine, $indexLastColumnEnd)) === []
+                ? []
+                : array_merge(...$positionedTextElementsFooter),
         ]));
     }
 
-    /** @param list<array{float, float}> $segments */
-    private static function segmentsCrossX(array $segments, float $candidateX): bool {
-        foreach ($segments as [$left, $right]) {
-            if ($left >= $candidateX) {
-                return false;
-            }
-
-            if ($right > $candidateX) {
+    /**
+     * @param list<PositionedTextElement> $positionedTextElementsOnLine
+     * @param array<string, Font> $fontCache
+     */
+    private static function elementOnLineCrossesX(array $positionedTextElementsOnLine, float $x, Page $page, array &$fontCache): bool {
+        foreach ($positionedTextElementsOnLine as $positionedTextElementOnLine) {
+            if ($positionedTextElementOnLine->absoluteMatrix->offsetX < $x
+                && $positionedTextElementOnLine->getRight($page, $fontCache) > $x) {
                 return true;
             }
         }
