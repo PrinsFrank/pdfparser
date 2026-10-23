@@ -41,7 +41,6 @@ class CCITTFaxDecode {
 
         if ($type === 3 && $count === 1) {
             return $entry . pack("v", $value) . "\x00\x00";
-            // @phpstan-ignore identical.alwaysTrue
         } elseif ($type === 4 || ($type === 3 && $count > 1)) {
             return $entry . pack("V", $value);
         } else {
