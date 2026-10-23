@@ -39,8 +39,8 @@ class ASCII85Decode {
             $padding = 5 - strlen($block);
             $block = str_pad($block, 5, 'u');
             $value = 0;
-            for ($i = 0; $i < 5; ++$i) {
-                $value = $value * 85 + (ord($block[$i]) - 33);
+            for ($j = 0; $j < 5; ++$j) {
+                $value = $value * 85 + (ord($block[$j]) - 33);
             }
 
             $binaryData = pack('N', $value);
