@@ -6,10 +6,12 @@ namespace PrinsFrank\PdfParser\Document\ContentStream;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\ContentStreamCommand;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\GraphicsStateOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\IncludesXObjects;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithColorState;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\ProducesPositionedTextElements;
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
+use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\ColorState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
@@ -36,6 +38,7 @@ readonly class ContentStream {
     public function getPositionedTextElements(Page|XObject $context, TransformationMatrix $transformationMatrix, array $visitedObjectIds): array {
         $positionedTextElements = $transformationStateStack = $textStateStack = [];
         $textState = new TextState(null, null); // See table 103, Tf operator for initial value
+        $colorState = new ColorState();
         foreach ($this->content as $content) {
             if ($content instanceof ContentStreamCommand) {
                 if ($content->operator === GraphicsStateOperator::SaveCurrentStateToStack) {
@@ -46,6 +49,10 @@ readonly class ContentStream {
                         ?? throw new ParseFailureException();
                     $textState = array_pop($textStateStack)
                         ?? throw new ParseFailureException();
+                }
+
+                if ($content->operator instanceof InteractsWithColorState) {
+                    $colorState = $content->operator->applyToColorState($content->operands, $colorState);
                 }
 
                 if ($content->operator instanceof InteractsWithTextState) {
@@ -65,6 +72,10 @@ readonly class ContentStream {
 
             $textMatrix = new TransformationMatrix(1, 0, 0, 1, 0, 0); // Identity matrix, See Table 106, Tm operator for initial value in text object
             foreach ($content->contentStreamCommands as $contentStreamCommand) {
+                if ($contentStreamCommand->operator instanceof InteractsWithColorState) {
+                    $colorState = $contentStreamCommand->operator->applyToColorState($contentStreamCommand->operands, $colorState);
+                }
+
                 if ($contentStreamCommand->operator instanceof InteractsWithTextState) {
                     $textState = $contentStreamCommand->operator->applyToTextState($contentStreamCommand->operands, $textState);
                 }
@@ -74,7 +85,7 @@ readonly class ContentStream {
                 }
 
                 if ($contentStreamCommand->operator instanceof ProducesPositionedTextElements && $textState !== null) {
-                    $positionedTextElements[] = $contentStreamCommand->operator->getPositionedTextElement($contentStreamCommand->operands, $textMatrix, $transformationMatrix, $textState);
+                    $positionedTextElements[] = $contentStreamCommand->operator->getPositionedTextElement($contentStreamCommand->operands, $textMatrix, $transformationMatrix, $textState, $colorState);
                 }
             }
         }
