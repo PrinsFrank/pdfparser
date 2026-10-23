@@ -10,6 +10,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CIDFontWidths
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CrossReferenceStreamByteSizes;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DifferencesArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\NumberTreeArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Boolean\BooleanValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Float\FloatValue;
@@ -1012,7 +1013,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::NR => [BooleanValue::class],
             self::NU => [DictionaryArrayValue::class],
             self::NUM_COPIES => [IntegerValue::class],
-            self::NUMS => [ArrayValue::class],
+            self::NUMS => [NumberTreeArrayValue::class],
             self::O => [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class, IntegerValue::class, FloatValue::class, Dictionary::class, ArrayValue::class, BooleanValue::class],
             self::OB => [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class],
             self::OC => [Dictionary::class],

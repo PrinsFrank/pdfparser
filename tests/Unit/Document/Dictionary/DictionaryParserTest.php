@@ -13,11 +13,13 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CrossReferenceStreamByteSizes;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\NumberTreeArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Boolean\BooleanValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EventNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\FilterNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NumberingStyleNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\PageModeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TabsNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TrappedNameValue;
@@ -276,7 +278,12 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::OPEN_ACTION, new ArrayValue([3, 0, 'R', '/Fit'])),
                 new DictionaryEntry(DictionaryKey::PAGE_MODE, PageModeNameValue::USE_OUTLINES),
                 new DictionaryEntry(DictionaryKey::PAGE_LABELS, new Dictionary(
-                    new DictionaryEntry(DictionaryKey::NUMS, new ArrayValue(['0<<','/S','/r>>12<<','/S','/D>>'])),
+                    new DictionaryEntry(DictionaryKey::NUMS, new NumberTreeArrayValue(
+                        [
+                            0 => new Dictionary(new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::LowerCaseRomanNumerals)),
+                            12 => new Dictionary(new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::DecimalArabic)),
+                        ],
+                    )),
                 )),
                 new DictionaryEntry(DictionaryKey::NAMES, new ReferenceValue(13164, 0)),
                 new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(13165, 0)),
