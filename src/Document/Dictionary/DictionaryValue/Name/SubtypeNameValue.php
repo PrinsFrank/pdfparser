@@ -18,4 +18,5 @@ enum SubtypeNameValue: string implements NameValue {
     case TYPE_3 = 'Type3';
     case XML = 'XML';
     case TEXT = 'Text';
+    case WIDGET = 'Widget';
 }

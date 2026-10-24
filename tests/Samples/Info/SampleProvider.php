@@ -24,7 +24,7 @@ class SampleProvider {
                 throw new RuntimeException();
             }
 
-            /** @var object{version: float, userPassword: ?string, ownerPassword: ?string, fileEncryptionKey: ?string, title: ?string, producer: ?string, author: ?string, creator: ?string, subject: ?string, keywords: ?string, creationDate: ?DateTimeImmutable, modificationDate: ?DateTimeImmutable, pages: list<object{text: string, markdown: string, images?: string[]}>} $content */
+            /** @var object{version: float, userPassword: ?string, ownerPassword: ?string, fileEncryptionKey: ?string, title: ?string, producer: ?string, author: ?string, creator: ?string, subject: ?string, keywords: ?string, creationDate: ?DateTimeImmutable, modificationDate: ?DateTimeImmutable, pages: list<object{text: string, markdown: string, images?: string[], annotations?: list<object{subType?: string, linkLocation?: string, partialFieldName?: string, alternativeFieldName?: string, mappingName?: string, value?: string}>}>} $content */
             $content = Yaml::parseFile($contentsPath, Yaml::PARSE_OBJECT_FOR_MAP | Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE | Yaml::PARSE_DATETIME);
             yield $sampleName => [
                 new FileInfo(
@@ -42,11 +42,23 @@ class SampleProvider {
                     $content->creationDate,
                     $content->modificationDate,
                     array_map(
-                        /** @param object{text: string, markdown: string, images?: string[]} $page */
+                        /** @param object{text: string, markdown: string, images?: string[], annotations?: list<object{subType?: string, linkLocation?: string, partialFieldName?: string, alternativeFieldName?: string, mappingName?: string, value?: string}>} $page */
                         fn(object $page) => new Page(
                             $page->text,
                             $page->markdown,
                             array_values(array_map(fn(string $relativePath) => sprintf('%s/images/%s', $sampleFolder, $relativePath), $page->images ?? [])),
+                            array_map(
+                                /** @param object{subType?: string, linkLocation?: string, partialFieldName?: string, alternativeFieldName?: string, mappingName?: string, value?: string} $annotation */
+                                fn(object $annotation) => new Annotation(
+                                    $annotation->subType ?? null,
+                                    $annotation->linkLocation ?? null,
+                                    $annotation->partialFieldName ?? null,
+                                    $annotation->alternativeFieldName ?? null,
+                                    $annotation->mappingName ?? null,
+                                    $annotation->value ?? null,
+                                ),
+                                $page->annotations ?? [],
+                            ),
                         ),
                         $content->pages,
                     ),

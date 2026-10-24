@@ -113,3 +113,7 @@ pages:
       E 
        
        
+    annotations:
+      -
+        subType: Link
+        linkLocation: 'https://example.com'

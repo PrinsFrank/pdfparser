@@ -197,3 +197,13 @@ pages:
       - page_1_image_1.png
       - page_1_image_2.png
       - page_1_image_3.png
+    annotations:
+      -
+        subType: Link
+        linkLocation: 'https://curia.europa.eu/juris/documents.jsf?num=C-34/24'
+      -
+        subType: Link
+        linkLocation: 'https://audiovisual.ec.europa.eu/en/ebs/grid?ebs=yes&ebsplus'
+      -
+        subType: Link
+        linkLocation: 'https://eur-lex.europa.eu/eli/reg/2012/1215/oj'

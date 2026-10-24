@@ -73,3 +73,8 @@ pages:
       gemäß § 91 SGB V 
       Der Vorsitzende 
       Prof. Hecken 
+    annotations:
+      -
+        subType: Widget
+        partialFieldName: Signature_1759821948057_0
+        alternativeFieldName: 'Die PDF-Datei der amtlichen Veröffentlichung ist mit einem qualifizierten elektronischen Siegel versehen. Siehe dazu Hinweis auf Infoseite.; '

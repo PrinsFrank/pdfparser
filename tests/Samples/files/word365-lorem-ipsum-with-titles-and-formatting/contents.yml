@@ -76,6 +76,19 @@ pages:
       Est saepe soluta et vero voluptatemQuo maxime! Eos tempora quas ad nesciunt itaque 
       **Ea nihil et ullam repellat et voluptatem delectus**. Aut voluptatum pariatur *Id* 
       *molestias cum nobis molestias*. Ut velit distinctioEx consectetur eos debitis 
+    annotations:
+      -
+        subType: Link
+        linkLocation: 'https://www.loremipzum.com/'
+      -
+        subType: Link
+        linkLocation: 'https://www.loremipzum.com/'
+      -
+        subType: Link
+        linkLocation: 'https://www.loremipzum.com/'
+      -
+        subType: Link
+        linkLocation: 'https://www.loremipzum.com/'
   -
     text: |-
       perspiciatis a minus commodi eos doloribus autem vel accusamus sequi et quidem 

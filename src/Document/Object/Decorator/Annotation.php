@@ -35,4 +35,28 @@ class Annotation extends DecoratedObject {
         return $this->getDictionary()
             ->getValueForKey($this->document, DictionaryKey::RECT, Rectangle::class);
     }
+
+    public function getPartialFieldName(): ?string {
+        return $this->getDictionary()
+            ->getStringValue($this->document, DictionaryKey::T)
+            ?->getText();
+    }
+
+    public function getAlternativeFieldName(): ?string {
+        return $this->getDictionary()
+            ->getStringValue($this->document, DictionaryKey::TU)
+            ?->getText();
+    }
+
+    public function getMappingName(): ?string {
+        return $this->getDictionary()
+            ->getStringValue($this->document, DictionaryKey::TM)
+            ?->getText();
+    }
+
+    public function getValue(): ?string {
+        return $this->getDictionary()
+            ->getStringValue($this->document, DictionaryKey::V)
+            ?->getText();
+    }
 }

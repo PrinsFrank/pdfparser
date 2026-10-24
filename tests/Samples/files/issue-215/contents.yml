@@ -107,6 +107,13 @@ pages:
       *Die Antwort wurde namens der Bundesregierung mit Schreiben des Bundesministeriums des Innern*
       *vom 28. August 2025 übermittelt.*
       *Die Drucksache enthält zusätzlich – in kleinerer Schrifttype – den Fragetext.*
+    annotations:
+      -
+        subType: Link
+        linkLocation: 'https://piwi.wiesbaden.de/sitzungsvorlage/detail/3434709'
+      -
+        subType: Link
+        linkLocation: 'https://landesplanung.hessen.de/sites/landesplanung.hessen.de/files/2024-10/landeswklimaanalysehessen_abschlussbericht_20240918.pdf'
   -
     text: |-
       Drucksache 21/1407 – 2 – Deutscher Bundestag – 21. Wahlperiode

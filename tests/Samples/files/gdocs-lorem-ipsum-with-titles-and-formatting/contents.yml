@@ -83,6 +83,22 @@ pages:
       *nobis molestias*. Ut velit distinctioEx consectetur eos debitis perspiciatis a minus commodi
       eos doloribus autem vel accusamus sequi et quidem reiciendis.
       ● Ut autem excepturi ut sequi laboriosam est quas debitis et placeat consequatur!
+    annotations:
+      -
+        subType: Link
+        linkLocation: 'https://www.loremipzum.com'
+      -
+        subType: Link
+        linkLocation: 'https://www.loremipzum.com'
+      -
+        subType: Link
+        linkLocation: 'https://www.loremipzum.com'
+      -
+        subType: Link
+        linkLocation: 'https://www.loremipzum.com'
+      -
+        subType: Link
+        linkLocation: 'https://www.loremipzum.com'
   -
     text: |-
       ● Qui autem voluptas eum deserunt dolor.

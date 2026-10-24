@@ -161,6 +161,10 @@ pages:
       - page_0_image_1.jpg
       - page_0_image_2.png
       - page_0_image_3.png
+    annotations:
+      -
+        subType: Link
+        linkLocation: 'mailto:namn.namn@liu.se'
   -
     text: |-
       OpenOffice make sure the document preparations 

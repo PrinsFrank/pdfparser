@@ -87,6 +87,19 @@ pages:
       • In nesciunt quia qui asperiores corrupti sed perspiciatis tempora id minus architecto! 
       • Rem beatae quos aut fugit vero. 
       • At adipisci enim id reiciendis officiis. 
+    annotations:
+      -
+        subType: Link
+        linkLocation: 'https://www.loremipzum.com/'
+      -
+        subType: Link
+        linkLocation: 'https://www.loremipzum.com/'
+      -
+        subType: Link
+        linkLocation: 'https://www.loremipzum.com/'
+      -
+        subType: Link
+        linkLocation: 'https://www.loremipzum.com/'
   -
     text: |-
       • Sed sapiente quia qui sint dolorem vel impedit magni. 
