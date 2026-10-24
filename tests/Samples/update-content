@@ -51,6 +51,17 @@ foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sa
             }
             $pages[$pageIndex]['images'][] = $fileName;
         }
+
+        foreach ($page->getAnnotations() as $annotation) {
+            $pages[$pageIndex]['annotations'][] = array_filter([
+                'subType' => $annotation->getSubType()?->value,
+                'linkLocation' => $annotation->getLinkLocation()?->getText(),
+                'partialFieldName' => $annotation->getPartialFieldName(),
+                'alternativeFieldName' => $annotation->getAlternativeFieldName(),
+                'mappingName' => $annotation->getMappingName(),
+                'value' => $annotation->getValue(),
+            ], fn (?string $value) => $value !== null);
+        }
     }
 
     $yamlContent = Yaml::dump(

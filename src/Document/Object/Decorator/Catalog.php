@@ -18,6 +18,11 @@ class Catalog extends DecoratedObject {
             ?? throw new ParseFailureException(sprintf('Unable to retrieve pages root object with number %d', $pagesReference->objectNumber));
     }
 
+    public function getInteractiveForm(): ?InteractiveForm {
+        return $this->getDictionary()
+            ->getObjectForReference($this->document, DictionaryKey::ACRO_FORM, InteractiveForm::class);
+    }
+
     /** @return list<FileSpecification> */
     public function getFileSpecifications(): array {
         $afType = $this->getDictionary()->getTypeForKey(DictionaryKey::AF);

@@ -103,6 +103,10 @@ pages:
       *Die Antwort wurde namens der Bundesregierung mit Schreiben des Bundesministeriums des Innern*
       *vom 9. September 2025 übermittelt.*
       *Die Drucksache enthält zusätzlich – in kleinerer Schrifttype – den Fragetext.*
+    annotations:
+      -
+        subType: Link
+        linkLocation: 'https://www.faz.net/aktuell/politik/inland/schuster-bezeichnet-wadephuls-aeusserung-ueber-zwangssolidaritaet-als-entgleisung-110593344.html'
   -
     text: |-
       Drucksache 21/1576 – 2 – Deutscher Bundestag – 21. Wahlperiode
@@ -194,6 +198,10 @@ pages:
       123, 148, 177). Religionsgemeinschaften bedürfen keiner Anerkennung durch 
       den Staat, um als Religionsgemeinschaft zu gelten und in Erscheinung treten zu 
       dürfen.
+    annotations:
+      -
+        subType: Link
+        linkLocation: 'https://www.faz.net/aktuell/politik/inland/schuster-bezeichnet-wadephuls-aeusserung-ueber-zwangssolidaritaet-als-entgleisung-110593344.html'
   -
     text: |-
       Deutscher Bundestag – 21. Wahlperiode – 3 – Drucksache 21/1576
@@ -368,3 +376,7 @@ pages:
       Gesamtherstellung: H. Heenemann GmbH & Co. KG, Buch- und Offsetdruckerei, Bessemerstraße 83–91, 12103 Berlin, www.heenemann-druck.de
       Vertrieb: Bundesanzeiger Verlag GmbH, Postfach 10 05 34, 50445 Köln, Telefon (02 21) 97 66 83 40, Fax (02 21) 97 66 83 44, www.bundesanzeiger-verlag.de
       ISSN 0722-8333
+    annotations:
+      -
+        subType: Link
+        linkLocation: 'http://lexetius.com/2002,2130'

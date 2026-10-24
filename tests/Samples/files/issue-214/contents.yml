@@ -47,3 +47,8 @@ pages:
       und 
       die Botschafterin von Barbados, Frau Nicolla Simone Rudder, 
       zur Entgegennahme ihrer Beglaubigungsschreiben empfangen. 
+    annotations:
+      -
+        subType: Widget
+        partialFieldName: Signature_1758009704254_0
+        alternativeFieldName: 'Die PDF-Datei der amtlichen Veröffentlichung ist mit einem qualifizierten elektronischen Siegel versehen. Siehe dazu Hinweis auf Infoseite.; '

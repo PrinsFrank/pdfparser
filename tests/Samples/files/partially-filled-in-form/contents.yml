@@ -92,6 +92,12 @@ pages:
       #### *060081201*
 
       
+    annotations:
+      -
+        subType: Widget
+        partialFieldName: '0'
+        alternativeFieldName: 'Vraag 1: Uw gegevens. Heeft uw werkgever of uitkeringsinstantie uw gegevens al ingevuld? Controleer ze dan en verbeter ze als ze fout of niet volledig zijn. Vraag 1a: Uw Achternaam en voorletter(s)'
+        value: 'Doe, J'
   -
     text: |-
       02 van 04
@@ -156,6 +162,12 @@ pages:
 
       
          
+    annotations:
+      -
+        subType: Widget
+        partialFieldName: '0'
+        alternativeFieldName: 'Vraag 2: Loonheffingskorting toepassen. Vraag 2a: U mag de loonheffingskorting maar bij 1 werkgever of uitkeringsinstantie laten toepassen. Lees ook de toelichting bij vraag 2a onderaan dit formulier. Zet daarna hiernaast een kruisje.'
+        value: 'Ik begrijp dat ik de loonheffingskorting maar bij 1 werkgever of uitkeringsinstantie mag laten toepassen. Ik heb ook de toelichting bij vraag 2a onderaan dit formulier gelezen.'
   -
     text: |-
       03 van 04
@@ -277,6 +289,10 @@ pages:
       maximale loonheffingskorting toepassen omdat uw loon of uitkering krijgt u te veel heffingskorting en moet u dat later aan de 
       niet hoog genoeg is? Doe dan aangifte inkomstenbelasting. Zo krijgt Belastingdienst terugbetalen. Of u krijgt minder terug na uw 
       u uiteindelijk altijd de heffingskortingen waar u recht op hebt. aangifte inkomstenbelasting.
+    annotations:
+      -
+        subType: Link
+        linkLocation: 'https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/programmas_en_formulieren/model_opgaaf_gegevens_voor_de_loonheffingen'
   -
     text: |-
       04 van 04
@@ -336,3 +352,7 @@ pages:
       tehuis woont.
       Wilt u weten of u recht hebt op een AOW-uitkering voor 
       alleenstaanden? Dit kunt u navragen bij de SVB.
+    annotations:
+      -
+        subType: Link
+        linkLocation: 'https://www.belastingdienst.nl/wps/wcm/connect/nl/aow/content/hulpmiddel-aow-en-loonheffingskorting'

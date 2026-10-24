@@ -94,6 +94,11 @@ pages:
       Herausgeber: Niedersächsische Staatskanzlei 
     images:
       - page_0_image_0.jpg
+    annotations:
+      -
+        subType: Widget
+        partialFieldName: Signature1
+        alternativeFieldName: "D:20250410102843+02'00'"
   -
     text: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 2 
@@ -1340,6 +1345,9 @@ pages:
        
       1) Abschluss des Ausbildungslehrgangs nicht erforderlich, wenn die Regelfunktion in einer Grundausstattungsfeu-
       erwehr nach § 1 Abs. 1 Nr. 1 übertragen wird. 
+    annotations:
+      -
+        subType: Link
   -
     text: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 14 
@@ -1535,6 +1543,9 @@ pages:
       tretende Gemeinde- oder Stadtbrandmeisterin oder Stellvertretender Gemeinde- oder Stadtbrandmeister, Ge-
       meinde- oder Stadtbrandmeisterin oder Gemeinde- oder Stadtbrandmeister sowie eine Gesamtdienstzeit von 
       mindestens zehn Jahren ab dem Datum der erstmaligen Verleihung eines Dienstgrades. 
+    annotations:
+      -
+        subType: Link
   -
     text: |-
       Nds. GVBl. 2025 Nr. 25 vom 10. April 2025  Seite 15 

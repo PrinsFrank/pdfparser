@@ -113,6 +113,8 @@ pages:
       %20auf%20Rekordhoch,-Stand%3A%2014.11.2024&text=Dem%20Kommunalbericht%202024%20des%20
       Nieders%C3%A4chsischen,des%20Landesrechnungshofs%2C%20Sandra%20von%20Klaeden. 
       1 
+    annotations:
+      - {  }
   -
     text: |-
       Niedersächsischer Landtag – 19. Wahlperiode Drucksache 19/7396 
@@ -436,6 +438,8 @@ pages:
                                                       
       4  https://www.nsgb.de/infrastrukturpaket-ist-ein-bluff/ 
       4 
+    annotations:
+      - {  }
   -
     text: |-
       Niedersächsischer Landtag – 19. Wahlperiode Drucksache 19/7396 
@@ -964,3 +968,5 @@ pages:
       x = Keine sinnvolle Aussage möglich.
       © Landesamt für Statistik Niedersachsen, Hannover 2025
       Vervielfältigung und Verbreitung, auch auszugsweise, mit Quellenangabe gestattet.
+    annotations:
+      - {  }

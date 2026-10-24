@@ -50,6 +50,13 @@ class SamplesTest extends TestCase {
                     sprintf('Page %d, image %d', $index, $imageIndex),
                 );
             }
+            foreach ($expectedPage->annotations as $annotationIndex => $annotation) {
+                self::assertSame($annotation->subType, $page->getAnnotations()[$annotationIndex]->getSubType()?->value);
+                self::assertSame($annotation->partialFieldName, $page->getAnnotations()[$annotationIndex]->getPartialFieldName());
+                self::assertSame($annotation->alternativeFieldName, $page->getAnnotations()[$annotationIndex]->getAlternativeFieldName());
+                self::assertSame($annotation->mappingName, $page->getAnnotations()[$annotationIndex]->getMappingName());
+                self::assertSame($annotation->value, $page->getAnnotations()[$annotationIndex]->getValue());
+            }
         }
     }
 
