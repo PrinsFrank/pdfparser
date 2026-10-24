@@ -11,6 +11,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -162,6 +163,10 @@ class Page extends DecoratedObject {
 
     /** @return list<Annotation> */
     public function getAnnotations(): array {
+        if (in_array($this->getDictionary()->getTypeForKey(DictionaryKey::ANNOTS), [ReferenceValueArray::class, ReferenceValue::class], true) === false) {
+            return [];
+        }
+
         return $this->getDictionary()
             ->getObjectsForReference($this->document, DictionaryKey::ANNOTS, Annotation::class);
     }
