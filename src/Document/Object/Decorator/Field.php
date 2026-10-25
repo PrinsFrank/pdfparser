@@ -8,6 +8,6 @@ class Field extends DecoratedObject {
     /** @return list<Annotation> */
     public function getAnnotations(): array {
         return $this->getDictionary()
-            ->getObjectsForReference($this->document, DictionaryKey::KIDS, Annotation::class);
+            ->getObjectsForReference(DictionaryKey::KIDS, Annotation::class);
     }
 }

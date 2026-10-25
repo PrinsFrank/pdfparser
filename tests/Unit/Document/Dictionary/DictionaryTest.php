@@ -16,7 +16,7 @@ class DictionaryTest extends TestCase {
         static::assertSame(
             TypeNameValue::FILE_SPEC,
             (new Dictionary(null, new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FILE_SPEC)))
-                ->getType(null),
+                ->getType(),
         );
     }
 
@@ -24,7 +24,7 @@ class DictionaryTest extends TestCase {
         static::assertSame(
             TypeNameValue::FILE_SPEC,
             (new Dictionary(null, new DictionaryEntry(DictionaryKey::TYPE, new Dictionary(null, new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FILE_SPEC)))))
-                ->getType(null),
+                ->getType(),
         );
     }
 
@@ -32,7 +32,7 @@ class DictionaryTest extends TestCase {
         static::assertSame(
             SubtypeNameValue::FORM,
             (new Dictionary(null, new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::FORM)))
-                ->getSubType(null),
+                ->getSubType(),
         );
     }
 
@@ -40,7 +40,7 @@ class DictionaryTest extends TestCase {
         static::assertSame(
             SubtypeNameValue::FORM,
             (new Dictionary(null, new DictionaryEntry(DictionaryKey::SUBTYPE, new Dictionary(null, new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::FORM)))))
-                ->getSubType(null),
+                ->getSubType(),
         );
     }
 }

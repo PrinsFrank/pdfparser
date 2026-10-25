@@ -11,56 +11,56 @@ class InformationDictionary extends DecoratedObject {
     /** @throws PdfParserException */
     public function getTitle(): ?string {
         return $this->getDictionary()
-            ->getStringValue($this->document, DictionaryKey::TITLE)
+            ->getStringValue(DictionaryKey::TITLE)
             ?->getText();
     }
 
     /** @throws PdfParserException */
     public function getProducer(): ?string {
         return $this->getDictionary()
-            ->getStringValue($this->document, DictionaryKey::PRODUCER)
+            ->getStringValue(DictionaryKey::PRODUCER)
             ?->getText();
     }
 
     /** @throws PdfParserException */
     public function getAuthor(): ?string {
         return $this->getDictionary()
-            ->getStringValue($this->document, DictionaryKey::AUTHOR)
+            ->getStringValue(DictionaryKey::AUTHOR)
             ?->getText();
     }
 
     /** @throws PdfParserException */
     public function getCreator(): ?string {
         return $this->getDictionary()
-            ->getStringValue($this->document, DictionaryKey::CREATOR)
+            ->getStringValue(DictionaryKey::CREATOR)
             ?->getText();
     }
 
     /** @throws PdfParserException */
     public function getSubject(): ?string {
         return $this->getDictionary()
-            ->getStringValue($this->document, DictionaryKey::SUBJECT)
+            ->getStringValue(DictionaryKey::SUBJECT)
             ?->getText();
     }
 
     /** @throws PdfParserException */
     public function getKeywords(): ?string {
         return $this->getDictionary()
-            ->getStringValue($this->document, DictionaryKey::KEYWORDS)
+            ->getStringValue(DictionaryKey::KEYWORDS)
             ?->getText();
     }
 
     /** @throws PdfParserException */
     public function getCreationDate(): ?DateTimeImmutable {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::CREATION_DATE, DateValue::class)
+            ->getValueForKey(DictionaryKey::CREATION_DATE, DateValue::class)
             ?->value;
     }
 
     /** @throws PdfParserException */
     public function getModificationDate(): ?DateTimeImmutable {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::MOD_DATE, DateValue::class)
+            ->getValueForKey(DictionaryKey::MOD_DATE, DateValue::class)
             ?->value;
     }
 }

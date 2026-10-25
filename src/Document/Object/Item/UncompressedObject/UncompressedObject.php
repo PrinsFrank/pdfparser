@@ -72,7 +72,7 @@ readonly class UncompressedObject implements ObjectItem {
         }
 
         $dictionary = $this->getDictionary($document);
-        if ($dictionary->getType($document) !== TypeNameValue::OBJ_STM) {
+        if ($dictionary->getType() !== TypeNameValue::OBJ_STM) {
             throw new ParseFailureException('Unable to get stream data from item that is not a stream');
         }
 

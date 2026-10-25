@@ -23,7 +23,7 @@ enum XObjectOperator: string implements IncludesXObjects {
     #[Override]
     public function getPositionedTextElements(string $operands, TransformationMatrix $transformationMatrix, Page|XObject $context, array $visitedObjectIds): array {
         $reference = $context->getXObjectsDictionary()
-            ?->getValueForKey($context->document, NameObjectStringValue::fromValue($operands) ?? throw new ParseFailureException(), ReferenceValue::class);
+            ?->getValueForKey(NameObjectStringValue::fromValue($operands) ?? throw new ParseFailureException(), ReferenceValue::class);
         if ($reference === null) {
             return [];
         }

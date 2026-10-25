@@ -15,14 +15,14 @@ class FileSpecification extends DecoratedObject {
         $ufType = $this->getDictionary()->getTypeForKey(DictionaryKey::UF);
         if (in_array($ufType, [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class], true)) {
             return $this->getDictionary()
-                ->getStringValue($this->document, DictionaryKey::UF)
+                ->getStringValue(DictionaryKey::UF)
                 ?->getText() ?? throw new ParseFailureException();
         }
 
         $fType = $this->getDictionary()->getTypeForKey(DictionaryKey::F);
         if (in_array($fType, [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class], true)) {
             return $this->getDictionary()
-                ->getStringValue($this->document, DictionaryKey::F)
+                ->getStringValue(DictionaryKey::F)
                 ?->getText() ?? throw new ParseFailureException();
         }
 
@@ -31,11 +31,11 @@ class FileSpecification extends DecoratedObject {
 
     public function getEmbeddedFileStreamDictionary(): ?Dictionary {
         return $this->getDictionary()
-            ->getSubDictionary($this->document, DictionaryKey::EF);
+            ->getSubDictionary(DictionaryKey::EF);
     }
 
     public function getEmbeddedFile(): ?EmbeddedFile {
         return $this->getEmbeddedFileStreamDictionary()
-            ?->getObjectForReference($this->document, DictionaryKey::F, EmbeddedFile::class);
+            ?->getObjectForReference(DictionaryKey::F, EmbeddedFile::class);
     }
 }
