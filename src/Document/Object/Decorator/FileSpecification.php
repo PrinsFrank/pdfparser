@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\EmbeddedFile;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\HexadecimalStringValue;
@@ -36,6 +37,7 @@ class FileSpecification extends DecoratedObject {
 
     public function getEmbeddedFile(): ?EmbeddedFile {
         return $this->getEmbeddedFileStreamDictionary()
-            ?->getObjectForReference(DictionaryKey::F, EmbeddedFile::class);
+            ?->getObjectForReference(DictionaryKey::F)
+            ?->getDictionary(EmbeddedFile::class);
     }
 }
