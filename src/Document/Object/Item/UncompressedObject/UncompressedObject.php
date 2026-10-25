@@ -6,6 +6,8 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\DecoratedDictionary;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\GenericDictionary;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
@@ -36,21 +38,21 @@ readonly class UncompressedObject implements ObjectItem {
     ) {}
 
     #[Override]
-    public function getDictionary(): Dictionary {
+    public function getDictionary(string $decoratorFQN = GenericDictionary::class): DecoratedDictionary {
         if (isset($this->dictionary)) {
-            return $this->dictionary;
+            return new $decoratorFQN($this->dictionary);
         }
 
         $startDictionaryPos = $this->document->stream->firstPos(DelimiterCharacter::LESS_THAN_SIGN, $this->startOffset, $this->endOffset);
         if ($startDictionaryPos === null) {
-            return $this->dictionary = new Dictionary($this->document);
+            return new $decoratorFQN($this->dictionary = new Dictionary($this->document));
         }
 
         $endDictionaryPos = $this->document->stream->firstPos(Marker::STREAM, $startDictionaryPos, $this->endOffset)
             ?? $this->document->stream->lastPos(Marker::END_OBJ, $this->document->stream->getSizeInBytes() - $this->endOffset)
             ?? throw new ParseFailureException('Unable to locate start of stream or end of current object');
 
-        return $this->dictionary = DictionaryParser::parse($this->document, $this->getEncryptionContext(), $this->document->stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos);
+        return new $decoratorFQN($this->dictionary = DictionaryParser::parse($this->document, $this->getEncryptionContext(), $this->document->stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos));
     }
 
     public function getCompressedObject(int $objectNumber): CompressedObject {
@@ -81,7 +83,7 @@ readonly class UncompressedObject implements ObjectItem {
             $this->document->stream,
             $this->startOffset,
             $this->endOffset,
-            $dictionary,
+            $dictionary->dictionary,
         );
     }
 
@@ -111,7 +113,7 @@ readonly class UncompressedObject implements ObjectItem {
                 $this->document,
                 $startStreamPos,
                 ($eolEndStreamPos ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value))) - $startStreamPos,
-                $this->getDictionary(),
+                $this->getDictionary()->dictionary,
             );
         }
 

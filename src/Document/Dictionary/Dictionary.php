@@ -145,7 +145,8 @@ readonly class Dictionary {
 
         if ($subDictionaryType === ReferenceValue::class) {
             return ($this->getObjectForReference($dictionaryKey) ?? throw new ParseFailureException())
-                ->getDictionary();
+                ->getDictionary()
+                ->dictionary;
         }
 
         throw new ParseFailureException(sprintf('Invalid type "%s" for subDictionary with key %s', $subDictionaryType, $dictionaryKey->name));

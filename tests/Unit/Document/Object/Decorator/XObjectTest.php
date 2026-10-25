@@ -4,6 +4,7 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\Object\Decorator;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\GenericDictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
@@ -18,10 +19,10 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(CompressedObject::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(
+            ->willReturn(new GenericDictionary(new Dictionary(
                 null,
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::IMAGE),
-            ));
+            )));
 
         static::assertTrue(
             (new XObject($objectItem))
@@ -33,10 +34,10 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(CompressedObject::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(
+            ->willReturn(new GenericDictionary(new Dictionary(
                 null,
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::FORM),
-            ));
+            )));
 
         static::assertFalse(
             (new XObject($objectItem))
@@ -48,7 +49,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(CompressedObject::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(null));
+            ->willReturn(new GenericDictionary(new Dictionary(null)));
 
         static::assertFalse(
             (new XObject($objectItem))
@@ -60,10 +61,10 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(CompressedObject::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(
+            ->willReturn(new GenericDictionary(new Dictionary(
                 null,
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::FORM),
-            ));
+            )));
 
         static::assertTrue(
             (new XObject($objectItem))
@@ -75,10 +76,10 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(CompressedObject::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(
+            ->willReturn(new GenericDictionary(new Dictionary(
                 null,
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::IMAGE),
-            ));
+            )));
 
         static::assertFalse(
             (new XObject($objectItem))
@@ -90,7 +91,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(CompressedObject::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(null));
+            ->willReturn(new GenericDictionary(new Dictionary(null)));
 
         static::assertFalse(
             (new XObject($objectItem))
@@ -102,7 +103,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(CompressedObject::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(null, new DictionaryEntry(DictionaryKey::WIDTH, new IntegerValue(42))));
+            ->willReturn(new GenericDictionary(new Dictionary(null, new DictionaryEntry(DictionaryKey::WIDTH, new IntegerValue(42)))));
 
         static::assertSame(
             42,
@@ -115,7 +116,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(CompressedObject::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(null));
+            ->willReturn(new GenericDictionary(new Dictionary(null)));
 
         static::assertNull(
             (new XObject($objectItem))
@@ -127,7 +128,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(CompressedObject::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(null, new DictionaryEntry(DictionaryKey::HEIGHT, new IntegerValue(42))));
+            ->willReturn(new GenericDictionary(new Dictionary(null, new DictionaryEntry(DictionaryKey::HEIGHT, new IntegerValue(42)))));
 
         static::assertSame(
             42,
@@ -140,7 +141,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(CompressedObject::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(null));
+            ->willReturn(new GenericDictionary(new Dictionary(null)));
 
         static::assertNull(
             (new XObject($objectItem))
@@ -152,7 +153,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(CompressedObject::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(null, new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(42))));
+            ->willReturn(new GenericDictionary(new Dictionary(null, new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(42)))));
 
         static::assertSame(
             42,
@@ -165,7 +166,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(CompressedObject::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(null));
+            ->willReturn(new GenericDictionary(new Dictionary(null)));
 
         static::assertNull(
             (new XObject($objectItem))

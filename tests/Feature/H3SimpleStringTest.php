@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\CrossReferenceSe
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\CrossReferenceSubSection;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryFreeObject;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\GenericDictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
@@ -74,11 +75,13 @@ class H3SimpleStringTest extends TestCase {
             $obj1,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
-                new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
-                new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
+                    new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
+                    new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
+                ),
             ),
             $obj1?->getDictionary(),
         );
@@ -96,10 +99,12 @@ class H3SimpleStringTest extends TestCase {
             $obj2,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
-                new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
+                    new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
+                ),
             ),
             $obj2?->getDictionary(),
         );
@@ -117,11 +122,13 @@ class H3SimpleStringTest extends TestCase {
             $obj3,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGES),
-                new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
-                new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGES),
+                    new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
+                    new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
+                ),
             ),
             $obj3?->getDictionary(),
         );
@@ -139,23 +146,25 @@ class H3SimpleStringTest extends TestCase {
             $obj4,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
-                new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
-                new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
-                new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValue(5, 0)),
-                new DictionaryEntry(DictionaryKey::RESOURCES, new Dictionary(
+            new GenericDictionary(
+                new Dictionary(
                     $document,
-                    new DictionaryEntry(DictionaryKey::PROC_SET, new ReferenceValue(6, 0)),
-                    new DictionaryEntry(
-                        DictionaryKey::FONT,
-                        new Dictionary(
-                            $document,
-                            new DictionaryEntry(new NameObjectStringValue('F1'), new ReferenceValue(7, 0)),
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
+                    new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
+                    new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
+                    new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValue(5, 0)),
+                    new DictionaryEntry(DictionaryKey::RESOURCES, new Dictionary(
+                        $document,
+                        new DictionaryEntry(DictionaryKey::PROC_SET, new ReferenceValue(6, 0)),
+                        new DictionaryEntry(
+                            DictionaryKey::FONT,
+                            new Dictionary(
+                                $document,
+                                new DictionaryEntry(new NameObjectStringValue('F1'), new ReferenceValue(7, 0)),
+                            ),
                         ),
-                    ),
-                )),
+                    )),
+                ),
             ),
             $obj4?->getDictionary(),
         );
@@ -173,9 +182,11 @@ class H3SimpleStringTest extends TestCase {
             $obj5,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(46)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(46)),
+                ),
             ),
             $obj5?->getDictionary(),
         );
@@ -193,7 +204,7 @@ class H3SimpleStringTest extends TestCase {
             $obj6,
         );
         static::assertEquals(
-            new Dictionary($document),
+            new GenericDictionary(new Dictionary($document)),
             $obj6?->getDictionary(),
         );
         $obj7 = $document->getObject(7);
@@ -210,13 +221,15 @@ class H3SimpleStringTest extends TestCase {
             $obj7,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FONT),
-                new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TYPE_1),
-                new DictionaryEntry(DictionaryKey::NAME, new NameObjectStringValue('F1')),
-                new DictionaryEntry(DictionaryKey::BASE_FONT, new NameObjectStringValue('Helvetica')),
-                new DictionaryEntry(DictionaryKey::ENCODING, EncodingNameValue::MacRomanEncoding),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FONT),
+                    new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TYPE_1),
+                    new DictionaryEntry(DictionaryKey::NAME, new NameObjectStringValue('F1')),
+                    new DictionaryEntry(DictionaryKey::BASE_FONT, new NameObjectStringValue('Helvetica')),
+                    new DictionaryEntry(DictionaryKey::ENCODING, EncodingNameValue::MacRomanEncoding),
+                ),
             ),
             $obj7?->getDictionary(),
         );
