@@ -9,12 +9,12 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\InformationDictionary;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObjectFactory;
 use PrinsFrank\PdfParser\Document\Object\Decorator\EncryptDictionary;
-use PrinsFrank\PdfParser\Document\Object\Decorator\InformationDictionary;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
@@ -72,7 +72,8 @@ class Document {
             return null;
         }
 
-        return $this->getObject($infoReference->objectNumber, InformationDictionary::class);
+        return $this->getObject($infoReference->objectNumber)
+            ?->getDictionary(InformationDictionary::class);
     }
 
     public function getEncryptDictionary(): ?EncryptDictionary {

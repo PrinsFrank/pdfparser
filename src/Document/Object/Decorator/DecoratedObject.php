@@ -2,7 +2,8 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
-use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\DecoratedDictionary;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\GenericDictionary;
 use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
@@ -22,9 +23,14 @@ abstract class DecoratedObject {
         }
     }
 
-    /** @throws PdfParserException */
-    public function getDictionary(): Dictionary {
-        return $this->objectItem->getDictionary();
+    /**
+     * @template T of DecoratedDictionary
+     * @param class-string<T> $decoratorFQN
+     * @throws PdfParserException
+     * @return T
+     */
+    public function getDictionary(string $decoratorFQN = GenericDictionary::class): DecoratedDictionary {
+        return $this->objectItem->getDictionary($decoratorFQN);
     }
 
     public function getStream(): Stream {

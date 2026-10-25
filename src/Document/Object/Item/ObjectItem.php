@@ -2,13 +2,19 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Item;
 
-use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\DecoratedDictionary;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\GenericDictionary;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 interface ObjectItem {
-    /** @throws PdfParserException */
-    public function getDictionary(): Dictionary;
+    /**
+     * @template T of DecoratedDictionary
+     * @param class-string<T> $decoratorFQN
+     * @throws PdfParserException
+     * @return T
+     */
+    public function getDictionary(string $decoratorFQN = GenericDictionary::class): DecoratedDictionary;
 
     public function getContent(): Stream;
 }

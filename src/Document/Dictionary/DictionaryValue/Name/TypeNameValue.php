@@ -11,7 +11,6 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\EncryptDictionary;
 use PrinsFrank\PdfParser\Document\Object\Decorator\FileSpecification;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
-use PrinsFrank\PdfParser\Document\Object\Decorator\InformationDictionary;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Pages;
 use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
@@ -153,7 +152,6 @@ enum TypeNameValue: string implements NameValue {
             TypeNameValue::ENCRYPT => EncryptDictionary::class,
             TypeNameValue::FILE_SPEC => FileSpecification::class,
             TypeNameValue::FONT => Font::class,
-            TypeNameValue::INFO => InformationDictionary::class,
             TypeNameValue::PAGE => Page::class,
             TypeNameValue::PAGES => Pages::class,
             TypeNameValue::X_OBJECT => XObject::class,

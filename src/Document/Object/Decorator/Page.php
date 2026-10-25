@@ -46,7 +46,7 @@ class Page extends DecoratedObject {
         }
 
         return ContentStreamParser::parse(
-            $this->objectItem->document->getObjectsByDictionaryKey($this->getDictionary(), DictionaryKey::CONTENTS),
+            $this->objectItem->document->getObjectsByDictionaryKey($this->getDictionary()->dictionary, DictionaryKey::CONTENTS),
         );
     }
 

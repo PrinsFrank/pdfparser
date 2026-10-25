@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\Object\Item\CompressedObject;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\GenericDictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
@@ -45,9 +46,11 @@ class CompressedObjectTest extends TestCase {
         );
 
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
+                ),
             ),
             $compressedObject->getDictionary(),
         );

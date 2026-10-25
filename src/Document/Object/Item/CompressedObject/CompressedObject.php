@@ -9,6 +9,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\DecoratedDictionary;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\GenericDictionary;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
@@ -35,9 +37,9 @@ readonly class CompressedObject implements ObjectItem {
     }
 
     #[Override]
-    public function getDictionary(): Dictionary {
+    public function getDictionary(string $decoratorFQN = GenericDictionary::class): DecoratedDictionary {
         if (isset($this->dictionary)) {
-            return $this->dictionary;
+            return new $decoratorFQN($this->dictionary);
         }
 
         $content = $this->getContent();
@@ -53,15 +55,17 @@ readonly class CompressedObject implements ObjectItem {
 
         if ($firstNonWhitespaceCharOffset === null
             || $content->read($firstNonWhitespaceCharOffset, 2) !== '<<') {
-            return new Dictionary($this->document);
+            return new $decoratorFQN($this->dictionary = new Dictionary($this->document));
         }
 
-        return $this->dictionary = DictionaryParser::parse(
-            $this->document,
-            $this->storedInObject->getEncryptionContext(),
-            $content,
-            $firstNonWhitespaceCharOffset,
-            $content->getSizeInBytes() - $firstNonWhitespaceCharOffset,
+        return new $decoratorFQN(
+            $this->dictionary = DictionaryParser::parse(
+                $this->document,
+                $this->storedInObject->getEncryptionContext(),
+                $content,
+                $firstNonWhitespaceCharOffset,
+                $content->getSizeInBytes() - $firstNonWhitespaceCharOffset,
+            ),
         );
     }
 

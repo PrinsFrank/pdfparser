@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\CrossReferenceSe
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\CrossReferenceSubSection;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryFreeObject;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\GenericDictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
@@ -113,11 +114,13 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj1,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
-                new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
-                new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
+                    new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
+                    new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
+                ),
             ),
             $obj1?->getDictionary(),
         );
@@ -135,10 +138,12 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj2,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
-                new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
+                    new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
+                ),
             ),
             $obj2?->getDictionary(),
         );
@@ -156,11 +161,13 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj3,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGES),
-                new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
-                new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGES),
+                    new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
+                    new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
+                ),
             ),
             $obj3?->getDictionary(),
         );
@@ -178,13 +185,15 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj4,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
-                new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
-                new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
-                new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValue(5, 0)),
-                new DictionaryEntry(DictionaryKey::ANNOTS, new ReferenceValue(7, 0)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
+                    new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
+                    new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
+                    new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValue(5, 0)),
+                    new DictionaryEntry(DictionaryKey::ANNOTS, new ReferenceValue(7, 0)),
+                ),
             ),
             $obj4?->getDictionary(),
         );
@@ -202,9 +211,11 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj5,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(35)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(35)),
+                ),
             ),
             $obj5?->getDictionary(),
         );
@@ -222,7 +233,7 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj6,
         );
         static::assertEquals(
-            new Dictionary($document),
+            new GenericDictionary(new Dictionary($document)),
             $obj6?->getDictionary(),
         );
         $obj7 = $document->getObject(7);
@@ -239,7 +250,7 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj7,
         );
         static::assertEquals(
-            new Dictionary($document),
+            new GenericDictionary(new Dictionary($document)),
             $obj7?->getDictionary(),
         );
         $obj8 = $document->getObject(8);
@@ -256,13 +267,15 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj8,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
-                new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
-                new DictionaryEntry(DictionaryKey::RECT, new Rectangle(44, 616, 162, 735)),
-                new DictionaryEntry(DictionaryKey::CONTENTS, new LiteralStringValue('Text #1')),
-                new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(true)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
+                    new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
+                    new DictionaryEntry(DictionaryKey::RECT, new Rectangle(44, 616, 162, 735)),
+                    new DictionaryEntry(DictionaryKey::CONTENTS, new LiteralStringValue('Text #1')),
+                    new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(true)),
+                ),
             ),
             $obj8?->getDictionary(),
         );
@@ -280,13 +293,15 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj9,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
-                new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
-                new DictionaryEntry(DictionaryKey::RECT, new Rectangle(224, 668, 457, 735)),
-                new DictionaryEntry(DictionaryKey::CONTENTS, new LiteralStringValue('Text #2')),
-                new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(false)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
+                    new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
+                    new DictionaryEntry(DictionaryKey::RECT, new Rectangle(224, 668, 457, 735)),
+                    new DictionaryEntry(DictionaryKey::CONTENTS, new LiteralStringValue('Text #2')),
+                    new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(false)),
+                ),
             ),
             $obj9?->getDictionary(),
         );
@@ -304,13 +319,15 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj10,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
-                new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
-                new DictionaryEntry(DictionaryKey::RECT, new Rectangle(239, 393, 328, 622)),
-                new DictionaryEntry(DictionaryKey::CONTENTS, new LiteralStringValue('Text #3')),
-                new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(true)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
+                    new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
+                    new DictionaryEntry(DictionaryKey::RECT, new Rectangle(239, 393, 328, 622)),
+                    new DictionaryEntry(DictionaryKey::CONTENTS, new LiteralStringValue('Text #3')),
+                    new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(true)),
+                ),
             ),
             $obj10?->getDictionary(),
         );
@@ -328,13 +345,15 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj11,
         );
         static::assertEquals(
-            new Dictionary(
-                $document,
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
-                new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
-                new DictionaryEntry(DictionaryKey::RECT, new Rectangle(34, 398, 225, 575)),
-                new DictionaryEntry(DictionaryKey::CONTENTS, new LiteralStringValue('Text #4')),
-                new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(false)),
+            new GenericDictionary(
+                new Dictionary(
+                    $document,
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
+                    new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
+                    new DictionaryEntry(DictionaryKey::RECT, new Rectangle(34, 398, 225, 575)),
+                    new DictionaryEntry(DictionaryKey::CONTENTS, new LiteralStringValue('Text #4')),
+                    new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(false)),
+                ),
             ),
             $obj11?->getDictionary(),
         );
