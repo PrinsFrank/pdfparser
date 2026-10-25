@@ -66,7 +66,6 @@ class H2MinimalTest extends TestCase {
                     9,
                     73,
                 ),
-                $document,
             ),
             $obj1,
         );
@@ -90,7 +89,6 @@ class H2MinimalTest extends TestCase {
                     74,
                     119,
                 ),
-                $document,
             ),
             $obj2,
         );
@@ -113,7 +111,6 @@ class H2MinimalTest extends TestCase {
                     120,
                     178,
                 ),
-                $document,
             ),
             $obj3,
         );
@@ -137,7 +134,6 @@ class H2MinimalTest extends TestCase {
                     179,
                     299,
                 ),
-                $document,
             ),
             $obj4,
         );
@@ -163,7 +159,6 @@ class H2MinimalTest extends TestCase {
                     300,
                     383,
                 ),
-                $document,
             ),
             $obj5,
         );
@@ -185,7 +180,6 @@ class H2MinimalTest extends TestCase {
                     384,
                     407,
                 ),
-                $document,
             ),
             $obj6,
         );
@@ -203,7 +197,6 @@ class H2MinimalTest extends TestCase {
                     9,
                     73,
                 ),
-                $document,
             ),
             $document->getCatalog(),
         );

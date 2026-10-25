@@ -141,12 +141,12 @@ class Document {
                 throw new RuntimeException('Parents for stream items shouldn\'t be stream items themselves');
             }
 
-            $objectItem = $parentObject->objectItem->getCompressedObject($objectNumber, $this);
+            $objectItem = $parentObject->objectItem->getCompressedObject($objectNumber);
         } else {
             $objectItem = UncompressedObjectParser::parseObject($crossReferenceEntry, $objectNumber, $this);
         }
 
-        return $this->objectCache[$objectNumber] = DecoratedObjectFactory::forItem($objectNumber, $objectItem, $this, $expectedDecoratorFQN);
+        return $this->objectCache[$objectNumber] = DecoratedObjectFactory::forItem($objectNumber, $objectItem, $expectedDecoratorFQN);
     }
 
     /** @throws PdfParserException */

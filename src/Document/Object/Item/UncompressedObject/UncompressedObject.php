@@ -36,29 +36,30 @@ readonly class UncompressedObject implements ObjectItem {
     ) {}
 
     #[Override]
-    public function getDictionary(Document $document): Dictionary {
+    public function getDictionary(): Dictionary {
         if (isset($this->dictionary)) {
             return $this->dictionary;
         }
 
-        $startDictionaryPos = $document->stream->firstPos(DelimiterCharacter::LESS_THAN_SIGN, $this->startOffset, $this->endOffset);
+        $startDictionaryPos = $this->document->stream->firstPos(DelimiterCharacter::LESS_THAN_SIGN, $this->startOffset, $this->endOffset);
         if ($startDictionaryPos === null) {
-            return $this->dictionary = new Dictionary($document);
+            return $this->dictionary = new Dictionary($this->document);
         }
 
-        $endDictionaryPos = $document->stream->firstPos(Marker::STREAM, $startDictionaryPos, $this->endOffset)
-            ?? $document->stream->lastPos(Marker::END_OBJ, $document->stream->getSizeInBytes() - $this->endOffset)
+        $endDictionaryPos = $this->document->stream->firstPos(Marker::STREAM, $startDictionaryPos, $this->endOffset)
+            ?? $this->document->stream->lastPos(Marker::END_OBJ, $this->document->stream->getSizeInBytes() - $this->endOffset)
             ?? throw new ParseFailureException('Unable to locate start of stream or end of current object');
 
-        return $this->dictionary = DictionaryParser::parse($document, $this->getEncryptionContext(), $document->stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos);
+        return $this->dictionary = DictionaryParser::parse($this->document, $this->getEncryptionContext(), $this->document->stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos);
     }
 
-    public function getCompressedObject(int $objectNumber, Document $document): CompressedObject {
-        $byteOffsets = $this->getByteOffsets($document);
+    public function getCompressedObject(int $objectNumber): CompressedObject {
+        $byteOffsets = $this->getByteOffsets();
         $startByteOffset = $byteOffsets->getRelativeByteOffsetForObject($objectNumber)
             ?? throw new InvalidArgumentException('Compressed object does not exist in this uncompressed object');
 
         return new CompressedObject(
+            $this->document,
             $objectNumber,
             $this,
             $startByteOffset,
@@ -66,18 +67,18 @@ readonly class UncompressedObject implements ObjectItem {
         );
     }
 
-    public function getByteOffsets(Document $document): CompressedObjectByteOffsets {
+    public function getByteOffsets(): CompressedObjectByteOffsets {
         if (isset($this->byteOffsets)) {
             return $this->byteOffsets;
         }
 
-        $dictionary = $this->getDictionary($document);
+        $dictionary = $this->getDictionary();
         if ($dictionary->getType() !== TypeNameValue::OBJ_STM) {
             throw new ParseFailureException('Unable to get stream data from item that is not a stream');
         }
 
         return $this->byteOffsets = CompressedObjectByteOffsetParser::parse(
-            $document->stream,
+            $this->document->stream,
             $this->startOffset,
             $this->endOffset,
             $dictionary,
@@ -97,30 +98,30 @@ readonly class UncompressedObject implements ObjectItem {
     }
 
     #[Override]
-    public function getContent(Document $document): Stream {
-        if (($startStreamPos = $document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)) !== null
-            && ($endStreamPos = $document->stream->lastPos(Marker::END_STREAM, $document->stream->getSizeInBytes() - $this->endOffset)) !== null) {
+    public function getContent(): Stream {
+        if (($startStreamPos = $this->document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)) !== null
+            && ($endStreamPos = $this->document->stream->lastPos(Marker::END_STREAM, $this->document->stream->getSizeInBytes() - $this->endOffset)) !== null) {
             if ($startStreamPos === $endStreamPos
-                || $startStreamPos === ($eolEndStreamPos = $document->stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset))) {
+                || $startStreamPos === ($eolEndStreamPos = $this->document->stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset))) {
                 return new InMemoryStream('');
             }
 
             return CompressedObjectContentParser::parseBinary(
                 $this->getEncryptionContext(),
-                $document,
+                $this->document,
                 $startStreamPos,
                 ($eolEndStreamPos ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value))) - $startStreamPos,
-                $this->getDictionary($document),
+                $this->getDictionary(),
             );
         }
 
-        $startObjPos = $document->stream->firstPos(Marker::OBJ, $this->startOffset, $this->endOffset)
+        $startObjPos = $this->document->stream->firstPos(Marker::OBJ, $this->startOffset, $this->endOffset)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::OBJ->value));
-        $endObjPos = $document->stream->lastPos(Marker::END_OBJ, $document->stream->getSizeInBytes() - $this->endOffset)
+        $endObjPos = $this->document->stream->lastPos(Marker::END_OBJ, $this->document->stream->getSizeInBytes() - $this->endOffset)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_OBJ->value));
 
         return FileStream::fromString(
-            $document->stream->read(
+            $this->document->stream->read(
                 $startObjPos + Marker::OBJ->length(),
                 $endObjPos - ($startObjPos + Marker::OBJ->length()),
             ),

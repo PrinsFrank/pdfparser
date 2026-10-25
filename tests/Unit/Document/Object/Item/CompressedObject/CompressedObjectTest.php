@@ -31,6 +31,7 @@ class CompressedObjectTest extends TestCase {
 
         $document = new Document($totalStream, Version::V1_0, new CrossReferenceSource(), null);
         $compressedObject = new CompressedObject(
+            $document,
             12,
             new UncompressedObject(
                 $document,
@@ -48,7 +49,7 @@ class CompressedObjectTest extends TestCase {
                 $document,
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
             ),
-            $compressedObject->getDictionary($document),
+            $compressedObject->getDictionary(),
         );
     }
 }
