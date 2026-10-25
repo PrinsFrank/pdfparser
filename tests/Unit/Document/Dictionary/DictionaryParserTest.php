@@ -51,9 +51,10 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
-                new DictionaryEntry(DictionaryKey::DECODE_PARMS, new Dictionary()),
+                null,
+                new DictionaryEntry(DictionaryKey::DECODE_PARMS, new Dictionary(null)),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -77,6 +78,7 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
                 new DictionaryEntry(DictionaryKey::INDEX, new ArrayValue([0, 16])),
                 new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(16)),
@@ -87,7 +89,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(57)),
                 new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::FLATE_DECODE),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -101,9 +103,10 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::INDEX, new ArrayValue([0, 16])),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -129,7 +132,9 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::DECODE_PARMS, new Dictionary(
+                    null,
                     new DictionaryEntry(DictionaryKey::COLUMNS, new IntegerValue(5)),
                     new DictionaryEntry(DictionaryKey::PREDICTOR, new IntegerValue(12)),
                 )),
@@ -144,7 +149,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
                 new DictionaryEntry(DictionaryKey::W, new CrossReferenceStreamByteSizes(1, 4, 0)),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -152,7 +157,9 @@ class DictionaryParserTest extends TestCase {
         $stream = new InMemoryStream('<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode/ID[<9A27A23F6A2546448EBB340FF38477BD><C5C4714E306446ABAE40FE784477D322>]/Index[2460 1 4311 1 4317 2 4414 1 4717 21]/Info 4318 0 R/Length 106/Prev 46153797/Root 4320 0 R/Size 4738/Type/XRef/W[1 4 0]>>stream');
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::DECODE_PARMS, new Dictionary(
+                    null,
                     new DictionaryEntry(DictionaryKey::COLUMNS, new IntegerValue(5)),
                     new DictionaryEntry(DictionaryKey::PREDICTOR, new IntegerValue(12)),
                 )),
@@ -167,7 +174,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
                 new DictionaryEntry(DictionaryKey::W, new CrossReferenceStreamByteSizes(1, 4, 0)),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -192,6 +199,7 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FONT_DESCRIPTOR),
                 new DictionaryEntry(DictionaryKey::FONT_NAME, new NameObjectStringValue('TAIPAH+CMR10')),
                 new DictionaryEntry(DictionaryKey::FLAGS, new IntegerValue(4)),
@@ -205,7 +213,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::CHAR_SET, new LiteralStringValue('/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two')),
                 new DictionaryEntry(DictionaryKey::FONT_FILE, new ReferenceValue(11, 0)),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -226,6 +234,7 @@ class DictionaryParserTest extends TestCase {
         static::assertNotFalse($creationModificationDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s P', '2022-05-06 20:11:53 +02:00'));
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::PRODUCER, new LiteralStringValue('pdfTeX-1.40.18')),
                 new DictionaryEntry(DictionaryKey::CREATOR, new LiteralStringValue('TeX')),
                 new DictionaryEntry(DictionaryKey::CREATION_DATE, new DateValue($creationModificationDate)),
@@ -233,7 +242,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TRAPPED, TrappedNameValue::FALSE),
                 new DictionaryEntry(DictionaryKey::PTEX_FULLBANNER, new LiteralStringValue('This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3')),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -251,11 +260,12 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::PRODUCER, new LiteralStringValue('pdfTeX-1.40.18')),
                 new DictionaryEntry(new NameObjectStringValue('Foo'), new LiteralStringValue('Bar')),
                 new DictionaryEntry(new NameObjectStringValue('Bar'), new LiteralStringValue('% this is not a comment but a string literal')),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -275,13 +285,15 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::OPEN_ACTION, new ArrayValue([3, 0, 'R', '/Fit'])),
                 new DictionaryEntry(DictionaryKey::PAGE_MODE, PageModeNameValue::USE_OUTLINES),
                 new DictionaryEntry(DictionaryKey::PAGE_LABELS, new Dictionary(
+                    null,
                     new DictionaryEntry(DictionaryKey::NUMS, new NumberTreeArrayValue(
                         [
-                            0 => new Dictionary(new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::LowerCaseRomanNumerals)),
-                            12 => new Dictionary(new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::DecimalArabic)),
+                            0 => new Dictionary(null, new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::LowerCaseRomanNumerals)),
+                            12 => new Dictionary(null, new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::DecimalArabic)),
                         ],
                     )),
                 )),
@@ -290,7 +302,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(13221, 0)),
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -312,13 +324,17 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
                 new DictionaryEntry(DictionaryKey::RESOURCES, new Dictionary(
+                    null,
                     new DictionaryEntry(DictionaryKey::PROC_SET, new ArrayValue(['/PDF', '/Text', '/ImageB', '/ImageC', '/ImageI'])),
                     new DictionaryEntry(DictionaryKey::EXT_GSTATE, new Dictionary(
+                        null,
                         new DictionaryEntry(new NameObjectStringValue('G3'), new ReferenceValue(3, 0)),
                     )),
                     new DictionaryEntry(DictionaryKey::FONT, new Dictionary(
+                        null,
                         new DictionaryEntry(new NameObjectStringValue('F4'), new ReferenceValue(4, 0)),
                     )),
                 )),
@@ -328,7 +344,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TABS, TabsNameValue::StructureOrder),
                 new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(6, 0)),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -362,16 +378,20 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(
                     DictionaryKey::OCPROPERTIES,
                     new Dictionary(
+                        null,
                         new DictionaryEntry(
                             DictionaryKey::D,
                             new Dictionary(
+                                null,
                                 new DictionaryEntry(
                                     DictionaryKey::AS,
                                     new DictionaryArrayValue(
                                         new Dictionary(
+                                            null,
                                             new DictionaryEntry(
                                                 DictionaryKey::CATEGORY,
                                                 new ArrayValue(['/Print']),
@@ -389,6 +409,7 @@ class DictionaryParserTest extends TestCase {
                                             ),
                                         ),
                                         new Dictionary(
+                                            null,
                                             new DictionaryEntry(
                                                 DictionaryKey::CATEGORY,
                                                 new ArrayValue(['/View']),
@@ -437,7 +458,7 @@ class DictionaryParserTest extends TestCase {
                     ),
                 ),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -450,9 +471,10 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::DCT_DECODE),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
 
         // Note the extra space after the /Filter
@@ -464,9 +486,10 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::DCT_DECODE),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -482,10 +505,11 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -501,10 +525,11 @@ class DictionaryParserTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 
@@ -517,9 +542,11 @@ class DictionaryParserTest extends TestCase {
 
         static::assertEquals(
             new Dictionary(
+                null,
                 new DictionaryEntry(
                     DictionaryKey::ACRO_FORM,
                     new Dictionary(
+                        null,
                         new DictionaryEntry(
                             DictionaryKey::DA,
                             new LiteralStringValue('/Helv 0 Tf 0 g '),
@@ -527,9 +554,11 @@ class DictionaryParserTest extends TestCase {
                         new DictionaryEntry(
                             DictionaryKey::DR,
                             new Dictionary(
+                                null,
                                 new DictionaryEntry(
                                     DictionaryKey::ENCODING,
                                     new Dictionary(
+                                        null,
                                         new DictionaryEntry(
                                             DictionaryKey::PDFDOC_ENCODING,
                                             new ReferenceValue(50, 0),
@@ -539,6 +568,7 @@ class DictionaryParserTest extends TestCase {
                                 new DictionaryEntry(
                                     DictionaryKey::FONT,
                                     new Dictionary(
+                                        null,
                                         new DictionaryEntry(
                                             DictionaryKey::HELV,
                                             new ReferenceValue(48, 0),
@@ -556,6 +586,7 @@ class DictionaryParserTest extends TestCase {
                                 new DictionaryEntry(
                                     DictionaryKey::XOBJECT,
                                     new Dictionary(
+                                        null,
                                         new DictionaryEntry(
                                             new NameObjectStringValue('FRM'),
                                             new ReferenceValue(31, 0),
@@ -583,9 +614,11 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(
                     DictionaryKey::EXTENSIONS,
                     new Dictionary(
+                        null,
                         new DictionaryEntry(
                             new NameObjectStringValue('ADBE'),
                             new Dictionary(
+                                null,
                                 new DictionaryEntry(
                                     DictionaryKey::BASE_VERSION,
                                     Version::V1_7,
@@ -605,6 +638,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(
                     DictionaryKey::MARK_INFO,
                     new Dictionary(
+                        null,
                         new DictionaryEntry(
                             DictionaryKey::MARKED,
                             new BooleanValue(true),
@@ -636,7 +670,7 @@ class DictionaryParserTest extends TestCase {
                     new ReferenceValue(28, 0),
                 ),
             ),
-            DictionaryParser::parse(null, $stream, 0, $stream->getSizeInBytes()),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
 }

@@ -12,10 +12,10 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 #[CoversClass(CrossReferenceSection::class)]
 class CrossReferenceSectionTest extends TestCase {
     public function testGetCrossReferenceEntry(): void {
-        static::assertNull((new CrossReferenceSection(new Dictionary()))->getCrossReferenceEntry(42));
+        static::assertNull((new CrossReferenceSection(new Dictionary(null)))->getCrossReferenceEntry(42));
 
         $crossReferenceSection = new CrossReferenceSection(
-            new Dictionary(),
+            new Dictionary(null),
             new CrossReferenceSubSection(
                 42,
                 2,
@@ -27,7 +27,7 @@ class CrossReferenceSectionTest extends TestCase {
         static::assertSame($crossReferenceEntry2, $crossReferenceSection->getCrossReferenceEntry(43));
 
         $crossReferenceSection = new CrossReferenceSection(
-            new Dictionary(),
+            new Dictionary(null),
             new CrossReferenceSubSection(
                 42,
                 2,

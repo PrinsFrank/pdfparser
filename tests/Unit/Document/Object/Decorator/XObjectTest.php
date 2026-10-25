@@ -20,6 +20,7 @@ class XObjectTest extends TestCase {
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
             ->willReturn(new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::IMAGE),
             ));
 
@@ -34,6 +35,7 @@ class XObjectTest extends TestCase {
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
             ->willReturn(new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::FORM),
             ));
 
@@ -47,7 +49,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(ObjectItem::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary());
+            ->willReturn(new Dictionary(null));
 
         static::assertFalse(
             (new XObject(42, $objectItem, $this->createMock(Document::class)))
@@ -60,6 +62,7 @@ class XObjectTest extends TestCase {
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
             ->willReturn(new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::FORM),
             ));
 
@@ -74,6 +77,7 @@ class XObjectTest extends TestCase {
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
             ->willReturn(new Dictionary(
+                null,
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::IMAGE),
             ));
 
@@ -87,7 +91,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(ObjectItem::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary());
+            ->willReturn(new Dictionary(null));
 
         static::assertFalse(
             (new XObject(42, $objectItem, $this->createMock(Document::class)))
@@ -99,7 +103,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(ObjectItem::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(new DictionaryEntry(DictionaryKey::WIDTH, new IntegerValue(42))));
+            ->willReturn(new Dictionary(null, new DictionaryEntry(DictionaryKey::WIDTH, new IntegerValue(42))));
 
         static::assertSame(
             42,
@@ -112,7 +116,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(ObjectItem::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary());
+            ->willReturn(new Dictionary(null));
 
         static::assertNull(
             (new XObject(42, $objectItem, $this->createMock(Document::class)))
@@ -124,7 +128,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(ObjectItem::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(new DictionaryEntry(DictionaryKey::HEIGHT, new IntegerValue(42))));
+            ->willReturn(new Dictionary(null, new DictionaryEntry(DictionaryKey::HEIGHT, new IntegerValue(42))));
 
         static::assertSame(
             42,
@@ -137,7 +141,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(ObjectItem::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary());
+            ->willReturn(new Dictionary(null));
 
         static::assertNull(
             (new XObject(42, $objectItem, $this->createMock(Document::class)))
@@ -149,7 +153,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(ObjectItem::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary(new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(42))));
+            ->willReturn(new Dictionary(null, new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(42))));
 
         static::assertSame(
             42,
@@ -162,7 +166,7 @@ class XObjectTest extends TestCase {
         $objectItem = $this->createMock(ObjectItem::class);
         $objectItem->expects(self::atLeastOnce())
             ->method('getDictionary')
-            ->willReturn(new Dictionary());
+            ->willReturn(new Dictionary(null));
 
         static::assertNull(
             (new XObject(42, $objectItem, $this->createMock(Document::class)))

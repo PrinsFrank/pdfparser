@@ -22,7 +22,7 @@ class CrossReferenceTableParserTest extends TestCase {
         $stream = new InMemoryStream("28 5\ntrailer\n");
         static::assertEquals(
             new CrossReferenceSection(
-                new Dictionary(),
+                new Dictionary(null),
                 new CrossReferenceSubSection(28, 5),
             ),
             CrossReferenceTableParser::parse($stream, 0, $stream->getSizeInBytes()),
@@ -33,7 +33,7 @@ class CrossReferenceTableParserTest extends TestCase {
         $stream = new InMemoryStream("28 5\rtrailer\r");
         static::assertEquals(
             new CrossReferenceSection(
-                new Dictionary(),
+                new Dictionary(null),
                 new CrossReferenceSubSection(28, 5),
             ),
             CrossReferenceTableParser::parse($stream, 0, $stream->getSizeInBytes()),
@@ -44,7 +44,7 @@ class CrossReferenceTableParserTest extends TestCase {
         $stream = new InMemoryStream("28 5\n\rtrailer\n\r");
         static::assertEquals(
             new CrossReferenceSection(
-                new Dictionary(),
+                new Dictionary(null),
                 new CrossReferenceSubSection(28, 5),
             ),
             CrossReferenceTableParser::parse($stream, 0, $stream->getSizeInBytes()),
@@ -73,7 +73,7 @@ class CrossReferenceTableParserTest extends TestCase {
         );
         static::assertEquals(
             new CrossReferenceSection(
-                new Dictionary(),
+                new Dictionary(null),
                 new CrossReferenceSubSection(
                     0,
                     6,
@@ -116,7 +116,7 @@ class CrossReferenceTableParserTest extends TestCase {
         );
         static::assertEquals(
             new CrossReferenceSection(
-                new Dictionary(),
+                new Dictionary(null),
                 (new CrossReferenceSubSection(
                     0,
                     1,

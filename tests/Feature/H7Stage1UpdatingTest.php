@@ -53,6 +53,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 ],
                 new CrossReferenceSection(
                     new Dictionary(
+                        null,
                         new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(12)),
                         new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(1, 0)),
                         new DictionaryEntry(DictionaryKey::PREV, new IntegerValue(408)),
@@ -79,6 +80,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 ),
                 new CrossReferenceSection(
                     new Dictionary(
+                        null,
                         new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(7)),
                         new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(1, 0)),
                     ),
@@ -114,6 +116,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                $document,
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
                 new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
@@ -137,6 +140,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                $document,
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
                 new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
             ),
@@ -159,6 +163,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                $document,
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGES),
                 new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
                 new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
@@ -182,6 +187,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                $document,
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
                 new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
                 new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
@@ -207,6 +213,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                $document,
                 new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(35)),
             ),
             $obj5?->getDictionary(),
@@ -227,7 +234,7 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj6,
         );
         static::assertEquals(
-            new Dictionary(),
+            new Dictionary($document),
             $obj6?->getDictionary(),
         );
         $obj7 = $document->getObject(7);
@@ -246,7 +253,7 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj7,
         );
         static::assertEquals(
-            new Dictionary(),
+            new Dictionary($document),
             $obj7?->getDictionary(),
         );
         $obj8 = $document->getObject(8);
@@ -266,6 +273,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                $document,
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
                 new DictionaryEntry(DictionaryKey::RECT, new Rectangle(44, 616, 162, 735)),
@@ -291,6 +299,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                $document,
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
                 new DictionaryEntry(DictionaryKey::RECT, new Rectangle(224, 668, 457, 735)),
@@ -316,6 +325,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                $document,
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
                 new DictionaryEntry(DictionaryKey::RECT, new Rectangle(239, 393, 328, 622)),
@@ -341,6 +351,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(
+                $document,
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
                 new DictionaryEntry(DictionaryKey::RECT, new Rectangle(34, 398, 225, 575)),

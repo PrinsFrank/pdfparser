@@ -25,6 +25,7 @@ class CrossReferenceSourceParserTest extends TestCase {
                 [],
                 new CrossReferenceSection(
                     new Dictionary(
+                        null,
                         new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(7)),
                         new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(1, 0)),
                     ),

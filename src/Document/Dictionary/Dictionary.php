@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DocumentAwareDictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
@@ -30,6 +31,8 @@ readonly class Dictionary {
 
     /** @no-named-arguments */
     public function __construct(
+        // @phpstan-ignore property.onlyWritten
+        private readonly ?Document $document,
         DictionaryEntry... $dictionaryEntries,
     ) {
         $this->dictionaryEntries = $dictionaryEntries;
@@ -57,9 +60,12 @@ readonly class Dictionary {
                 $content = ($document->getObject($value->objectNumber) ?? throw new InvalidArgumentException(sprintf('Object with nr %d not found', $value->objectNumber)))
                     ->getStream();
                 if ($expectedValueType === Dictionary::class) {
-                    $value = DictionaryParser::parse(null, $content, 0, $content->getSizeInBytes());
+                    $value = DictionaryParser::parse($document, null, $content, 0, $content->getSizeInBytes());
                 } elseif (is_a($expectedValueType, NameValue::class, true)) {
                     $value = $expectedValueType::tryFrom($content->toString())
+                        ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced object %d as %s', $content->toString(), $value->objectNumber, $expectedValueType));
+                } elseif (is_a($expectedValueType, DocumentAwareDictionaryValue::class, true)) {
+                    $value = $expectedValueType::fromValue($content->toString(), $document)
                         ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced object %d as %s', $content->toString(), $value->objectNumber, $expectedValueType));
                 } elseif (is_a($expectedValueType, DictionaryValue::class, true)) {
                     $value = $expectedValueType::fromValue($content->toString())
@@ -77,7 +83,7 @@ readonly class Dictionary {
 
                 $content = new InMemoryStream($content);
                 if ($expectedValueType === Dictionary::class) {
-                    $value = DictionaryParser::parse(null, $content, 0, $content->getSizeInBytes());
+                    $value = DictionaryParser::parse($document, null, $content, 0, $content->getSizeInBytes());
                 } elseif (is_a($expectedValueType, NameValue::class, true)) {
                     $value = $expectedValueType::tryFrom($content->toString())
                         ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced value array', $content->toString()));
@@ -86,8 +92,11 @@ readonly class Dictionary {
                         $content = new InMemoryStream('[' . $content->toString() . ']');
                     }
 
-                    $value = $expectedValueType::fromValue($content->toString())
-                        ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced value array', $content->toString()));
+                    $value = (
+                        is_a($expectedValueType, DocumentAwareDictionaryValue::class, true)
+                        ? $expectedValueType::fromValue($content->toString(), $document)
+                        : $expectedValueType::fromValue($content->toString())
+                    ) ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced value array', $content->toString()));
                 }
             }
 
@@ -132,7 +141,7 @@ readonly class Dictionary {
         }
 
         if ($subDictionaryType === DictionaryArrayValue::class) {
-            return ($this->getValueForKey($document, $dictionaryKey, DictionaryArrayValue::class) ?? throw new RuntimeException())->toSingleDictionary();
+            return ($this->getValueForKey($document, $dictionaryKey, DictionaryArrayValue::class) ?? throw new RuntimeException())->toSingleDictionary($document);
         }
 
         if ($subDictionaryType === ReferenceValue::class) {

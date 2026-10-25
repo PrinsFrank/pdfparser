@@ -19,7 +19,7 @@ class CrossReferenceSourceTest extends TestCase {
     public function testGetCrossReferenceEntry(): void {
         $crossReferenceSource = new CrossReferenceSource(
             new CrossReferenceSection(
-                new Dictionary(),
+                new Dictionary(null),
                 new CrossReferenceSubSection(
                     42,
                     1,
@@ -27,7 +27,7 @@ class CrossReferenceSourceTest extends TestCase {
                 ),
             ),
             new CrossReferenceSection(
-                new Dictionary(),
+                new Dictionary(null),
                 new CrossReferenceSubSection(
                     43,
                     1,
@@ -43,11 +43,11 @@ class CrossReferenceSourceTest extends TestCase {
     public function testGetReferenceForKey(): void {
         $crossReferenceSource = new CrossReferenceSource(
             new CrossReferenceSection(
-                new Dictionary(new DictionaryEntry(DictionaryKey::ROOT, $referenceValue1 = new ReferenceValue(1, 0))),
+                new Dictionary(null, new DictionaryEntry(DictionaryKey::ROOT, $referenceValue1 = new ReferenceValue(1, 0))),
                 new CrossReferenceSubSection(42, 1),
             ),
             new CrossReferenceSection(
-                new Dictionary(new DictionaryEntry(DictionaryKey::INFO, $referenceValue2 = new ReferenceValue(12, 0))),
+                new Dictionary(null, new DictionaryEntry(DictionaryKey::INFO, $referenceValue2 = new ReferenceValue(12, 0))),
                 new CrossReferenceSubSection(43, 1),
             ),
         );

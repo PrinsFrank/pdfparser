@@ -6,6 +6,7 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
@@ -23,7 +24,7 @@ readonly class DictionaryArrayValue implements DictionaryValue {
 
     #[Override]
     /** @throws PdfParserException */
-    public static function fromValue(string $valueString): ?self {
+    public static function fromValue(string $valueString, ?Document $document = null): ?self {
         $valueString = trim($valueString);
         if (str_starts_with($valueString, '[') === false || str_ends_with($valueString, ']') === false) {
             return null;
@@ -49,13 +50,13 @@ readonly class DictionaryArrayValue implements DictionaryValue {
                 continue;
             }
 
-            $dictionaryEntries[] = DictionaryParser::parse(null, $memoryStream = new InMemoryStream($match), 0, $memoryStream->getSizeInBytes());
+            $dictionaryEntries[] = DictionaryParser::parse($document, null, $memoryStream = new InMemoryStream($match), 0, $memoryStream->getSizeInBytes());
         }
 
         return new self(... $dictionaryEntries);
     }
 
-    public function toSingleDictionary(): ?Dictionary {
+    public function toSingleDictionary(?Document $document): ?Dictionary {
         $dictionaryEntries = [];
         foreach ($this->dictionaries as $dictionary) {
             foreach ($dictionary->dictionaryEntries as $dictionaryEntry) {
@@ -63,6 +64,6 @@ readonly class DictionaryArrayValue implements DictionaryValue {
             }
         }
 
-        return new Dictionary(... $dictionaryEntries);
+        return new Dictionary($document, ... $dictionaryEntries);
     }
 }

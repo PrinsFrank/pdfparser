@@ -52,10 +52,11 @@ readonly class CompressedObject implements ObjectItem {
 
         if ($firstNonWhitespaceCharOffset === null
             || $content->read($firstNonWhitespaceCharOffset, 2) !== '<<') {
-            return new Dictionary();
+            return new Dictionary($document);
         }
 
         return $this->dictionary = DictionaryParser::parse(
+            $document,
             $this->storedInObject->getEncryptionContext(),
             $content,
             $firstNonWhitespaceCharOffset,

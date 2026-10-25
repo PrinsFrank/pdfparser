@@ -18,9 +18,10 @@ class NumberTreeArrayValueTest extends TestCase {
         static::assertEquals(
             new NumberTreeArrayValue(
                 [
-                    0 => new Dictionary(new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::LowerCaseRomanNumerals)),
-                    4 => new Dictionary(new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::DecimalArabic)),
+                    0 => new Dictionary(null, new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::LowerCaseRomanNumerals)),
+                    4 => new Dictionary(null, new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::DecimalArabic)),
                     7 => new Dictionary(
+                        null,
                         new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::DecimalArabic),
                         new DictionaryEntry(DictionaryKey::P, new LiteralStringValue(' A- ')),
                         new DictionaryEntry(DictionaryKey::ST, new IntegerValue(8)),
@@ -42,9 +43,10 @@ class NumberTreeArrayValueTest extends TestCase {
         static::assertEquals(
             new NumberTreeArrayValue(
                 [
-                    0 => new Dictionary(new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::LowerCaseRomanNumerals)),
-                    4 => new Dictionary(new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::DecimalArabic)),
+                    0 => new Dictionary(null, new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::LowerCaseRomanNumerals)),
+                    4 => new Dictionary(null, new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::DecimalArabic)),
                     7 => new Dictionary(
+                        null,
                         new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::DecimalArabic),
                         new DictionaryEntry(DictionaryKey::P, new LiteralStringValue(' A- ')),
                         new DictionaryEntry(DictionaryKey::ST, new IntegerValue(8)),
@@ -56,9 +58,10 @@ class NumberTreeArrayValueTest extends TestCase {
         static::assertEquals(
             new NumberTreeArrayValue(
                 [
-                    0 => new Dictionary(new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::LowerCaseRomanNumerals)),
-                    4 => new Dictionary(new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::DecimalArabic)),
+                    0 => new Dictionary(null, new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::LowerCaseRomanNumerals)),
+                    4 => new Dictionary(null, new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::DecimalArabic)),
                     7 => new Dictionary(
+                        null,
                         new DictionaryEntry(DictionaryKey::S, NumberingStyleNameValue::DecimalArabic),
                         new DictionaryEntry(DictionaryKey::P, new LiteralStringValue(' A- ')),
                         new DictionaryEntry(DictionaryKey::ST, new IntegerValue(8)),
