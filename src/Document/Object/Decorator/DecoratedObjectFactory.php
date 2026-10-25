@@ -13,7 +13,7 @@ class DecoratedObjectFactory {
      * @throws PdfParserException
      * @return ($expectedDecoratorFQN is null ? DecoratedObject : T)
      */
-    public static function forItem(int $objectNumber, ?ObjectItem $objectItem, ?string $expectedDecoratorFQN): ?DecoratedObject {
+    public static function forItem(?ObjectItem $objectItem, ?string $expectedDecoratorFQN): ?DecoratedObject {
         if ($objectItem === null) {
             return null;
         }
@@ -27,6 +27,6 @@ class DecoratedObjectFactory {
             ?? $typeNameValue?->getDecoratorFQN()
             ?? GenericObject::class;
 
-        return new $decoratorFQN($objectNumber, $objectItem);
+        return new $decoratorFQN($objectItem);
     }
 }

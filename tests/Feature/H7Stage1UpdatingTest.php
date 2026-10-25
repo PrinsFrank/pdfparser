@@ -102,7 +102,6 @@ class H7Stage1UpdatingTest extends TestCase {
         $obj1 = $document->getObject(1);
         static::assertEquals(
             new Catalog(
-                1,
                 new UncompressedObject(
                     $document,
                     1,
@@ -125,7 +124,6 @@ class H7Stage1UpdatingTest extends TestCase {
         $obj2 = $document->getObject(2);
         static::assertEquals(
             new GenericObject(
-                2,
                 new UncompressedObject(
                     $document,
                     2,
@@ -147,7 +145,6 @@ class H7Stage1UpdatingTest extends TestCase {
         $obj3 = $document->getObject(3);
         static::assertEquals(
             new Pages(
-                3,
                 new UncompressedObject(
                     $document,
                     3,
@@ -170,7 +167,6 @@ class H7Stage1UpdatingTest extends TestCase {
         $obj4 = $document->getObject(4);
         static::assertEquals(
             new Page(
-                4,
                 new UncompressedObject(
                     $document,
                     4,
@@ -195,7 +191,6 @@ class H7Stage1UpdatingTest extends TestCase {
         $obj5 = $document->getObject(5);
         static::assertEquals(
             new GenericObject(
-                5,
                 new UncompressedObject(
                     $document,
                     5,
@@ -216,7 +211,6 @@ class H7Stage1UpdatingTest extends TestCase {
         $obj6 = $document->getObject(6);
         static::assertEquals(
             new GenericObject(
-                6,
                 new UncompressedObject(
                     $document,
                     6,
@@ -234,7 +228,6 @@ class H7Stage1UpdatingTest extends TestCase {
         $obj7 = $document->getObject(7);
         static::assertEquals(
             new GenericObject(
-                7,
                 new UncompressedObject(
                     $document,
                     7,
@@ -252,7 +245,6 @@ class H7Stage1UpdatingTest extends TestCase {
         $obj8 = $document->getObject(8);
         static::assertEquals(
             new Annotation(
-                8,
                 new UncompressedObject(
                     $document,
                     8,
@@ -277,7 +269,6 @@ class H7Stage1UpdatingTest extends TestCase {
         $obj9 = $document->getObject(9);
         static::assertEquals(
             new Annotation(
-                9,
                 new UncompressedObject(
                     $document,
                     9,
@@ -302,7 +293,6 @@ class H7Stage1UpdatingTest extends TestCase {
         $obj10 = $document->getObject(10);
         static::assertEquals(
             new Annotation(
-                10,
                 new UncompressedObject(
                     $document,
                     10,
@@ -327,7 +317,6 @@ class H7Stage1UpdatingTest extends TestCase {
         $obj11 = $document->getObject(11);
         static::assertEquals(
             new Annotation(
-                11,
                 new UncompressedObject(
                     $document,
                     11,
@@ -351,7 +340,6 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         static::assertEquals(
             new Catalog(
-                1,
                 new UncompressedObject(
                     $document,
                     1,
