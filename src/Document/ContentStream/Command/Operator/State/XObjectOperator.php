@@ -28,7 +28,7 @@ enum XObjectOperator: string implements IncludesXObjects {
             return [];
         }
 
-        $xObject = $context->document->getObject($reference->objectNumber, XObject::class);
+        $xObject = $context->objectItem->document->getObject($reference->objectNumber, XObject::class);
         if ($xObject === null || $xObject->isForm() === false) {
             return [];
         }

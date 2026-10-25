@@ -66,7 +66,6 @@ class H4SimpleGraphicsTest extends TestCase {
                     9,
                     73,
                 ),
-                $document,
             ),
             $obj1,
         );
@@ -90,7 +89,6 @@ class H4SimpleGraphicsTest extends TestCase {
                     74,
                     119,
                 ),
-                $document,
             ),
             $obj2,
         );
@@ -113,7 +111,6 @@ class H4SimpleGraphicsTest extends TestCase {
                     120,
                     178,
                 ),
-                $document,
             ),
             $obj3,
         );
@@ -137,7 +134,6 @@ class H4SimpleGraphicsTest extends TestCase {
                     179,
                     299,
                 ),
-                $document,
             ),
             $obj4,
         );
@@ -166,7 +162,6 @@ class H4SimpleGraphicsTest extends TestCase {
                     300,
                     951,
                 ),
-                $document,
             ),
             $obj5,
         );
@@ -188,7 +183,6 @@ class H4SimpleGraphicsTest extends TestCase {
                     952,
                     975,
                 ),
-                $document,
             ),
             $obj6,
         );
@@ -206,7 +200,6 @@ class H4SimpleGraphicsTest extends TestCase {
                     9,
                     73,
                 ),
-                $document,
             ),
             $document->getCatalog(),
         );

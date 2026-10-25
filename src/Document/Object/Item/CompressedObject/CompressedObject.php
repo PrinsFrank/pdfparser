@@ -23,6 +23,7 @@ readonly class CompressedObject implements ObjectItem {
     private Dictionary $dictionary;
 
     public function __construct(
+        public Document $document,
         public int $objectNumber,
         public UncompressedObject $storedInObject,
         public int $startByteOffsetInDecodedStream,
@@ -34,12 +35,12 @@ readonly class CompressedObject implements ObjectItem {
     }
 
     #[Override]
-    public function getDictionary(Document $document): Dictionary {
+    public function getDictionary(): Dictionary {
         if (isset($this->dictionary)) {
             return $this->dictionary;
         }
 
-        $content = $this->getContent($document);
+        $content = $this->getContent();
         $contentLength = $content->getSizeInBytes();
         $firstNonWhitespaceCharOffset = null;
         for ($offset = 0; $offset < $contentLength; $offset++) {
@@ -52,11 +53,11 @@ readonly class CompressedObject implements ObjectItem {
 
         if ($firstNonWhitespaceCharOffset === null
             || $content->read($firstNonWhitespaceCharOffset, 2) !== '<<') {
-            return new Dictionary($document);
+            return new Dictionary($this->document);
         }
 
         return $this->dictionary = DictionaryParser::parse(
-            $document,
+            $this->document,
             $this->storedInObject->getEncryptionContext(),
             $content,
             $firstNonWhitespaceCharOffset,
@@ -65,12 +66,12 @@ readonly class CompressedObject implements ObjectItem {
     }
 
     #[Override]
-    public function getContent(Document $document): Stream {
-        $first = $this->storedInObject->getDictionary($document)->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
+    public function getContent(): Stream {
+        $first = $this->storedInObject->getDictionary()->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
 
         $content = substr(
-            $this->storedInObject->getContent($document)->toString(),
+            $this->storedInObject->getContent()->toString(),
             $first->value + $this->startByteOffsetInDecodedStream,
             $this->endByteOffsetInDecodedStream !== null ? $this->endByteOffsetInDecodedStream - $this->startByteOffsetInDecodedStream : null,
         );
@@ -79,7 +80,7 @@ readonly class CompressedObject implements ObjectItem {
             $content = implode(
                 '',
                 array_map(
-                    fn(ReferenceValue $referenceValue) => ($document->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException())
+                    fn(ReferenceValue $referenceValue) => ($this->document->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException())
                         ->getStream()
                         ->toString(),
                     $referenceValueArray->referenceValues,

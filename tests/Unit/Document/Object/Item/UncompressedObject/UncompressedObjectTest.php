@@ -20,7 +20,7 @@ class UncompressedObjectTest extends TestCase {
 
             EOD,
             (new UncompressedObject(
-                $document = new Document(
+                new Document(
                     $stream = new InMemoryStream(
                         <<<EOD
                         42 0 obj
@@ -37,7 +37,7 @@ class UncompressedObjectTest extends TestCase {
                 0,
                 $stream->getSizeInBytes(),
             ))
-                ->getContent($document)
+                ->getContent()
                 ->toString(),
         );
     }
@@ -49,7 +49,7 @@ class UncompressedObjectTest extends TestCase {
 
             EOD,
             (new UncompressedObject(
-                $document = new Document(
+                new Document(
                     $stream = new InMemoryStream(
                         <<<EOD
                         42 0 obj 0
@@ -65,7 +65,7 @@ class UncompressedObjectTest extends TestCase {
                 0,
                 $stream->getSizeInBytes(),
             ))
-                ->getContent($document)
+                ->getContent()
                 ->toString(),
         );
     }

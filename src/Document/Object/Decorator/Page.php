@@ -46,7 +46,7 @@ class Page extends DecoratedObject {
         }
 
         return ContentStreamParser::parse(
-            $this->document->getObjectsByDictionaryKey($this->getDictionary(), DictionaryKey::CONTENTS),
+            $this->objectItem->document->getObjectsByDictionaryKey($this->getDictionary(), DictionaryKey::CONTENTS),
         );
     }
 
@@ -60,7 +60,7 @@ class Page extends DecoratedObject {
             return null;
         }
 
-        return ($this->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+        return ($this->objectItem->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
             ->getResourceDictionary([$parentReference->objectNumber]);
     }
 
@@ -81,7 +81,7 @@ class Page extends DecoratedObject {
                 throw new InvalidArgumentException(sprintf('XObjects should be references, got %s', get_class($xObjectDictionaryEntry->value)));
             }
 
-            $xObjects[] = $this->document->getObject($xObjectDictionaryEntry->value->objectNumber, XObject::class)
+            $xObjects[] = $this->objectItem->document->getObject($xObjectDictionaryEntry->value->objectNumber, XObject::class)
                 ?? throw new ParseFailureException(sprintf('Unable to locate object with nr %d', $xObjectDictionaryEntry->value->objectNumber));
         }
 
@@ -139,7 +139,7 @@ class Page extends DecoratedObject {
             return null;
         }
 
-        return ($this->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+        return ($this->objectItem->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
             ->getMediaBox([$parentReference->objectNumber]);
     }
 
@@ -152,7 +152,7 @@ class Page extends DecoratedObject {
             return null;
         }
 
-        $cropBoxParent = ($this->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+        $cropBoxParent = ($this->objectItem->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
             ->getCropBox([$parentReference->objectNumber]);
         if ($cropBoxParent !== null) {
             return $cropBoxParent;

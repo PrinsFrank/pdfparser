@@ -4,8 +4,8 @@ namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
 use Deprecated;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
-use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\Stream;
@@ -14,10 +14,9 @@ use PrinsFrank\PdfParser\Stream\Stream;
 abstract class DecoratedObject {
     final public function __construct(
         public readonly int $objectNumber,
-        public readonly ObjectItem $objectItem,
-        public readonly Document $document,
+        public readonly CompressedObject|UncompressedObject $objectItem,
     ) {
-        $typeNameValue = $this->objectItem->getDictionary($document)->getType();
+        $typeNameValue = $this->objectItem->getDictionary()->getType();
         if ($typeNameValue !== null && !in_array($typeNameValue->getDecoratorFQN(), [static::class, GenericObject::class], true)) {
             throw new InvalidArgumentException(
                 sprintf('Object should have decorator %s, got %s', $typeNameValue->getDecoratorFQN(), static::class),
@@ -27,11 +26,11 @@ abstract class DecoratedObject {
 
     /** @throws PdfParserException */
     public function getDictionary(): Dictionary {
-        return $this->objectItem->getDictionary($this->document);
+        return $this->objectItem->getDictionary();
     }
 
     public function getStream(): Stream {
-        return $this->objectItem->getContent($this->document);
+        return $this->objectItem->getContent();
     }
 
     #[Deprecated('Use self::getStream() instead')]

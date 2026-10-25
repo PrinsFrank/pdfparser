@@ -2,7 +2,6 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
-use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -14,12 +13,12 @@ class DecoratedObjectFactory {
      * @throws PdfParserException
      * @return ($expectedDecoratorFQN is null ? DecoratedObject : T)
      */
-    public static function forItem(int $objectNumber, ?ObjectItem $objectItem, Document $document, ?string $expectedDecoratorFQN): ?DecoratedObject {
+    public static function forItem(int $objectNumber, ?ObjectItem $objectItem, ?string $expectedDecoratorFQN): ?DecoratedObject {
         if ($objectItem === null) {
             return null;
         }
 
-        $typeNameValue = $objectItem->getDictionary($document)->getType();
+        $typeNameValue = $objectItem->getDictionary()->getType();
         if ($expectedDecoratorFQN !== null && $typeNameValue !== null && $expectedDecoratorFQN !== $typeNameValue->getDecoratorFQN()) {
             throw new ParseFailureException(sprintf('Expected object of type %s, got %s', $expectedDecoratorFQN, $typeNameValue->getDecoratorFQN()));
         }
@@ -28,6 +27,6 @@ class DecoratedObjectFactory {
             ?? $typeNameValue?->getDecoratorFQN()
             ?? GenericObject::class;
 
-        return new $decoratorFQN($objectNumber, $objectItem, $document);
+        return new $decoratorFQN($objectNumber, $objectItem);
     }
 }

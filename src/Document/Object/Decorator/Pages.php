@@ -24,7 +24,7 @@ class Pages extends DecoratedObject {
             }
 
             $visitedObjectNrs[] = $referenceValue->objectNumber;
-            $kidObject = $this->document->getObject($referenceValue->objectNumber)
+            $kidObject = $this->objectItem->document->getObject($referenceValue->objectNumber)
                 ?? throw new ParseFailureException(sprintf('Child with number %d could not be found', $referenceValue->objectNumber));
 
             if ($kidObject instanceof Pages) {
@@ -32,7 +32,7 @@ class Pages extends DecoratedObject {
             } elseif ($kidObject instanceof Page) {
                 $kids[] = $kidObject;
             } elseif ($kidObject instanceof GenericObject) {
-                $kids[] = new Page($referenceValue->objectNumber, $kidObject->objectItem, $this->document);
+                $kids[] = new Page($referenceValue->objectNumber, $kidObject->objectItem);
             }
         }
 
@@ -56,7 +56,7 @@ class Pages extends DecoratedObject {
             return null; // exit loops in page trees
         }
 
-        return ($this->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+        return ($this->objectItem->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
             ->getResourceDictionary([... $visitedObjectNrs, $parentReference->objectNumber]);
     }
 
@@ -74,7 +74,7 @@ class Pages extends DecoratedObject {
             return null; // exit loops in page trees
         }
 
-        return ($this->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+        return ($this->objectItem->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
             ->getCropBox([... $visitedObjectNrs, $parentReference->objectNumber]);
     }
 
@@ -92,7 +92,7 @@ class Pages extends DecoratedObject {
             return null; // exit loops in page trees
         }
 
-        return ($this->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+        return ($this->objectItem->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
             ->getCropBox([... $visitedObjectNrs, $parentReference->objectNumber]);
     }
 }

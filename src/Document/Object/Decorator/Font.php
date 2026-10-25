@@ -121,7 +121,7 @@ class Font extends DecoratedObject {
             throw new ParseFailureException();
         }
 
-        $stream = $toUnicodeObject->objectItem->getContent($this->document);
+        $stream = $toUnicodeObject->objectItem->getContent();
         return $this->toUnicodeCMap = ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes());
     }
 
@@ -198,7 +198,7 @@ class Font extends DecoratedObject {
         if ($valueType === ReferenceValue::class) {
             $descendantFontsReference = $this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValue::class) ?? throw new ParseFailureException();
             return [
-                $this->document->getObject($descendantFontsReference->objectNumber, Font::class)
+                $this->objectItem->document->getObject($descendantFontsReference->objectNumber, Font::class)
                     ?? throw new ParseFailureException(sprintf('Descendant font with number %d could not be found', $descendantFontsReference->objectNumber)),
             ];
         }
@@ -209,7 +209,7 @@ class Font extends DecoratedObject {
 
         $descendantFonts = [];
         foreach ($this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
-            $descendantFonts[] = $this->document->getObject($referenceValue->objectNumber, Font::class)
+            $descendantFonts[] = $this->objectItem->document->getObject($referenceValue->objectNumber, Font::class)
                 ?? throw new ParseFailureException(sprintf('Descendant font with number %d could not be found', $referenceValue->objectNumber));
         }
 
@@ -232,7 +232,7 @@ class Font extends DecoratedObject {
 
         foreach ($this->getDescendantFonts() as $descendantFont) {
             if ($descendantFont instanceof Dictionary && $descendantFont->getTypeForKey(DictionaryKey::W) === ReferenceValue::class) {
-                $descendantFont = $this->document->getObject($descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class)->objectNumber ?? throw new ParseFailureException(), Font::class) ?? throw new ParseFailureException();
+                $descendantFont = $this->objectItem->document->getObject($descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class)->objectNumber ?? throw new ParseFailureException(), Font::class) ?? throw new ParseFailureException();
             }
 
             if ($descendantFont instanceof Font) {
@@ -266,7 +266,7 @@ class Font extends DecoratedObject {
 
         foreach ($this->getDescendantFonts() as $descendantFont) {
             if ($descendantFont instanceof Dictionary && $descendantFont->getTypeForKey(DictionaryKey::W) === ReferenceValue::class) {
-                $descendantFont = $this->document->getObject($descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class)->objectNumber ?? throw new ParseFailureException(), Font::class) ?? throw new ParseFailureException();
+                $descendantFont = $this->objectItem->document->getObject($descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class)->objectNumber ?? throw new ParseFailureException(), Font::class) ?? throw new ParseFailureException();
             }
 
             if ($descendantFont instanceof Font && ($widthsDescendantFont = $descendantFont->getWidths()) !== null) {
@@ -275,7 +275,7 @@ class Font extends DecoratedObject {
         }
 
         if ($this->getDictionary()->getTypeForKey(DictionaryKey::WIDTHS) === ReferenceValue::class) {
-            $object = $this->document->getObject(($widthsReference = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ReferenceValue::class))->objectNumber ?? throw new ParseFailureException(), Font::class)
+            $object = $this->objectItem->document->getObject(($widthsReference = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ReferenceValue::class))->objectNumber ?? throw new ParseFailureException(), Font::class)
                 ?? throw new ParseFailureException(sprintf('Width dictionary with number %d could not be found', $widthsReference->objectNumber));
             $arrayValue = ArrayValue::fromValue(preg_replace('/%.+/', '', $object->getStream()->toString()) ?? $object->getStream()->toString());
             if ($arrayValue instanceof ArrayValue === false) {
