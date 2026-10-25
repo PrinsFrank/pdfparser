@@ -24,12 +24,12 @@ class EncryptDictionary extends DecoratedObject {
             throw new RuntimeException('Unable to retrieve security handler for non-security handler dictionaries');
         }
 
-        return $this->getDictionary()->getValueForKey($this->document, DictionaryKey::FILTER, SecurityHandlerNameValue::class);
+        return $this->getDictionary()->getValueForKey(DictionaryKey::FILTER, SecurityHandlerNameValue::class);
     }
 
     public function getLengthFileEncryptionKeyInBits(): ?int {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::LENGTH, IntegerValue::class)
+            ->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)
             ?->value;
     }
 
@@ -41,7 +41,7 @@ class EncryptDictionary extends DecoratedObject {
         }
 
         $binaryString = $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::O, $userPasswordEntryType)
+            ->getValueForKey(DictionaryKey::O, $userPasswordEntryType)
             ?->getBinaryString()
             ?? throw new ParseFailureException();
 
@@ -61,7 +61,7 @@ class EncryptDictionary extends DecoratedObject {
         }
 
         $binaryString = $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::U, $userPasswordEntryType)
+            ->getValueForKey(DictionaryKey::U, $userPasswordEntryType)
             ?->getBinaryString()
             ?? throw new ParseFailureException();
 
@@ -75,25 +75,25 @@ class EncryptDictionary extends DecoratedObject {
 
     public function getPValue(): int {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::P, IntegerValue::class)
+            ->getValueForKey(DictionaryKey::P, IntegerValue::class)
             ->value
             ?? throw new ParseFailureException('Unable to retrieve p value');
     }
 
     public function getSecurityAlgorithm(): ?SecurityAlgorithm {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::V, SecurityAlgorithm::class);
+            ->getValueForKey(DictionaryKey::V, SecurityAlgorithm::class);
     }
 
     public function getStandardSecurityHandlerRevision(): StandardSecurityHandlerRevision {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::R, StandardSecurityHandlerRevision::class)
+            ->getValueForKey(DictionaryKey::R, StandardSecurityHandlerRevision::class)
             ?? throw new ParseFailureException('Unable to retrieve standard security handler revision');
     }
 
     public function isMetadataEncrypted(): bool {
         $encryptMetadata = $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::ENCRYPT_METADATA, BooleanValue::class);
+            ->getValueForKey(DictionaryKey::ENCRYPT_METADATA, BooleanValue::class);
 
         return $encryptMetadata === null || $encryptMetadata->value; // If key is not present, assume encrypted metadata
     }

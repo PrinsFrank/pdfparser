@@ -8,6 +8,6 @@ class InteractiveForm extends DecoratedObject {
     /** @return list<Field> */
     public function getFields(): array {
         return $this->getDictionary()
-            ->getObjectsForReference($this->document, DictionaryKey::FIELDS, Field::class);
+            ->getObjectsForReference(DictionaryKey::FIELDS, Field::class);
     }
 }

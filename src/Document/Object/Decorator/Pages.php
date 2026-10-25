@@ -18,7 +18,7 @@ class Pages extends DecoratedObject {
      */
     public function getPageItems(array $visitedObjectNrs = []): array {
         $kids = [];
-        foreach ($this->getDictionary()->getValueForKey($this->document, DictionaryKey::KIDS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
+        foreach ($this->getDictionary()->getValueForKey(DictionaryKey::KIDS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
             if (in_array($referenceValue->objectNumber, $visitedObjectNrs, true)) {
                 continue;
             }
@@ -44,11 +44,11 @@ class Pages extends DecoratedObject {
      * @throws PdfParserException
      */
     public function getResourceDictionary(array $visitedObjectNrs): ?Dictionary {
-        if (($localValue = $this->getDictionary()->getSubDictionary($this->document, DictionaryKey::RESOURCES)) !== null) {
+        if (($localValue = $this->getDictionary()->getSubDictionary(DictionaryKey::RESOURCES)) !== null) {
             return $localValue;
         }
 
-        if (($parentReference = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
             return null;
         }
 
@@ -62,11 +62,11 @@ class Pages extends DecoratedObject {
 
     /** @param list<int> $visitedObjectNrs */
     public function getMediaBox(array $visitedObjectNrs): ?Rectangle {
-        if (($localValue = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::MEDIA_BOX, Rectangle::class)) !== null) {
+        if (($localValue = $this->getDictionary()->getValueForKey(DictionaryKey::MEDIA_BOX, Rectangle::class)) !== null) {
             return $localValue;
         }
 
-        if (($parentReference = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
             return null;
         }
 
@@ -80,11 +80,11 @@ class Pages extends DecoratedObject {
 
     /** @param list<int> $visitedObjectNrs */
     public function getCropBox(array $visitedObjectNrs): ?Rectangle {
-        if (($localValue = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::CROP_BOX, Rectangle::class)) !== null) {
+        if (($localValue = $this->getDictionary()->getValueForKey(DictionaryKey::CROP_BOX, Rectangle::class)) !== null) {
             return $localValue;
         }
 
-        if (($parentReference = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
             return null;
         }
 

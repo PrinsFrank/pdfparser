@@ -12,36 +12,36 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValu
 class EmbeddedFile extends DecoratedObject {
     public function getLength(): ?int {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::LENGTH, IntegerValue::class)
+            ->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)
             ?->value;
     }
 
     public function getFileSpecificInformation(): ?Dictionary {
         return $this->getDictionary()
-            ->getSubDictionary($this->document, DictionaryKey::PARAMS);
+            ->getSubDictionary(DictionaryKey::PARAMS);
     }
 
     public function getSubType(): ?string {
         return $this->getDictionary()
-            ->getStringValue($this->document, DictionaryKey::SUBTYPE)
+            ->getStringValue(DictionaryKey::SUBTYPE)
             ?->getText();
     }
 
     public function getSize(): ?int {
         return $this->getFileSpecificInformation()
-            ?->getValueForKey($this->document, DictionaryKey::SIZE, IntegerValue::class)
+            ?->getValueForKey(DictionaryKey::SIZE, IntegerValue::class)
             ?->value;
     }
 
     public function getCreationDate(): ?DateTimeImmutable {
         return $this->getFileSpecificInformation()
-            ?->getValueForKey($this->document, DictionaryKey::CREATION_DATE, DateValue::class)
+            ?->getValueForKey(DictionaryKey::CREATION_DATE, DateValue::class)
             ?->value;
     }
 
     public function getModificationDate(): ?DateTimeImmutable {
         return $this->getFileSpecificInformation()
-            ?->getValueForKey($this->document, DictionaryKey::MOD_DATE, DateValue::class)
+            ?->getValueForKey(DictionaryKey::MOD_DATE, DateValue::class)
             ?->value;
     }
 }

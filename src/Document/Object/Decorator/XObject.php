@@ -29,48 +29,48 @@ use PrinsFrank\PdfParser\Stream\Stream;
 class XObject extends DecoratedObject {
     public function isImage(): bool {
         return $this->getDictionary()
-            ->getSubType($this->document) === SubtypeNameValue::IMAGE;
+            ->getSubType() === SubtypeNameValue::IMAGE;
     }
 
     public function isForm(): bool {
         return $this->getDictionary()
-            ->getSubType($this->document) === SubtypeNameValue::FORM;
+            ->getSubType() === SubtypeNameValue::FORM;
     }
 
     public function getWidth(): ?int {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::WIDTH, IntegerValue::class)
+            ->getValueForKey(DictionaryKey::WIDTH, IntegerValue::class)
             ?->value;
     }
 
     public function getHeight(): ?int {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::HEIGHT, IntegerValue::class)
+            ->getValueForKey(DictionaryKey::HEIGHT, IntegerValue::class)
             ?->value;
     }
 
     public function getLength(): ?int {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::LENGTH, IntegerValue::class)
+            ->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)
             ?->value;
     }
 
     /** @throws PdfParserException */
     public function getResourceDictionary(): ?Dictionary {
         return $this->getDictionary()
-            ->getSubDictionary($this->document, DictionaryKey::RESOURCES);
+            ->getSubDictionary(DictionaryKey::RESOURCES);
     }
 
     /** @throws PdfParserException */
     public function getXObjectsDictionary(): ?Dictionary {
         return $this->getResourceDictionary()
-            ?->getSubDictionary($this->document, DictionaryKey::XOBJECT);
+            ?->getSubDictionary(DictionaryKey::XOBJECT);
     }
 
     /** @throws PdfParserException */
     public function getFontDictionary(): ?Dictionary {
         return $this->getResourceDictionary()
-            ?->getSubDictionary($this->document, DictionaryKey::FONT);
+            ?->getSubDictionary(DictionaryKey::FONT);
     }
 
     public function getImageType(): ?ImageType {
@@ -84,11 +84,11 @@ class XObject extends DecoratedObject {
         }
 
         if ($filterValueType === FilterNameValue::class) {
-            return $this->getDictionary()->getValueForKey($this->document, DictionaryKey::FILTER, FilterNameValue::class)?->getImageType();
+            return $this->getDictionary()->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class)?->getImageType();
         }
 
         if ($filterValueType === ArrayValue::class) {
-            foreach ($this->getDictionary()->getValueForKey($this->document, DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new RuntimeException() as $filterValue) {
+            foreach ($this->getDictionary()->getValueForKey(DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new RuntimeException() as $filterValue) {
                 if (!is_string($filterValue)) {
                     throw new ParseFailureException(sprintf('Expected a string for filter value, got "%s"', ($jsonEncoded = json_encode($filterValue)) !== false ? $jsonEncoded : 'Unknown'));
                 }
@@ -105,7 +105,7 @@ class XObject extends DecoratedObject {
 
     private function getBitsPerComponent(): ?int {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::BITS_PER_COMPONENT, IntegerValue::class)
+            ->getValueForKey(DictionaryKey::BITS_PER_COMPONENT, IntegerValue::class)
             ?->value;
     }
 
@@ -115,18 +115,18 @@ class XObject extends DecoratedObject {
         }
 
         if ($type === DeviceColorSpaceNameValue::class || $type === CIEColorSpaceNameValue::class || $type === SpecialColorSpaceNameValue::class) {
-            return new ColorSpace(false, $this->getDictionary()->getValueForKey($this->document, DictionaryKey::COLOR_SPACE, $type) ?? throw new ParseFailureException(), null, null, null);
+            return new ColorSpace(false, $this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, $type) ?? throw new ParseFailureException(), null, null, null);
         }
 
         if ($type === ArrayValue::class) {
-            $colorSpaceArray = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::COLOR_SPACE, ArrayValue::class)
+            $colorSpaceArray = $this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, ArrayValue::class)
                 ?? throw new ParseFailureException();
 
             return ColorSpaceFactory::fromString($colorSpaceArray->toString(), $this->document);
         }
 
         if ($type === ReferenceValue::class) {
-            $colorSpaceObject = $this->getDictionary()->getObjectForReference($this->document, DictionaryKey::COLOR_SPACE)
+            $colorSpaceObject = $this->getDictionary()->getObjectForReference(DictionaryKey::COLOR_SPACE)
                 ?? throw new ParseFailureException('Unable to retrieve colorspace object');
 
             return ColorSpaceFactory::fromString($colorSpaceObject->getStream()->toString(), $this->document);
@@ -158,7 +158,6 @@ class XObject extends DecoratedObject {
             $height,
             $this->getBitsPerComponent() ?? throw new RuntimeException('Unable to retrieve bits per component'),
             $content,
-            $this->document,
         );
     }
 

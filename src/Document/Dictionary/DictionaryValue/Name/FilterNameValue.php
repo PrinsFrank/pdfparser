@@ -6,7 +6,6 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
-use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Filter\Decode\ASCII85Decode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\ASCIIHexDecode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\CCITTFaxDecode;
@@ -32,8 +31,8 @@ enum FilterNameValue: string implements NameValue {
     case CICI_SIGN_IT = 'CIC.SignIt';
     case VERISIGN_PPKVS = 'Verisign.PPKVS';
 
-    public function decodeBinary(string $content, ?Dictionary $dictionary, ?Document $document): string {
-        $decodeParams = $dictionary?->getSubDictionary($document, DictionaryKey::DECODE_PARMS);
+    public function decodeBinary(string $content, ?Dictionary $dictionary): string {
+        $decodeParams = $dictionary?->getSubDictionary(DictionaryKey::DECODE_PARMS);
 
         return match ($this) {
             self::JPX_DECODE,
@@ -41,20 +40,20 @@ enum FilterNameValue: string implements NameValue {
             self::DCT_DECODE => $content, // Don't decode JPEG content
             self::FLATE_DECODE => FlateDecode::decodeBinary(
                 $content,
-                $decodeParams !== null && ($predictorValue = LZWFlatePredictorValue::tryFrom((int) $decodeParams->getValueForKey($document, DictionaryKey::PREDICTOR, IntegerValue::class)?->value)) !== null
+                $decodeParams !== null && ($predictorValue = LZWFlatePredictorValue::tryFrom((int) $decodeParams->getValueForKey(DictionaryKey::PREDICTOR, IntegerValue::class)?->value)) !== null
                     ? $predictorValue
                     : LZWFlatePredictorValue::None,
-                ($decodeParams?->getValueForKey($document, DictionaryKey::COLUMNS, IntegerValue::class)->value ?? 1)
-                    * ($decodeParams?->getValueForKey($document, DictionaryKey::COLORS, IntegerValue::class)->value ?? 1),
+                ($decodeParams?->getValueForKey(DictionaryKey::COLUMNS, IntegerValue::class)->value ?? 1)
+                    * ($decodeParams?->getValueForKey(DictionaryKey::COLORS, IntegerValue::class)->value ?? 1),
             ),
             self::CCITT_FAX_DECODE => CCITTFaxDecode::addHeaderAndIFD(
                 $content,
-                $decodeParams?->getValueForKey($document, DictionaryKey::COLUMNS, IntegerValue::class)->value
+                $decodeParams?->getValueForKey(DictionaryKey::COLUMNS, IntegerValue::class)->value
                     ?? throw new ParseFailureException('Missing columns'),
-                $decodeParams->getValueForKey($document, DictionaryKey::ROWS, IntegerValue::class)->value
-                    ?? $dictionary->getValueForKey($document, DictionaryKey::HEIGHT, IntegerValue::class)->value
+                $decodeParams->getValueForKey(DictionaryKey::ROWS, IntegerValue::class)->value
+                    ?? $dictionary->getValueForKey(DictionaryKey::HEIGHT, IntegerValue::class)->value
                     ?? throw new ParseFailureException('Missing rows'),
-                $decodeParams->getValueForKey($document, DictionaryKey::K, IntegerValue::class)->value
+                $decodeParams->getValueForKey(DictionaryKey::K, IntegerValue::class)->value
                     ?? throw new ParseFailureException('Missing K'),
             ),
             self::ASCII_85_DECODE => ASCII85Decode::decodeBinary($content),

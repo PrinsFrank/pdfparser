@@ -2,7 +2,6 @@
 
 namespace PrinsFrank\PdfParser\Document\Image;
 
-use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpace;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\Components;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -17,7 +16,7 @@ class RasterizedImage {
      * @param int<1, max> $height
      * @throws ParseFailureException
      */
-    public static function toPNG(ColorSpace $colorSpace, int $width, int $height, int $bitsPerComponent, Stream $content, Document $document): Stream {
+    public static function toPNG(ColorSpace $colorSpace, int $width, int $height, int $bitsPerComponent, Stream $content): Stream {
         $image = imagecreatetruecolor($width, $height);
         if ($image === false) {
             throw new ParseFailureException('Unable to create image');
@@ -63,7 +62,7 @@ class RasterizedImage {
                             throw new ParseFailureException('Index in LUT is too large');
                         }
 
-                        $color = match ($colorSpace->getComponents($document)) {
+                        $color = match ($colorSpace->getComponents()) {
                             Components::RGB => imagecolorallocate($image, ord($colorSpace->LUTObj->getStream()->read($indexInLUT, 1)), ord($colorSpace->LUTObj->getStream()->read($indexInLUT + 1, 1)), ord($colorSpace->LUTObj->getStream()->read($indexInLUT + 2, 1))),
                             Components::Gray => imagecolorallocate($image, $value = ord($colorSpace->LUTObj->getStream()->read($indexInLUT, 1)), $value, $value),
                             Components::CMYK => imagecolorallocate(
@@ -75,7 +74,7 @@ class RasterizedImage {
                         };
                         $pixelIndex++;
                     } else {
-                        $color = match ($colorSpace->getComponents($document)) {
+                        $color = match ($colorSpace->getComponents()) {
                             Components::RGB => imagecolorallocate($image, ord($content->read($pixelIndex, 1)), ord($content->read($pixelIndex + 1, 1)), ord($content->read($pixelIndex + 2, 1))),
                             Components::Gray => imagecolorallocate($image, $value = ord($content->read($pixelIndex, 1)), $value, $value),
                             Components::CMYK => imagecolorallocate(
@@ -85,7 +84,7 @@ class RasterizedImage {
                                 min(255, max(0, (int) (255 * (1 - (ord($content->read($pixelIndex + 2, 1)) / 255)) * (1 - (ord($content->read($pixelIndex + 3, 1)) / 255))))),
                             ),
                         };
-                        $pixelIndex += $colorSpace->getComponents($document)->value;
+                        $pixelIndex += $colorSpace->getComponents()->value;
                     }
 
                     if ($color === false) {

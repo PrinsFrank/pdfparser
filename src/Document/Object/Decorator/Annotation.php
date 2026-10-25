@@ -16,7 +16,7 @@ class Annotation extends DecoratedObject {
         }
 
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::SUBTYPE, SubtypeNameValue::class);
+            ->getValueForKey(DictionaryKey::SUBTYPE, SubtypeNameValue::class);
     }
 
     public function isLink(): bool {
@@ -24,39 +24,39 @@ class Annotation extends DecoratedObject {
     }
 
     public function getLinkLocation(): LiteralStringValue|HexadecimalStringValue|NameObjectStringValue|null {
-        if (($action = $this->getDictionary()->getSubDictionary($this->document, DictionaryKey::A)) === null) {
+        if (($action = $this->getDictionary()->getSubDictionary(DictionaryKey::A)) === null) {
             return null;
         }
 
-        return $action->getStringValue($this->document, DictionaryKey::URI);
+        return $action->getStringValue(DictionaryKey::URI);
     }
 
     public function getRect(): ?Rectangle {
         return $this->getDictionary()
-            ->getValueForKey($this->document, DictionaryKey::RECT, Rectangle::class);
+            ->getValueForKey(DictionaryKey::RECT, Rectangle::class);
     }
 
     public function getPartialFieldName(): ?string {
         return $this->getDictionary()
-            ->getStringValue($this->document, DictionaryKey::T)
+            ->getStringValue(DictionaryKey::T)
             ?->getText();
     }
 
     public function getAlternativeFieldName(): ?string {
         return $this->getDictionary()
-            ->getStringValue($this->document, DictionaryKey::TU)
+            ->getStringValue(DictionaryKey::TU)
             ?->getText();
     }
 
     public function getMappingName(): ?string {
         return $this->getDictionary()
-            ->getStringValue($this->document, DictionaryKey::TM)
+            ->getStringValue(DictionaryKey::TM)
             ?->getText();
     }
 
     public function getValue(): ?string {
         return $this->getDictionary()
-            ->getStringValue($this->document, DictionaryKey::V)
+            ->getStringValue(DictionaryKey::V)
             ?->getText();
     }
 }

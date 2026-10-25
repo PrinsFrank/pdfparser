@@ -34,23 +34,23 @@ class CompressedObjectContentParser {
         }
 
         if (($filterType = $dictionary->getTypeForKey(DictionaryKey::FILTER)) === FilterNameValue::class) {
-            $binaryStreamContent = ($dictionary->getValueForKey(null, DictionaryKey::FILTER, FilterNameValue::class) ?? throw new ParseFailureException())
-                ->decodeBinary($binaryStreamContent, $dictionary, ($context instanceof Document ? $context : null));
+            $binaryStreamContent = ($dictionary->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class) ?? throw new ParseFailureException())
+                ->decodeBinary($binaryStreamContent, $dictionary);
         } elseif ($filterType === ArrayValue::class) {
-            foreach ($dictionary->getValueForKey(null, DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new ParseFailureException() as $filterValue) {
+            foreach ($dictionary->getValueForKey(DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new ParseFailureException() as $filterValue) {
                 if (is_string($filterValue) === false || ($filter = FilterNameValue::tryFrom(ltrim($filterValue, '/'))) === null) {
                     throw new ParseFailureException();
                 }
 
                 $binaryStreamContent = $filter
-                    ->decodeBinary($binaryStreamContent, $dictionary, ($context instanceof Document ? $context : null));
+                    ->decodeBinary($binaryStreamContent, $dictionary);
             }
         } elseif ($filterType === ReferenceValue::class) {
             if (!$context instanceof Document) {
                 throw new ParseFailureException('Filter reference is only supported in a Document');
             }
 
-            $filter = $dictionary->getObjectForReference($context, DictionaryKey::FILTER) ?? throw new ParseFailureException('Unable to retrieve filter object');
+            $filter = $dictionary->getObjectForReference(DictionaryKey::FILTER) ?? throw new ParseFailureException('Unable to retrieve filter object');
             if (($filterArray = ArrayValue::fromValue($filter->getStream()->toString())) instanceof ArrayValue === false) {
                 throw new ParseFailureException('Filter object is not an array');
             }
@@ -61,7 +61,7 @@ class CompressedObjectContentParser {
                 }
 
                 $binaryStreamContent = $filter
-                    ->decodeBinary($binaryStreamContent, $dictionary, $context);
+                    ->decodeBinary($binaryStreamContent, $dictionary);
             }
         } elseif ($filterType !== null) {
             throw new RuntimeException(sprintf('Expected filter to be a FilterNameValue or ArrayValue, got %s', $filterType));

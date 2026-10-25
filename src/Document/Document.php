@@ -106,11 +106,11 @@ class Document {
     public function getObjectsByDictionaryKey(Dictionary $dictionary, DictionaryKey $dictionaryKey, ?string $expectedDecoratorFQN = null): array {
         $dictionaryValueType = $dictionary->getTypeForKey($dictionaryKey);
         if ($dictionaryValueType === ReferenceValue::class) {
-            return [$this->getObject($dictionary->getValueForKey($this, $dictionaryKey, ReferenceValue::class)->objectNumber ?? throw new ParseFailureException(), $expectedDecoratorFQN) ?? throw new ParseFailureException()];
+            return [$this->getObject($dictionary->getValueForKey($dictionaryKey, ReferenceValue::class)->objectNumber ?? throw new ParseFailureException(), $expectedDecoratorFQN) ?? throw new ParseFailureException()];
         } elseif ($dictionaryValueType === ReferenceValueArray::class) {
             return array_map(
                 fn(ReferenceValue $referenceValue) => $this->getObject($referenceValue->objectNumber, $expectedDecoratorFQN) ?? throw new ParseFailureException(),
-                $dictionary->getValueForKey($this, $dictionaryKey, ReferenceValueArray::class)->referenceValues ?? throw new ParseFailureException(),
+                $dictionary->getValueForKey($dictionaryKey, ReferenceValueArray::class)->referenceValues ?? throw new ParseFailureException(),
             );
         }
 

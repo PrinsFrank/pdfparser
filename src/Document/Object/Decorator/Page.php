@@ -52,11 +52,11 @@ class Page extends DecoratedObject {
 
     /** @throws PdfParserException */
     public function getResourceDictionary(): ?Dictionary {
-        if (($localResourceDictionary = $this->getDictionary()->getSubDictionary($this->document, DictionaryKey::RESOURCES)) !== null) {
+        if (($localResourceDictionary = $this->getDictionary()->getSubDictionary(DictionaryKey::RESOURCES)) !== null) {
             return $localResourceDictionary;
         }
 
-        if (($parentReference = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
             return null;
         }
 
@@ -67,7 +67,7 @@ class Page extends DecoratedObject {
     /** @throws PdfParserException */
     public function getXObjectsDictionary(): ?Dictionary {
         return $this->getResourceDictionary()
-            ?->getSubDictionary($this->document, DictionaryKey::XOBJECT);
+            ?->getSubDictionary(DictionaryKey::XOBJECT);
     }
 
     /**
@@ -102,20 +102,20 @@ class Page extends DecoratedObject {
     /** @throws PdfParserException */
     public function getFontDictionary(): ?Dictionary {
         return $this->getResourceDictionary()
-            ?->getSubDictionary($this->document, DictionaryKey::FONT);
+            ?->getSubDictionary(DictionaryKey::FONT);
     }
 
     /** @throws PdfParserException */
     public function getFont(DictionaryKey|NameObjectStringValue $dictionaryKey): Font {
         $font = $this->getFontDictionary()
-            ?->getObjectForReference($this->document, $dictionaryKey, Font::class);
+            ?->getObjectForReference($dictionaryKey, Font::class);
         if ($font !== null) {
             return $font;
         }
 
         foreach ($this->getXObjects() as $xObject) {
             $font = $xObject->getFontDictionary()
-                ?->getObjectForReference($this->document, $dictionaryKey, Font::class);
+                ?->getObjectForReference($dictionaryKey, Font::class);
             if ($font !== null) {
                 return $font;
             }
@@ -127,15 +127,15 @@ class Page extends DecoratedObject {
     /** @return list<FileSpecification> */
     public function getFileSpecifications(): array {
         return $this->getDictionary()
-            ->getObjectsForReference($this->document, DictionaryKey::AF, FileSpecification::class);
+            ->getObjectsForReference(DictionaryKey::AF, FileSpecification::class);
     }
 
     public function getMediaBox(): ?Rectangle {
-        if (($localValue = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::MEDIA_BOX, Rectangle::class)) !== null) {
+        if (($localValue = $this->getDictionary()->getValueForKey(DictionaryKey::MEDIA_BOX, Rectangle::class)) !== null) {
             return $localValue;
         }
 
-        if (($parentReference = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
             return null;
         }
 
@@ -144,11 +144,11 @@ class Page extends DecoratedObject {
     }
 
     public function getCropBox(): ?Rectangle {
-        if (($localValue = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::CROP_BOX, Rectangle::class)) !== null) {
+        if (($localValue = $this->getDictionary()->getValueForKey(DictionaryKey::CROP_BOX, Rectangle::class)) !== null) {
             return $localValue;
         }
 
-        if (($parentReference = $this->getDictionary()->getValueForKey($this->document, DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
             return null;
         }
 
@@ -168,6 +168,6 @@ class Page extends DecoratedObject {
         }
 
         return $this->getDictionary()
-            ->getObjectsForReference($this->document, DictionaryKey::ANNOTS, Annotation::class);
+            ->getObjectsForReference(DictionaryKey::ANNOTS, Annotation::class);
     }
 }

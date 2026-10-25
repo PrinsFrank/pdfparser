@@ -19,7 +19,7 @@ class CompressedObjectByteOffsetParser {
     public static function parse(Stream $stream, int $startOffsetObject, int $endOffsetObject, Dictionary $dictionary): CompressedObjectByteOffsets {
         $startStreamPos = $stream->getStartNextLineAfter(Marker::STREAM, $startOffsetObject, $endOffsetObject)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::STREAM->value));
-        if ($dictionary->getTypeForKey(DictionaryKey::LENGTH) === IntegerValue::class && ($lengthInteger = $dictionary->getValueForKey(null, DictionaryKey::LENGTH, IntegerValue::class)) !== null) {
+        if ($dictionary->getTypeForKey(DictionaryKey::LENGTH) === IntegerValue::class && ($lengthInteger = $dictionary->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)) !== null) {
             $length = $lengthInteger->value;
         } else {
             $endStreamPos = $stream->lastPos(Marker::END_STREAM, $stream->getSizeInBytes() - $endOffsetObject)
@@ -30,7 +30,7 @@ class CompressedObjectByteOffsetParser {
         }
 
         $content = bin2hex(CompressedObjectContentParser::parseBinary(null, $stream, $startStreamPos, $length, $dictionary)->toString());
-        $first = $dictionary->getValueForKey(null, DictionaryKey::FIRST, IntegerValue::class)
+        $first = $dictionary->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
         $buffer = '';
         $previousObjectNumber = null;
