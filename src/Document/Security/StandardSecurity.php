@@ -2,8 +2,8 @@
 
 namespace PrinsFrank\PdfParser\Document\Security;
 
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\EncryptDictionary;
 use PrinsFrank\PdfParser\Document\Encryption\RC4;
-use PrinsFrank\PdfParser\Document\Object\Decorator\EncryptDictionary;
 use PrinsFrank\PdfParser\Exception\NotImplementedException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use SensitiveParameter;
