@@ -9,11 +9,13 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryFactory;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DocumentAwareDictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Document\Dictionary\Normalization\NameValueNormalizer;
+use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Encryption\RC4;
 use PrinsFrank\PdfParser\Document\Security\EncryptionContext;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -25,7 +27,7 @@ class DictionaryEntryFactory {
      * @param string|array<string, mixed> $dictionaryValue
      * @throws PdfParserException
      */
-    public static function fromKeyValuePair(?EncryptionContext $encryptionContext, string $keyString, string|array $dictionaryValue): ?DictionaryEntry {
+    public static function fromKeyValuePair(?Document $document, ?EncryptionContext $encryptionContext, string $keyString, string|array $dictionaryValue): ?DictionaryEntry {
         $dictionaryKey = DictionaryKey::tryFromKeyString($keyString)
             ?? NameObjectStringValue::fromValue($keyString)
             ?? throw new ParseFailureException();
@@ -42,18 +44,18 @@ class DictionaryEntryFactory {
             return null; // @see 7.3.9, null objects as value for dictionary entry shall be equivalent to omitting the entry entirely
         }
 
-        return new DictionaryEntry($dictionaryKey, self::getValue($encryptionContext, $dictionaryKey, $dictionaryValue));
+        return new DictionaryEntry($dictionaryKey, self::getValue($document, $encryptionContext, $dictionaryKey, $dictionaryValue));
     }
 
     /**
      * @param string|array<string, mixed> $value
      * @throws PdfParserException
      */
-    protected static function getValue(?EncryptionContext $encryptionContext, DictionaryKey|NameObjectStringValue $dictionaryKey, string|array $value): Dictionary|DictionaryValue|NameValue {
+    protected static function getValue(?Document $document, ?EncryptionContext $encryptionContext, DictionaryKey|NameObjectStringValue $dictionaryKey, string|array $value): Dictionary|DictionaryValue|NameValue {
         $allowedValueTypes = $dictionaryKey->getValueTypes();
         if ((in_array(Dictionary::class, $allowedValueTypes, true) || in_array(ArrayValue::class, $allowedValueTypes, true))
             && is_array($value)) {
-            return DictionaryFactory::fromArray($encryptionContext, $value);
+            return DictionaryFactory::fromArray($document, $encryptionContext, $value);
         }
 
         if (is_string($value)
@@ -75,11 +77,17 @@ class DictionaryEntryFactory {
                 continue;
             }
 
-            if (!is_string($value) || ($valueObject = $allowedValueType::fromValue($value)) === null) {
+            if (!is_string($value)) {
                 continue;
             }
 
-            return $valueObject;
+            if (is_a($allowedValueType, DocumentAwareDictionaryValue::class, true) && ($valueObject = $allowedValueType::fromValue($value, $document)) !== null) {
+                return $valueObject;
+            }
+
+            if (($valueObject = $allowedValueType::fromValue($value)) !== null) {
+                return $valueObject;
+            }
         }
 
         if (is_string($value) && ($referenceValueArray = ReferenceValueArray::fromValue($value)) !== null) {

@@ -45,6 +45,7 @@ class CompressedObjectTest extends TestCase {
 
         static::assertEquals(
             new Dictionary(
+                $document,
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
             ),
             $compressedObject->getDictionary($document),

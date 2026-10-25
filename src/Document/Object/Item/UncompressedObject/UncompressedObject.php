@@ -43,14 +43,14 @@ readonly class UncompressedObject implements ObjectItem {
 
         $startDictionaryPos = $document->stream->firstPos(DelimiterCharacter::LESS_THAN_SIGN, $this->startOffset, $this->endOffset);
         if ($startDictionaryPos === null) {
-            return $this->dictionary = new Dictionary();
+            return $this->dictionary = new Dictionary($document);
         }
 
         $endDictionaryPos = $document->stream->firstPos(Marker::STREAM, $startDictionaryPos, $this->endOffset)
             ?? $document->stream->lastPos(Marker::END_OBJ, $document->stream->getSizeInBytes() - $this->endOffset)
             ?? throw new ParseFailureException('Unable to locate start of stream or end of current object');
 
-        return $this->dictionary = DictionaryParser::parse($this->getEncryptionContext(), $document->stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos);
+        return $this->dictionary = DictionaryParser::parse($document, $this->getEncryptionContext(), $document->stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos);
     }
 
     public function getCompressedObject(int $objectNumber, Document $document): CompressedObject {

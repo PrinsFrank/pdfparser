@@ -27,32 +27,33 @@ class DictionaryArrayValueTest extends TestCase {
             DictionaryArrayValue::fromValue('[null]'),
         );
         static::assertEquals(
-            new DictionaryArrayValue(new Dictionary()),
+            new DictionaryArrayValue(new Dictionary(null)),
             DictionaryArrayValue::fromValue('[<<>>]'),
         );
         static::assertEquals(
-            new DictionaryArrayValue(new Dictionary()),
+            new DictionaryArrayValue(new Dictionary(null)),
             DictionaryArrayValue::fromValue('[ <<>> ]'),
         );
         static::assertEquals(
-            new DictionaryArrayValue(new Dictionary(), new Dictionary()),
+            new DictionaryArrayValue(new Dictionary(null), new Dictionary(null)),
             DictionaryArrayValue::fromValue('[<<>> <<>>]'),
         );
         static::assertEquals(
-            new DictionaryArrayValue(new Dictionary(), new Dictionary()),
+            new DictionaryArrayValue(new Dictionary(null), new Dictionary(null)),
             DictionaryArrayValue::fromValue('[null <<>> <<>>]'),
         );
         static::assertEquals(
-            new DictionaryArrayValue(new Dictionary(), new Dictionary()),
+            new DictionaryArrayValue(new Dictionary(null), new Dictionary(null)),
             DictionaryArrayValue::fromValue('[<<>> <<>> null]'),
         );
         static::assertEquals(
-            new DictionaryArrayValue(new Dictionary(new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(106))), new Dictionary(new DictionaryEntry(DictionaryKey::TITLE, new LiteralStringValue('Foo')))),
+            new DictionaryArrayValue(new Dictionary(null, new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(106))), new Dictionary(null, new DictionaryEntry(DictionaryKey::TITLE, new LiteralStringValue('Foo')))),
             DictionaryArrayValue::fromValue('[<</Length 106>> <</Title(Foo)>>]'),
         );
         static::assertEquals(
             new DictionaryArrayValue(
                 new Dictionary(
+                    null,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTPUT_INTENT),
                     new DictionaryEntry(DictionaryKey::S, new NameObjectStringValue('GTS_PDFA1')),
                     new DictionaryEntry(new NameObjectStringValue('OutputConditionIdentifier'), new LiteralStringValue('sRGB')),
@@ -66,11 +67,13 @@ class DictionaryArrayValueTest extends TestCase {
         static::assertEquals(
             new DictionaryArrayValue(
                 new Dictionary(
+                    null,
                     new DictionaryEntry(DictionaryKey::CATEGORY, new ArrayValue(['/Print'])),
                     new DictionaryEntry(DictionaryKey::EVENT, EventNameValue::Print),
                     new DictionaryEntry(DictionaryKey::OCGS, new ReferenceValueArray(new ReferenceValue(939, 0), new ReferenceValue(419, 0))),
                 ),
                 new Dictionary(
+                    null,
                     new DictionaryEntry(DictionaryKey::CATEGORY, new ArrayValue(['/View'])),
                     new DictionaryEntry(DictionaryKey::EVENT, EventNameValue::View),
                     new DictionaryEntry(DictionaryKey::OCGS, new ReferenceValueArray(new ReferenceValue(939, 0), new ReferenceValue(419, 0))),

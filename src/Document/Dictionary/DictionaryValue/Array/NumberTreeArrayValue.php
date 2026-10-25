@@ -6,6 +6,7 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
@@ -16,7 +17,7 @@ readonly class NumberTreeArrayValue implements DictionaryValue {
     ) {}
 
     #[Override]
-    public static function fromValue(string $valueString): ?self {
+    public static function fromValue(string $valueString, ?Document $document = null): ?self {
         $sanitizedValueString = trim($valueString);
         if (!str_starts_with($sanitizedValueString, '[') || !str_ends_with($sanitizedValueString, ']')) {
             return null;
@@ -29,7 +30,7 @@ readonly class NumberTreeArrayValue implements DictionaryValue {
 
         $pageLabelDictionaries = [];
         foreach ($matches as $match) {
-            $pageLabelDictionaries[(int) $match[1]] = DictionaryParser::parse(null, $dictionaryStream = new InMemoryStream($match[2]), 0, $dictionaryStream->getSizeInBytes());
+            $pageLabelDictionaries[(int) $match[1]] = DictionaryParser::parse($document, null, $dictionaryStream = new InMemoryStream($match[2]), 0, $dictionaryStream->getSizeInBytes());
         }
 
         return new self($pageLabelDictionaries);
