@@ -2,7 +2,6 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
-use Deprecated;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
@@ -30,10 +29,5 @@ abstract class DecoratedObject {
 
     public function getStream(): Stream {
         return $this->objectItem->getContent();
-    }
-
-    #[Deprecated('Use self::getStream() instead')]
-    public function getContent(): string {
-        return $this->getStream()->toString();
     }
 }
