@@ -32,7 +32,7 @@ class Pages extends DecoratedObject {
             } elseif ($kidObject instanceof Page) {
                 $kids[] = $kidObject;
             } elseif ($kidObject instanceof GenericObject) {
-                $kids[] = new Page($referenceValue->objectNumber, $kidObject->objectItem);
+                $kids[] = new Page($kidObject->objectItem);
             }
         }
 

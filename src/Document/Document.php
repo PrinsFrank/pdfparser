@@ -146,7 +146,7 @@ class Document {
             $objectItem = UncompressedObjectParser::parseObject($crossReferenceEntry, $objectNumber, $this);
         }
 
-        return $this->objectCache[$objectNumber] = DecoratedObjectFactory::forItem($objectNumber, $objectItem, $expectedDecoratorFQN);
+        return $this->objectCache[$objectNumber] = DecoratedObjectFactory::forItem($objectItem, $expectedDecoratorFQN);
     }
 
     /** @throws PdfParserException */

@@ -33,11 +33,11 @@ enum XObjectOperator: string implements IncludesXObjects {
             return [];
         }
 
-        if (in_array($xObject->objectNumber, $visitedObjectIds, true)) {
+        if (in_array($xObject->objectItem->objectNumber, $visitedObjectIds, true)) {
             return [];
         }
 
-        $visitedObjectIds[] = $xObject->objectNumber;
+        $visitedObjectIds[] = $xObject->objectItem->objectNumber;
         return $xObject->getPositionedTextElements($transformationMatrix, $visitedObjectIds);
     }
 }

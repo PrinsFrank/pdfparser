@@ -24,7 +24,7 @@ class XObjectTest extends TestCase {
             ));
 
         static::assertTrue(
-            (new XObject(42, $objectItem))
+            (new XObject($objectItem))
                 ->isImage(),
         );
     }
@@ -39,7 +39,7 @@ class XObjectTest extends TestCase {
             ));
 
         static::assertFalse(
-            (new XObject(42, $objectItem))
+            (new XObject($objectItem))
                 ->isImage(),
         );
     }
@@ -51,7 +51,7 @@ class XObjectTest extends TestCase {
             ->willReturn(new Dictionary(null));
 
         static::assertFalse(
-            (new XObject(42, $objectItem))
+            (new XObject($objectItem))
                 ->isImage(),
         );
     }
@@ -66,7 +66,7 @@ class XObjectTest extends TestCase {
             ));
 
         static::assertTrue(
-            (new XObject(42, $objectItem))
+            (new XObject($objectItem))
                 ->isForm(),
         );
     }
@@ -81,7 +81,7 @@ class XObjectTest extends TestCase {
             ));
 
         static::assertFalse(
-            (new XObject(42, $objectItem))
+            (new XObject($objectItem))
                 ->isForm(),
         );
     }
@@ -93,7 +93,7 @@ class XObjectTest extends TestCase {
             ->willReturn(new Dictionary(null));
 
         static::assertFalse(
-            (new XObject(42, $objectItem))
+            (new XObject($objectItem))
                 ->isForm(),
         );
     }
@@ -106,7 +106,7 @@ class XObjectTest extends TestCase {
 
         static::assertSame(
             42,
-            (new XObject(42, $objectItem))
+            (new XObject($objectItem))
                 ->getWidth(),
         );
     }
@@ -118,7 +118,7 @@ class XObjectTest extends TestCase {
             ->willReturn(new Dictionary(null));
 
         static::assertNull(
-            (new XObject(42, $objectItem))
+            (new XObject($objectItem))
                 ->getWidth(),
         );
     }
@@ -131,7 +131,7 @@ class XObjectTest extends TestCase {
 
         static::assertSame(
             42,
-            (new XObject(42, $objectItem))
+            (new XObject($objectItem))
                 ->getHeight(),
         );
     }
@@ -143,7 +143,7 @@ class XObjectTest extends TestCase {
             ->willReturn(new Dictionary(null));
 
         static::assertNull(
-            (new XObject(42, $objectItem))
+            (new XObject($objectItem))
                 ->getHeight(),
         );
     }
@@ -156,7 +156,7 @@ class XObjectTest extends TestCase {
 
         static::assertSame(
             42,
-            (new XObject(42, $objectItem))
+            (new XObject($objectItem))
                 ->getLength(),
         );
     }
@@ -168,7 +168,7 @@ class XObjectTest extends TestCase {
             ->willReturn(new Dictionary(null));
 
         static::assertNull(
-            (new XObject(42, $objectItem))
+            (new XObject($objectItem))
                 ->getLength(),
         );
     }

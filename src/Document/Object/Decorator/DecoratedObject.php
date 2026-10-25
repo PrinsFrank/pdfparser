@@ -13,7 +13,6 @@ use PrinsFrank\PdfParser\Stream\Stream;
 /** @api */
 abstract class DecoratedObject {
     final public function __construct(
-        public readonly int $objectNumber,
         public readonly CompressedObject|UncompressedObject $objectItem,
     ) {
         $typeNameValue = $this->objectItem->getDictionary()->getType();
