@@ -3,6 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\FileSpecification;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\InteractiveForm;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
@@ -21,7 +22,8 @@ class Catalog extends DecoratedObject {
 
     public function getInteractiveForm(): ?InteractiveForm {
         return $this->getDictionary()
-            ->getObjectForReference(DictionaryKey::ACRO_FORM, InteractiveForm::class);
+            ->getObjectForReference(DictionaryKey::ACRO_FORM)
+            ?->getDictionary(InteractiveForm::class);
     }
 
     /** @return list<FileSpecification> */

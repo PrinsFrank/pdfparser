@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\Decorator;
+namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 
-use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Field;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 
-class InteractiveForm extends DecoratedObject {
+readonly class InteractiveForm extends DecoratedDictionary {
     /** @return list<Field> */
     public function getFields(): array {
         return array_map(
             static fn(DecoratedObject $decoratedObject) => $decoratedObject->getDictionary(Field::class),
-            $this->getDictionary()->getObjectsForReference(DictionaryKey::FIELDS),
+            $this->getObjectsForReference(DictionaryKey::FIELDS),
         );
     }
 }
