@@ -31,7 +31,7 @@ readonly class Dictionary {
 
     /** @no-named-arguments */
     public function __construct(
-        private ?Document $document,
+        public ?Document $document,
         DictionaryEntry... $dictionaryEntries,
     ) {
         $this->dictionaryEntries = $dictionaryEntries;

@@ -1,48 +1,46 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\Decorator;
+namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 
-use PrinsFrank\PdfParser\Document\Dictionary\Decorator\FileSpecification;
-use PrinsFrank\PdfParser\Document\Dictionary\Decorator\InteractiveForm;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Pages;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
-class Catalog extends DecoratedObject {
+readonly class Catalog extends DecoratedDictionary {
     /** @throws PdfParserException */
     public function getPagesRoot(): Pages {
-        $pagesReference = $this->getDictionary()->getValueForKey(DictionaryKey::PAGES, ReferenceValue::class)
+        $pagesReference = $this->getValueForKey(DictionaryKey::PAGES, ReferenceValue::class)
             ?? throw new ParseFailureException('Every catalog dictionary should contain a pages reference, none found');
 
-        return $this->objectItem->document->getObject($pagesReference->objectNumber, Pages::class)
+        return $this->dictionary->document?->getObject($pagesReference->objectNumber, Pages::class)
             ?? throw new ParseFailureException(sprintf('Unable to retrieve pages root object with number %d', $pagesReference->objectNumber));
     }
 
     public function getInteractiveForm(): ?InteractiveForm {
-        return $this->getDictionary()
-            ->getObjectForReference(DictionaryKey::ACRO_FORM)
+        return $this->getObjectForReference(DictionaryKey::ACRO_FORM)
             ?->getDictionary(InteractiveForm::class);
     }
 
     /** @return list<FileSpecification> */
     public function getFileSpecifications(): array {
-        $afType = $this->getDictionary()->getTypeForKey(DictionaryKey::AF);
+        $afType = $this->getTypeForKey(DictionaryKey::AF);
         if ($afType === null) {
             return [];
         }
 
         if ($afType === ReferenceValue::class) {
-            $referenceArrayContent = $this->getDictionary()
-                ->getObjectForReference(DictionaryKey::AF)
+            $referenceArrayContent = $this->getObjectForReference(DictionaryKey::AF)
                 ?->getStream()->toString() ?? throw new ParseFailureException('Unable to retrieve AF object content');
             if (($AFReferences = ReferenceValueArray::fromValue($referenceArrayContent)) instanceof ReferenceValueArray === false) {
                 throw new ParseFailureException('AF object is not a reference array');
             }
 
             return array_map(
-                fn(ReferenceValue $referenceValue) => ($this->objectItem->document->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException('Unable to retrieve file specification'))->getDictionary(FileSpecification::class),
+                fn(ReferenceValue $referenceValue) => ($this->dictionary->document?->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException('Unable to retrieve file specification'))->getDictionary(FileSpecification::class),
                 $AFReferences->referenceValues,
             );
         }
@@ -50,7 +48,7 @@ class Catalog extends DecoratedObject {
         if ($afType === ReferenceValueArray::class) {
             return array_map(
                 static fn(DecoratedObject $object) => $object->getDictionary(FileSpecification::class),
-                $this->getDictionary()->getObjectsForReference(DictionaryKey::AF),
+                $this->getObjectsForReference(DictionaryKey::AF),
             );
         }
 
