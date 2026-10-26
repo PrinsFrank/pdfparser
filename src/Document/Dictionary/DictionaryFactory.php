@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Dictionary;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntryFactory;
-use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Security\EncryptionContext;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -15,7 +16,7 @@ class DictionaryFactory {
      * @param array<string, mixed> $dictionaryArray
      * @throws PdfParserException
      */
-    public static function fromArray(?Document $document, ?EncryptionContext $encryptionContext, array $dictionaryArray): Dictionary {
+    public static function fromArray(CompressedObject|UncompressedObject|null $object, ?EncryptionContext $encryptionContext, array $dictionaryArray): Dictionary {
         $dictionaryEntries = [];
         foreach ($dictionaryArray as $keyString => $value) {
             if (!is_string($value) && (!is_array($value) || array_is_list($value))) {
@@ -23,7 +24,7 @@ class DictionaryFactory {
             }
 
             /** @var non-empty-array<string, mixed>|string $value */
-            $dictionaryEntry = DictionaryEntryFactory::fromKeyValuePair($document, $encryptionContext, $keyString, $value);
+            $dictionaryEntry = DictionaryEntryFactory::fromKeyValuePair($object, $encryptionContext, $keyString, $value);
             if ($dictionaryEntry === null) {
                 continue;
             }
@@ -31,6 +32,6 @@ class DictionaryFactory {
             $dictionaryEntries[] = $dictionaryEntry;
         }
 
-        return new Dictionary($document, ... $dictionaryEntries);
+        return new Dictionary($object, ... $dictionaryEntries);
     }
 }

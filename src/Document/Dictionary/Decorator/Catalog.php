@@ -16,7 +16,7 @@ readonly class Catalog extends DecoratedDictionary {
         $pagesReference = $this->getValueForKey(DictionaryKey::PAGES, ReferenceValue::class)
             ?? throw new ParseFailureException('Every catalog dictionary should contain a pages reference, none found');
 
-        return $this->dictionary->document?->getObject($pagesReference->objectNumber, Pages::class)
+        return $this->dictionary->object?->document?->getObject($pagesReference->objectNumber, Pages::class)
             ?? throw new ParseFailureException(sprintf('Unable to retrieve pages root object with number %d', $pagesReference->objectNumber));
     }
 
@@ -40,7 +40,7 @@ readonly class Catalog extends DecoratedDictionary {
             }
 
             return array_map(
-                fn(ReferenceValue $referenceValue) => ($this->dictionary->document?->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException('Unable to retrieve file specification'))->getDictionary(FileSpecification::class),
+                fn(ReferenceValue $referenceValue) => ($this->dictionary->object?->document?->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException('Unable to retrieve file specification'))->getDictionary(FileSpecification::class),
                 $AFReferences->referenceValues,
             );
         }

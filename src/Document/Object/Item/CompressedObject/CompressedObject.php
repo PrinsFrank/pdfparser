@@ -55,12 +55,12 @@ readonly class CompressedObject implements ObjectItem {
 
         if ($firstNonWhitespaceCharOffset === null
             || $content->read($firstNonWhitespaceCharOffset, 2) !== '<<') {
-            return new $decoratorFQN($this->dictionary = new Dictionary($this->document));
+            return new $decoratorFQN($this->dictionary = new Dictionary($this));
         }
 
         return new $decoratorFQN(
             $this->dictionary = DictionaryParser::parse(
-                $this->document,
+                $this,
                 $this->storedInObject->getEncryptionContext(),
                 $content,
                 $firstNonWhitespaceCharOffset,
