@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Annotation;
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\FileSpecification;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
@@ -170,7 +171,9 @@ class Page extends DecoratedObject {
             return [];
         }
 
-        return $this->getDictionary()
-            ->getObjectsForReference(DictionaryKey::ANNOTS, Annotation::class);
+        return array_map(
+            static fn(DecoratedObject $object) => $object->getDictionary(Annotation::class),
+            $this->getDictionary()->getObjectsForReference(DictionaryKey::ANNOTS),
+        );
     }
 }

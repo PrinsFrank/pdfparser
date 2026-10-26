@@ -21,7 +21,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Annotation;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
@@ -255,7 +254,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj8 = $document->getObject(8);
         static::assertEquals(
-            new Annotation(
+            new GenericObject(
                 new UncompressedObject(
                     $document,
                     8,
@@ -281,7 +280,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj9 = $document->getObject(9);
         static::assertEquals(
-            new Annotation(
+            new GenericObject(
                 new UncompressedObject(
                     $document,
                     9,
@@ -307,7 +306,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj10 = $document->getObject(10);
         static::assertEquals(
-            new Annotation(
+            new GenericObject(
                 new UncompressedObject(
                     $document,
                     10,
@@ -333,7 +332,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj11 = $document->getObject(11);
         static::assertEquals(
-            new Annotation(
+            new GenericObject(
                 new UncompressedObject(
                     $document,
                     11,
