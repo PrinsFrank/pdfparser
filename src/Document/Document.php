@@ -5,16 +5,16 @@ namespace PrinsFrank\PdfParser\Document;
 
 use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Catalog;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\EncryptDictionary;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\InformationDictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Dictionary\Decorator\InformationDictionary;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObjectFactory;
-use PrinsFrank\PdfParser\Document\Object\Decorator\EncryptDictionary;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
@@ -82,20 +82,17 @@ class Document {
             return null;
         }
 
-        return $this->getObject($infoReference->objectNumber, EncryptDictionary::class);
+        return $this->getObject($infoReference->objectNumber)
+            ?->getDictionary(EncryptDictionary::class);
     }
 
     /** @throws PdfParserException */
     public function getCatalog(): Catalog {
         $rootReference = $this->crossReferenceSource->getReferenceForKey(DictionaryKey::ROOT)
             ?? throw new ParseFailureException('Unable to locate root for document.');
-        $catalog = $this->getObject($rootReference->objectNumber, Catalog::class)
-            ?? throw new ParseFailureException(sprintf('Document references object %d as root, but object couln\'t be located', $rootReference->objectNumber));
-        if (!$catalog instanceof Catalog) {
-            throw new RuntimeException('Catalog should be a catalog item');
-        }
 
-        return $catalog;
+        return ($this->getObject($rootReference->objectNumber) ?? throw new ParseFailureException(sprintf('Document references object %d as root, but object couln\'t be located', $rootReference->objectNumber)))
+            ->getDictionary(Catalog::class);
     }
 
     /**

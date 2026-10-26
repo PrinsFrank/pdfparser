@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\Decorator;
+namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 
 use DateTimeImmutable;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
@@ -9,22 +9,14 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 
 /** @see 7.11.4 Embedded file streams */
-class EmbeddedFile extends DecoratedObject {
+readonly class EmbeddedFile extends DecoratedDictionary {
     public function getLength(): ?int {
-        return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)
+        return $this->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)
             ?->value;
     }
 
     public function getFileSpecificInformation(): ?Dictionary {
-        return $this->getDictionary()
-            ->getSubDictionary(DictionaryKey::PARAMS);
-    }
-
-    public function getSubType(): ?string {
-        return $this->getDictionary()
-            ->getStringValue(DictionaryKey::SUBTYPE)
-            ?->getText();
+        return $this->getSubDictionary(DictionaryKey::PARAMS);
     }
 
     public function getSize(): ?int {

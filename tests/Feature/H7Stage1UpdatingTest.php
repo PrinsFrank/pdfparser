@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\CrossReferenceSe
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\CrossReferenceSubSection;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryFreeObject;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\GenericDictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
@@ -21,8 +22,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Annotation;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Pages;
@@ -102,7 +101,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj1 = $document->getObject(1);
         static::assertEquals(
-            new Catalog(
+            new GenericObject(
                 new UncompressedObject(
                     $document,
                     1,
@@ -255,7 +254,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj8 = $document->getObject(8);
         static::assertEquals(
-            new Annotation(
+            new GenericObject(
                 new UncompressedObject(
                     $document,
                     8,
@@ -281,7 +280,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj9 = $document->getObject(9);
         static::assertEquals(
-            new Annotation(
+            new GenericObject(
                 new UncompressedObject(
                     $document,
                     9,
@@ -307,7 +306,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj10 = $document->getObject(10);
         static::assertEquals(
-            new Annotation(
+            new GenericObject(
                 new UncompressedObject(
                     $document,
                     10,
@@ -333,7 +332,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj11 = $document->getObject(11);
         static::assertEquals(
-            new Annotation(
+            new GenericObject(
                 new UncompressedObject(
                     $document,
                     11,
@@ -359,12 +358,11 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         static::assertEquals(
             new Catalog(
-                new UncompressedObject(
+                new Dictionary(
                     $document,
-                    1,
-                    0,
-                    9,
-                    73,
+                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
+                    new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
+                    new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
                 ),
             ),
             $document->getCatalog(),

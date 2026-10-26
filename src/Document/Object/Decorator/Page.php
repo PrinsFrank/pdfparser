@@ -7,6 +7,8 @@ use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Annotation;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\FileSpecification;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
@@ -126,8 +128,10 @@ class Page extends DecoratedObject {
 
     /** @return list<FileSpecification> */
     public function getFileSpecifications(): array {
-        return $this->getDictionary()
-            ->getObjectsForReference(DictionaryKey::AF, FileSpecification::class);
+        return array_map(
+            static fn(DecoratedObject $decoratedObject) => $decoratedObject->getDictionary(FileSpecification::class),
+            $this->getDictionary()->getObjectsForReference(DictionaryKey::AF),
+        );
     }
 
     public function getMediaBox(): ?Rectangle {
@@ -167,7 +171,9 @@ class Page extends DecoratedObject {
             return [];
         }
 
-        return $this->getDictionary()
-            ->getObjectsForReference(DictionaryKey::ANNOTS, Annotation::class);
+        return array_map(
+            static fn(DecoratedObject $object) => $object->getDictionary(Annotation::class),
+            $this->getDictionary()->getObjectsForReference(DictionaryKey::ANNOTS),
+        );
     }
 }

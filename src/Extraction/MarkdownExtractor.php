@@ -13,7 +13,7 @@ use PrinsFrank\MarkDownDom\Node\Inline\Italic;
 use PrinsFrank\MarkDownDom\Node\Inline\Link;
 use PrinsFrank\MarkDownDom\Node\Inline\Text;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Annotation;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Annotation;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
