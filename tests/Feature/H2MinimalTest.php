@@ -72,7 +72,7 @@ class H2MinimalTest extends TestCase {
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $document,
+                    $obj1?->objectItem,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
                     new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
                     new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
@@ -96,7 +96,7 @@ class H2MinimalTest extends TestCase {
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $document,
+                    $obj2?->objectItem,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
                     new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
                 ),
@@ -119,7 +119,7 @@ class H2MinimalTest extends TestCase {
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $document,
+                    $obj3?->objectItem,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGES),
                     new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
                     new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
@@ -143,12 +143,12 @@ class H2MinimalTest extends TestCase {
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $document,
+                    $obj4?->objectItem,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
                     new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
                     new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
                     new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValue(5, 0)),
-                    new DictionaryEntry(DictionaryKey::RESOURCES, new Dictionary($document, new DictionaryEntry(DictionaryKey::PROC_SET, new ReferenceValue(6, 0)))),
+                    new DictionaryEntry(DictionaryKey::RESOURCES, new Dictionary($obj4?->objectItem, new DictionaryEntry(DictionaryKey::PROC_SET, new ReferenceValue(6, 0)))),
                 ),
             ),
             $obj4?->getDictionary(),
@@ -169,7 +169,7 @@ class H2MinimalTest extends TestCase {
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $document,
+                    $obj5?->objectItem,
                     new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(35)),
                 ),
             ),
@@ -189,13 +189,13 @@ class H2MinimalTest extends TestCase {
             $obj6,
         );
         static::assertEquals(
-            new GenericDictionary(new Dictionary($document)),
+            new GenericDictionary(new Dictionary($obj6?->objectItem)),
             $obj6?->getDictionary(),
         );
         static::assertEquals(
             new Catalog(
                 new Dictionary(
-                    $document,
+                    $obj1?->objectItem,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
                     new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
                     new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),

@@ -18,8 +18,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\HexadecimalStringValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
-use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
@@ -31,7 +32,7 @@ readonly class Dictionary {
 
     /** @no-named-arguments */
     public function __construct(
-        public ?Document $document,
+        public CompressedObject|UncompressedObject|null $object,
         DictionaryEntry... $dictionaryEntries,
     ) {
         $this->dictionaryEntries = $dictionaryEntries;
@@ -55,16 +56,16 @@ readonly class Dictionary {
                     ?? throw new InvalidArgumentException('Value type is dictionary but subdictionary not found');
             }
 
-            if ($value instanceof ReferenceValue && $this->document !== null && $expectedValueType !== ReferenceValue::class) {
-                $content = ($this->document->getObject($value->objectNumber) ?? throw new InvalidArgumentException(sprintf('Object with nr %d not found', $value->objectNumber)))
+            if ($value instanceof ReferenceValue && $this->object !== null && $expectedValueType !== ReferenceValue::class) {
+                $content = ($this->object->document->getObject($value->objectNumber) ?? throw new InvalidArgumentException(sprintf('Object with nr %d not found', $value->objectNumber)))
                     ->getStream();
                 if ($expectedValueType === Dictionary::class) {
-                    $value = DictionaryParser::parse($this->document, null, $content, 0, $content->getSizeInBytes());
+                    $value = DictionaryParser::parse($this->object, null, $content, 0, $content->getSizeInBytes());
                 } elseif (is_a($expectedValueType, NameValue::class, true)) {
                     $value = $expectedValueType::tryFrom($content->toString())
                         ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced object %d as %s', $content->toString(), $value->objectNumber, $expectedValueType));
                 } elseif (is_a($expectedValueType, DocumentAwareDictionaryValue::class, true)) {
-                    $value = $expectedValueType::fromValue($content->toString(), $this->document)
+                    $value = $expectedValueType::fromValue($content->toString(), $this->object)
                         ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced object %d as %s', $content->toString(), $value->objectNumber, $expectedValueType));
                 } elseif (is_a($expectedValueType, DictionaryValue::class, true)) {
                     $value = $expectedValueType::fromValue($content->toString())
@@ -72,17 +73,17 @@ readonly class Dictionary {
                 }
             }
 
-            if ($value instanceof ReferenceValueArray && $this->document !== null && $expectedValueType !== ReferenceValueArray::class) {
+            if ($value instanceof ReferenceValueArray && $this->object !== null && $expectedValueType !== ReferenceValueArray::class) {
                 $content = '';
                 foreach ($value->referenceValues as $referenceValue) {
-                    $content .= ($this->document->getObject($referenceValue->objectNumber) ?? throw new InvalidArgumentException(sprintf('Object with nr %d not found', $referenceValue->objectNumber)))
+                    $content .= ($this->object->document->getObject($referenceValue->objectNumber) ?? throw new InvalidArgumentException(sprintf('Object with nr %d not found', $referenceValue->objectNumber)))
                         ->getStream()
                         ->toString();
                 }
 
                 $content = new InMemoryStream($content);
                 if ($expectedValueType === Dictionary::class) {
-                    $value = DictionaryParser::parse($this->document, null, $content, 0, $content->getSizeInBytes());
+                    $value = DictionaryParser::parse($this->object, null, $content, 0, $content->getSizeInBytes());
                 } elseif (is_a($expectedValueType, NameValue::class, true)) {
                     $value = $expectedValueType::tryFrom($content->toString())
                         ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced value array', $content->toString()));
@@ -93,7 +94,7 @@ readonly class Dictionary {
 
                     $value = (
                         is_a($expectedValueType, DocumentAwareDictionaryValue::class, true)
-                        ? $expectedValueType::fromValue($content->toString(), $this->document)
+                        ? $expectedValueType::fromValue($content->toString(), $this->object)
                         : $expectedValueType::fromValue($content->toString())
                     ) ?? throw new ParseFailureException(sprintf('Unable to parse content "%s" of referenced value array', $content->toString()));
                 }
@@ -140,7 +141,7 @@ readonly class Dictionary {
         }
 
         if ($subDictionaryType === DictionaryArrayValue::class) {
-            return ($this->getValueForKey($dictionaryKey, DictionaryArrayValue::class) ?? throw new RuntimeException())->toSingleDictionary($this->document);
+            return ($this->getValueForKey($dictionaryKey, DictionaryArrayValue::class) ?? throw new RuntimeException())->toSingleDictionary($this->object);
         }
 
         if ($subDictionaryType === ReferenceValue::class) {
@@ -163,7 +164,7 @@ readonly class Dictionary {
             return null;
         }
 
-        return $this->document?->getObject($reference->objectNumber, $expectedDecoratorFQN)
+        return $this->object?->document?->getObject($reference->objectNumber, $expectedDecoratorFQN)
             ?? throw new ParseFailureException();
     }
 
@@ -184,7 +185,7 @@ readonly class Dictionary {
 
         $objects = [];
         foreach ($references->referenceValues as $referenceValue) {
-            $objects[] = $this->document?->getObject($referenceValue->objectNumber, $expectedDecoratorFQN)
+            $objects[] = $this->object?->document?->getObject($referenceValue->objectNumber, $expectedDecoratorFQN)
                 ?? throw new ParseFailureException();
         }
 

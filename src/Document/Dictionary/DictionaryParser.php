@@ -5,10 +5,11 @@ namespace PrinsFrank\PdfParser\Document\Dictionary;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParseContext\DictionaryParseContext;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParseContext\NestingContext;
-use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\LiteralStringEscapeCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Security\EncryptionContext;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\Stream;
@@ -21,7 +22,7 @@ class DictionaryParser {
      *
      * @throws PdfParserException
      */
-    public static function parse(?Document $document, ?EncryptionContext $encryptionContext, Stream $stream, int $startPos, int $nrOfBytes): Dictionary {
+    public static function parse(UncompressedObject|CompressedObject|null $object, ?EncryptionContext $encryptionContext, Stream $stream, int $startPos, int $nrOfBytes): Dictionary {
         $dictionaryArray = [];
         $nestingContext = (new NestingContext())->setContext(DictionaryParseContext::ROOT);
         $arrayNestingLevel = 0;
@@ -125,7 +126,7 @@ class DictionaryParser {
             }
         }
 
-        return DictionaryFactory::fromArray($document, $encryptionContext, $dictionaryArray);
+        return DictionaryFactory::fromArray($object, $encryptionContext, $dictionaryArray);
     }
 
     /** @param array<string, mixed> $dictionaryArray */
