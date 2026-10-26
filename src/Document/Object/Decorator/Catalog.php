@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\FileSpecification;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
@@ -32,21 +33,23 @@ class Catalog extends DecoratedObject {
 
         if ($afType === ReferenceValue::class) {
             $referenceArrayContent = $this->getDictionary()
-                ->getObjectForReference(DictionaryKey::AF, FileSpecification::class)
+                ->getObjectForReference(DictionaryKey::AF)
                 ?->getStream()->toString() ?? throw new ParseFailureException('Unable to retrieve AF object content');
             if (($AFReferences = ReferenceValueArray::fromValue($referenceArrayContent)) instanceof ReferenceValueArray === false) {
                 throw new ParseFailureException('AF object is not a reference array');
             }
 
             return array_map(
-                fn(ReferenceValue $referenceValue) => $this->objectItem->document->getObject($referenceValue->objectNumber, FileSpecification::class) ?? throw new ParseFailureException('Unable to retrieve file specification'),
+                fn(ReferenceValue $referenceValue) => ($this->objectItem->document->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException('Unable to retrieve file specification'))->getDictionary(FileSpecification::class),
                 $AFReferences->referenceValues,
             );
         }
 
         if ($afType === ReferenceValueArray::class) {
-            return $this->getDictionary()
-                ->getObjectsForReference(DictionaryKey::AF, FileSpecification::class);
+            return array_map(
+                static fn(DecoratedObject $object) => $object->getDictionary(FileSpecification::class),
+                $this->getDictionary()->getObjectsForReference(DictionaryKey::AF),
+            );
         }
 
         throw new ParseFailureException(sprintf('Unexpected type "%s" for AF key', $afType));

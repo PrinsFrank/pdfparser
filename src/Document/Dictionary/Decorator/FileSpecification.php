@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\Decorator;
+namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 
-use PrinsFrank\PdfParser\Document\Dictionary\Decorator\EmbeddedFile;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\HexadecimalStringValue;
@@ -11,19 +10,17 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObje
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @see 7.11.3 File specification dictionaries */
-class FileSpecification extends DecoratedObject {
+readonly class FileSpecification extends DecoratedDictionary {
     public function getFileSpecificationString(): ?string {
-        $ufType = $this->getDictionary()->getTypeForKey(DictionaryKey::UF);
+        $ufType = $this->getTypeForKey(DictionaryKey::UF);
         if (in_array($ufType, [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class], true)) {
-            return $this->getDictionary()
-                ->getStringValue(DictionaryKey::UF)
+            return $this->getStringValue(DictionaryKey::UF)
                 ?->getText() ?? throw new ParseFailureException();
         }
 
-        $fType = $this->getDictionary()->getTypeForKey(DictionaryKey::F);
+        $fType = $this->getTypeForKey(DictionaryKey::F);
         if (in_array($fType, [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class], true)) {
-            return $this->getDictionary()
-                ->getStringValue(DictionaryKey::F)
+            return $this->getStringValue(DictionaryKey::F)
                 ?->getText() ?? throw new ParseFailureException();
         }
 
@@ -31,8 +28,7 @@ class FileSpecification extends DecoratedObject {
     }
 
     public function getEmbeddedFileStreamDictionary(): ?Dictionary {
-        return $this->getDictionary()
-            ->getSubDictionary(DictionaryKey::EF);
+        return $this->getSubDictionary(DictionaryKey::EF);
     }
 
     public function getEmbeddedFile(): ?EmbeddedFile {
