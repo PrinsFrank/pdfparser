@@ -24,8 +24,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Pages;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
@@ -110,7 +108,7 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj3 = $document->getObject(3);
         static::assertEquals(
-            new Pages(
+            new GenericObject(
                 new UncompressedObject(
                     $document,
                     3,
@@ -134,7 +132,7 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj4 = $document->getObject(4);
         static::assertEquals(
-            new Page(
+            new GenericObject(
                 new UncompressedObject(
                     $document,
                     4,

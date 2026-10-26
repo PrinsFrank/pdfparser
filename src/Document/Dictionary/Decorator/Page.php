@@ -1,27 +1,27 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\Decorator;
+namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 
 use PrinsFrank\MarkDownDom\Renderer\MarkdownRenderer;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
-use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Annotation;
-use PrinsFrank\PdfParser\Document\Dictionary\Decorator\FileSpecification;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
+use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Extraction\MarkdownExtractor;
 use PrinsFrank\PdfParser\Extraction\TextExtractor;
 
-class Page extends DecoratedObject {
+readonly class Page extends DecoratedDictionary {
     /**
      * @throws PdfParserException
      * @return list<PositionedTextElement>
@@ -43,26 +43,27 @@ class Page extends DecoratedObject {
 
     /** @throws PdfParserException */
     public function getContentStream(): ?ContentStream {
-        if ($this->getDictionary()->getTypeForKey(DictionaryKey::CONTENTS) === null) {
+        if ($this->getTypeForKey(DictionaryKey::CONTENTS) === null) {
             return null;
         }
 
         return ContentStreamParser::parse(
-            $this->objectItem->document->getObjectsByDictionaryKey($this->getDictionary()->dictionary, DictionaryKey::CONTENTS),
+            $this->dictionary->object?->document->getObjectsByDictionaryKey($this->dictionary, DictionaryKey::CONTENTS) ?? throw new ParseFailureException(),
         );
     }
 
     /** @throws PdfParserException */
     public function getResourceDictionary(): ?Dictionary {
-        if (($localResourceDictionary = $this->getDictionary()->getSubDictionary(DictionaryKey::RESOURCES)) !== null) {
+        if (($localResourceDictionary = $this->getSubDictionary(DictionaryKey::RESOURCES)) !== null) {
             return $localResourceDictionary;
         }
 
-        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+        if (($parentReference = $this->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
             return null;
         }
 
-        return ($this->objectItem->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+        return ($this->dictionary->object?->document->getObject($parentReference->objectNumber) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+            ->getDictionary(Pages::class)
             ->getResourceDictionary([$parentReference->objectNumber]);
     }
 
@@ -83,7 +84,7 @@ class Page extends DecoratedObject {
                 throw new InvalidArgumentException(sprintf('XObjects should be references, got %s', get_class($xObjectDictionaryEntry->value)));
             }
 
-            $xObjects[] = $this->objectItem->document->getObject($xObjectDictionaryEntry->value->objectNumber, XObject::class)
+            $xObjects[] = $this->dictionary->object?->document->getObject($xObjectDictionaryEntry->value->objectNumber)?->getDictionary(XObject::class)
                 ?? throw new ParseFailureException(sprintf('Unable to locate object with nr %d', $xObjectDictionaryEntry->value->objectNumber));
         }
 
@@ -130,33 +131,35 @@ class Page extends DecoratedObject {
     public function getFileSpecifications(): array {
         return array_map(
             static fn(DecoratedObject $decoratedObject) => $decoratedObject->getDictionary(FileSpecification::class),
-            $this->getDictionary()->getObjectsForReference(DictionaryKey::AF),
+            $this->getObjectsForReference(DictionaryKey::AF),
         );
     }
 
     public function getMediaBox(): ?Rectangle {
-        if (($localValue = $this->getDictionary()->getValueForKey(DictionaryKey::MEDIA_BOX, Rectangle::class)) !== null) {
+        if (($localValue = $this->getValueForKey(DictionaryKey::MEDIA_BOX, Rectangle::class)) !== null) {
             return $localValue;
         }
 
-        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+        if (($parentReference = $this->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
             return null;
         }
 
-        return ($this->objectItem->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+        return ($this->dictionary->object?->document->getObject($parentReference->objectNumber) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+            ->getDictionary(Pages::class)
             ->getMediaBox([$parentReference->objectNumber]);
     }
 
     public function getCropBox(): ?Rectangle {
-        if (($localValue = $this->getDictionary()->getValueForKey(DictionaryKey::CROP_BOX, Rectangle::class)) !== null) {
+        if (($localValue = $this->getValueForKey(DictionaryKey::CROP_BOX, Rectangle::class)) !== null) {
             return $localValue;
         }
 
-        if (($parentReference = $this->getDictionary()->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
+        if (($parentReference = $this->getValueForKey(DictionaryKey::PARENT, ReferenceValue::class)) === null) {
             return null;
         }
 
-        $cropBoxParent = ($this->objectItem->document->getObject($parentReference->objectNumber, Pages::class) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+        $cropBoxParent = ($this->dictionary->object?->document->getObject($parentReference->objectNumber) ?? throw new ParseFailureException(sprintf('Parent with object nr %d not found', $parentReference->objectNumber)))
+            ->getDictionary(Pages::class)
             ->getCropBox([$parentReference->objectNumber]);
         if ($cropBoxParent !== null) {
             return $cropBoxParent;
@@ -167,13 +170,13 @@ class Page extends DecoratedObject {
 
     /** @return list<Annotation> */
     public function getAnnotations(): array {
-        if (in_array($this->getDictionary()->getTypeForKey(DictionaryKey::ANNOTS), [ReferenceValueArray::class, ReferenceValue::class], true) === false) {
+        if (in_array($this->getTypeForKey(DictionaryKey::ANNOTS), [ReferenceValueArray::class, ReferenceValue::class], true) === false) {
             return [];
         }
 
         return array_map(
             static fn(DecoratedObject $object) => $object->getDictionary(Annotation::class),
-            $this->getDictionary()->getObjectsForReference(DictionaryKey::ANNOTS),
+            $this->getObjectsForReference(DictionaryKey::ANNOTS),
         );
     }
 }

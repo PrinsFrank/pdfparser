@@ -14,6 +14,6 @@ $document = (new \PrinsFrank\PdfParser\PdfParser())
 
 match ($argv[2] ?? throw new InvalidArgumentException('Missing profile type')) {
     'getText' => $document->getText(),
-    'getImages' => array_map(fn(\PrinsFrank\PdfParser\Document\Object\Decorator\XObject $image) => $image->getStream()->toString(), $document->getImages()),
+    'getImages' => array_map(fn(\PrinsFrank\PdfParser\Document\Dictionary\Decorator\XObject $image) => $image->getStream()->toString(), $document->getImages()),
     default => throw new InvalidArgumentException('Please provide a profile type'),
 };

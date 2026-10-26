@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\Decorator;
+namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 
-use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\Object\TextObjectOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
@@ -21,44 +20,39 @@ use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpace;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpaceFactory;
 use PrinsFrank\PdfParser\Document\Image\ImageType;
 use PrinsFrank\PdfParser\Document\Image\RasterizedImage;
+use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
-class XObject extends DecoratedObject {
+readonly class XObject extends DecoratedDictionary {
     public function isImage(): bool {
-        return $this->getDictionary()
-            ->getSubType() === SubtypeNameValue::IMAGE;
+        return $this->getSubType() === SubtypeNameValue::IMAGE;
     }
 
     public function isForm(): bool {
-        return $this->getDictionary()
-            ->getSubType() === SubtypeNameValue::FORM;
+        return $this->getSubType() === SubtypeNameValue::FORM;
     }
 
     public function getWidth(): ?int {
-        return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::WIDTH, IntegerValue::class)
+        return $this->getValueForKey(DictionaryKey::WIDTH, IntegerValue::class)
             ?->value;
     }
 
     public function getHeight(): ?int {
-        return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::HEIGHT, IntegerValue::class)
+        return $this->getValueForKey(DictionaryKey::HEIGHT, IntegerValue::class)
             ?->value;
     }
 
     public function getLength(): ?int {
-        return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)
+        return $this->getValueForKey(DictionaryKey::LENGTH, IntegerValue::class)
             ?->value;
     }
 
     /** @throws PdfParserException */
     public function getResourceDictionary(): ?Dictionary {
-        return $this->getDictionary()
-            ->getSubDictionary(DictionaryKey::RESOURCES);
+        return $this->getSubDictionary(DictionaryKey::RESOURCES);
     }
 
     /** @throws PdfParserException */
@@ -78,17 +72,17 @@ class XObject extends DecoratedObject {
             throw new RuntimeException('Unable to retrieve image type for XObjects that is not an image');
         }
 
-        $filterValueType = $this->getDictionary()->getTypeForKey(DictionaryKey::FILTER);
+        $filterValueType = $this->getTypeForKey(DictionaryKey::FILTER);
         if ($filterValueType === null) {
             return null;
         }
 
         if ($filterValueType === FilterNameValue::class) {
-            return $this->getDictionary()->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class)?->getImageType();
+            return $this->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class)?->getImageType();
         }
 
         if ($filterValueType === ArrayValue::class) {
-            foreach ($this->getDictionary()->getValueForKey(DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new RuntimeException() as $filterValue) {
+            foreach ($this->getValueForKey(DictionaryKey::FILTER, ArrayValue::class)->value ?? throw new RuntimeException() as $filterValue) {
                 if (!is_string($filterValue)) {
                     throw new ParseFailureException(sprintf('Expected a string for filter value, got "%s"', ($jsonEncoded = json_encode($filterValue)) !== false ? $jsonEncoded : 'Unknown'));
                 }
@@ -104,40 +98,38 @@ class XObject extends DecoratedObject {
     }
 
     private function getBitsPerComponent(): ?int {
-        return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::BITS_PER_COMPONENT, IntegerValue::class)
+        return $this->getValueForKey(DictionaryKey::BITS_PER_COMPONENT, IntegerValue::class)
             ?->value;
     }
 
     private function getColorSpace(): ?ColorSpace {
-        if (($type = $this->getDictionary()->getTypeForKey(DictionaryKey::COLOR_SPACE)) === null) {
+        if (($type = $this->getTypeForKey(DictionaryKey::COLOR_SPACE)) === null) {
             return null;
         }
 
         if ($type === DeviceColorSpaceNameValue::class || $type === CIEColorSpaceNameValue::class || $type === SpecialColorSpaceNameValue::class) {
-            return new ColorSpace(false, $this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, $type) ?? throw new ParseFailureException(), null, null, null);
+            return new ColorSpace(false, $this->getValueForKey(DictionaryKey::COLOR_SPACE, $type) ?? throw new ParseFailureException(), null, null, null);
         }
 
         if ($type === ArrayValue::class) {
-            $colorSpaceArray = $this->getDictionary()->getValueForKey(DictionaryKey::COLOR_SPACE, ArrayValue::class)
+            $colorSpaceArray = $this->getValueForKey(DictionaryKey::COLOR_SPACE, ArrayValue::class)
                 ?? throw new ParseFailureException();
 
-            return ColorSpaceFactory::fromString($colorSpaceArray->toString(), $this->objectItem->document);
+            return ColorSpaceFactory::fromString($colorSpaceArray->toString(), $this->dictionary->object->document ?? throw new ParseFailureException());
         }
 
         if ($type === ReferenceValue::class) {
-            $colorSpaceObject = $this->getDictionary()->getObjectForReference(DictionaryKey::COLOR_SPACE)
+            $colorSpaceObject = $this->getObjectForReference(DictionaryKey::COLOR_SPACE)
                 ?? throw new ParseFailureException('Unable to retrieve colorspace object');
 
-            return ColorSpaceFactory::fromString($colorSpaceObject->getStream()->toString(), $this->objectItem->document);
+            return ColorSpaceFactory::fromString($colorSpaceObject->getStream()->toString(), $this->dictionary->object->document ?? throw new ParseFailureException());
         }
 
         throw new ParseFailureException(sprintf('Unsupported colorspace format %s', $type));
     }
 
-    #[Override]
     public function getStream(): Stream {
-        $content = parent::getStream();
+        $content = $this->dictionary->object?->getContent() ?? throw new ParseFailureException();
         if (!$this->isImage() || $this->getImageType() !== ImageType::PNG) {
             return $content;
         }
@@ -170,11 +162,12 @@ class XObject extends DecoratedObject {
             return [];
         }
 
-        if (($stream = $this->getStream())->firstPos(TextObjectOperator::BEGIN, 0, $stream->getSizeInBytes()) === null) {
+        if (($stream = $this->getStream())->firstPos(TextObjectOperator::BEGIN, 0, $stream->getSizeInBytes()) === null
+            || $this->dictionary->object === null) {
             return [];
         }
 
-        return ContentStreamParser::parse([$this])
+        return ContentStreamParser::parse([new GenericObject($this->dictionary->object)])
             ->getPositionedTextElements($this, $transformationMatrix, $visitedObjectIds);
     }
 }
