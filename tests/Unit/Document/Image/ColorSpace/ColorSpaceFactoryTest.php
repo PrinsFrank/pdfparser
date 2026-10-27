@@ -10,13 +10,14 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\DeviceColorSpa
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpace;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpaceFactory;
-use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
 #[CoversClass(ColorSpaceFactory::class)]
 class ColorSpaceFactoryTest extends TestCase {
     public function testFromStringNonIndexed(): void {
-        $lutObject = $this->createMock(DecoratedObject::class);
+        $lutObject = $this->createMock(UncompressedObject::class);
         $document = $this->createMock(Document::class);
         $document->expects(self::once())
             ->method('getObject')
@@ -36,7 +37,7 @@ class ColorSpaceFactoryTest extends TestCase {
     }
 
     public function testFromStringIndexed(): void {
-        $lutObject = $this->createMock(DecoratedObject::class);
+        $lutObject = $this->createMock(UncompressedObject::class);
         $document = $this->createMock(Document::class);
         $document->expects(self::once())
             ->method('getObject')
@@ -56,7 +57,7 @@ class ColorSpaceFactoryTest extends TestCase {
     }
 
     public function testFromStringIndexedWithExtraSpaces(): void {
-        $lutObject = $this->createMock(DecoratedObject::class);
+        $lutObject = $this->createMock(UncompressedObject::class);
         $document = $this->createMock(Document::class);
         $document->expects(self::once())
             ->method('getObject')
@@ -76,12 +77,12 @@ class ColorSpaceFactoryTest extends TestCase {
     }
 
     public function testFromStringIndexedWithTwoReferences(): void {
-        $colorSpaceObject = $this->createMock(DecoratedObject::class);
+        $colorSpaceObject = $this->createMock(UncompressedObject::class);
         $colorSpaceObject->expects(self::atLeastOnce())
-            ->method('getStream')
+            ->method('getContent')
             ->willReturn(new InMemoryStream('[ /ICCBased 15 0 R ]'));
 
-        $lutObject = $this->createMock(DecoratedObject::class);
+        $lutObject = $this->createMock(CompressedObject::class);
 
         $document = $this->createMock(Document::class);
         $document->expects(self::exactly(2))
@@ -105,9 +106,9 @@ class ColorSpaceFactoryTest extends TestCase {
     }
 
     public function testFromStringWithInlineLUT(): void {
-        $colorSpaceObject = $this->createMock(DecoratedObject::class);
+        $colorSpaceObject = $this->createMock(UncompressedObject::class);
         $colorSpaceObject->expects(self::atLeastOnce())
-            ->method('getStream')
+            ->method('getContent')
             ->willReturn(new InMemoryStream('[/DeviceRGB 16 0 R]'));
 
         $document = $this->createMock(Document::class);

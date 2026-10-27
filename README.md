@@ -141,7 +141,7 @@ Code specific for certain object types lives in that object types' decorator. Re
 If you want to retrieve an object by its number, you can call the `$document->getObject($objectNumber)` method. If you know that the object with that number is supposed to be of a specific type, you can supply the second argument. For example, if you want to get object 42 which you know is of type Page, you can call the method like this:
 
 ```php
-$page = $document->getObject(42, Page::class);
+$page = $document->getObject(42);
 ```
 
 If the object is not of the correct type, this will result in an exception. If you don't care about the object type, pass null as the second argument or don't supply the second argument at all.

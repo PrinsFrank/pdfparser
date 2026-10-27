@@ -24,7 +24,8 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\XObjectOp
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
-use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\FileStream;
 
@@ -40,8 +41,8 @@ class ContentStreamParserTest extends TestCase {
                 ET
             EOD,
         );
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(CompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -50,7 +51,7 @@ class ContentStreamParserTest extends TestCase {
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '( Hello World )')),
             ),
             ContentStreamParser::parse(
-                [$decoratedObject],
+                [$object],
             ),
         );
     }
@@ -66,8 +67,8 @@ class ContentStreamParserTest extends TestCase {
                 ET
             EOD,
         );
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(CompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -76,7 +77,7 @@ class ContentStreamParserTest extends TestCase {
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '( Hello World )')),
             ),
             ContentStreamParser::parse(
-                [$decoratedObject],
+                [$object],
             ),
         );
     }
@@ -94,8 +95,8 @@ class ContentStreamParserTest extends TestCase {
             ET
             EOD,
         );
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(CompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
@@ -103,7 +104,7 @@ class ContentStreamParserTest extends TestCase {
                     ->addContentStreamCommand(new ContentStreamCommand(TextPositioningOperator::MOVE_OFFSET, '100 100'))
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '( Hello World )')),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
     }
 
@@ -116,15 +117,15 @@ class ContentStreamParserTest extends TestCase {
             ET
             EOD,
         );
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(UncompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '([Hello)'))
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(World])')),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
     }
 
@@ -136,14 +137,14 @@ class ContentStreamParserTest extends TestCase {
             ET
             EOD,
         );
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(UncompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hel\)lo)')),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
     }
 
@@ -155,14 +156,14 @@ class ContentStreamParserTest extends TestCase {
             ET
             EOD,
         );
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(CompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW_ARRAY, '[(F)-1(O)32(O)]')),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
     }
 
@@ -174,14 +175,14 @@ class ContentStreamParserTest extends TestCase {
             ET
             EOD,
         );
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(CompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW_ARRAY, '[(F)-1([O)32(O])]')),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
     }
 
@@ -193,14 +194,14 @@ class ContentStreamParserTest extends TestCase {
             ET
             EOD,
         );
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(UncompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextStateOperator::FONT_SIZE, '/Tc1.0 1')),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
     }
 
@@ -215,8 +216,8 @@ class ContentStreamParserTest extends TestCase {
             ET
             EOD,
         );
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(CompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 new ContentStreamCommand(GraphicsStateOperator::SetLineCap, '0'),
@@ -225,42 +226,42 @@ class ContentStreamParserTest extends TestCase {
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hello)'))
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(World)')),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
     }
 
     public function testParseWithMultibyteEscapedStringLiteralDelimiterInStringLiteral(): void {
         $contentStream = FileStream::fromString('BT (Hel' . chr(233) . '\)lo) Tj ET');
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(CompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hel' . chr(233) . '\)lo)')),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
 
         $contentStream = FileStream::fromString('BT (Hel' . chr(233) . chr(108) . '\)lo) Tj ET');
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(UncompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hel' . chr(233) . chr(108) . '\)lo)')),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
 
         $contentStream = FileStream::fromString('BT (Hel' . chr(233) . chr(108) . chr(58) . '\)lo) Tj ET');
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(CompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hel' . chr(233) . chr(108) . chr(58) . '\)lo)')),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
     }
 
@@ -272,14 +273,14 @@ class ContentStreamParserTest extends TestCase {
             ET
             EOD,
         );
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(CompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextStateOperator::FONT_SIZE, '/Helvetica-2000805986 24')),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
     }
 
@@ -291,13 +292,13 @@ class ContentStreamParserTest extends TestCase {
             ET
             EOD,
         );
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(CompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject()),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
     }
 
@@ -311,15 +312,15 @@ class ContentStreamParserTest extends TestCase {
             ET % comment 4
             EOD,
         );
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(CompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hello)'))
                     ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(World)')),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
     }
 
@@ -334,15 +335,15 @@ class ContentStreamParserTest extends TestCase {
             ET
             EOD,
         );
-        $decoratedObject = $this->createMock(GenericObject::class);
-        $decoratedObject->expects(self::once())->method('getStream')->willReturn($contentStream);
+        $object = $this->createMock(UncompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
         static::assertEquals(
             new ContentStream(
                 (new TextObject())
                     ->addContentStreamCommand(new ContentStreamCommand(ColorOperator::SetColorDeviceRGB, '0 0 1'))
                     ->addContentStreamCommand(new ContentStreamCommand(ColorOperator::SetStrokingColorDeviceRGB, '1 0 0')),
             ),
-            ContentStreamParser::parse([$decoratedObject]),
+            ContentStreamParser::parse([$object]),
         );
     }
 

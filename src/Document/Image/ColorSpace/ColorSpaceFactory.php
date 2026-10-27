@@ -17,8 +17,8 @@ class ColorSpaceFactory {
         if (preg_match('/^(?<objectNr>[0-9]+)\s+[0-9]+\s+R$/', $matches['name'], $nameObjectMatches) === 1) {
             $colorSpaceObject = $document->getObject((int) $nameObjectMatches['objectNr'])
                 ?? throw new ParseFailureException(sprintf('Unable to locate object with number %d', (int) $nameObjectMatches['objectNr']));
-            if (preg_match('/^\s*\[\s*\/(?<name>[A-Za-z]+)\s+(?<objectNr>[0-9]+)\s+[0-9]+\s+R\s*]\s*$/', $colorSpaceObject->getStream()->toString(), $colorSpaceObjectMatches) !== 1) {
-                throw new ParseFailureException(sprintf('Invalid color space string "%s" in colorSpaceObject', $colorSpaceObject->getStream()->toString()));
+            if (preg_match('/^\s*\[\s*\/(?<name>[A-Za-z]+)\s+(?<objectNr>[0-9]+)\s+[0-9]+\s+R\s*]\s*$/', $colorSpaceObject->getContent()->toString(), $colorSpaceObjectMatches) !== 1) {
+                throw new ParseFailureException(sprintf('Invalid color space string "%s" in colorSpaceObject', $colorSpaceObject->getContent()->toString()));
             }
 
             $colorSpaceName = DeviceColorSpaceNameValue::tryFrom($colorSpaceObjectMatches['name'])

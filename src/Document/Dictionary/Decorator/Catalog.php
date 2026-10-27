@@ -5,7 +5,8 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
@@ -34,7 +35,7 @@ readonly class Catalog extends DecoratedDictionary {
 
         if ($afType === ReferenceValue::class) {
             $referenceArrayContent = $this->getObjectForReference(DictionaryKey::AF)
-                ?->getStream()->toString() ?? throw new ParseFailureException('Unable to retrieve AF object content');
+                ?->getContent()->toString() ?? throw new ParseFailureException('Unable to retrieve AF object content');
             if (($AFReferences = ReferenceValueArray::fromValue($referenceArrayContent)) instanceof ReferenceValueArray === false) {
                 throw new ParseFailureException('AF object is not a reference array');
             }
@@ -47,7 +48,7 @@ readonly class Catalog extends DecoratedDictionary {
 
         if ($afType === ReferenceValueArray::class) {
             return array_map(
-                static fn(DecoratedObject $object) => $object->getDictionary(FileSpecification::class),
+                static fn(UncompressedObject|CompressedObject $object) => $object->getDictionary(FileSpecification::class),
                 $this->getObjectsForReference(DictionaryKey::AF),
             );
         }

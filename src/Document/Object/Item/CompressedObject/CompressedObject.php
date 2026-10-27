@@ -85,7 +85,7 @@ readonly class CompressedObject implements ObjectItem {
                 '',
                 array_map(
                     fn(ReferenceValue $referenceValue) => ($this->document->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException())
-                        ->getStream()
+                        ->getContent()
                         ->toString(),
                     $referenceValueArray->referenceValues,
                 ),

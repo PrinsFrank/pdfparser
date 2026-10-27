@@ -4,9 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Page;
-use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Font;
-use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
 
 enum TypeNameValue: string implements NameValue {
     case _3_D = '3D';
@@ -135,9 +133,4 @@ enum TypeNameValue: string implements NameValue {
     case VRI = 'VRI';
     case X_OBJECT = 'XObject';
     case X_REF = 'XRef';
-
-    /** @return class-string<DecoratedObject> */
-    public function getDecoratorFQN(): string {
-        return GenericObject::class;
-    }
 }
