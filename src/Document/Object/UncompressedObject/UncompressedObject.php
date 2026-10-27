@@ -20,39 +20,55 @@ use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 use PrinsFrank\PdfParser\Document\Security\EncryptionContext;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\FileStream;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @api */
-readonly class UncompressedObject implements ObjectItem {
-    private Dictionary $dictionary;
-    private CompressedObjectByteOffsets $byteOffsets;
+class UncompressedObject implements ObjectItem {
+    /** @var array<class-string<DecoratedDictionary>, DecoratedDictionary> */
+    private array $decoratorCache = [];
+    private readonly Dictionary $dictionary;
+    private readonly CompressedObjectByteOffsets $byteOffsets;
 
     public function __construct(
-        public Document $document,
-        public int $objectNumber,
-        public int $generationNumber,
-        public int $startOffset,
-        public int $endOffset,
+        public readonly Document $document,
+        public readonly int $objectNumber,
+        public readonly int $generationNumber,
+        public readonly int $startOffset,
+        public readonly int $endOffset,
     ) {}
 
+    /**
+     * @template T of DecoratedDictionary
+     * @param class-string<T> $decoratorFQN
+     * @throws PdfParserException
+     * @return T
+     */
     #[Override]
     public function getDictionary(string $decoratorFQN = GenericDictionary::class): DecoratedDictionary {
+        if (isset($this->decoratorCache[$decoratorFQN])) {
+            /** @var T $decoratedDictionary */
+            $decoratedDictionary = $this->decoratorCache[$decoratorFQN];
+
+            return $decoratedDictionary;
+        }
+
         if (isset($this->dictionary)) {
-            return new $decoratorFQN($this->dictionary);
+            return $this->decoratorCache[$decoratorFQN] = new $decoratorFQN($this->dictionary);
         }
 
         $startDictionaryPos = $this->document->stream->firstPos(DelimiterCharacter::LESS_THAN_SIGN, $this->startOffset, $this->endOffset);
         if ($startDictionaryPos === null) {
-            return new $decoratorFQN($this->dictionary = new Dictionary($this));
+            return $this->decoratorCache[$decoratorFQN] = new $decoratorFQN($this->dictionary = new Dictionary($this));
         }
 
         $endDictionaryPos = $this->document->stream->firstPos(Marker::STREAM, $startDictionaryPos, $this->endOffset)
             ?? $this->document->stream->lastPos(Marker::END_OBJ, $this->document->stream->getSizeInBytes() - $this->endOffset)
             ?? throw new ParseFailureException('Unable to locate start of stream or end of current object');
 
-        return new $decoratorFQN($this->dictionary = DictionaryParser::parse($this, $this->getEncryptionContext(), $this->document->stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos));
+        return $this->decoratorCache[$decoratorFQN] = new $decoratorFQN($this->dictionary = DictionaryParser::parse($this, $this->getEncryptionContext(), $this->document->stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos));
     }
 
     public function getCompressedObject(int $objectNumber): CompressedObject {
