@@ -5,13 +5,13 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array;
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DocumentAwareDictionaryValue;
 use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
-readonly class NumberTreeArrayValue implements DictionaryValue {
+readonly class NumberTreeArrayValue implements DocumentAwareDictionaryValue {
     /** @param array<int, Dictionary> $numberTree */
     public function __construct(
         public array $numberTree,
