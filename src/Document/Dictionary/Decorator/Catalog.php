@@ -6,7 +6,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Pages;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
@@ -16,8 +15,9 @@ readonly class Catalog extends DecoratedDictionary {
         $pagesReference = $this->getValueForKey(DictionaryKey::PAGES, ReferenceValue::class)
             ?? throw new ParseFailureException('Every catalog dictionary should contain a pages reference, none found');
 
-        return $this->dictionary->object?->document?->getObject($pagesReference->objectNumber, Pages::class)
-            ?? throw new ParseFailureException(sprintf('Unable to retrieve pages root object with number %d', $pagesReference->objectNumber));
+        return ($this->dictionary->object?->document?->getObject($pagesReference->objectNumber)
+            ?? throw new ParseFailureException(sprintf('Unable to retrieve pages root object with number %d', $pagesReference->objectNumber)))
+            ->getDictionary(Pages::class);
     }
 
     public function getInteractiveForm(): ?InteractiveForm {

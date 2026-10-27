@@ -20,8 +20,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Pages;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
@@ -105,7 +103,7 @@ class H2MinimalTest extends TestCase {
         );
         $obj3 = $document->getObject(3);
         static::assertEquals(
-            new Pages(
+            new GenericObject(
                 new UncompressedObject(
                     $document,
                     3,
@@ -129,7 +127,7 @@ class H2MinimalTest extends TestCase {
         );
         $obj4 = $document->getObject(4);
         static::assertEquals(
-            new Page(
+            new GenericObject(
                 new UncompressedObject(
                     $document,
                     4,

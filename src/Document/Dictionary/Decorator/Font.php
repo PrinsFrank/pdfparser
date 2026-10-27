@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\Decorator;
+namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 
 use PrinsFrank\MarkDownDom\Enum\HeadingLevel;
 use PrinsFrank\PdfParser\Document\CMap\Registry\RegistryOrchestrator;
@@ -29,28 +29,26 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
-class Font extends DecoratedObject {
-    /** @var list<Font|Dictionary> */
-    private readonly array $descendantFontsCache;
-    private readonly ToUnicodeCMap|false $toUnicodeCMap;
-    private readonly CIDFontWidths|FontWidths|false $widths;
-    private readonly DifferencesArrayValue|false $differencesCache;
-    private readonly EncodingNameValue|false $encodingCache;
+readonly class Font extends DecoratedDictionary {
+    /** @var list<Font> */
+    private array $descendantFontsCache;
+    private ToUnicodeCMap|false $toUnicodeCMap;
+    private CIDFontWidths|FontWidths|false $widths;
+    private DifferencesArrayValue|false $differencesCache;
+    private EncodingNameValue|false $encodingCache;
 
     /** @throws PdfParserException */
     public function getBaseFont(): ?string {
-        return $this->getDictionary()
-            ->getStringValue(DictionaryKey::BASE_FONT)
+        return $this->getStringValue(DictionaryKey::BASE_FONT)
             ?->value;
     }
 
     public function getEncodingDictionary(): ?Dictionary {
-        if (in_array($this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING), [null, EncodingNameValue::class, NameObjectStringValue::class], true)) {
+        if (in_array($this->getTypeForKey(DictionaryKey::ENCODING), [null, EncodingNameValue::class, NameObjectStringValue::class], true)) {
             return null;
         }
 
-        return $this->getDictionary()
-            ->getSubDictionary(DictionaryKey::ENCODING);
+        return $this->getSubDictionary(DictionaryKey::ENCODING);
     }
 
     /** @throws PdfParserException */
@@ -59,8 +57,8 @@ class Font extends DecoratedObject {
             return $this->encodingCache === false ? null : $this->encodingCache;
         }
 
-        if ($this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING) === EncodingNameValue::class) {
-            $encoding = $this->getDictionary()->getValueForKey(DictionaryKey::ENCODING, EncodingNameValue::class);
+        if ($this->getTypeForKey(DictionaryKey::ENCODING) === EncodingNameValue::class) {
+            $encoding = $this->getValueForKey(DictionaryKey::ENCODING, EncodingNameValue::class);
         } else {
             $encoding = $this->getEncodingDictionary()
                 ?->getValueForKey(DictionaryKey::BASE_ENCODING, EncodingNameValue::class);
@@ -97,16 +95,14 @@ class Font extends DecoratedObject {
                 : $this->toUnicodeCMap;
         }
 
-        if ($this->getDictionary()->getTypeForKey(DictionaryKey::TO_UNICODE) === ToUnicodeCMapNameValue::class) {
-            $toUnicodeCMapNameValue = $this->getDictionary()
-                ->getValueForKey(DictionaryKey::TO_UNICODE, ToUnicodeCMapNameValue::class)
+        if ($this->getTypeForKey(DictionaryKey::TO_UNICODE) === ToUnicodeCMapNameValue::class) {
+            $toUnicodeCMapNameValue = $this->getValueForKey(DictionaryKey::TO_UNICODE, ToUnicodeCMapNameValue::class)
                 ?? throw new ParseFailureException();
 
             return $this->toUnicodeCMap = $toUnicodeCMapNameValue->getToUnicodeCMap();
         }
 
-        $toUnicodeObject = $this->getDictionary()
-            ->getObjectForReference(DictionaryKey::TO_UNICODE);
+        $toUnicodeObject = $this->getObjectForReference(DictionaryKey::TO_UNICODE);
         if ($toUnicodeObject === null) {
             $descendantUnicodeCMap = $this->getToUnicodeCMapDescendantFont();
             if ($descendantUnicodeCMap !== null) {
@@ -127,9 +123,7 @@ class Font extends DecoratedObject {
 
     private function getToUnicodeCMapDescendantFont(): ?ToUnicodeCMap {
         foreach ($this->getDescendantFonts() as $descendantFont) {
-            $fontDictionary = $descendantFont instanceof Dictionary ? $descendantFont : $descendantFont->getDictionary();
-
-            if (($CIDSystemInfo = $fontDictionary->getValueForKey(DictionaryKey::CIDSYSTEM_INFO, Dictionary::class)) !== null) {
+            if (($CIDSystemInfo = $descendantFont->getValueForKey(DictionaryKey::CIDSYSTEM_INFO, Dictionary::class)) !== null) {
                 $fontResource = RegistryOrchestrator::getForRegistryOrderingSupplement(
                     $CIDSystemInfo->getStringValue(DictionaryKey::REGISTRY) ?? throw new ParseFailureException(),
                     $CIDSystemInfo->getStringValue(DictionaryKey::ORDERING) ?? throw new ParseFailureException(),
@@ -147,15 +141,13 @@ class Font extends DecoratedObject {
 
     /** @throws PdfParserException */
     public function getFirstChar(): ?int {
-        return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::FIRST_CHAR, IntegerValue::class)
+        return $this->getValueForKey(DictionaryKey::FIRST_CHAR, IntegerValue::class)
             ?->value;
     }
 
     /** @throws PdfParserException */
     public function getLastChar(): ?int {
-        return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::LAST_CHAR, IntegerValue::class)
+        return $this->getValueForKey(DictionaryKey::LAST_CHAR, IntegerValue::class)
             ?->value;
     }
 
@@ -184,33 +176,36 @@ class Font extends DecoratedObject {
         return $totalCharacterWidth;
     }
 
-    /** @return list<Font|Dictionary> */
+    /** @return list<Font> */
     public function getDescendantFonts(): array {
         if (isset($this->descendantFontsCache)) {
             return $this->descendantFontsCache;
         }
 
-        $valueType = $this->getDictionary()->getTypeForKey(DictionaryKey::DESCENDANT_FONTS);
+        $valueType = $this->getTypeForKey(DictionaryKey::DESCENDANT_FONTS);
         if ($valueType === null) {
             return $this->descendantFontsCache = [];
         }
 
         if ($valueType === ReferenceValue::class) {
-            $descendantFontsReference = $this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValue::class) ?? throw new ParseFailureException();
+            $descendantFontsReference = $this->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValue::class) ?? throw new ParseFailureException();
             return [
-                $this->objectItem->document->getObject($descendantFontsReference->objectNumber, Font::class)
-                    ?? throw new ParseFailureException(sprintf('Descendant font with number %d could not be found', $descendantFontsReference->objectNumber)),
+                ($this->dictionary->object?->document->getObject($descendantFontsReference->objectNumber) ?? throw new ParseFailureException(sprintf('Descendant font with number %d could not be found', $descendantFontsReference->objectNumber)))
+                    ->getDictionary(Font::class),
             ];
         }
 
         if ($valueType === DictionaryArrayValue::class) {
-            return $this->descendantFontsCache = $this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, DictionaryArrayValue::class)->dictionaries ?? throw new ParseFailureException();
+            return $this->descendantFontsCache = array_map(
+                fn(Dictionary $dictionary) => new self($dictionary),
+                $this->getValueForKey(DictionaryKey::DESCENDANT_FONTS, DictionaryArrayValue::class)->dictionaries ?? throw new ParseFailureException(),
+            );
         }
 
         $descendantFonts = [];
-        foreach ($this->getDictionary()->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
-            $descendantFonts[] = $this->objectItem->document->getObject($referenceValue->objectNumber, Font::class)
-                ?? throw new ParseFailureException(sprintf('Descendant font with number %d could not be found', $referenceValue->objectNumber));
+        foreach ($this->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
+            $descendantFonts[] = ($this->dictionary->object?->document->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException(sprintf('Descendant font with number %d could not be found', $referenceValue->objectNumber)))
+                ->getDictionary(Font::class);
         }
 
         return $this->descendantFontsCache = $descendantFonts;
@@ -218,7 +213,7 @@ class Font extends DecoratedObject {
 
     public function isCIDFont(): bool {
         return in_array(
-            $this->getDictionary()->getValueForKey(DictionaryKey::SUBTYPE, SubtypeNameValue::class),
+            $this->getValueForKey(DictionaryKey::SUBTYPE, SubtypeNameValue::class),
             [SubtypeNameValue::CID_FONT_TYPE_0, SubtypeNameValue::CID_FONT_TYPE_2, SubtypeNameValue::CID_FONT_TYPE_0_C],
             true,
         );
@@ -226,13 +221,16 @@ class Font extends DecoratedObject {
 
     public function getDefaultWidth(): float {
         if ($this->isCIDFont()) {
-            return ($this->getDictionary()->getValueForKey(DictionaryKey::DW, IntegerValue::class)->value
+            return ($this->getValueForKey(DictionaryKey::DW, IntegerValue::class)->value
                 ?? 1000) / 1000;
         }
 
         foreach ($this->getDescendantFonts() as $descendantFont) {
             if ($descendantFont instanceof Dictionary && $descendantFont->getTypeForKey(DictionaryKey::W) === ReferenceValue::class) {
-                $descendantFont = $this->objectItem->document->getObject($descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class)->objectNumber ?? throw new ParseFailureException(), Font::class) ?? throw new ParseFailureException();
+                /** @var ReferenceValue $descendantFontReference */
+                $descendantFontReference = $descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class) ?? throw new ParseFailureException();
+                $descendantFont = ($this->dictionary->object?->document->getObject($descendantFontReference->objectNumber) ?? throw new ParseFailureException())
+                    ->getDictionary(Font::class);
             }
 
             if ($descendantFont instanceof Font) {
@@ -254,19 +252,21 @@ class Font extends DecoratedObject {
         }
 
         if ($this->isCIDFont()) {
-            if ($this->getDictionary()->getTypeForKey(DictionaryKey::W) === CrossReferenceStreamByteSizes::class) {
-                $byteSizes = $this->getDictionary()->getValueForKey(DictionaryKey::W, CrossReferenceStreamByteSizes::class) ?? throw new ParseFailureException(); // TODO: fix misinterpretation
+            if ($this->getTypeForKey(DictionaryKey::W) === CrossReferenceStreamByteSizes::class) {
+                $byteSizes = $this->getValueForKey(DictionaryKey::W, CrossReferenceStreamByteSizes::class) ?? throw new ParseFailureException(); // TODO: fix misinterpretation
 
                 return $this->widths = new CIDFontWidths(new RangeCIDWidth($byteSizes->lengthRecord1InBytes, $byteSizes->lengthRecord2InBytes, $byteSizes->lengthRecord3InBytes));
             }
 
-            $this->widths = $this->getDictionary()->getValueForKey(DictionaryKey::W, CIDFontWidths::class) ?? false;
+            $this->widths = $this->getValueForKey(DictionaryKey::W, CIDFontWidths::class) ?? false;
             return $this->widths === false ? null : $this->widths;
         }
 
         foreach ($this->getDescendantFonts() as $descendantFont) {
             if ($descendantFont instanceof Dictionary && $descendantFont->getTypeForKey(DictionaryKey::W) === ReferenceValue::class) {
-                $descendantFont = $this->objectItem->document->getObject($descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class)->objectNumber ?? throw new ParseFailureException(), Font::class) ?? throw new ParseFailureException();
+                /** @var ReferenceValue $descendantFontReference */
+                $descendantFontReference = $descendantFont->getValueForKey(DictionaryKey::W, ReferenceValue::class) ?? throw new ParseFailureException();
+                $descendantFont = $this->dictionary->object?->document->getObject($descendantFontReference->objectNumber) ?? throw new ParseFailureException();
             }
 
             if ($descendantFont instanceof Font && ($widthsDescendantFont = $descendantFont->getWidths()) !== null) {
@@ -274,8 +274,9 @@ class Font extends DecoratedObject {
             }
         }
 
-        if ($this->getDictionary()->getTypeForKey(DictionaryKey::WIDTHS) === ReferenceValue::class) {
-            $object = $this->objectItem->document->getObject(($widthsReference = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ReferenceValue::class))->objectNumber ?? throw new ParseFailureException(), Font::class)
+        if ($this->getTypeForKey(DictionaryKey::WIDTHS) === ReferenceValue::class) {
+            $widthsReference = $this->getValueForKey(DictionaryKey::WIDTHS, ReferenceValue::class) ?? throw new ParseFailureException();
+            $object = $this->dictionary->object?->document->getObject($widthsReference->objectNumber)
                 ?? throw new ParseFailureException(sprintf('Width dictionary with number %d could not be found', $widthsReference->objectNumber));
             $arrayValue = ArrayValue::fromValue(preg_replace('/%.+/', '', $object->getStream()->toString()) ?? $object->getStream()->toString());
             if ($arrayValue instanceof ArrayValue === false) {
@@ -283,7 +284,7 @@ class Font extends DecoratedObject {
             }
 
             $widthsArray = $arrayValue->value;
-        } elseif (($widthsArray = $this->getDictionary()->getValueForKey(DictionaryKey::WIDTHS, ArrayValue::class)?->value) === null) {
+        } elseif (($widthsArray = $this->getValueForKey(DictionaryKey::WIDTHS, ArrayValue::class)?->value) === null) {
             $this->widths = false;
             return null;
         }
@@ -309,8 +310,7 @@ class Font extends DecoratedObject {
 
     /** @throws PdfParserException */
     public function getFontDescriptor(): ?ReferenceValue {
-        return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::FONT_DESCRIPTOR, ReferenceValue::class);
+        return $this->getValueForKey(DictionaryKey::FONT_DESCRIPTOR, ReferenceValue::class);
     }
 
     public function isBold(): bool {

@@ -5,10 +5,10 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State;
 use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\IncludesXObjects;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Page;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\XObject;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
-use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /**
@@ -28,8 +28,8 @@ enum XObjectOperator: string implements IncludesXObjects {
             return [];
         }
 
-        $xObject = $context->objectItem->document->getObject($reference->objectNumber, XObject::class);
-        if ($xObject === null || $xObject->isForm() === false) {
+        $xObject = $context->dictionary->object?->document->getObject($reference->objectNumber);
+        if ($xObject === null || ($xObjectDictionary = $xObject->getDictionary(XObject::class))->isForm() === false) {
             return [];
         }
 
@@ -38,6 +38,6 @@ enum XObjectOperator: string implements IncludesXObjects {
         }
 
         $visitedObjectIds[] = $xObject->objectItem->objectNumber;
-        return $xObject->getPositionedTextElements($transformationMatrix, $visitedObjectIds);
+        return $xObjectDictionary->getPositionedTextElements($transformationMatrix, $visitedObjectIds);
     }
 }

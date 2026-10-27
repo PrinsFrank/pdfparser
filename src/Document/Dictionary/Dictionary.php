@@ -41,7 +41,7 @@ readonly class Dictionary {
     /**
      * @template T of DictionaryValue|NameValue|Dictionary
      * @param class-string<T> $expectedValueType
-     * @return T
+     * @return T|null
      */
     public function getValueForKey(DictionaryKey|NameObjectStringValue $dictionaryKey, string $expectedValueType): DictionaryValue|Dictionary|NameValue|null {
         foreach ($this->dictionaryEntries as $dictionaryEntry) {

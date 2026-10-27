@@ -8,6 +8,8 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\EncryptDictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\InformationDictionary;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Page;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\XObject;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
@@ -15,8 +17,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObjectFactory;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
-use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObjectParser;
 use PrinsFrank\PdfParser\Document\Security\FileEncryptionKey;

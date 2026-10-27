@@ -14,7 +14,7 @@ use PrinsFrank\MarkDownDom\Node\Inline\Link;
 use PrinsFrank\MarkDownDom\Node\Inline\Text;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Annotation;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Extraction\SpaceDetection\SpaceDetector;
