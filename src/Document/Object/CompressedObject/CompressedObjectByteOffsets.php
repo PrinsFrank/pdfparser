@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\Item\CompressedObject;
+namespace PrinsFrank\PdfParser\Document\Object\CompressedObject;
 
 /** @internal */
 class CompressedObjectByteOffsets {

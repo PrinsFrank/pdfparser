@@ -10,8 +10,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\DeviceColorSpa
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpace;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpaceFactory;
-use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
-use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
+use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
 #[CoversClass(ColorSpaceFactory::class)]
