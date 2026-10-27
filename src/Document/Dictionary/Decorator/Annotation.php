@@ -10,14 +10,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralS
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 
 readonly class Annotation extends DecoratedDictionary {
-    public function getSubType(): ?SubtypeNameValue {
-        if ($this->getTypeForKey(DictionaryKey::SUBTYPE) !== SubtypeNameValue::class) {
-            return null;
-        }
-
-        return $this->getValueForKey(DictionaryKey::SUBTYPE, SubtypeNameValue::class);
-    }
-
     public function isLink(): bool {
         return $this->getSubType() === SubtypeNameValue::LINK;
     }
