@@ -14,7 +14,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -111,14 +110,16 @@ readonly class Page extends DecoratedDictionary {
     /** @throws PdfParserException */
     public function getFont(DictionaryKey|NameObjectStringValue $dictionaryKey): Font {
         $font = $this->getFontDictionary()
-            ?->getObjectForReference($dictionaryKey, Font::class);
+            ?->getObjectForReference($dictionaryKey)
+            ?->getDictionary(Font::class);
         if ($font !== null) {
             return $font;
         }
 
         foreach ($this->getXObjects() as $xObject) {
             $font = $xObject->getFontDictionary()
-                ?->getObjectForReference($dictionaryKey, Font::class);
+                ?->getObjectForReference($dictionaryKey)
+                ?->getDictionary(Font::class);
             if ($font !== null) {
                 return $font;
             }

@@ -5,7 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
 
 enum TypeNameValue: string implements NameValue {
@@ -138,9 +138,6 @@ enum TypeNameValue: string implements NameValue {
 
     /** @return class-string<DecoratedObject> */
     public function getDecoratorFQN(): string {
-        return match ($this) {
-            TypeNameValue::FONT => Font::class,
-            default => GenericObject::class,
-        };
+        return GenericObject::class;
     }
 }

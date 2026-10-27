@@ -3,7 +3,7 @@
 namespace PrinsFrank\PdfParser\Extraction\SpaceDetection;
 
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
-use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Font;
 
 class SpaceDetector {
     public static function shouldContainExtraSpace(
