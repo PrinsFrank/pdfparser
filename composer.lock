@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e8a6b4c9b626b878744aebcfe46fa2c",
+    "content-hash": "69b1a4852a6e57bd6dcb6849cd54cb0c",
     "packages": [
         {
             "name": "prinsfrank/glyph-lists",
@@ -1508,6 +1508,58 @@
                 }
             ],
             "time": "2026-10-05T05:47:54+00:00"
+        },
+        {
+            "name": "prinsfrank/phpstan-doc-code-analyzer",
+            "version": "v0.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PrinsFrank/phpstan-doc-code-analyzer.git",
+                "reference": "896a9efe786e28479fc1f938b1490c6d7297382b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PrinsFrank/phpstan-doc-code-analyzer/zipball/896a9efe786e28479fc1f938b1490c6d7297382b",
+                "reference": "896a9efe786e28479fc1f938b1490c6d7297382b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2",
+                "phpstan/phpstan": "^2.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.84",
+                "phpunit/phpunit": "^12.2"
+            },
+            "type": "phpstan-extension",
+            "extra": {
+                "phpstan": {
+                    "includes": [
+                        "extension.neon"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PrinsFrank\\PHPStanDocCodeAnalyzer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Analyze code snippets in documentation and README with PHPStan!",
+            "support": {
+                "issues": "https://github.com/PrinsFrank/phpstan-doc-code-analyzer/issues",
+                "source": "https://github.com/PrinsFrank/phpstan-doc-code-analyzer/tree/v0.0.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/PrinsFrank",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-09-10T20:05:16+00:00"
         },
         {
             "name": "psr/container",

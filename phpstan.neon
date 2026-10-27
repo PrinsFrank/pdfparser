@@ -12,6 +12,11 @@ parameters:
     reportWrongPhpDocTypeInVarTag: true
     reportAnyTypeWideningInVarTag: true
     checkMissingOverrideMethodAttribute: true
+    docCodeAnalyzer:
+        paths:
+            - README.md
+            - CONTRIBUTING.md
+            - docs/**.md
     ignoreErrors:
         - identifier: offsetAccess.notFound
         - identifier: property.uninitializedReadonly          # Used in several objects to cache parsed/decoded data
@@ -34,3 +39,4 @@ includes:
     - phar://phpstan.phar/conf/bleedingEdge.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/prinsfrank/phpstan-doc-code-analyzer/extension.neon
