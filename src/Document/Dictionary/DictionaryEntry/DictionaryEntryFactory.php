@@ -14,7 +14,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
-use PrinsFrank\PdfParser\Document\Dictionary\Normalization\NameValueNormalizer;
 use PrinsFrank\PdfParser\Document\Encryption\RC4;
 use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject;
 use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
@@ -68,7 +67,8 @@ class DictionaryEntryFactory {
         foreach ($allowedValueTypes as $allowedValueType) {
             if (is_a($allowedValueType, BackedEnum::class, true)
                 && is_string($value)
-                && ($resolvedValue = $allowedValueType::tryFrom(NameValueNormalizer::normalize($value))) !== null) {
+                && ($nameObject = NameObjectStringValue::fromValue(str_starts_with($value, '/') ? $value : '/' . $value)) !== null
+                && ($resolvedValue = $allowedValueType::tryFrom($nameObject->getText())) !== null) {
                 return $resolvedValue;
             }
         }
