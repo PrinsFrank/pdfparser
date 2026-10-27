@@ -5,14 +5,14 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array;
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DocumentAwareDictionaryValue;
 use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 
-readonly class DictionaryArrayValue implements DictionaryValue {
+readonly class DictionaryArrayValue implements DocumentAwareDictionaryValue {
     /** @var list<Dictionary> */
     public array $dictionaries;
 
