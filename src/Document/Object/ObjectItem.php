@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\Item;
+namespace PrinsFrank\PdfParser\Document\Object;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\DecoratedDictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\GenericDictionary;

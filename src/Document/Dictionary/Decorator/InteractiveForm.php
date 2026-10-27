@@ -3,8 +3,8 @@
 namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
-use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
+use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
 
 readonly class InteractiveForm extends DecoratedDictionary {
     /** @return list<Field> */

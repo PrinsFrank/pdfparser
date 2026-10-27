@@ -11,8 +11,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
-use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
+use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 

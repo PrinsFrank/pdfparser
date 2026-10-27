@@ -13,8 +13,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
-use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
-use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
+use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;

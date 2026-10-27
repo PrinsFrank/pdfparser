@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectContent;
+namespace PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObjectContent;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;

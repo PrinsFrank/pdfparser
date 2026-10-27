@@ -4,7 +4,7 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\Object\Item\CompressedObject;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectByteOffsets;
+use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObjectByteOffsets;
 
 #[CoversClass(CompressedObjectByteOffsets::class)]
 class CompressedObjectByteOffsetsTest extends TestCase {

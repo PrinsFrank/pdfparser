@@ -22,7 +22,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
-use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
+use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
 

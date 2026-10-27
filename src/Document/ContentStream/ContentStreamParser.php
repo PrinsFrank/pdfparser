@@ -19,8 +19,8 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextState
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Type3FontOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\XObjectOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
-use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
-use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
+use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @internal */

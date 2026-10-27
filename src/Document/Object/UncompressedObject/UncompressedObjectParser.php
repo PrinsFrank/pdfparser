@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject;
+namespace PrinsFrank\PdfParser\Document\Object\UncompressedObject;
 
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Document;
