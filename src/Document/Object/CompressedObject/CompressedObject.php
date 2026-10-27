@@ -16,30 +16,46 @@ use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\InMemoryStream;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @api */
-readonly class CompressedObject implements ObjectItem {
-    private Dictionary $dictionary;
+class CompressedObject implements ObjectItem {
+    /** @var array<class-string<DecoratedDictionary>, DecoratedDictionary> */
+    private array $decoratorCache = [];
+    private readonly Dictionary $dictionary;
 
     public function __construct(
-        public Document $document,
-        public int $objectNumber,
-        public UncompressedObject $storedInObject,
-        public int $startByteOffsetInDecodedStream,
-        public ?int $endByteOffsetInDecodedStream,
+        public readonly Document $document,
+        public readonly int $objectNumber,
+        public readonly UncompressedObject $storedInObject,
+        public readonly int $startByteOffsetInDecodedStream,
+        public readonly ?int $endByteOffsetInDecodedStream,
     ) {
         if ($this->endByteOffsetInDecodedStream !== null && $this->startByteOffsetInDecodedStream > $this->endByteOffsetInDecodedStream) {
             throw new InvalidArgumentException(sprintf('Start offset %d should be before end offset %d', $this->startByteOffsetInDecodedStream, $this->endByteOffsetInDecodedStream));
         }
     }
 
+    /**
+     * @template T of DecoratedDictionary
+     * @param class-string<T> $decoratorFQN
+     * @throws PdfParserException
+     * @return T
+     */
     #[Override]
     public function getDictionary(string $decoratorFQN = GenericDictionary::class): DecoratedDictionary {
+        if (isset($this->decoratorCache[$decoratorFQN])) {
+            /** @var T $decoratedDictionary */
+            $decoratedDictionary = $this->decoratorCache[$decoratorFQN];
+
+            return $decoratedDictionary;
+        }
+
         if (isset($this->dictionary)) {
-            return new $decoratorFQN($this->dictionary);
+            return $this->decoratorCache[$decoratorFQN] = new $decoratorFQN($this->dictionary);
         }
 
         $content = $this->getContent();
@@ -55,10 +71,10 @@ readonly class CompressedObject implements ObjectItem {
 
         if ($firstNonWhitespaceCharOffset === null
             || $content->read($firstNonWhitespaceCharOffset, 2) !== '<<') {
-            return new $decoratorFQN($this->dictionary = new Dictionary($this));
+            return $this->decoratorCache[$decoratorFQN] = new $decoratorFQN($this->dictionary = new Dictionary($this));
         }
 
-        return new $decoratorFQN(
+        return $this->decoratorCache[$decoratorFQN] = new $decoratorFQN(
             $this->dictionary = DictionaryParser::parse(
                 $this,
                 $this->storedInObject->getEncryptionContext(),
