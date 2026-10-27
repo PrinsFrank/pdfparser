@@ -113,11 +113,11 @@ readonly class Font extends DecoratedDictionary {
             return null;
         }
 
-        if ($toUnicodeObject->objectItem instanceof UncompressedObject === false) {
+        if ($toUnicodeObject instanceof UncompressedObject === false) {
             throw new ParseFailureException();
         }
 
-        $stream = $toUnicodeObject->objectItem->getContent();
+        $stream = $toUnicodeObject->getContent();
         return $this->toUnicodeCMap = ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes());
     }
 
@@ -278,9 +278,9 @@ readonly class Font extends DecoratedDictionary {
             $widthsReference = $this->getValueForKey(DictionaryKey::WIDTHS, ReferenceValue::class) ?? throw new ParseFailureException();
             $object = $this->dictionary->object?->document->getObject($widthsReference->objectNumber)
                 ?? throw new ParseFailureException(sprintf('Width dictionary with number %d could not be found', $widthsReference->objectNumber));
-            $arrayValue = ArrayValue::fromValue(preg_replace('/%.+/', '', $object->getStream()->toString()) ?? $object->getStream()->toString());
+            $arrayValue = ArrayValue::fromValue(preg_replace('/%.+/', '', $object->getContent()->toString()) ?? $object->getContent()->toString());
             if ($arrayValue instanceof ArrayValue === false) {
-                throw new ParseFailureException(sprintf('Width dictionary with number %d does not contain a valid array, "%s"', $widthsReference->objectNumber, $object->getStream()->read(0, 100) . '...'));
+                throw new ParseFailureException(sprintf('Width dictionary with number %d does not contain a valid array, "%s"', $widthsReference->objectNumber, $object->getContent()->read(0, 100) . '...'));
             }
 
             $widthsArray = $arrayValue->value;

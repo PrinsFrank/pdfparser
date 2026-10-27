@@ -51,7 +51,7 @@ class CompressedObjectContentParser {
             }
 
             $filter = $dictionary->getObjectForReference(DictionaryKey::FILTER) ?? throw new ParseFailureException('Unable to retrieve filter object');
-            if (($filterArray = ArrayValue::fromValue($filter->getStream()->toString())) instanceof ArrayValue === false) {
+            if (($filterArray = ArrayValue::fromValue($filter->getContent()->toString())) instanceof ArrayValue === false) {
                 throw new ParseFailureException('Filter object is not an array');
             }
 

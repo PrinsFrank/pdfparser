@@ -7,7 +7,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValu
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\CIEColorSpaceNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\DeviceColorSpaceNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SpecialColorSpaceNameValue;
-use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
@@ -17,7 +18,7 @@ readonly class ColorSpace {
     public function __construct(
         public bool $isIndexed,
         public DeviceColorSpaceNameValue|CIEColorSpaceNameValue|SpecialColorSpaceNameValue $nameValue,
-        public ?DecoratedObject $LUTObj,
+        public CompressedObject|UncompressedObject|null $LUTObj,
         public ?string $fallbackLUT,
         public ?int $maxIndexLUT,
     ) {}

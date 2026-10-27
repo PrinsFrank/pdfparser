@@ -63,13 +63,13 @@ class RasterizedImage {
                         }
 
                         $color = match ($colorSpace->getComponents()) {
-                            Components::RGB => imagecolorallocate($image, ord($colorSpace->LUTObj->getStream()->read($indexInLUT, 1)), ord($colorSpace->LUTObj->getStream()->read($indexInLUT + 1, 1)), ord($colorSpace->LUTObj->getStream()->read($indexInLUT + 2, 1))),
-                            Components::Gray => imagecolorallocate($image, $value = ord($colorSpace->LUTObj->getStream()->read($indexInLUT, 1)), $value, $value),
+                            Components::RGB => imagecolorallocate($image, ord($colorSpace->LUTObj->getContent()->read($indexInLUT, 1)), ord($colorSpace->LUTObj->getContent()->read($indexInLUT + 1, 1)), ord($colorSpace->LUTObj->getContent()->read($indexInLUT + 2, 1))),
+                            Components::Gray => imagecolorallocate($image, $value = ord($colorSpace->LUTObj->getContent()->read($indexInLUT, 1)), $value, $value),
                             Components::CMYK => imagecolorallocate(
                                 $image,
-                                min(255, max(0, (int) (255 * (1 - (ord($colorSpace->LUTObj->getStream()->read($indexInLUT, 1)) / 255)) * (1 - (ord($colorSpace->LUTObj->getStream()->read($indexInLUT + 3, 1)) / 255))))),
-                                min(255, max(0, (int) (255 * (1 - (ord($colorSpace->LUTObj->getStream()->read($indexInLUT + 1, 1)) / 255)) * (1 - (ord($colorSpace->LUTObj->getStream()->read($indexInLUT + 3, 1)) / 255))))),
-                                min(255, max(0, (int) (255 * (1 - (ord($colorSpace->LUTObj->getStream()->read($indexInLUT + 2, 1)) / 255)) * (1 - (ord($colorSpace->LUTObj->getStream()->read($indexInLUT + 3, 1)) / 255))))),
+                                min(255, max(0, (int) (255 * (1 - (ord($colorSpace->LUTObj->getContent()->read($indexInLUT, 1)) / 255)) * (1 - (ord($colorSpace->LUTObj->getContent()->read($indexInLUT + 3, 1)) / 255))))),
+                                min(255, max(0, (int) (255 * (1 - (ord($colorSpace->LUTObj->getContent()->read($indexInLUT + 1, 1)) / 255)) * (1 - (ord($colorSpace->LUTObj->getContent()->read($indexInLUT + 3, 1)) / 255))))),
+                                min(255, max(0, (int) (255 * (1 - (ord($colorSpace->LUTObj->getContent()->read($indexInLUT + 2, 1)) / 255)) * (1 - (ord($colorSpace->LUTObj->getContent()->read($indexInLUT + 3, 1)) / 255))))),
                             ),
                         };
                         $pixelIndex++;

@@ -3,13 +3,14 @@
 namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 
 readonly class Field extends DecoratedDictionary {
     /** @return list<Annotation> */
     public function getAnnotations(): array {
         return array_map(
-            static fn(DecoratedObject $object) => $object->getDictionary(Annotation::class),
+            static fn(UncompressedObject|CompressedObject $object) => $object->getDictionary(Annotation::class),
             $this->getObjectsForReference(DictionaryKey::KIDS),
         );
     }

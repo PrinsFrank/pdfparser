@@ -20,7 +20,6 @@ use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpace;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpaceFactory;
 use PrinsFrank\PdfParser\Document\Image\ImageType;
 use PrinsFrank\PdfParser\Document\Image\RasterizedImage;
-use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
@@ -122,7 +121,7 @@ readonly class XObject extends DecoratedDictionary {
             $colorSpaceObject = $this->getObjectForReference(DictionaryKey::COLOR_SPACE)
                 ?? throw new ParseFailureException('Unable to retrieve colorspace object');
 
-            return ColorSpaceFactory::fromString($colorSpaceObject->getStream()->toString(), $this->dictionary->object->document ?? throw new ParseFailureException());
+            return ColorSpaceFactory::fromString($colorSpaceObject->getContent()->toString(), $this->dictionary->object->document ?? throw new ParseFailureException());
         }
 
         throw new ParseFailureException(sprintf('Unsupported colorspace format %s', $type));
@@ -167,7 +166,7 @@ readonly class XObject extends DecoratedDictionary {
             return [];
         }
 
-        return ContentStreamParser::parse([new GenericObject($this->dictionary->object)])
+        return ContentStreamParser::parse([$this->dictionary->object])
             ->getPositionedTextElements($this, $transformationMatrix, $visitedObjectIds);
     }
 }

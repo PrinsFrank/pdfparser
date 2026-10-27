@@ -13,7 +13,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
-use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -131,7 +132,7 @@ readonly class Page extends DecoratedDictionary {
     /** @return list<FileSpecification> */
     public function getFileSpecifications(): array {
         return array_map(
-            static fn(DecoratedObject $decoratedObject) => $decoratedObject->getDictionary(FileSpecification::class),
+            static fn(UncompressedObject|CompressedObject $object) => $object->getDictionary(FileSpecification::class),
             $this->getObjectsForReference(DictionaryKey::AF),
         );
     }
@@ -176,7 +177,7 @@ readonly class Page extends DecoratedDictionary {
         }
 
         return array_map(
-            static fn(DecoratedObject $object) => $object->getDictionary(Annotation::class),
+            static fn(UncompressedObject|CompressedObject $object) => $object->getDictionary(Annotation::class),
             $this->getObjectsForReference(DictionaryKey::ANNOTS),
         );
     }

@@ -18,7 +18,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\HexadecimalStringValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
-use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
@@ -58,7 +57,7 @@ readonly class Dictionary {
 
             if ($value instanceof ReferenceValue && $this->object !== null && $expectedValueType !== ReferenceValue::class) {
                 $content = ($this->object->document->getObject($value->objectNumber) ?? throw new InvalidArgumentException(sprintf('Object with nr %d not found', $value->objectNumber)))
-                    ->getStream();
+                    ->getContent();
                 if ($expectedValueType === Dictionary::class) {
                     $value = DictionaryParser::parse($this->object, null, $content, 0, $content->getSizeInBytes());
                 } elseif (is_a($expectedValueType, NameValue::class, true)) {
@@ -77,7 +76,7 @@ readonly class Dictionary {
                 $content = '';
                 foreach ($value->referenceValues as $referenceValue) {
                     $content .= ($this->object->document->getObject($referenceValue->objectNumber) ?? throw new InvalidArgumentException(sprintf('Object with nr %d not found', $referenceValue->objectNumber)))
-                        ->getStream()
+                        ->getContent()
                         ->toString();
                 }
 
@@ -153,29 +152,20 @@ readonly class Dictionary {
         throw new ParseFailureException(sprintf('Invalid type "%s" for subDictionary with key %s', $subDictionaryType, $dictionaryKey->name));
     }
 
-    /**
-     * @template T of DecoratedObject
-     * @param class-string<T>|null $expectedDecoratorFQN
-     * @return ($expectedDecoratorFQN is null ? DecoratedObject : T)
-     */
-    public function getObjectForReference(DictionaryKey|NameObjectStringValue $dictionaryKey, ?string $expectedDecoratorFQN = null): ?DecoratedObject {
+    public function getObjectForReference(DictionaryKey|NameObjectStringValue $dictionaryKey): CompressedObject|UncompressedObject|null {
         $reference = $this->getValueForKey($dictionaryKey, ReferenceValue::class);
         if ($reference === null) {
             return null;
         }
 
-        return $this->object?->document?->getObject($reference->objectNumber, $expectedDecoratorFQN)
+        return $this->object?->document?->getObject($reference->objectNumber)
             ?? throw new ParseFailureException();
     }
 
-    /**
-     * @template T of DecoratedObject
-     * @param class-string<T>|null $expectedDecoratorFQN
-     * @return ($expectedDecoratorFQN is null ? list<DecoratedObject> : list<T>)
-     */
-    public function getObjectsForReference(DictionaryKey|NameObjectStringValue $dictionaryKey, ?string $expectedDecoratorFQN = null): array {
+    /** @return list<UncompressedObject|CompressedObject> */
+    public function getObjectsForReference(DictionaryKey|NameObjectStringValue $dictionaryKey): array {
         if ($this->getTypeForKey($dictionaryKey) === ReferenceValue::class) {
-            return [$this->getObjectForReference($dictionaryKey, $expectedDecoratorFQN) ?? throw new ParseFailureException()];
+            return [$this->getObjectForReference($dictionaryKey) ?? throw new ParseFailureException()];
         }
 
         $references = $this->getValueForKey($dictionaryKey, ReferenceValueArray::class);
@@ -185,7 +175,7 @@ readonly class Dictionary {
 
         $objects = [];
         foreach ($references->referenceValues as $referenceValue) {
-            $objects[] = $this->object?->document?->getObject($referenceValue->objectNumber, $expectedDecoratorFQN)
+            $objects[] = $this->object?->document?->getObject($referenceValue->objectNumber)
                 ?? throw new ParseFailureException();
         }
 

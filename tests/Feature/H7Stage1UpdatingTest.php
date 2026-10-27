@@ -22,7 +22,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
-use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
@@ -99,21 +98,19 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj1 = $document->getObject(1);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    1,
-                    0,
-                    9,
-                    73,
-                ),
+            new UncompressedObject(
+                $document,
+                1,
+                0,
+                9,
+                73,
             ),
             $obj1,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj1?->objectItem,
+                    $obj1,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
                     new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
                     new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
@@ -123,21 +120,19 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj2 = $document->getObject(2);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    2,
-                    0,
-                    74,
-                    119,
-                ),
+            new UncompressedObject(
+                $document,
+                2,
+                0,
+                74,
+                119,
             ),
             $obj2,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj2?->objectItem,
+                    $obj2,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
                     new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
                 ),
@@ -146,21 +141,19 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj3 = $document->getObject(3);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    3,
-                    0,
-                    120,
-                    178,
-                ),
+            new UncompressedObject(
+                $document,
+                3,
+                0,
+                120,
+                178,
             ),
             $obj3,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj3?->objectItem,
+                    $obj3,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGES),
                     new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
                     new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
@@ -170,21 +163,19 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj4 = $document->getObject(4);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    4,
-                    0,
-                    604,
-                    703,
-                ),
+            new UncompressedObject(
+                $document,
+                4,
+                0,
+                604,
+                703,
             ),
             $obj4,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj4?->objectItem,
+                    $obj4,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
                     new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
                     new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
@@ -196,21 +187,19 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj5 = $document->getObject(5);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    5,
-                    0,
-                    300,
-                    383,
-                ),
+            new UncompressedObject(
+                $document,
+                5,
+                0,
+                300,
+                383,
             ),
             $obj5,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj5?->objectItem,
+                    $obj5,
                     new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(35)),
                 ),
             ),
@@ -218,55 +207,49 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj6 = $document->getObject(6);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    6,
-                    0,
-                    384,
-                    407,
-                ),
+            new UncompressedObject(
+                $document,
+                6,
+                0,
+                384,
+                407,
             ),
             $obj6,
         );
         static::assertEquals(
-            new GenericDictionary(new Dictionary($obj6?->objectItem)),
+            new GenericDictionary(new Dictionary($obj6)),
             $obj6?->getDictionary(),
         );
         $obj7 = $document->getObject(7);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    7,
-                    0,
-                    812,
-                    855,
-                ),
+            new UncompressedObject(
+                $document,
+                7,
+                0,
+                812,
+                855,
             ),
             $obj7,
         );
         static::assertEquals(
-            new GenericDictionary(new Dictionary($obj7?->objectItem)),
+            new GenericDictionary(new Dictionary($obj7)),
             $obj7?->getDictionary(),
         );
         $obj8 = $document->getObject(8);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    8,
-                    0,
-                    856,
-                    957,
-                ),
+            new UncompressedObject(
+                $document,
+                8,
+                0,
+                856,
+                957,
             ),
             $obj8,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj8?->objectItem,
+                    $obj8,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                     new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
                     new DictionaryEntry(DictionaryKey::RECT, new Rectangle(44, 616, 162, 735)),
@@ -278,21 +261,19 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj9 = $document->getObject(9);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    9,
-                    0,
-                    958,
-                    1061,
-                ),
+            new UncompressedObject(
+                $document,
+                9,
+                0,
+                958,
+                1061,
             ),
             $obj9,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj9?->objectItem,
+                    $obj9,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                     new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
                     new DictionaryEntry(DictionaryKey::RECT, new Rectangle(224, 668, 457, 735)),
@@ -304,21 +285,19 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj10 = $document->getObject(10);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    10,
-                    0,
-                    1062,
-                    1165,
-                ),
+            new UncompressedObject(
+                $document,
+                10,
+                0,
+                1062,
+                1165,
             ),
             $obj10,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj10?->objectItem,
+                    $obj10,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                     new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
                     new DictionaryEntry(DictionaryKey::RECT, new Rectangle(239, 393, 328, 622)),
@@ -330,21 +309,19 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj11 = $document->getObject(11);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    11,
-                    0,
-                    1166,
-                    1269,
-                ),
+            new UncompressedObject(
+                $document,
+                11,
+                0,
+                1166,
+                1269,
             ),
             $obj11,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj11?->objectItem,
+                    $obj11,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                     new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
                     new DictionaryEntry(DictionaryKey::RECT, new Rectangle(34, 398, 225, 575)),
@@ -357,7 +334,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertEquals(
             new Catalog(
                 new Dictionary(
-                    $obj1?->objectItem,
+                    $obj1,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
                     new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
                     new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),

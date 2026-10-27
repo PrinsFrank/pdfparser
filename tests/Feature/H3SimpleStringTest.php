@@ -22,7 +22,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
-use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
@@ -60,21 +59,19 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj1 = $document->getObject(1);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    1,
-                    0,
-                    9,
-                    73,
-                ),
+            new UncompressedObject(
+                $document,
+                1,
+                0,
+                9,
+                73,
             ),
             $obj1,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj1?->objectItem,
+                    $obj1,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
                     new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
                     new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
@@ -84,21 +81,19 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj2 = $document->getObject(2);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    2,
-                    0,
-                    74,
-                    119,
-                ),
+            new UncompressedObject(
+                $document,
+                2,
+                0,
+                74,
+                119,
             ),
             $obj2,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj2?->objectItem,
+                    $obj2,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
                     new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
                 ),
@@ -107,21 +102,19 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj3 = $document->getObject(3);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    3,
-                    0,
-                    120,
-                    178,
-                ),
+            new UncompressedObject(
+                $document,
+                3,
+                0,
+                120,
+                178,
             ),
             $obj3,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj3?->objectItem,
+                    $obj3,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGES),
                     new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
                     new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
@@ -131,32 +124,30 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj4 = $document->getObject(4);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    4,
-                    0,
-                    179,
-                    321,
-                ),
+            new UncompressedObject(
+                $document,
+                4,
+                0,
+                179,
+                321,
             ),
             $obj4,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj4?->objectItem,
+                    $obj4,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
                     new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
                     new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
                     new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValue(5, 0)),
                     new DictionaryEntry(DictionaryKey::RESOURCES, new Dictionary(
-                        $obj4?->objectItem,
+                        $obj4,
                         new DictionaryEntry(DictionaryKey::PROC_SET, new ReferenceValue(6, 0)),
                         new DictionaryEntry(
                             DictionaryKey::FONT,
                             new Dictionary(
-                                $obj4?->objectItem,
+                                $obj4,
                                 new DictionaryEntry(new NameObjectStringValue('F1'), new ReferenceValue(7, 0)),
                             ),
                         ),
@@ -167,21 +158,19 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj5 = $document->getObject(5);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    5,
-                    0,
-                    322,
-                    416,
-                ),
+            new UncompressedObject(
+                $document,
+                5,
+                0,
+                322,
+                416,
             ),
             $obj5,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj5?->objectItem,
+                    $obj5,
                     new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(46)),
                 ),
             ),
@@ -189,38 +178,34 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj6 = $document->getObject(6);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    6,
-                    0,
-                    417,
-                    446,
-                ),
+            new UncompressedObject(
+                $document,
+                6,
+                0,
+                417,
+                446,
             ),
             $obj6,
         );
         static::assertEquals(
-            new GenericDictionary(new Dictionary($obj6?->objectItem)),
+            new GenericDictionary(new Dictionary($obj6)),
             $obj6?->getDictionary(),
         );
         $obj7 = $document->getObject(7);
         static::assertEquals(
-            new GenericObject(
-                new UncompressedObject(
-                    $document,
-                    7,
-                    0,
-                    447,
-                    554,
-                ),
+            new UncompressedObject(
+                $document,
+                7,
+                0,
+                447,
+                554,
             ),
             $obj7,
         );
         static::assertEquals(
             new GenericDictionary(
                 new Dictionary(
-                    $obj7?->objectItem,
+                    $obj7,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FONT),
                     new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TYPE_1),
                     new DictionaryEntry(DictionaryKey::NAME, new NameObjectStringValue('F1')),
@@ -233,7 +218,7 @@ class H3SimpleStringTest extends TestCase {
         static::assertEquals(
             new Catalog(
                 new Dictionary(
-                    $obj1?->objectItem,
+                    $obj1,
                     new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
                     new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
                     new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
