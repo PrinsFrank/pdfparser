@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Tests\Unit\Document\Object\Item\CompressedObject;
+namespace PrinsFrank\PdfParser\Tests\Unit\Document\Object\CompressedObject;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
