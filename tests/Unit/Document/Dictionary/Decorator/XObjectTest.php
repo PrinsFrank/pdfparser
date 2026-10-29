@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Tests\Unit\Document\Object\Decorator;
+namespace PrinsFrank\PdfParser\Tests\Unit\Document\Dictionary\Decorator;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
