@@ -44,7 +44,7 @@ foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sa
 
             try {
                 $fileName = sprintf('page_%d_image_%d.%s', $pageIndex, $imageIndex, $image->getImageType()->getFileExtension());
-                file_put_contents(sprintf('%s/%s', $imageFolder, $fileName), $image->getStream()->toString());
+                file_put_contents(sprintf('%s/%s', $imageFolder, $fileName), $image->getContent()->toString());
             } catch (PdfParserException) {
                 echo sprintf('Failed to save image %d for page %d', $imageIndex, $pageIndex) . PHP_EOL;
                 continue 2;

@@ -46,7 +46,7 @@ class SamplesTest extends TestCase {
             foreach ($expectedPage->imagePaths as $imageIndex => $imagePath) {
                 self::assertImage(
                     $imagePath,
-                    $page->getImages()[$imageIndex]->getStream()->toString(),
+                    $page->getImages()[$imageIndex]->getContent()->toString(),
                     sprintf('Page %d, image %d', $index, $imageIndex),
                 );
             }
