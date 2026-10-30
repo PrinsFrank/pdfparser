@@ -128,7 +128,7 @@ readonly class XObject extends DecoratedDictionary {
         throw new ParseFailureException(sprintf('Unsupported colorspace format %s', $type));
     }
 
-    public function getStream(): Stream {
+    public function getContent(): Stream {
         $content = $this->dictionary->object?->getContent() ?? throw new ParseFailureException();
         if (!$this->isImage() || $this->getImageType() !== ImageType::PNG) {
             return $content;
@@ -162,7 +162,7 @@ readonly class XObject extends DecoratedDictionary {
             return [];
         }
 
-        if (($stream = $this->getStream())->firstPos(TextObjectOperator::BEGIN, 0, $stream->getSizeInBytes()) === null
+        if (($stream = $this->getContent())->firstPos(TextObjectOperator::BEGIN, 0, $stream->getSizeInBytes()) === null
             || $this->dictionary->object === null) {
             return [];
         }

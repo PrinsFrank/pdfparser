@@ -16,7 +16,7 @@ class LocalSampleTest extends TestCase {
             ->parseFile($path);
 
         foreach ($document->getImages() as $image) {
-            $image->getStream()->toString();
+            $image->getContent()->toString();
             // file_put_contents(sprintf('%s/img_%d.%s', __DIR__, $index, $image->getImageType()->getFileExtension()), $image->getContent());
         }
     }
