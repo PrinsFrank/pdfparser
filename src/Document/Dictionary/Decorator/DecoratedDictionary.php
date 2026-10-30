@@ -7,7 +7,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 /** @mixin Dictionary */
 abstract readonly class DecoratedDictionary {
     final public function __construct(
-        public Dictionary $dictionary, // TODO: Make protected
+        public Dictionary $dictionary,
     ) {}
 
     /** @param list<mixed> $arguments */

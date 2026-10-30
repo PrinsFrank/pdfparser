@@ -254,7 +254,7 @@ readonly class Font extends DecoratedDictionary {
 
         if ($this->isCIDFont()) {
             if ($this->getTypeForKey(DictionaryKey::W) === CrossReferenceStreamByteSizes::class) {
-                $byteSizes = $this->getValueForKey(DictionaryKey::W, CrossReferenceStreamByteSizes::class) ?? throw new ParseFailureException(); // TODO: fix misinterpretation
+                $byteSizes = $this->getValueForKey(DictionaryKey::W, CrossReferenceStreamByteSizes::class) ?? throw new ParseFailureException();
 
                 return $this->widths = new CIDFontWidths(new RangeCIDWidth($byteSizes->lengthRecord1InBytes, $byteSizes->lengthRecord2InBytes, $byteSizes->lengthRecord3InBytes));
             }
