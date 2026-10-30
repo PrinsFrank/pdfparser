@@ -29,6 +29,7 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
+/** @see 9.6 Fonts */
 readonly class Font extends DecoratedDictionary {
     /** @var list<Font> */
     private array $descendantFontsCache;

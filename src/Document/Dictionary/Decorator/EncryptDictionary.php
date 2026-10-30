@@ -13,6 +13,7 @@ use PrinsFrank\PdfParser\Document\Security\StandardSecurityHandlerRevision;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
+/** @see 7.6.2 Application of encryption */
 readonly class EncryptDictionary extends DecoratedDictionary {
     public function getSecurityHandler(): ?SecurityHandlerNameValue {
         $filterType = $this->getTypeForKey(DictionaryKey::FILTER);

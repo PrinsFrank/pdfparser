@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
+/** @see 14.3.3 Information dictionary */
 readonly class InformationDictionary extends DecoratedDictionary {
     /** @throws PdfParserException */
     public function getTitle(): ?string {

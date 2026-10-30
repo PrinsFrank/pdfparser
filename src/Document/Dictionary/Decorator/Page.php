@@ -21,6 +21,7 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Extraction\MarkdownExtractor;
 use PrinsFrank\PdfParser\Extraction\TextExtractor;
 
+/** @see 7.7.3.3 Page Objects */
 readonly class Page extends DecoratedDictionary {
     /**
      * @throws PdfParserException
