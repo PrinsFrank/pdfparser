@@ -10,6 +10,7 @@ use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
+/** @see 7.7.2 Document Catalog dictionaries */
 readonly class Catalog extends DecoratedDictionary {
     /** @throws PdfParserException */
     public function getPagesRoot(): Pages {

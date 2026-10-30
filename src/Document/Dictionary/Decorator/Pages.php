@@ -11,6 +11,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
+/** @see 7.7.3.2 Page tree nodes */
 readonly class Pages extends DecoratedDictionary {
     /**
      * @param list<int> $visitedObjectNrs

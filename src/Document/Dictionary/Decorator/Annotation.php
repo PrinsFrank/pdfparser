@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\Hexadeci
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 
+/** @see 12.5.2 Annotation dictionaries */
 readonly class Annotation extends DecoratedDictionary {
     public function isLink(): bool {
         return $this->getSubType() === SubtypeNameValue::LINK;

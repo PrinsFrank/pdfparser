@@ -125,87 +125,54 @@ Once you have opened a file from the filesystem with `parseFile` or from a strin
 While initially parsing the document, a small number of variables are populated in the `Document` instance that allow for further accessing of that document. This includes:
 - The public `$stream` property: a PHP stream handle to the file in memory or on the filesystem.
 - The public `$version` property: Information about the PDF version of the file.
-- the public `$crossReferenceSource` property: A parsed crossReference table or stream, containing several crossReference(Sub)Sections that contain information about objects stored in the document and where to find them.
+- The public `$crossReferenceSource` property: A parsed crossReference table or stream, containing several crossReference(Sub)Sections that contain information about objects stored in the document and where to find them.
+- The public `$security` with the user and owner password if supplied
 - The private `$pages` property to cache any pages that have already been retrieved. This property is only set when the pages are actually retrieved using the `getPages` method. (See below)
 
 The document also contains several methods to retrieve specific objects from it. Those are discussed below.
 
 If you want to quickly retrieve all text from a document, you can use the `getText` method.
 
-## Objects in a `Document` and their decorators
+## Objects in a `Document`
 
 A PDF is organized in objects. Not all objects are created equally. Some objects might be a Page, while others a Font. Some objects might be Generic and without a specific type. There are currently 18 specific types, and a generic object type. Some of those will be specified below.
 
 Code specific for certain object types lives in that object types' decorator. Retrieving text for a Page makes sense, retrieving the text from a Font not so much, so the Page decorator contains the `getText` method. Below you'll find some documentation for specific object decorators.
 
-If you want to retrieve an object by its number, you can call the `$document->getObject($objectNumber)` method. If you know that the object with that number is supposed to be of a specific type, you can supply the second argument. For example, if you want to get object 42 which you know is of type Page, you can call the method like this:
+If you want to retrieve an object by its number, you can call the `$document->getObject($objectNumber)` method:
 
 ```php
 $page = $document->getObject(42);
 ```
 
-If the object is not of the correct type, this will result in an exception. If you don't care about the object type, pass null as the second argument or don't supply the second argument at all.
+## Dictionaries
 
-### Decorated `InformationDictionary` objects
-
-If a PDF has a title, producer, author, creator, creationDate or modificationDate, it is stored in an InformationDictionary.
-
-If a PDF has an InformationDictionary, it can be retrieved using the `$document->getInformationDictionary()` method. Not All PDFs have this available, so this method might return null.
-
-To access information from the InformationDictionary, there are several methods available:
+The most important data type in a PDF is a dictionary. It contains key-value pairs with information about objects. In principle, any dictionary can contain any key-value pair. To retrieve the dictionary for an (un)compressed object, you can simply call the `getDictionary` method:
 
 ```php
-/** @var \PrinsFrank\PdfParser\Document\Document $document */
-$title = $document->getInformationDictionary()?->getTitle(); 
-$producer = $document->getInformationDictionary()?->getProducer(); 
-$author = $document->getInformationDictionary()?->getAuthor(); 
-$creator = $document->getInformationDictionary()?->getCreator(); 
-$creationDate = $document->getInformationDictionary()?->getCreationDate(); 
-$modificationDate = $document->getInformationDictionary()?->getModificationDate(); 
+/** @var \PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject $object */
+$object->getDictionary();
 ```
 
-If you want to access non-standard data from the information dictionary, you can also retrieve the entire dictionary from the object:
+In practice, most dictionaries are of a certain subtype. As such, this library contains several `Decorators` that wrap the dictionaries, providing easy access to dictionaries of specific types:
+
+- [Annotations](./docs/12.5-annotations.md)
+- [Catalog](./docs/7.7.2-document-catalog.md)
+- [EmbeddedFile](./docs/7.11.4-embedded-files.md)
+- [EncryptDictionary](./docs/7.6-encryption.md)
+- [Field](./docs/12.7-interactive-forms.md)
+- [FileSpecification](./docs/7.11.3-file-specifications.md)
+- [Font](./docs/9.6-fonts.md)
+- [InformationDictionary](./docs/14.3-document-information.md)
+- [InteractiveForm](./docs/12.7-interactive-forms.md)
+- [Page](./docs/7.7.3.3-page-objects.md)
+- [Pages](./docs/7.7.3.2-page-tree-nodes.md)
+- [XObject](./docs/8.8-external-objects.md)
+
+If you expect a dictionary to be of a certain type, you can retrieve the decorated object by supplying the expected decorator as an argument for the `getDictionary` method:
+
 
 ```php
-/** @var \PrinsFrank\PdfParser\Document\Document $document */
-$dictionary = $document->getInformationDictionary()?->getDictionary();
-```
-
-### Decorated `Page` objects
-
-Page objects can be retrieved from a document by calling the `$document->getPage($pageNumber)` method for a single page, or `$document->getPages()` for all pages. Note that `$pageNumber` is zero-indexed, so even if different format page numbers are displayed at the bottom of a page, the first page in a document is still page 0, etc.
-
-Once you have a `Page` object, there are several methods available to retrieve information from that page. The main method of interest here is the `$page->getText()` method. To retrieve all text from all pages, you could do something like this:
-
-```php
-use PrinsFrank\PdfParser\PdfParser;
-
-$document = (new PdfParser())->parseFile('/path/to/file.pdf');
-
-foreach ($document->getPages() as $index => $page) {
-    echo 'Text on page ' . $index . ' : ' . $page->getText();
-}
-```
-
-There is also a `getText` method available on the Document to retrieve all text at once without even having to retrieve pages.
-
-There are also methods available to get the underlying positioned Text Elements using `$page->getPositionedTextElements()`, the resource dictionary for a page using `$page->getResourceDictionary()` and the font dictionary using `$page->getFontDictionary()`.
-
-### Decorated `XObject` objects
-
-Images and forms are stored in XObjects. These can be retrieved on a page-by-page basis using `$page->getXObjects()`. If you are only interested in images, you can retrieve all image XObjects by calling `$page->getImages()`.
-
-For XObjects, there are some additional methods: `getWidth` returns the width of the object in pixels if available, `getHeight()` the height in pixels, and `getLength()` the length in bytes. To determine the subtype, there are two methods available: `isImage()` and `isForm`. If the XObject is an image, `getImageType()` will return the image type.
-
-To extract all images on a page and store them on your machine, you could do something like this:
-
-```php
-/** @var \PrinsFrank\PdfParser\Document\Document $document */
-foreach ($document->getImages() as $index => $image) {
-    if (($imageFileExtension = $image->getImageType()?->getFileExtension()) === null) {
-        continue; // You could still save the file with a default file extension like 'jpg', but it is not clear what kind of image this is.
-    }
-
-    file_put_contents(sprintf('%s/image_%d.%s', __DIR__, $index, $imageFileExtension), $image->->getStream()->toString());
-}
+/** @var \PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject $object */
+$object->getDictionary(\PrinsFrank\PdfParser\Document\Dictionary\Decorator\InformationDictionary::class);
 ```

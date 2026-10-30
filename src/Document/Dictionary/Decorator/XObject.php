@@ -25,6 +25,7 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
+/** @see 8.8 External objects */
 readonly class XObject extends DecoratedDictionary {
     public function isImage(): bool {
         return $this->getSubType() === SubtypeNameValue::IMAGE;
