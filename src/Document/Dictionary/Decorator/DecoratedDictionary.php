@@ -3,6 +3,8 @@
 namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Stream\Stream;
 
 /** @mixin Dictionary */
 abstract readonly class DecoratedDictionary {
@@ -14,5 +16,10 @@ abstract readonly class DecoratedDictionary {
     public function __call(string $name, array $arguments): mixed {
         // @phpstan-ignore method.dynamicName
         return $this->dictionary->$name(...$arguments);
+    }
+
+    public function getContent(): Stream {
+        return $this->dictionary->object?->getContent()
+            ?? throw new ParseFailureException();
     }
 }

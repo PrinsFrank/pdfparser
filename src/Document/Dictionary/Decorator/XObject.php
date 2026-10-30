@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 
+use Override;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\Object\TextObjectOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
@@ -128,8 +129,9 @@ readonly class XObject extends DecoratedDictionary {
         throw new ParseFailureException(sprintf('Unsupported colorspace format %s', $type));
     }
 
+    #[Override]
     public function getContent(): Stream {
-        $content = $this->dictionary->object?->getContent() ?? throw new ParseFailureException();
+        $content = parent::getContent();
         if (!$this->isImage() || $this->getImageType() !== ImageType::PNG) {
             return $content;
         }
