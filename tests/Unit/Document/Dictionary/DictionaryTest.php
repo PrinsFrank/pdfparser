@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 
 #[CoversClass(Dictionary::class)]
 class DictionaryTest extends TestCase {
@@ -32,6 +33,14 @@ class DictionaryTest extends TestCase {
         static::assertSame(
             SubtypeNameValue::FORM,
             (new Dictionary(null, new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::FORM)))
+                ->getSubType(),
+        );
+    }
+
+    public function testGetSubTypeWithNameObjectStringValue(): void {
+        static::assertEquals(
+            new NameObjectStringValue('/text/xml'),
+            (new Dictionary(null, new DictionaryEntry(DictionaryKey::SUBTYPE, new NameObjectStringValue('/text/xml'))))
                 ->getSubType(),
         );
     }
