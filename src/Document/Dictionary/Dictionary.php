@@ -186,7 +186,15 @@ readonly class Dictionary {
         return $this->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
     }
 
-    public function getSubType(): ?SubtypeNameValue {
-        return $this->getValueForKey(DictionaryKey::SUBTYPE, SubtypeNameValue::class);
+    public function getSubType(): SubtypeNameValue|NameObjectStringValue|null {
+        if (($subTypeType = $this->getTypeForKey(DictionaryKey::SUBTYPE)) === NameObjectStringValue::class) {
+            return $this->getValueForKey(DictionaryKey::SUBTYPE, NameObjectStringValue::class);
+        }
+
+        if ($subTypeType === SubtypeNameValue::class || $subTypeType === Dictionary::class) {
+            return $this->getValueForKey(DictionaryKey::SUBTYPE, SubtypeNameValue::class);
+        }
+
+        return null;
     }
 }
