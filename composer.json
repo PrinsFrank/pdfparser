@@ -18,6 +18,7 @@
         "ext-gd": "*",
         "ext-iconv": "*",
         "ext-zlib": "*",
+        "prinsfrank/core-14-font-metrics": "^1.0",
         "prinsfrank/glyph-lists": "^1.0",
         "prinsfrank/markdown-dom": "^0.2.1"
     },
