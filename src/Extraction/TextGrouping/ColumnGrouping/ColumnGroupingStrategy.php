@@ -54,7 +54,11 @@ class ColumnGroupingStrategy {
                 $visibleElements,
             ),
         );
-        $xCandidates = array_diff(array_unique([...$elementsLeft, ...$elementsRight]), [$pageLeft, $pageRight]);
+        $pageWidth = $pageRight - $pageLeft;
+        $xCandidates = array_filter(
+            array_unique([...$elementsLeft, ...$elementsRight]),
+            fn(float $xCandidate) => $xCandidate > $pageLeft + ($pageWidth * 0.07) && $xCandidate < $pageRight - ($pageWidth * 0.07),
+        );
         $positionedElementsGroupedByLine = iterator_to_array(TextOverlapStrategy::group($positionedTextElements), false);
         $nrOfLines = count($positionedElementsGroupedByLine);
         $elementMissCounts = $headerEndLineIndices = [];
