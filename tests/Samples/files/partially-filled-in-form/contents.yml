@@ -127,9 +127,9 @@ pages:
       Datum (dd-mm-jjjj)
       Handtekening 
       Schrijf binnen het vak.
+         
       *060081202*
       
-         
     markdown: |-
       **02** van 04
       ** Loonhengskorting toepassen**
@@ -158,10 +158,10 @@ pages:
       Datum *(dd-mm-jjjj)*
       Handtekening 
       *Schrijf binnen het vak.*
+         
       #### *060081202*
 
       
-         
     annotations:
       -
         subType: Widget

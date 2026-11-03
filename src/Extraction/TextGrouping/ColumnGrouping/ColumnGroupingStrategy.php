@@ -34,20 +34,24 @@ class ColumnGroupingStrategy {
      * @return list<list<PositionedTextElement>>
      */
     public static function group(array $positionedTextElements, Page $page, array &$fontCache): array {
-        if ($positionedTextElements === []) {
+        $visibleElements = array_filter(
+            $positionedTextElements,
+            static fn(PositionedTextElement $e) => $e->getHeight() > 0 && $e->getRight($page, $fontCache) > $e->absoluteMatrix->offsetX,
+        );
+
+        if ($visibleElements === []) {
             return [];
         }
-
         $pageLeft = min(
             $elementsLeft = array_map(
                 static fn(PositionedTextElement $e) => floor($e->absoluteMatrix->offsetX / self::MINIMUM_GUTTER_WIDTH) * self::MINIMUM_GUTTER_WIDTH,
-                $positionedTextElements,
+                $visibleElements,
             ),
         );
         $pageRight = max(
             $elementsRight = array_map(
                 static fn(PositionedTextElement $e) => ceil($e->getRight($page, $fontCache) / self::MINIMUM_GUTTER_WIDTH) * self::MINIMUM_GUTTER_WIDTH,
-                $positionedTextElements,
+                $visibleElements,
             ),
         );
         $xCandidates = array_diff(array_unique([...$elementsLeft, ...$elementsRight]), [$pageLeft, $pageRight]);
