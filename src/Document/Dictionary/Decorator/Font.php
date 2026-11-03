@@ -23,6 +23,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\ToUnicodeCMapN
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
+use PrinsFrank\PdfParser\Document\Font\Core14FontWidths;
 use PrinsFrank\PdfParser\Document\Font\FontWidths;
 use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
@@ -34,7 +35,7 @@ readonly class Font extends DecoratedDictionary {
     /** @var list<Font> */
     private array $descendantFontsCache;
     private ToUnicodeCMap|false $toUnicodeCMap;
-    private CIDFontWidths|FontWidths|false $widths;
+    private CIDFontWidths|FontWidths|Core14FontWidths|false $widths;
     private DifferencesArrayValue|false $differencesCache;
     private EncodingNameValue|false $encodingCache;
 
@@ -243,7 +244,7 @@ readonly class Font extends DecoratedDictionary {
     }
 
     /** @throws PdfParserException */
-    public function getWidths(): CIDFontWidths|FontWidths|null {
+    public function getWidths(): CIDFontWidths|FontWidths|Core14FontWidths|null {
         if (isset($this->widths)) {
             if ($this->widths === false) {
                 return null;
@@ -286,6 +287,11 @@ readonly class Font extends DecoratedDictionary {
 
             $widthsArray = $arrayValue->value;
         } elseif (($widthsArray = $this->getValueForKey(DictionaryKey::WIDTHS, ArrayValue::class)?->value) === null) {
+            if ($this->getSubType() === SubtypeNameValue::TYPE_1
+                && ($baseFont = $this->getBaseFont()) !== null
+                && ($core14FontWidths = Core14FontWidths::fromBaseFont($baseFont)) !== null) {
+                return $this->widths = $core14FontWidths;
+            }
             $this->widths = false;
             return null;
         }

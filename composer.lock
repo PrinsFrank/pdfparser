@@ -4,8 +4,52 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4feb5c8f82ddc9bb920bdf9eba95b09d",
+    "content-hash": "6e443776750e066f51d6a40eb3281abc",
     "packages": [
+        {
+            "name": "prinsfrank/core-14-font-metrics",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PrinsFrank/core-14-font-metrics.git",
+                "reference": "ab56002e0d3949d8570049b2d5e40b22bf2f5b7e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PrinsFrank/core-14-font-metrics/zipball/ab56002e0d3949d8570049b2d5e40b22bf2f5b7e",
+                "reference": "ab56002e0d3949d8570049b2d5e40b22bf2f5b7e",
+                "shasum": ""
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.95",
+                "phpstan/phpstan": "^2.3",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-strict-rules": "^2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PrinsFrank\\Core14FontMetrics\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Font metrics for the core 14 PostScript Fonts",
+            "support": {
+                "issues": "https://github.com/PrinsFrank/core-14-font-metrics/issues",
+                "source": "https://github.com/PrinsFrank/core-14-font-metrics/tree/v1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/PrinsFrank",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-11-03T19:00:09+00:00",
+            "published-time": "2026-11-03T19:00:39+00:00"
+        },
         {
             "name": "prinsfrank/glyph-lists",
             "version": "v1.0.0",
@@ -4851,5 +4895,5 @@
     "platform-overrides": {
         "php": "8.2"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.11.0"
 }
