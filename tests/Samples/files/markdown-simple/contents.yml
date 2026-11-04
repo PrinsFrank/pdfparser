@@ -35,31 +35,19 @@ pages:
       3. Ordered list item 3 
        
        
+       
       Link 
        
-      A 
-      D 
+      A B C 
+      D  E 
+       F  
        
        
-       
-      A 
-      D 
-       
-       
+      A B C 
+      D  E 
+       F  
        
        
-       
-      B 
-       
-      F 
-      B 
-       
-      F 
-      C 
-      E 
-       
-      C 
-      E 
        
        
     markdown: |-
@@ -86,31 +74,19 @@ pages:
       3. Ordered list item 3 
        
        
+       
       [Link 
       ](https://example.com) 
-      A 
-      D 
+      A B C 
+      D  E 
+       F  
        
        
-       
-      A 
-      D 
-       
-       
+      A B C 
+      D  E 
+       F  
        
        
-       
-      B 
-       
-      F 
-      B 
-       
-      F 
-      C 
-      E 
-       
-      C 
-      E 
        
        
     annotations:
