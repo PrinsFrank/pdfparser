@@ -10,6 +10,8 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /** @internal */
 class FlateDecode {
+    private const BYTES_IN_MEGABYTE = 1024 ** 2;
+
     /**
      * @throws PdfParserException
      * @return string in binary format
@@ -19,20 +21,7 @@ class FlateDecode {
             throw new InvalidArgumentException(sprintf('Nr of columns should be equal to or bigger than 1, %d given', $columns));
         }
 
-        $decodedValue = @gzuncompress($value);
-        if ($decodedValue === false) {
-            if (($tmpFile = tempnam(sys_get_temp_dir(), 'gz')) === false) {
-                throw new RuntimeException('Unable to create temporary file');
-            }
-
-            file_put_contents($tmpFile, "\x1f\x8b\x08\x00\x00\x00\x00\x00" . $value);
-            $decodedValue = file_get_contents('compress.zlib://' . $tmpFile);
-            unlink($tmpFile);
-            if (in_array($decodedValue, ['', false], true)) {
-                throw new ParseFailureException('Unable to gzuncompress value "' . substr(trim($value), 0, 30) . '..."');
-            }
-        }
-
+        $decodedValue = self::decode($value, 64 * self::BYTES_IN_MEGABYTE);
         if ($predictor === LZWFlatePredictorValue::None) {
             return $decodedValue;
         }
@@ -80,6 +69,35 @@ class FlateDecode {
 
         if (($decodedValue = hex2bin($decodedValue)) === false) {
             throw new ParseFailureException('Unable to hex2bin value "' . substr(trim($value), 0, 30) . '..."');
+        }
+
+        return $decodedValue;
+    }
+
+    /** @param int<0, max> $maxBytes */
+    protected static function decode(string $value, int $maxBytes): string {
+        $decodedValue = @gzuncompress($value, $maxBytes);
+        if ($decodedValue === false) {
+            if (($tmpFile = tempnam(sys_get_temp_dir(), 'gz')) === false) {
+                throw new RuntimeException('Unable to create temporary file');
+            }
+
+            try {
+                if (file_put_contents($tmpFile, "\x1f\x8b\x08\x00\x00\x00\x00\x00" . $value) === false) {
+                    throw new RuntimeException('Unable to write data to be uncompressed to temporary file');
+                }
+
+                $decodedValue = file_get_contents('compress.zlib://' . $tmpFile, length: $maxBytes + 1);
+                if (in_array($decodedValue, ['', false], true)) {
+                    throw new ParseFailureException('Unable to gzuncompress value "' . substr(trim($value), 0, 30) . '..."');
+                }
+            } finally {
+                is_file($tmpFile) && unlink($tmpFile);
+            }
+        }
+
+        if (strlen($decodedValue) > $maxBytes) {
+            throw new ParseFailureException('Unable to gzuncompress value as the resulting decoded value was larger than a gigabyte');
         }
 
         return $decodedValue;
