@@ -114,11 +114,20 @@ class Document {
         }
 
         if ($crossReferenceEntry instanceof CrossReferenceEntryCompressed) {
-            $parentObject = $this->getObject($crossReferenceEntry->storedInStreamWithObjectNumber)
-                ?? throw new RuntimeException(sprintf('Parent object for %d with number %d doesn\'t exist', $objectNumber, $crossReferenceEntry->storedInStreamWithObjectNumber));
+            if ($crossReferenceEntry->storedInStreamWithObjectNumber === $objectNumber) {
+                throw new ParseFailureException('Invalid crossReference entry, an object cannot contain itself');
+            }
 
-            if (!$parentObject->objectItem instanceof UncompressedObject) {
-                throw new RuntimeException('Parents for stream items shouldn\'t be stream items themselves');
+            $parentCrossReferenceEntry = $this->crossReferenceSource->getCrossReferenceEntry($crossReferenceEntry->storedInStreamWithObjectNumber)
+                ?? throw new RuntimeException(sprintf('Parent object for %d with number %d doesn\'t exist', $objectNumber, $crossReferenceEntry->storedInStreamWithObjectNumber));
+            if ($parentCrossReferenceEntry instanceof CrossReferenceEntryCompressed) {
+                throw new ParseFailureException(sprintf('Invalid cross reference entry for object %d, compressed object parent must be an uncompressed object stream', $objectNumber));
+            }
+
+            $parentObject = $this->objectCache[$crossReferenceEntry->storedInStreamWithObjectNumber]
+                ??= DecoratedObjectFactory::forItem(UncompressedObjectParser::parseObject($parentCrossReferenceEntry, $crossReferenceEntry->storedInStreamWithObjectNumber, $this->stream), $this, null);
+            if (!$parentObject?->objectItem instanceof UncompressedObject) {
+                throw new ParseFailureException('Resolved parent object for compressed object stream must be an uncompressed object stream');
             }
 
             $objectItem = $parentObject->objectItem->getCompressedObject($objectNumber, $this);
