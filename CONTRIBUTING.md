@@ -47,6 +47,22 @@ To retrieve information about passwords and file encryption keys, it's useful to
 qpdf --show-encryption --show-encryption-key --password=knownPassword file.pdf
 ```
 
+## Debugging text element dimensions
+
+To debug the dimensions of the resulting text elements during parsing, you can generate an svg:
+
+```bash
+docker compose exec php tests/Samples/debug-text-dimensions {sample-name} {optional: pageNumber}
+```
+
+```bash
+docker compose exec php tests/Samples/debug-text-dimensions markdown-simple
+```
+
+You can then see the output svg in `out.svg`, and compare the actual PDF with the generated svg in `compare.html`.
+The purple boxes are the calculated text dimensions. The text inside might not match those boxes as not all fonts are supported in svg.
+You can drag the svg over the PDF to compare.
+
 ## Use of comments
 
 Code should be self-documenting, and if something can be clarified by giving a method, variable or class a clearer name or writing code more explicitly that should be done instead of adding comments.

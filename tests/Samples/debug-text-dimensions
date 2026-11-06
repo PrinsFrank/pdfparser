@@ -1,0 +1,39 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
+
+$sampleName = $argv[1] ?? throw new InvalidArgumentException('Missing sample name');
+if (preg_match('/^[a-zA-Z0-9_-]+$/', $sampleName) !== 1) {
+    throw new InvalidArgumentException('Invalid sample name. Only alphanumeric characters, hyphens, and underscores are allowed.');
+}
+
+$samplePath = __DIR__ . '/files/' . $sampleName . '/file.pdf';
+if ($samplePath !== realpath($samplePath)) {
+    throw new InvalidArgumentException();
+}
+
+$pageNumber = (int) ($argv[2] ?? 1);
+
+$page = (new \PrinsFrank\PdfParser\PdfParser())
+    ->parseFile($samplePath)
+    ->getPage($pageNumber) ?? throw new \PrinsFrank\PdfParser\Exception\RuntimeException(sprintf('Page with index %d not found', $pageNumber));
+copy($samplePath, __DIR__ . '/out.pdf');
+
+$fontCache = [];
+$cropBox = $page->getCropBox();
+$svg = sprintf('<svg xmlns="http://www.w3.org/2000/svg" width="%s" height="%s" viewBox="0 0 %s %s">', $cropBox->getWidth(), $cropBox->getHeight(), $cropBox->getWidth(), $cropBox->getHeight()) . PHP_EOL;
+$svg .= '  <rect width="100%" height="100%" fill="transparent" stroke-width="2" stroke="red"/>' . PHP_EOL;
+foreach ($page->getPositionedTextElements() as $positionedTextElement) {
+    $font = $page->getFont($positionedTextElement->textState->fontName);
+
+    $svg .= '  <g>' . PHP_EOL;
+    $svg .= sprintf('    <rect x="%s" y="%s" width="%s" height="%s" fill="purple" stroke="violet" stroke-width="0.2"/>', $positionedTextElement->absoluteMatrix->offsetX, $cropBox->getHeight() - $positionedTextElement->absoluteMatrix->offsetY - $positionedTextElement->getHeight(), $positionedTextElement->getRight($page, $fontCache) - $positionedTextElement->absoluteMatrix->offsetX, $positionedTextElement->getHeight()) . PHP_EOL;
+    $svg .= sprintf('    <text x="%s" y="%s" font-family="%s" font-size="%s" dominant-baseline="alphabetic">%s</text>',$positionedTextElement->absoluteMatrix->offsetX, $cropBox->getHeight() - $positionedTextElement->absoluteMatrix->offsetY, htmlspecialchars($font->getBaseFont(), ENT_QUOTES | ENT_XML1, 'utf-8'), $positionedTextElement->textState->fontSize, htmlspecialchars($positionedTextElement->getText($font), ENT_QUOTES | ENT_XML1, 'utf-8')) . PHP_EOL;
+    $svg .= '  </g>' . PHP_EOL;
+}
+$page->getText();
+foreach ([] as $xGutter) {
+    $svg .= sprintf('<line x1="%s" x2="%s" y1="0" y2="%s" stroke="blue"/>', $xGutter, $xGutter, $cropBox->getHeight()) . PHP_EOL;
+}
+file_put_contents(__DIR__ . '/out.svg', $svg . '</svg>');
