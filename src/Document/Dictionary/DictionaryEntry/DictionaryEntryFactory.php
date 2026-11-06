@@ -59,7 +59,6 @@ class DictionaryEntryFactory {
         }
 
         if (is_string($value)
-            && preg_match('/^[0-9]+ [0-9]+ R$/', $value) === 1
             && ($referenceValue = ReferenceValue::fromValue($value)) !== null) {
             return $referenceValue;
         }

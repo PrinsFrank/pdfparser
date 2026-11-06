@@ -673,4 +673,24 @@ class DictionaryParserTest extends TestCase {
             DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
         );
     }
+
+    public function testParsesMultiLineReference(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            <<
+            /Root
+            3
+            0
+            R
+            >>
+            EOD,
+        );
+        static::assertEquals(
+            new Dictionary(
+                null,
+                new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(3, 0)),
+            ),
+            DictionaryParser::parse(null, null, $stream, 0, $stream->getSizeInBytes()),
+        );
+    }
 }

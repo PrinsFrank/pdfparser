@@ -75,8 +75,6 @@ class DictionaryParser {
                 if ($currentContext === DictionaryParseContext::KEY) {
                     $nestingContext->setContext(DictionaryParseContext::KEY_VALUE_SEPARATOR);
                     $currentContext = DictionaryParseContext::KEY_VALUE_SEPARATOR;
-                } elseif ($currentContext === DictionaryParseContext::VALUE) {
-                    self::flush($dictionaryArray, $nestingContext);
                 } elseif ($currentContext === DictionaryParseContext::COMMENT) {
                     $nestingContext->setContext($contextBeforeComment ?? DictionaryParseContext::DICTIONARY);
                     $currentContext = $contextBeforeComment ?? DictionaryParseContext::DICTIONARY;

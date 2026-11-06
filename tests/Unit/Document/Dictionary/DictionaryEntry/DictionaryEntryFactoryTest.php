@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntryFactory;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TabsNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
 use PrinsFrank\PdfParser\Document\Version\Version;
 
@@ -27,6 +28,10 @@ class DictionaryEntryFactoryTest extends TestCase {
             new DictionaryEntry(DictionaryKey::VERSION, Version::V1_5),
             DictionaryEntryFactory::fromKeyValuePair(null, null, '/Version', '/1#2E5'),
             'Support for hex values in name objects, see #7.3.5',
+        );
+        static::assertEquals(
+            new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(3, 0)),
+            DictionaryEntryFactory::fromKeyValuePair(null, null, '/Root', '3' . PHP_EOL . '0' . PHP_EOL . 'R'),
         );
     }
 }
