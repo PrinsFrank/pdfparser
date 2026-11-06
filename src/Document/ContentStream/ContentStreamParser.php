@@ -129,7 +129,7 @@ class ContentStreamParser {
                         $inInlineImage = false;
                     }
                 } elseif ($inStringLiteral) {
-                    if ($char === ')' && $previousChar !== '\\') {
+                    if ($char === ')' && ($previousChar !== '\\' || $secondToLastChar === '\\')) {
                         $inStringLiteral = false;
                     }
                 } elseif ($inResourceName) {
@@ -137,7 +137,7 @@ class ContentStreamParser {
                         $inResourceName = false;
                     }
                 } elseif ($inDictionary) {
-                    if ($char === '>' && $previousChar === '>' && $secondToLastChar !== '\\') {
+                    if ($char === '>' && $previousChar === '>' && ($secondToLastChar !== '\\' || $thirdToLastChar === '\\')) {
                         $inDictionary = false;
                     }
                 } elseif ($char === '%') {
@@ -145,20 +145,20 @@ class ContentStreamParser {
                     $startOfCommentOffset = $index;
                     $previousChar = $secondToLastChar = $thirdToLastChar = null;
                     continue;
-                } elseif ($char === '[' && $previousChar !== '\\') {
+                } elseif ($char === '[' && ($previousChar !== '\\' || $secondToLastChar === '\\')) {
                     $inArrayLevel++;
-                } elseif ($char === '<' && $previousChar === '<' && $secondToLastChar !== '\\') {
+                } elseif ($char === '<' && $previousChar === '<' && ($secondToLastChar !== '\\' || $thirdToLastChar === '\\')) {
                     $inDictionary = true;
-                } elseif ($char === '<' && $previousChar !== '\\' && $rawStream[$index + 1] !== '<') {
+                } elseif ($char === '<' && ($previousChar !== '\\' || $secondToLastChar === '\\') && $rawStream[$index + 1] !== '<') {
                     $inStringLevel++;
-                } elseif ($char === '(' && $previousChar !== '\\') {
+                } elseif ($char === '(' && ($previousChar !== '\\' || $secondToLastChar === '\\')) {
                     $inStringLiteral = true;
-                } elseif ($char === '/' && $previousChar !== '\\') {
+                } elseif ($char === '/' && ($previousChar !== '\\' || $secondToLastChar === '\\')) {
                     $inResourceName = true;
                 } elseif ($inStringLevel > 0 || $inArrayLevel > 0) {
-                    if ($inStringLevel > 0 && $char === '>' && $previousChar !== '\\') {
+                    if ($inStringLevel > 0 && $char === '>' && ($previousChar !== '\\' || $secondToLastChar === '\\')) {
                         $inStringLevel--;
-                    } elseif ($inArrayLevel > 0 && $char === ']' && $previousChar !== '\\') {
+                    } elseif ($inArrayLevel > 0 && $char === ']' && ($previousChar !== '\\' || $secondToLastChar === '\\')) {
                         $inArrayLevel--;
                     }
                 } elseif (isset(self::OPERATOR_CHARS[$char])) {
@@ -171,7 +171,7 @@ class ContentStreamParser {
                             $content[] = $textObject;
                             $textObject = null;
                         }
-                    } elseif ($char === 'D' && $previousChar === 'I' && $secondToLastChar !== '\\') {
+                    } elseif ($char === 'D' && $previousChar === 'I' && ($secondToLastChar !== '\\' || $thirdToLastChar === '\\')) {
                         $inInlineImage = true;
                     } elseif ($char === 'C'
                         && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
