@@ -4,5 +4,9 @@
 # Sample files
 /tests/Feature/samples/external/*
 
+# Text dimensions output svg
+/tests/Samples/out.pdf
+/tests/Samples/out.svg
+
 # Cache folder
 /cache
