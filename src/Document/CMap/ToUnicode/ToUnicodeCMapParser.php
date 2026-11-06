@@ -50,8 +50,8 @@ class ToUnicodeCMapParser {
             $beginBFCharPos += strlen(ToUnicodeCMapOperator::BeginBFChar->value);
             $endBFCharPos = $stream->firstPos(ToUnicodeCMapOperator::EndBFChar, $beginBFCharPos, $startOffset + $nrOfBytes)
                 ?? throw new ParseFailureException();
-            if (preg_match_all('/\s*<(?P<source>[^>]+)>\s*<(?P<destination>[^>]+)>\s*/', $stream->read($beginBFCharPos, $endBFCharPos - $beginBFCharPos), $matchesBFChar, PREG_SET_ORDER) === 0) {
-                throw new ParseFailureException('Unrecognized bfchar format');
+            if (preg_match_all('/\s*<(?P<source>[^>]+)>\s*<(?P<destination>[^>]+)>\s*/', $stream->read($beginBFCharPos, $endBFCharPos - $beginBFCharPos), $matchesBFChar, PREG_SET_ORDER) === false) {
+                throw new ParseFailureException('An error occurred during parsing of bfChar');
             }
 
             foreach ($matchesBFChar as $matchBFChar) {
@@ -64,8 +64,8 @@ class ToUnicodeCMapParser {
         while (($beginBFRangePos = $stream->firstPos(ToUnicodeCMapOperator::BeginBFRange, $lastPos, $startOffset + $nrOfBytes)) !== null) {
             $endBFRangePos = $stream->firstPos(ToUnicodeCMapOperator::EndBFRange, $beginBFRangePos, $startOffset + $nrOfBytes)
                 ?? throw new ParseFailureException();
-            if (preg_match_all('/\s*<(?P<start>[^>]+)>\s*<(?P<end>[^>]+)>\s*(?P<targetString>(<[^>]+>)|(\[\s*(<[^>]+>\s*)+\]))/', $stream->read($beginBFRangePos, $endBFRangePos - $beginBFRangePos), $matchesBFRange, PREG_SET_ORDER) === 0) {
-                throw new ParseFailureException('Unrecognized bfrange format');
+            if (preg_match_all('/\s*<(?P<start>[^>]+)>\s*<(?P<end>[^>]+)>\s*(?P<targetString>(<[^>]+>)|(\[\s*(<[^>]+>\s*)+\]))/', $stream->read($beginBFRangePos, $endBFRangePos - $beginBFRangePos), $matchesBFRange, PREG_SET_ORDER) === false) {
+                throw new ParseFailureException('An error occurred during parsing of bfRange');
             }
 
             foreach ($matchesBFRange as $matchBFRange) {

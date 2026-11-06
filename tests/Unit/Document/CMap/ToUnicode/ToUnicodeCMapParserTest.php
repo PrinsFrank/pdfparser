@@ -100,4 +100,50 @@ class ToUnicodeCMapParserTest extends TestCase {
             ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes()),
         );
     }
+
+    public function testParseEmptyBFChar(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            begincmap
+            1 begincodespacerange
+            < 0000 > < FFFF >
+            endcodespacerange
+            0 beginbfchar
+            endbfchar
+            endcmap
+            EOD,
+        );
+        static::assertEquals(
+            new ToUnicodeCMap(
+                [
+                    new CodeSpaceRange(0x0000, 0xFFFF),
+                ],
+                2,
+            ),
+            ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes()),
+        );
+    }
+
+    public function testParseEmptyBFRange(): void {
+        $stream = new InMemoryStream(
+            <<<EOD
+            begincmap
+            1 begincodespacerange
+            < 0000 > < FFFF >
+            endcodespacerange
+            0 beginbfrange
+            endbfrange
+            endcmap
+            EOD,
+        );
+        static::assertEquals(
+            new ToUnicodeCMap(
+                [
+                    new CodeSpaceRange(0x0000, 0xFFFF),
+                ],
+                2,
+            ),
+            ToUnicodeCMapParser::parse($stream, 0, $stream->getSizeInBytes()),
+        );
+    }
 }
