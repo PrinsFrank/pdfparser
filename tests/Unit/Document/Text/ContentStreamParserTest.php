@@ -148,6 +148,25 @@ class ContentStreamParserTest extends TestCase {
         );
     }
 
+    public function testParseWithEscapedReverseSolidusInStringLiteral(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            BT
+            (Hello\\\\) Tj
+            ET
+            EOD,
+        );
+        $object = $this->createMock(UncompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(Hello\\\\)')),
+            ),
+            ContentStreamParser::parse([$object]),
+        );
+    }
+
     public function testParseShowArraySyntax(): void {
         $contentStream = FileStream::fromString(
             <<<EOD
