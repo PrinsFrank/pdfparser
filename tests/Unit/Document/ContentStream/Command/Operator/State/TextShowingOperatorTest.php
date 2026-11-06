@@ -64,4 +64,31 @@ class TextShowingOperatorTest extends TestCase {
             ),
         );
     }
+
+    public function testGetPositionedTextElementsWithEscapedCharacters(): void {
+        $textMatrix = new TransformationMatrix(2, 2, 2, 2, 2, 2);
+        $globalTransformationMatrix = new TransformationMatrix(3, 3, 3, 3, 3, 3);
+        $textState = new TextState(null, null);
+        $colorState = new ColorState();
+
+        static::assertEquals(
+            new PositionedTextElement(
+                [
+                    new TextSegment(new LiteralStringValue('A\\\\'), 120),
+                    new TextSegment(new LiteralStringValue('W\\)'), 120),
+                    new TextSegment(new LiteralStringValue('A\\('), 95),
+                    new TextSegment(new LiteralStringValue('Y again'), null),
+                ],
+                new TransformationMatrix(12, 12, 12, 12, 15, 15),
+                $textState,
+            ),
+            TextShowingOperator::SHOW_ARRAY->getPositionedTextElement(
+                '[(A\\\\) 120 (W\\)) 120 (A\\() 95 (Y again)]',
+                $textMatrix,
+                $globalTransformationMatrix,
+                $textState,
+                $colorState,
+            ),
+        );
+    }
 }
