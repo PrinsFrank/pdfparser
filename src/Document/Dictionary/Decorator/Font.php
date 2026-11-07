@@ -153,16 +153,16 @@ readonly class Font extends DecoratedDictionary {
             ?->value;
     }
 
-    /** @param list<int> $chars */
-    public function getWidthForChars(array $chars, float $wordSpace, float $charSpace, float $fontSize, float $scaleX): float {
-        if ($chars === []) {
+    /** @param list<int> $bytes */
+    public function getWidthForBytes(array $bytes, float $wordSpace, float $charSpace, float $fontSize, float $scaleX): float {
+        if ($bytes === []) {
             return 0.0;
         }
 
         $defaultWidth = null;
         $totalCharacterWidth = 0.0;
         $charWidthCache = [];
-        foreach ($chars as $char) {
+        foreach ($this->getCharacterCodesForBytes($bytes) as $char) {
             if (isset($charWidthCache[$char]) === false) {
                 $characterWidth = $this->getWidths()?->getWidthForCharacter($char) ?? ($defaultWidth ??= $this->getDefaultWidth());
 
@@ -176,6 +176,24 @@ readonly class Font extends DecoratedDictionary {
         }
 
         return $totalCharacterWidth;
+    }
+
+    /**
+     * @param list<int> $bytes
+     * @return list<int>
+     */
+    private function getCharacterCodesForBytes(array $bytes): array {
+        if (in_array($this->getEncoding(), [EncodingNameValue::IdentityH, EncodingNameValue::IdentityV], true) === false) {
+            return $bytes;
+        }
+
+        $characterCodes = [];
+        $nrOfBytes = count($bytes);
+        for ($i = 0; $i + 1 < $nrOfBytes; $i += 2) {
+            $characterCodes[] = ($bytes[$i] << 8) | $bytes[$i + 1];
+        }
+
+        return $characterCodes;
     }
 
     /** @return list<Font> */

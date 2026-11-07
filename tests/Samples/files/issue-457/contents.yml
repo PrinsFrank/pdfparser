@@ -16,7 +16,7 @@ pages:
     text: |-
       Main title
       Subtitle (if available)
-      Anders Andersson 1 and Anna Annasson 2
+      Anders Andersson1 and Anna Annasson2
       1Linköpings universitet, Devision and Department, Sweden namn.namn@liu.se
       2Company. City, Contry
       Abstract
@@ -88,7 +88,7 @@ pages:
       ##### **Main title**
 
       **Subtitle (if available)**
-      Anders Andersson 1 and Anna Annasson 2
+      Anders Andersson1 and Anna Annasson2
       1Linköpings universitet, Devision and Department, Sweden [namn.namn@liu.se
       ](mailto:namn.namn@liu.se)2Company. City, Contry
       **Abstract**
@@ -171,12 +171,12 @@ pages:
       are the same as describe here. Do not use fonts 
       with no serifs like Arial, Helvetica etc. in the text 
       area. Only headlines may be written with Arial 10 
-      point bold . The general rule is: DO NOT USE 
+      point bold. The general rule is: DO NOT USE 
       OTHER FONTS. (Papers prepared on other 
       computers on which Arial is not available, use 
       Helvetica (or Geneva) 10 point or a similar 9 point 
       san serif font.) This template is printed in Times 
-      New Roman 10 point . Embed all fonts in 
+      New Roman 10 point. Embed all fonts in 
       particular those in the pictures!
       The line spacing should be set at single spacing ‘at 
       least 10 points’. Leave 3 points after each 
@@ -194,10 +194,10 @@ pages:
       of a page. 
       4 HEADING 1
       To indicate the major sections of your paper, use 
-      Heading  1. These sections should be numbered. 
+      Heading 1. These sections should be numbered. 
       For example, Heading 1 is used for the following 
       section headings in these Instructions: 
-      INTRODUCTION, TEXT, SUMMARY , etc. 
+      INTRODUCTION, TEXT, SUMMARY, etc. 
       The style for Heading 1 is ARIAL 10 POINT BOLD 
       ALL CAPS with a 5 mm (0.2 in) hanging indent to 
       accommodate the number and 3 point spacing 
@@ -230,7 +230,7 @@ pages:
       Authors should use approved terminology and 
       symbols, which are relevant for their research 
       area. Keep it consistent through the complete 
-      document . 
+      document. 
       5.2 Style
       The following list summarises several important 
       points of style in order to get a good style in the 
@@ -270,12 +270,12 @@ pages:
       are the same as describe here. Do not use fonts 
       with no serifs like **Arial, Helvetica** etc. in the text 
       area. Only headlines may be written with **Arial 10** 
-      **point bold** . The general rule is: **DO NOT USE** 
+      **point bold**. The general rule is: **DO NOT USE** 
       **OTHER FONTS.** (Papers prepared on other 
       computers on which Arial is not available, use 
       **Helvetica (or Geneva) 10 point** or a similar 9 point 
       san serif font.) This template is printed in **Times** 
-      **New Roman 10 point** . **Embed all fonts in** 
+      **New Roman 10 point**. **Embed all fonts in** 
       **particular those in the pictures!**
       The line spacing should be set at single spacing ‘at 
       least 10 points’. Leave 3 points after each 
@@ -293,10 +293,10 @@ pages:
       **of a page.** 
       **4 HEADING 1**
       To indicate the major sections of your paper, use 
-      Heading  1. These sections should be numbered. 
+      Heading 1. These sections should be numbered. 
       For example, Heading 1 is used for the following 
       section headings in these Instructions: 
-      **INTRODUCTION, TEXT, SUMMARY** , etc. 
+      **INTRODUCTION, TEXT, SUMMARY**, etc. 
       The style for Heading 1 is **ARIAL 10 POINT BOLD** 
       **ALL CAPS** with a 5 mm (0.2 in) hanging indent to 
       accommodate the number and 3 point spacing 
@@ -329,7 +329,7 @@ pages:
       Authors should use approved terminology and 
       symbols, which are relevant for their research 
       area. Keep it consistent through the complete 
-      document . 
+      document. 
       **5.2 Style**
       The following list summarises several important 
       points of style in order to get a good style in the 
@@ -375,7 +375,7 @@ pages:
       point for subscript and superscript, and 5 point for 
       sub-subscript and sub-superscript.
       Use italics for variables (u); bold for vectors (no 
-      arrows) ( u); bold italic for variable vectors (u) and 
+      arrows) (u); bold italic for variable vectors (u) and 
       capital bold italic (U) for variable matrices. Use ith, 
       th th th
       jth, nth, not i , j , n . The order of brackets 
@@ -454,7 +454,7 @@ pages:
       point for subscript and superscript, and 5 point for 
       sub-subscript and sub-superscript.
       Use *italics* for variables (*u*); bold for vectors (no 
-      arrows) ( **u**); bold italic for variable vectors (***u***) and 
+      arrows) (**u**); bold italic for variable vectors (***u***) and 
       capital bold italic (***U***) for variable matrices. Use *i*th, 
       th th th
       *j*th, *n*th, not *i* , *j* , *n* . The order of brackets 
@@ -577,7 +577,7 @@ pages:
       only common abbreviations in journal names.
       [1] Sundin, J., Willner, S. 2004, Health and 
       Vulnerable Men. Sweden: From Traditional 
-      Farming to Indu strialisation in Hygiea 
+      Farming to Industrialisation in Hygiea 
       Internationalis Vol. 4, Issue 1, 175–203. 
       Linköpings universitet.
       [2] Nelson, Marie, 1988, Bitter bread. The famine 
@@ -593,7 +593,7 @@ pages:
       4, Issue 1, pp. 175–203. Linköpings universitet 
       2004.
       [2] Nelson, Marie. Bitter bread. The famine in 
-      Norrbotten 1867–1868 . Studia historica 
+      Norrbotten 1867–1868. Studia historica 
       Upsaliensia, Uppsala universitet, 1988.
       9 ACKNOWLEDGEMENT
       The acknowledgement can include reference to 
@@ -643,7 +643,7 @@ pages:
       only common abbreviations in journal names.
       [1] Sundin, J., Willner, S. 2004, Health and 
       Vulnerable Men. Sweden: From Traditional 
-      Farming to Indu strialisation in Hygiea 
+      Farming to Industrialisation in Hygiea 
       Internationalis Vol. 4, Issue 1, 175–203. 
       Linköpings universitet.
       [2] Nelson, Marie, 1988, Bitter bread. The famine 
@@ -659,7 +659,7 @@ pages:
       4, Issue 1, pp. 175–203. Linköpings universitet 
       2004.
       [2] Nelson, Marie. *Bitter bread. The famine in* 
-      *Norrbotten 1867–1868* . Studia historica 
+      *Norrbotten 1867–1868*. Studia historica 
       Upsaliensia, Uppsala universitet, 1988.
       **9 ACKNOWLEDGEMENT**
       The acknowledgement can include reference to 

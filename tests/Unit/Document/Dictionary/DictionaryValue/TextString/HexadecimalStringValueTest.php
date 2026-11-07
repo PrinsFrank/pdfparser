@@ -82,16 +82,16 @@ class HexadecimalStringValueTest extends TestCase {
 
     public function testGetCodePoints(): void {
         static::assertSame(
-            [72, 101],
-            (new HexadecimalStringValue('00480065'))->getCodePoints(),
+            [0, 72, 0, 101],
+            (new HexadecimalStringValue('00480065'))->getBytes(),
         );
         static::assertSame(
-            [72, 101],
-            (new HexadecimalStringValue('00 480065'))->getCodePoints(),
+            [0, 72, 0, 101],
+            (new HexadecimalStringValue('00 480065'))->getBytes(),
         );
         static::assertSame(
-            [72, 101],
-            (new HexadecimalStringValue('0048 0065'))->getCodePoints(),
+            [0, 72, 0, 101],
+            (new HexadecimalStringValue('0048 0065'))->getBytes(),
         );
     }
 }

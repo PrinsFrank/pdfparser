@@ -51,12 +51,10 @@ readonly class HexadecimalStringValue implements DictionaryValue {
     }
 
     /** @return list<int> */
-    public function getCodePoints(): array {
+    public function getBytes(): array {
         $codePoints = [];
-        foreach (str_split($this->getBinaryString(), 2) as $char) {
-            $codePoints[] = is_int($codePoint = hexdec(bin2hex($char)))
-                ? $codePoint
-                : throw new ParseFailureException();
+        foreach (str_split($this->getBinaryString()) as $char) {
+            $codePoints[] = ord($char);
         }
 
         return $codePoints;
