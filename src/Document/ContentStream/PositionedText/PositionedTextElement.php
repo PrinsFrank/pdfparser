@@ -46,10 +46,10 @@ readonly class PositionedTextElement {
     }
 
     /** @return list<int> */
-    public function getCodePoints(): array {
+    public function getBytes(): array {
         $codePoints = [];
         foreach ($this->textSegments as $textSegment) {
-            array_push($codePoints, ...$textSegment->textString->getCodePoints());
+            array_push($codePoints, ...$textSegment->textString->getBytes());
         }
 
         return $codePoints;
@@ -81,7 +81,7 @@ readonly class PositionedTextElement {
         $scaleX = $this->absoluteMatrix->scaleX;
         $fontSize = $this->textState->getFontSize();
 
-        $glyphAdvance = $font->getWidthForChars($this->getCodePoints(), $this->textState->wordSpace, $this->textState->charSpace, $fontSize, $scaleX); // Σ (w0·Tfs + Tc + Tw·[code 32]) · scaleX
+        $glyphAdvance = $font->getWidthForBytes($this->getBytes(), $this->textState->wordSpace, $this->textState->charSpace, $fontSize, $scaleX); // Σ (w0·Tfs + Tc + Tw·[code 32]) · scaleX
         $offsetAdvance = -($this->getTotalOffset() / 1000) * $fontSize * $scaleX;                                 // − Σ(Tj)/1000 · Tfs · scaleX
 
         return $this->advanceWidthCache = ($glyphAdvance + $offsetAdvance) * ($this->textState->scale / 100); // · Th

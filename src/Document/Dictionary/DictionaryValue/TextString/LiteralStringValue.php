@@ -52,7 +52,7 @@ readonly class LiteralStringValue implements DictionaryValue {
     }
 
     /** @return list<int> */
-    public function getCodePoints(): array {
+    public function getBytes(): array {
         $codePoints = [];
         foreach (str_split($this->getBinaryString()) as $char) {
             $codePoints[] = ord($char);
