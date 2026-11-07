@@ -1,0 +1,53 @@
+# yaml-language-server: $schema=../../schema.json
+version: '1.4'
+userPassword: null
+ownerPassword: null
+fileEncryptionKey: null
+title: 'Multilingual table'
+producer: null
+author: null
+creator: 'Google Sheets'
+subject: null
+keywords: null
+creationDate: null
+modificationDate: null
+pages:
+  -
+    text: |-
+      Item Qty Price Note
+      Pen 10 2,50 single
+      Notebook A5 5 4,00 multi word cell
+      Eraser 3 empty cell before
+      X 1 0,99 one character
+      Order 42 1000 1 234,56 text with digits
+      Długopis żelowy 7 3,45 Polish ą ć ę ł ń ó ś ź ż
+      Źdźbło 12 0,15 Polish uppercase Ą Ć Ę Ł Ń Ó Ś Ź Ż
+      Straße 4 7,25 German ß ü Ö
+      Crème brûlée 6 3,10 French ç œ É
+      Příliš žluťoučký 1 9,99 Czech ř ě ů
+      Smørbrød Ålesund 2 15,00 Nordic ø å æ
+      Ağaç ılık 3 1,20 Turkish ğ ı İ ş
+      Tiếng Việt 5 0,50 Vietnamese ế ệ ữ
+      Ελληνικά 1 2,00 Greek
+      Привет мир 2 3,00 Cyrillic
+      Total 1063
+    markdown: |-
+      Item Qty Price Note
+      Pen 10 2,50 single
+      Notebook A5 5 4,00 multi word cell
+      Eraser 3 empty cell before
+      X 1 0,99 one character
+      Order 42 1000 1 234,56 text with digits
+      Długopis żelowy 7 3,45 Polish ą ć ę ł ń ó ś ź ż
+      Źdźbło 12 0,15 Polish uppercase Ą Ć Ę Ł Ń Ó Ś Ź Ż
+      Straße 4 7,25 German ß ü Ö
+      Crème brûlée 6 3,10 French ç œ É
+      Příliš žluťoučký 1 9,99 Czech ř ě ů
+      Smørbrød Ålesund 2 15,00 Nordic ø å æ
+      Ağaç ılık 3 1,20 Turkish ğ ı İ ş
+      Tiếng Việt 5 0,50 Vietnamese ế ệ ữ
+      Ελληνικά 1 2,00 Greek
+      Привет мир 2 3,00 Cyrillic
+      Total 1063
+    annotations:
+      - {  }
