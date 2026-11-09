@@ -14,12 +14,12 @@ readonly class FloatValue implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
-        $valueString = trim($valueString);
-        $valueAsFloat = (float) $valueString;
-        if (number_format($valueAsFloat, (int) strpos(strrev($valueString), ".")) !== $valueString) {
+        $valueString = trim($valueString, "\x00\x09\x0A\x0C\x0D\x20");
+        if (preg_match('/^[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)$/D', $valueString) !== 1) {
             return null;
         }
 
-        return new self($valueAsFloat);
+        $value = (float) $valueString;
+        return is_finite($value) ? new self($value) : null;
     }
 }
