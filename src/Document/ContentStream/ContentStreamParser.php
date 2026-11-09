@@ -113,6 +113,9 @@ class ContentStreamParser {
             $startCurrentOperandIndex = 0;
             $contentStream = $contentsObject->getContent();
             $contentStreamSize = $contentStream->getSizeInBytes();
+            if ($contentStreamSize === 0) {
+                continue;
+            }
             $rawStream = $contentStream->toString();
             for ($index = 0; $index < $contentStreamSize; $index++) {
                 $char = $rawStream[$index];

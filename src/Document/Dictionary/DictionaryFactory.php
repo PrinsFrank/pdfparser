@@ -16,7 +16,7 @@ class DictionaryFactory {
      * @param array<string, mixed> $dictionaryArray
      * @throws PdfParserException
      */
-    public static function fromArray(CompressedObject|UncompressedObject|null $object, ?EncryptionContext $encryptionContext, array $dictionaryArray): Dictionary {
+    public static function fromArray(CompressedObject|UncompressedObject|null $object, ?EncryptionContext $encryptionContext, array $dictionaryArray, bool $useStandardKeys = true): Dictionary {
         $dictionaryEntries = [];
         foreach ($dictionaryArray as $keyString => $value) {
             if (!is_string($value) && (!is_array($value) || array_is_list($value))) {
@@ -24,7 +24,7 @@ class DictionaryFactory {
             }
 
             /** @var non-empty-array<string, mixed>|string $value */
-            $dictionaryEntry = DictionaryEntryFactory::fromKeyValuePair($object, $encryptionContext, $keyString, $value);
+            $dictionaryEntry = DictionaryEntryFactory::fromKeyValuePair($object, $encryptionContext, $keyString, $value, $useStandardKeys);
             if ($dictionaryEntry === null) {
                 continue;
             }

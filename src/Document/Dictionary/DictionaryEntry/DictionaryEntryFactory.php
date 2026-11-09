@@ -27,8 +27,8 @@ class DictionaryEntryFactory {
      * @param string|array<string, mixed> $dictionaryValue
      * @throws PdfParserException
      */
-    public static function fromKeyValuePair(CompressedObject|UncompressedObject|null $object, ?EncryptionContext $encryptionContext, string $keyString, string|array $dictionaryValue): ?DictionaryEntry {
-        $dictionaryKey = DictionaryKey::tryFromKeyString($keyString)
+    public static function fromKeyValuePair(CompressedObject|UncompressedObject|null $object, ?EncryptionContext $encryptionContext, string $keyString, string|array $dictionaryValue, bool $useStandardKeys = true): ?DictionaryEntry {
+        $dictionaryKey = ($useStandardKeys ? DictionaryKey::tryFromKeyString($keyString) : null)
             ?? NameObjectStringValue::fromValue($keyString)
             ?? throw new ParseFailureException();
 
@@ -44,18 +44,18 @@ class DictionaryEntryFactory {
             return null; // @see 7.3.9, null objects as value for dictionary entry shall be equivalent to omitting the entry entirely
         }
 
-        return new DictionaryEntry($dictionaryKey, self::getValue($object, $encryptionContext, $dictionaryKey, $dictionaryValue));
+        return new DictionaryEntry($dictionaryKey, self::getValue($object, $encryptionContext, $dictionaryKey, $dictionaryValue, $useStandardKeys));
     }
 
     /**
      * @param string|array<string, mixed> $value
      * @throws PdfParserException
      */
-    protected static function getValue(CompressedObject|UncompressedObject|null $object, ?EncryptionContext $encryptionContext, DictionaryKey|NameObjectStringValue $dictionaryKey, string|array $value): Dictionary|DictionaryValue|NameValue {
+    protected static function getValue(CompressedObject|UncompressedObject|null $object, ?EncryptionContext $encryptionContext, DictionaryKey|NameObjectStringValue $dictionaryKey, string|array $value, bool $useStandardKeys = true): Dictionary|DictionaryValue|NameValue {
         $allowedValueTypes = $dictionaryKey->getValueTypes();
         if ((in_array(Dictionary::class, $allowedValueTypes, true) || in_array(ArrayValue::class, $allowedValueTypes, true))
             && is_array($value)) {
-            return DictionaryFactory::fromArray($object, $encryptionContext, $value);
+            return DictionaryFactory::fromArray($object, $encryptionContext, $value, $useStandardKeys && $dictionaryKey->value !== 'ADBE_FillSign');
         }
 
         if (is_string($value)

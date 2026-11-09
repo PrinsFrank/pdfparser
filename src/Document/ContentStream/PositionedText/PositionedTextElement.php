@@ -4,6 +4,7 @@ namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Page;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\XObject;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Font;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -19,6 +20,7 @@ readonly class PositionedTextElement {
         public array $textSegments,
         public TransformationMatrix $absoluteMatrix,
         public TextState $textState,
+        public ?XObject $resourceContext = null,
     ) {}
 
     /** @throws ParseFailureException */
@@ -93,13 +95,19 @@ readonly class PositionedTextElement {
             return $this->rightCache;
         }
 
-        if ($this->textState->fontName === null) {
-            throw new ParseFailureException('Unable to locate font');
-        }
-
-        $font = $fontCache[$this->textState->fontName->value] ??= $page->getFont($this->textState->fontName);
+        $font = $this->getFont($page, $fontCache);
 
         return $this->rightCache = $this->absoluteMatrix->offsetX + $this->getAdvanceWidth($font);
+    }
+
+    /** @param array<string, Font> $fontCache */
+    public function getFont(Page $page, array &$fontCache): Font {
+        $name = $this->textState->fontName ?? throw new ParseFailureException('Unable to locate font');
+        $key = $this->resourceContext === null ? $name->value : spl_object_id($this->resourceContext) . '/' . $name->value;
+        return $fontCache[$key] ??= $this->resourceContext?->getFontDictionary()
+            ?->getObjectForReference($name)
+            ?->getDictionary(Font::class)
+            ?? $page->getFont($name);
     }
 
     /** The sum of the TJ adjustment numbers in this element's segments, in thousandths of an em. */
