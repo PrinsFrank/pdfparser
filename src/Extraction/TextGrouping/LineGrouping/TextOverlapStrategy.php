@@ -24,10 +24,17 @@ class TextOverlapStrategy {
      * @return iterable<list<PositionedTextElement>>
      */
     public static function group(array $positionedTextElements): iterable {
-        usort(
-            $positionedTextElements,
-            fn(PositionedTextElement $a, PositionedTextElement $b): int => $b->absoluteMatrix->offsetY <=> $a->absoluteMatrix->offsetY,
-        );
+        $previousY = INF;
+        foreach ($positionedTextElements as $element) {
+            $offsetY = $element->absoluteMatrix->offsetY;
+            if ($offsetY > $previousY) {
+                $offsets = array_map(static fn(PositionedTextElement $element): float => $element->absoluteMatrix->offsetY, $positionedTextElements);
+                $indices = array_keys($positionedTextElements);
+                array_multisort($offsets, SORT_DESC, SORT_NUMERIC, $indices, SORT_ASC, SORT_NUMERIC, $positionedTextElements);
+                break;
+            }
+            $previousY = $offsetY;
+        }
 
         /** @var array<int, true> $processedIndices */
         $processedIndices = [];
@@ -82,10 +89,17 @@ class TextOverlapStrategy {
                 }
             }
 
-            usort(
-                $positionedTextElementsOnLine,
-                static fn(PositionedTextElement $a, PositionedTextElement $b): int => $a->absoluteMatrix->offsetX <=> $b->absoluteMatrix->offsetX,
-            );
+            $previousX = -INF;
+            foreach ($positionedTextElementsOnLine as $element) {
+                $offsetX = $element->absoluteMatrix->offsetX;
+                if ($offsetX < $previousX) {
+                    $offsets = array_map(static fn(PositionedTextElement $element): float => $element->absoluteMatrix->offsetX, $positionedTextElementsOnLine);
+                    $indices = array_keys($positionedTextElementsOnLine);
+                    array_multisort($offsets, SORT_ASC, SORT_NUMERIC, $indices, SORT_ASC, SORT_NUMERIC, $positionedTextElementsOnLine);
+                    break;
+                }
+                $previousX = $offsetX;
+            }
 
             yield $positionedTextElementsOnLine;
         }
