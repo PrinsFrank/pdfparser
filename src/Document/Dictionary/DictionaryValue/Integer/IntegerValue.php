@@ -6,7 +6,11 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer;
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
-/** @api */
+/**
+ * @api
+ *
+ * @see 7.3.3 Numeric objects, Integer objects
+ */
 readonly class IntegerValue implements DictionaryValue {
     public function __construct(
         public int $value,
@@ -15,12 +19,10 @@ readonly class IntegerValue implements DictionaryValue {
     #[Override]
     public static function fromValue(string $valueString): ?self {
         $valueString = trim($valueString);
-        $valueAsInt = (int) $valueString;
-        if ((string) $valueAsInt !== $valueString
-            && (string) $valueAsInt !== ltrim($valueString, '0')) {
+        if (preg_match('/^[+-]?[0-9]+$/', $valueString) !== 1) {
             return null;
         }
 
-        return new self($valueAsInt);
+        return new self((int) $valueString);
     }
 }
