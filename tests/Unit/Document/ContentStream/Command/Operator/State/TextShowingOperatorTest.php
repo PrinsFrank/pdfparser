@@ -14,6 +14,78 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralS
 
 #[CoversClass(TextShowingOperator::class)]
 class TextShowingOperatorTest extends TestCase {
+    public function testGetPositionedTextElementShow(): void {
+        $textMatrix = new TransformationMatrix(2, 2, 2, 2, 2, 2);
+        $globalTransformationMatrix = new TransformationMatrix(3, 3, 3, 3, 3, 3);
+        $textState = new TextState(null, null);
+        $colorState = new ColorState();
+
+        static::assertEquals(
+            new PositionedTextElement(
+                [
+                    new TextSegment(null, new LiteralStringValue('AWAY again')),
+                ],
+                new TransformationMatrix(12, 12, 12, 12, 15, 15),
+                $textState,
+            ),
+            TextShowingOperator::SHOW->getPositionedTextElement(
+                '(AWAY again)',
+                $textMatrix,
+                $globalTransformationMatrix,
+                $textState,
+                $colorState,
+            ),
+        );
+    }
+
+    public function testGetPositionedTextElementMoveShow(): void {
+        $textMatrix = new TransformationMatrix(2, 2, 2, 2, 2, 2);
+        $globalTransformationMatrix = new TransformationMatrix(3, 3, 3, 3, 3, 3);
+        $textState = new TextState(null, null);
+        $colorState = new ColorState();
+
+        static::assertEquals(
+            new PositionedTextElement(
+                [
+                    new TextSegment(null, new LiteralStringValue('AWAY again')),
+                ],
+                new TransformationMatrix(12, 12, 12, 12, 15, 15),
+                $textState,
+            ),
+            TextShowingOperator::MOVE_SHOW->getPositionedTextElement(
+                '(AWAY again)',
+                $textMatrix,
+                $globalTransformationMatrix,
+                $textState,
+                $colorState,
+            ),
+        );
+    }
+
+    public function testGetPositionedTextElementMoveShowSpacing(): void {
+        $textMatrix = new TransformationMatrix(2, 2, 2, 2, 2, 2);
+        $globalTransformationMatrix = new TransformationMatrix(3, 3, 3, 3, 3, 3);
+        $textState = new TextState(null, null);
+        $colorState = new ColorState();
+
+        static::assertEquals(
+            new PositionedTextElement(
+                [
+                    new TextSegment(null, new LiteralStringValue('AWAY again')),
+                ],
+                new TransformationMatrix(12, 12, 12, 12, 15, 15),
+                $textState,
+            ),
+            TextShowingOperator::MOVE_SHOW_SPACING->getPositionedTextElement(
+                '(AWAY again)',
+                $textMatrix,
+                $globalTransformationMatrix,
+                $textState,
+                $colorState,
+            ),
+        );
+    }
+
     public function testGetPositionedTextElementsFromFigure61FirstExample(): void {
         $textMatrix = new TransformationMatrix(2, 2, 2, 2, 2, 2);
         $globalTransformationMatrix = new TransformationMatrix(3, 3, 3, 3, 3, 3);
