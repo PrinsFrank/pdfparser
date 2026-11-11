@@ -30,7 +30,7 @@ class TextExtractor {
                     throw new ParseFailureException('Unable to locate font');
                 }
 
-                $font = $fontCache[$positionedTextElement->textState->fontName->value] ??= $page->getFont($positionedTextElement->textState->fontName);
+                $font = $positionedTextElement->getFont($page, $fontCache);
                 $elementText = $positionedTextElement->getText($font);
                 if ($elementText === '') {
                     $previousTextElementOnLine = $positionedTextElement;

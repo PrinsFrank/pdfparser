@@ -85,7 +85,10 @@ readonly class ContentStream {
                 }
 
                 if ($contentStreamCommand->operator instanceof ProducesPositionedTextElements && $textState !== null) {
-                    $positionedTextElements[] = $contentStreamCommand->operator->getPositionedTextElement($contentStreamCommand->operands, $textMatrix, $transformationMatrix, $textState, $colorState);
+                    $element = $contentStreamCommand->operator->getPositionedTextElement($contentStreamCommand->operands, $textMatrix, $transformationMatrix, $textState, $colorState);
+                    $positionedTextElements[] = $context instanceof XObject
+                        ? new PositionedTextElement($element->textSegments, $element->absoluteMatrix, $element->textState, $context)
+                        : $element;
                 }
             }
         }
