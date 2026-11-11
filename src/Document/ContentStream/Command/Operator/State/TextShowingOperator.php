@@ -65,7 +65,7 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
         TextState $textState,
         ColorState $colorState,
     ): PositionedTextElement {
-        if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((?:\\\\.|[^\\\\)])*\)))\s*(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $operands, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL)) === false) {
+        if (($result = preg_match_all('/(?<offset>-?[0-9]+(\.[0-9]+)?)?\s*(?<chars>(<(\\\\>|[^>])*>)|(\((?:\\\\.|[^\\\\)])*\)))/', $operands, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL)) === false) {
             throw new ParseFailureException(sprintf('Error with regex'));
         } elseif ($result === 0) {
             throw new ParseFailureException(sprintf('Operands "%s" is not in a recognized format', $operands));
@@ -74,10 +74,10 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
         return new PositionedTextElement(
             array_map(
                 fn(array $match) => new TextSegment(
+                    $match['offset'] !== null ? (float) $match['offset'] : null,
                     str_starts_with($match['chars'], '(')
                         ? LiteralStringValue::fromValue($match['chars']) ?? throw new ParseFailureException()
                         : HexadecimalStringValue::fromValue($match['chars']) ?? throw new ParseFailureException(),
-                    $match['offset'] !== null ? (float) $match['offset'] : null,
                 ),
                 $matches,
             ),

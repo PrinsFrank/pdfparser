@@ -389,7 +389,7 @@ pages:
         linkLocation: 'https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/programmas_en_formulieren/model_opgaaf_gegevens_voor_de_loonheffingen'
   -
     text: |2-
-       oelichting bij de vragen T (vervolg)
+        oelichting bij de vragen T (vervolg)
       SVB-uitkering en loonheffingskorting
       Krijgt u een uitkering van de Sociale Verzekeringsbank (SVB), 
       bijvoorbeeld AOW? Dan past de SVB de loonheffingskorting 
@@ -431,7 +431,7 @@ pages:
       Wilt u weten of u recht hebt op een AOW-uitkering voor 
       alleenstaanden? Dit kunt u navragen bij de SVB.
     markdown: |2-
-       **oelichting bij de vragen T** *(vervolg)*
+        **oelichting bij de vragen T** *(vervolg)*
       **SVB-uitkering en loonheffingskorting**
       Krijgt u een uitkering van de Sociale Verzekeringsbank (SVB), 
       bijvoorbeeld AOW? Dan past de SVB de loonheffingskorting 
