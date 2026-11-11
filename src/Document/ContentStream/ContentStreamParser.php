@@ -140,6 +140,16 @@ class ContentStreamParser {
                     if ($char === '>' && $previousChar === '>' && ($secondToLastChar !== '\\' || $thirdToLastChar === '\\')) {
                         $inDictionary = false;
                     }
+                } elseif ($previousChar !== 'd' && ($span = strspn(
+                    $rawStream,
+                    $inStringLevel > 0 ? "0123456789ABCDEFabcdef\x00\x09\x0A\x0C\x0D\x20" : "0123456789+-.\x00\x09\x0A\x0C\x0D\x20",
+                    $index,
+                )) >= 3) {
+                    $index += $span - 1;
+                    $thirdToLastChar = $rawStream[$index - 2];
+                    $secondToLastChar = $rawStream[$index - 1];
+                    $previousChar = $rawStream[$index];
+                    continue;
                 } elseif ($char === '%') {
                     $inComment = true;
                     $startOfCommentOffset = $index;
