@@ -31,7 +31,8 @@ readonly class PositionedTextElement {
         $previousOffset = null;
         foreach ($this->textSegments as $textSegment) {
             $textSegmentText = $textSegment->getText($differences, $encoding, $toUnicodeCMap);
-            if ($previousOffset !== null
+            if ($textSegmentText !== ''
+                && $previousOffset !== null
                 && $previousOffset / 1000 <= -self::WORD_BREAK_THRESHOLD_EM
                 && str_ends_with($text, ' ') === false
                 && str_starts_with($textSegmentText, ' ') === false) {
