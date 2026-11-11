@@ -6,7 +6,11 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Float;
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
-/** @api */
+/**
+ * @api
+ *
+ * @see 7.3.3 numeric objects, Real objects
+ */
 readonly class FloatValue implements DictionaryValue {
     public function __construct(
         public float $value,
@@ -15,11 +19,10 @@ readonly class FloatValue implements DictionaryValue {
     #[Override]
     public static function fromValue(string $valueString): ?self {
         $valueString = trim($valueString);
-        $valueAsFloat = (float) $valueString;
-        if (number_format($valueAsFloat, (int) strpos(strrev($valueString), ".")) !== $valueString) {
+        if (preg_match('/^[+-]?(?:[0-9]+\.?[0-9]*|\.[0-9]+)$/', $valueString) !== 1) {
             return null;
         }
 
-        return new self($valueAsFloat);
+        return new self((float) $valueString);
     }
 }
