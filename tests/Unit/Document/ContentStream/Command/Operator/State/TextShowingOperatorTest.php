@@ -23,7 +23,7 @@ class TextShowingOperatorTest extends TestCase {
         static::assertEquals(
             new PositionedTextElement(
                 [
-                    new TextSegment(new LiteralStringValue('AWAY again'), null),
+                    new TextSegment(null, new LiteralStringValue('AWAY again')),
                 ],
                 new TransformationMatrix(12, 12, 12, 12, 15, 15),
                 $textState,
@@ -47,10 +47,10 @@ class TextShowingOperatorTest extends TestCase {
         static::assertEquals(
             new PositionedTextElement(
                 [
-                    new TextSegment(new LiteralStringValue('A'), 120),
-                    new TextSegment(new LiteralStringValue('W'), 120),
-                    new TextSegment(new LiteralStringValue('A'), 95),
-                    new TextSegment(new LiteralStringValue('Y again'), null),
+                    new TextSegment(null, new LiteralStringValue('A')),
+                    new TextSegment(120, new LiteralStringValue('W')),
+                    new TextSegment(120, new LiteralStringValue('A')),
+                    new TextSegment(95, new LiteralStringValue('Y again')),
                 ],
                 new TransformationMatrix(12, 12, 12, 12, 15, 15),
                 $textState,
@@ -74,10 +74,10 @@ class TextShowingOperatorTest extends TestCase {
         static::assertEquals(
             new PositionedTextElement(
                 [
-                    new TextSegment(new LiteralStringValue('A\\\\'), 120),
-                    new TextSegment(new LiteralStringValue('W\\)'), 120),
-                    new TextSegment(new LiteralStringValue('A\\('), 95),
-                    new TextSegment(new LiteralStringValue('Y again'), null),
+                    new TextSegment(null, new LiteralStringValue('A\\\\')),
+                    new TextSegment(120, new LiteralStringValue('W\\)')),
+                    new TextSegment(120, new LiteralStringValue('A\\(')),
+                    new TextSegment(95, new LiteralStringValue('Y again')),
                 ],
                 new TransformationMatrix(12, 12, 12, 12, 15, 15),
                 $textState,

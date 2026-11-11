@@ -10,8 +10,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralS
 
 readonly class TextSegment {
     public function __construct(
-        public HexadecimalStringValue|LiteralStringValue $textString,
         public int|float|null $offset,
+        public HexadecimalStringValue|LiteralStringValue $textString,
     ) {}
 
     public function getText(?DifferencesArrayValue $differences, ?EncodingNameValue $encoding, ?ToUnicodeCMap $toUnicodeCMap): string {

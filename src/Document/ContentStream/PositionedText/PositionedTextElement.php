@@ -28,18 +28,16 @@ readonly class PositionedTextElement {
         $toUnicodeCMap = $font->getToUnicodeCMap();
 
         $text = '';
-        $previousOffset = null;
         foreach ($this->textSegments as $textSegment) {
             $textSegmentText = $textSegment->getText($differences, $encoding, $toUnicodeCMap);
-            if ($previousOffset !== null
-                && $previousOffset / 1000 <= -self::WORD_BREAK_THRESHOLD_EM
+            if ($textSegment->offset !== null
+                && $textSegment->offset / 1000 <= -self::WORD_BREAK_THRESHOLD_EM
                 && str_ends_with($text, ' ') === false
                 && str_starts_with($textSegmentText, ' ') === false) {
                 $text .= ' ';
             }
 
             $text .= $textSegmentText;
-            $previousOffset = $textSegment->offset;
         }
 
         return $text;
