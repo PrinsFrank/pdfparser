@@ -65,6 +65,20 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
         TextState $textState,
         ColorState $colorState,
     ): PositionedTextElement {
+        if ($this === self::SHOW || $this === self::MOVE_SHOW || $this === self::MOVE_SHOW_SPACING) {
+            return new PositionedTextElement(
+                [
+                    new TextSegment(
+                        null,
+                        str_starts_with($operands, '(')
+                            ? LiteralStringValue::fromValue($operands) ?? throw new ParseFailureException()
+                            : HexadecimalStringValue::fromValue($operands) ?? throw new ParseFailureException(),
+                    )],
+                $textMatrix->multiplyWith($globalTransformationMatrix),
+                $textState,
+            );
+        }
+
         if (($result = preg_match_all('/(?<offset>-?[0-9]+(\.[0-9]+)?)?\s*(?<chars>(<(\\\\>|[^>])*>)|(\((?:\\\\.|[^\\\\)])*\)))/', $operands, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL)) === false) {
             throw new ParseFailureException(sprintf('Error with regex'));
         } elseif ($result === 0) {
