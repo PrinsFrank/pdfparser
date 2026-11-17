@@ -43,7 +43,7 @@ class ColumnGroupingStrategy {
         $positionedElementsGroupedByLine = iterator_to_array(TextOverlapStrategy::group($positionedTextElements), false);
         $nrOfLines = count($positionedElementsGroupedByLine);
         if ($nrOfLines < self::NR_OF_LINES_TO_BE_CONSIDERED_COLUMNS) {
-            return [$positionedTextElements];
+            return $positionedElementsGroupedByLine;
         }
 
         $pageLeft = min(
@@ -88,7 +88,7 @@ class ColumnGroupingStrategy {
 
         if ($elementMissCounts === []
             || ($maxMissCount = max($elementMissCounts)) < self::NR_OF_LINES_TO_BE_CONSIDERED_COLUMNS) {
-            return [$positionedTextElements];
+            return $positionedElementsGroupedByLine;
         }
 
         $elementMissCounts = array_filter($elementMissCounts, fn(int $missCount) => $missCount >= $maxMissCount - 2);
@@ -106,7 +106,7 @@ class ColumnGroupingStrategy {
         $minimumColumnWidth = ($pageRight - $pageLeft) / 100 * self::MINIMUM_COLUMN_WIDTH_PERCENTAGE;
         foreach (($zeroIndexedGutters = array_values($xGutters)) as $xGutterIndex => $xGutter) {
             if ($xGutter < ($zeroIndexedGutters[$xGutterIndex - 1] ?? $pageLeft) + $minimumColumnWidth) {
-                return [$positionedTextElements];
+                return $positionedElementsGroupedByLine;
             }
         }
 
@@ -144,13 +144,9 @@ class ColumnGroupingStrategy {
 
         ksort($columns);
         return array_values(array_filter([
-            ($positionedTextElementsHeader = array_slice($positionedElementsGroupedByLine, 0, $indexFirstColumnStart)) === []
-                ? []
-                : array_merge(...$positionedTextElementsHeader),
-            ...array_values($columns),
-            ($positionedTextElementsFooter = array_slice($positionedElementsGroupedByLine, $indexLastColumnEnd)) === []
-                ? []
-                : array_merge(...$positionedTextElementsFooter),
+            ...array_slice($positionedElementsGroupedByLine, 0, $indexFirstColumnStart),
+            ...array_merge(...array_map(fn(array $column) => iterator_to_array(TextOverlapStrategy::group($column)), $columns)),
+            ...array_slice($positionedElementsGroupedByLine, $indexLastColumnEnd),
         ]));
     }
 
