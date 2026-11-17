@@ -163,4 +163,59 @@ class TextShowingOperatorTest extends TestCase {
             ),
         );
     }
+
+    public function testGetPositionedTextElementsTextOnly(): void {
+        $textMatrix = new TransformationMatrix(2, 2, 2, 2, 2, 2);
+        $globalTransformationMatrix = new TransformationMatrix(3, 3, 3, 3, 3, 3);
+        $textState = new TextState(null, null);
+        $colorState = new ColorState();
+
+        static::assertEquals(
+            new PositionedTextElement(
+                [
+                    new TextSegment(null, new LiteralStringValue('A\\\\')),
+                    new TextSegment(null, new LiteralStringValue('W\\)')),
+                    new TextSegment(null, new LiteralStringValue('A\\(')),
+                    new TextSegment(null, new LiteralStringValue('Y again')),
+                ],
+                new TransformationMatrix(12, 12, 12, 12, 15, 15),
+                $textState,
+            ),
+            TextShowingOperator::SHOW_ARRAY->getPositionedTextElement(
+                '[(A\\\\) (W\\)) (A\\() (Y again)]',
+                $textMatrix,
+                $globalTransformationMatrix,
+                $textState,
+                $colorState,
+            ),
+        );
+    }
+
+    public function testGetPositionedTextElementsWithOffsetsOnly(): void {
+        $textMatrix = new TransformationMatrix(2, 2, 2, 2, 2, 2);
+        $globalTransformationMatrix = new TransformationMatrix(3, 3, 3, 3, 3, 3);
+        $textState = new TextState(null, null);
+        $colorState = new ColorState();
+
+        static::assertEquals(
+            new PositionedTextElement(
+                [
+                    new TextSegment(120, null),
+                    new TextSegment(-120, null),
+                    new TextSegment(95, null),
+                    new TextSegment(-0.120, null),
+                    new TextSegment(0.120, null),
+                ],
+                new TransformationMatrix(12, 12, 12, 12, 15, 15),
+                $textState,
+            ),
+            TextShowingOperator::SHOW_ARRAY->getPositionedTextElement(
+                '[+120 -120 95 -.120 +.120]',
+                $textMatrix,
+                $globalTransformationMatrix,
+                $textState,
+                $colorState,
+            ),
+        );
+    }
 }

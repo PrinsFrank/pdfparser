@@ -79,24 +79,36 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
             );
         }
 
-        if (($result = preg_match_all('/(?<offset>-?[0-9]+(\.[0-9]+)?)?\s*(?<chars>(<(\\\\>|[^>])*>)|(\((?:\\\\.|[^\\\\)])*\)))/', $operands, $matches, PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL)) === false) {
-            throw new ParseFailureException(sprintf('Error with regex'));
-        } elseif ($result === 0) {
-            throw new ParseFailureException(sprintf('Operands "%s" is not in a recognized format', $operands));
+        if (str_starts_with($operands, '[') === false || str_ends_with($operands, ']') === false) {
+            throw new ParseFailureException();
         }
 
-        return new PositionedTextElement(
-            array_map(
-                fn(array $match) => new TextSegment(
-                    $match['offset'] !== null ? (float) $match['offset'] : null,
-                    str_starts_with($match['chars'], '(')
-                        ? LiteralStringValue::fromValue($match['chars']) ?? throw new ParseFailureException()
-                        : HexadecimalStringValue::fromValue($match['chars']) ?? throw new ParseFailureException(),
-                ),
-                $matches,
-            ),
-            $textMatrix->multiplyWith($globalTransformationMatrix),  // 9.4.4, Note 2 on Trm calculation
-            $textState,
-        );
+        $operandLength = strlen($operands = substr($operands, 1, -1));
+        $textSegments = [];
+        $offset = 0;
+        while ($offset < $operandLength) {
+            $remainingOperand = substr($operands, $offset);
+            if (trim($remainingOperand) === '') {
+                break;
+            }
+
+            if (preg_match('/^\s*(?:(?<offset>[+-]?[0-9]+(\.[0-9]+)?|[+-]?\.[0-9])?\s*(?<chars>(<(\\\\>|[^>])*>)|(\((?:\\\\.|[^\\\\)])*\)))|(?<offsetOnly>[+-]?[0-9]+(\.[0-9]+)?|[+-]?\.[0-9]+))/', $remainingOperand, $match, PREG_UNMATCHED_AS_NULL) !== 1) {
+                throw new ParseFailureException();
+            }
+
+            $textSegments[] = new TextSegment(
+                $match['offset'] !== null ? (float) $match['offset'] : ($match['offsetOnly'] !== null ? (float) $match['offsetOnly'] : null),
+                $match['chars'] === null
+                    ? null
+                    : (
+                        str_starts_with($match['chars'], '<') && str_ends_with($match['chars'], '>')
+                        ? HexadecimalStringValue::fromValue($match['chars']) ?? throw new ParseFailureException()
+                        : LiteralStringValue::fromValue($match['chars']) ?? throw new ParseFailureException()
+                    ),
+            );
+            $offset += strlen($match[0]);
+        }
+
+        return new PositionedTextElement($textSegments, $textMatrix->multiplyWith($globalTransformationMatrix), $textState);
     }
 }

@@ -11,10 +11,14 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralS
 readonly class TextSegment {
     public function __construct(
         public int|float|null $offset,
-        public HexadecimalStringValue|LiteralStringValue $textString,
+        public HexadecimalStringValue|LiteralStringValue|null $textString,
     ) {}
 
     public function getText(?DifferencesArrayValue $differences, ?EncodingNameValue $encoding, ?ToUnicodeCMap $toUnicodeCMap): string {
+        if ($this->textString === null) {
+            return '';
+        }
+
         $binaryString = $this->textString->getBinaryString();
         if ($differences === null) {
             return $this->decode($binaryString, $encoding, $toUnicodeCMap);
