@@ -47,7 +47,7 @@ readonly class PositionedTextElement {
     public function getBytes(): array {
         $codePoints = [];
         foreach ($this->textSegments as $textSegment) {
-            array_push($codePoints, ...$textSegment->textString->getBytes());
+            array_push($codePoints, ...$textSegment->textString?->getBytes() ?? []);
         }
 
         return $codePoints;
