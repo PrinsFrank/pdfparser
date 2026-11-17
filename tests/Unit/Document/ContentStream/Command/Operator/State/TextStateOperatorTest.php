@@ -7,23 +7,30 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextStateOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Font;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 #[CoversClass(TextStateOperator::class)]
 class TextStateOperatorTest extends TestCase {
     public function testApplyToTextState(): void {
+        $page = $this->createMock(Page::class);
+        $page->expects(self::atLeastOnce())->method('getFont')->with(new NameObjectStringValue('F0'))->willReturn($fontMock = $this->createMock(Font::class));
         static::assertEquals(
-            new TextState(new NameObjectStringValue('F0'), 12, 0, 0, 100, 0, 0, 0),
-            TextStateOperator::FONT_SIZE->applyToTextState('/F0 12', new TextState(null, null)),
+            new TextState($fontMock, 12, 0, 0, 100, 0, 0, 0),
+            TextStateOperator::FONT_SIZE->applyToTextState('/F0 12', new TextState(null, null), $page),
         );
         static::assertEquals(
-            new TextState(new NameObjectStringValue('F0'), -12, 0, 0, 100, 0, 0, 0),
-            TextStateOperator::FONT_SIZE->applyToTextState('/F0 -12', new TextState(null, null)),
+            new TextState($fontMock, -12, 0, 0, 100, 0, 0, 0),
+            TextStateOperator::FONT_SIZE->applyToTextState('/F0 -12', new TextState(null, null), $page),
         );
+
+        $page = $this->createMock(Page::class);
+        $page->expects(self::atLeastOnce())->method('getFont')->with(new NameObjectStringValue('F2+0'))->willReturn($fontMock = $this->createMock(Font::class));
         static::assertEquals(
-            new TextState(new NameObjectStringValue('F2+0'), 12, 0, 0, 100, 0, 0, 0),
-            TextStateOperator::FONT_SIZE->applyToTextState('/F2+0 12', new TextState(null, null)),
+            new TextState($fontMock, 12, 0, 0, 100, 0, 0, 0),
+            TextStateOperator::FONT_SIZE->applyToTextState('/F2+0 12', new TextState(null, null), $page),
         );
     }
 
@@ -31,7 +38,7 @@ class TextStateOperatorTest extends TestCase {
     public function testApplyToTextStateWithValidScaleOperand(string $operand, float $expectedScale): void {
         static::assertEquals(
             new TextState(null, null, 0, 0, $expectedScale, 0, 0, 0),
-            TextStateOperator::SCALE->applyToTextState($operand, new TextState(null, null)),
+            TextStateOperator::SCALE->applyToTextState($operand, new TextState(null, null), $this->createMock(Page::class)),
         );
     }
 
@@ -49,7 +56,7 @@ class TextStateOperatorTest extends TestCase {
         $this->expectException(ParseFailureException::class);
         $this->expectExceptionMessage(sprintf('Invalid scale operand "%s" for scale operator', $operand));
 
-        TextStateOperator::SCALE->applyToTextState($operand, new TextState(null, null));
+        TextStateOperator::SCALE->applyToTextState($operand, new TextState(null, null), $this->createMock(Page::class));
     }
 
     /** @return iterable<string, array{0: string}> */

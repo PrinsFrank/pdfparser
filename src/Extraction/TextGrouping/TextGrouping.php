@@ -3,20 +3,17 @@
 namespace PrinsFrank\PdfParser\Extraction\TextGrouping;
 
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
-use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Page;
-use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Font;
 use PrinsFrank\PdfParser\Extraction\TextGrouping\ColumnGrouping\ColumnGroupingStrategy;
 use PrinsFrank\PdfParser\Extraction\TextGrouping\LineGrouping\TextOverlapStrategy;
 
 class TextGrouping {
     /**
      * @param list<PositionedTextElement> $positionedTextElements
-     * @param array<string, Font> $fontCache
      * @return list<list<PositionedTextElement>>
      */
-    public static function group(array $positionedTextElements, Page $page, array &$fontCache): array {
+    public static function group(array $positionedTextElements): array {
         $elementsGroupedByLine = [];
-        foreach (ColumnGroupingStrategy::group($positionedTextElements, $page, $fontCache) as $elementsInColumn) {
+        foreach (ColumnGroupingStrategy::group($positionedTextElements) as $elementsInColumn) {
             foreach (TextOverlapStrategy::group($elementsInColumn) as $elementsOnLineInColumn) {
                 $elementsGroupedByLine[] = $elementsOnLineInColumn;
             }
