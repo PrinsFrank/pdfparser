@@ -56,7 +56,7 @@ readonly class ContentStream {
                 }
 
                 if ($content->operator instanceof InteractsWithTextState) {
-                    $textState = $content->operator->applyToTextState($content->operands, $textState);
+                    $textState = $content->operator->applyToTextState($content->operands, $textState, $context);
                 }
 
                 if ($content->operator instanceof InteractsWithTransformationMatrix) {
@@ -77,7 +77,7 @@ readonly class ContentStream {
                 }
 
                 if ($contentStreamCommand->operator instanceof InteractsWithTextState) {
-                    $textState = $contentStreamCommand->operator->applyToTextState($contentStreamCommand->operands, $textState);
+                    $textState = $contentStreamCommand->operator->applyToTextState($contentStreamCommand->operands, $textState, $context);
                 }
 
                 if ($contentStreamCommand->operator instanceof InteractsWithTransformationMatrix) {

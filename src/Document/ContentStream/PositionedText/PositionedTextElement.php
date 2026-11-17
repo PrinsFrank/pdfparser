@@ -3,9 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\ContentStream\PositionedText;
 
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
-use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
-use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Font;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 readonly class PositionedTextElement {
@@ -22,14 +20,10 @@ readonly class PositionedTextElement {
     ) {}
 
     /** @throws ParseFailureException */
-    public function getText(Font $font): string {
-        $differences = $font->getDifferences();
-        $encoding = $font->getEncoding();
-        $toUnicodeCMap = $font->getToUnicodeCMap();
-
+    public function getText(): string {
         $text = '';
         foreach ($this->textSegments as $textSegment) {
-            $textSegmentText = $textSegment->getText($differences, $encoding, $toUnicodeCMap);
+            $textSegmentText = $textSegment->getText($this->textState->getFontOrThrow());
             if ($textSegment->offset !== null
                 && $textSegment->offset / 1000 <= -self::WORD_BREAK_THRESHOLD_EM
                 && str_ends_with($text, ' ') === false
@@ -71,7 +65,7 @@ readonly class PositionedTextElement {
      *
      * Reconstructed here because Tj/TJ do not advance the text matrix in this parser.
      */
-    public function getAdvanceWidth(Font $font): float {
+    public function getAdvanceWidth(): float {
         if (isset($this->advanceWidthCache)) {
             return $this->advanceWidthCache;
         }
@@ -79,25 +73,18 @@ readonly class PositionedTextElement {
         $scaleX = $this->absoluteMatrix->scaleX;
         $fontSize = $this->textState->getFontSize();
 
-        $glyphAdvance = $font->getWidthForBytes($this->getBytes(), $this->textState->wordSpace, $this->textState->charSpace, $fontSize, $scaleX); // Σ (w0·Tfs + Tc + Tw·[code 32]) · scaleX
+        $glyphAdvance = $this->textState->getFontOrThrow()->getWidthForBytes($this->getBytes(), $this->textState->wordSpace, $this->textState->charSpace, $fontSize, $scaleX); // Σ (w0·Tfs + Tc + Tw·[code 32]) · scaleX
         $offsetAdvance = -($this->getTotalOffset() / 1000) * $fontSize * $scaleX;                                 // − Σ(Tj)/1000 · Tfs · scaleX
 
         return $this->advanceWidthCache = ($glyphAdvance + $offsetAdvance) * ($this->textState->scale / 100); // · Th
     }
 
-    /** @param array<string, Font> $fontCache */
-    public function getRight(Page $page, array &$fontCache): float {
+    public function getRight(): float {
         if (isset($this->rightCache)) {
             return $this->rightCache;
         }
 
-        if ($this->textState->fontName === null) {
-            throw new ParseFailureException('Unable to locate font');
-        }
-
-        $font = $fontCache[$this->textState->fontName->value] ??= $page->getFont($this->textState->fontName);
-
-        return $this->rightCache = $this->absoluteMatrix->offsetX + $this->getAdvanceWidth($font);
+        return $this->rightCache = $this->absoluteMatrix->offsetX + $this->getAdvanceWidth();
     }
 
     /** The sum of the TJ adjustment numbers in this element's segments, in thousandths of an em. */

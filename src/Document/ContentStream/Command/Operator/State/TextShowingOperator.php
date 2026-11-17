@@ -12,6 +12,8 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextEle
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Page;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\XObject;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\HexadecimalStringValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -35,7 +37,7 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
 
     /** @throws ParseFailureException */
     #[Override]
-    public function applyToTextState(string $operands, TextState $textState): TextState {
+    public function applyToTextState(string $operands, TextState $textState, Page|XObject $context): TextState {
         if ($this === self::MOVE_SHOW_SPACING) {
             $spacing = explode(' ', trim($operands));
             if (count($spacing) !== 2) {
@@ -43,7 +45,7 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
             }
 
             return new TextState(
-                $textState->fontName,
+                $textState->font,
                 $textState->fontSize,
                 (float) $spacing[1],
                 (float) $spacing[0],

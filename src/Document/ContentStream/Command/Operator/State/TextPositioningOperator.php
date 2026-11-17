@@ -8,6 +8,8 @@ use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interacti
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Interaction\InteractsWithTextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Page;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\XObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
@@ -50,7 +52,7 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
 
     /** @throws ParseFailureException */
     #[Override]
-    public function applyToTextState(string $operands, TextState $textState): TextState {
+    public function applyToTextState(string $operands, TextState $textState, Page|XObject $context): TextState {
         if ($this === self::MOVE_OFFSET_LEADING) {
             $offsets = explode(' ', trim($operands));
             if (count($offsets) !== 2) {

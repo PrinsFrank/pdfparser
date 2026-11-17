@@ -10,6 +10,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextEle
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextSegment\TextSegment;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TextState;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\HexadecimalStringValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\LiteralStringValue;
@@ -132,34 +133,36 @@ class ContentStreamTest extends TestCase {
         EOD);
         $object = $this->createMock(UncompressedObject::class);
         $object->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $page = $this->createMock(Page::class);
+        $page->expects(self::atLeastOnce())->method('getFont')->with(new NameObjectStringValue('F4'))->willReturn($fontMock = $this->createMock(Font::class));
         static::assertEquals(
             [
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0024'))], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 759.6821291075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0025'))], new TransformationMatrix(0.75, 0, 0, 0.75, 79.33170315, 759.6821291075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0026'))], new TransformationMatrix(0.75, 0, 0, 0.75, 86.6634063, 759.6821291075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 94.60161225, 759.6821291075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0027'))], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 745.1358641075001), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0028'))], new TransformationMatrix(0.75, 0, 0, 0.75, 79.938205725, 745.1358641075001), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0029'))], new TransformationMatrix(0.75, 0, 0, 0.75, 87.269908875, 745.1358641075001), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 93.984375, 745.1358641075001), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 108.0, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002A'))], new TransformationMatrix(0.75, 0, 0, 0.75, 144.0, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002B'))], new TransformationMatrix(0.75, 0, 0, 0.75, 152.550075525, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002C'))], new TransformationMatrix(0.75, 0, 0, 0.75, 160.48828125, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 163.54226325000002, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 166.596245025, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 169.65022679999998, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 172.704208575, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 175.75819035, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 178.812172125, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002D'))], new TransformationMatrix(0.75, 0, 0, 0.75, 181.86615375, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002E'))], new TransformationMatrix(0.75, 0, 0, 0.75, 187.3622475, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002F'))], new TransformationMatrix(0.75, 0, 0, 0.75, 194.69395065, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 200.80728, 730.5896001075), new TextState(new NameObjectStringValue('F4'), 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 716.0433351075001), new TextState(new NameObjectStringValue('F4'), 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0024'))], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 759.6821291075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0025'))], new TransformationMatrix(0.75, 0, 0, 0.75, 79.33170315, 759.6821291075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0026'))], new TransformationMatrix(0.75, 0, 0, 0.75, 86.6634063, 759.6821291075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 94.60161225, 759.6821291075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0027'))], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 745.1358641075001), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0028'))], new TransformationMatrix(0.75, 0, 0, 0.75, 79.938205725, 745.1358641075001), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0029'))], new TransformationMatrix(0.75, 0, 0, 0.75, 87.269908875, 745.1358641075001), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 93.984375, 745.1358641075001), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 108.0, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002A'))], new TransformationMatrix(0.75, 0, 0, 0.75, 144.0, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002B'))], new TransformationMatrix(0.75, 0, 0, 0.75, 152.550075525, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002C'))], new TransformationMatrix(0.75, 0, 0, 0.75, 160.48828125, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 163.54226325000002, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 166.596245025, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 169.65022679999998, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 172.704208575, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 175.75819035, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 178.812172125, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002D'))], new TransformationMatrix(0.75, 0, 0, 0.75, 181.86615375, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002E'))], new TransformationMatrix(0.75, 0, 0, 0.75, 187.3622475, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002F'))], new TransformationMatrix(0.75, 0, 0, 0.75, 194.69395065, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 200.80728, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 716.0433351075001), new TextState($fontMock, 14.666667)),
             ],
-            ContentStreamParser::parse([$object])->getPositionedTextElements($this->createMock(Page::class), new TransformationMatrix(1, 0, 0, 1, 0, 0), []),
+            ContentStreamParser::parse([$object])->getPositionedTextElements($page, new TransformationMatrix(1, 0, 0, 1, 0, 0), []),
         );
     }
 
@@ -176,12 +179,14 @@ class ContentStreamTest extends TestCase {
         );
         $object = $this->createMock(UncompressedObject::class);
         $object->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $page = $this->createMock(Page::class);
+        $page->expects(self::atLeastOnce())->method('getFont')->with(new NameObjectStringValue('F1'))->willReturn($fontMock = $this->createMock(Font::class));
         static::assertEquals(
             [
-                new PositionedTextElement([new TextSegment(null, new LiteralStringValue('[Hello'))], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState(new NameObjectStringValue('F1'), 7)),
-                new PositionedTextElement([new TextSegment(null, new LiteralStringValue('World]'))], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState(new NameObjectStringValue('F1'), 7)),
+                new PositionedTextElement([new TextSegment(null, new LiteralStringValue('[Hello'))], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState($fontMock, 7)),
+                new PositionedTextElement([new TextSegment(null, new LiteralStringValue('World]'))], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState($fontMock, 7)),
             ],
-            ContentStreamParser::parse([$object])->getPositionedTextElements($this->createMock(Page::class), new TransformationMatrix(1, 0, 0, 1, 0, 0), []),
+            ContentStreamParser::parse([$object])->getPositionedTextElements($page, new TransformationMatrix(1, 0, 0, 1, 0, 0), []),
         );
     }
 }

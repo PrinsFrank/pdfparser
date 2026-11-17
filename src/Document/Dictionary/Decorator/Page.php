@@ -34,12 +34,12 @@ readonly class Page extends DecoratedDictionary {
 
     /** @throws PdfParserException */
     public function getText(): string {
-        return TextExtractor::extractContent($this->getPositionedTextElements(), $this);
+        return TextExtractor::extractContent($this->getPositionedTextElements());
     }
 
     public function getMarkdown(): string {
         return (new MarkdownRenderer())
-            ->render(MarkdownExtractor::extractContent($this->getPositionedTextElements(), $this->getAnnotations(), $this));
+            ->render(MarkdownExtractor::extractContent($this->getPositionedTextElements(), $this->getAnnotations()));
     }
 
     /** @throws PdfParserException */
@@ -111,23 +111,10 @@ readonly class Page extends DecoratedDictionary {
 
     /** @throws PdfParserException */
     public function getFont(DictionaryKey|NameObjectStringValue $dictionaryKey): Font {
-        $font = $this->getFontDictionary()
+        return $this->getFontDictionary()
             ?->getObjectForReference($dictionaryKey)
-            ?->getDictionary(Font::class);
-        if ($font !== null) {
-            return $font;
-        }
-
-        foreach ($this->getXObjects() as $xObject) {
-            $font = $xObject->getFontDictionary()
-                ?->getObjectForReference($dictionaryKey)
-                ?->getDictionary(Font::class);
-            if ($font !== null) {
-                return $font;
-            }
-        }
-
-        throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $dictionaryKey->value));
+            ?->getDictionary(Font::class)
+            ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $dictionaryKey->value));
     }
 
     /** @return list<FileSpecification> */

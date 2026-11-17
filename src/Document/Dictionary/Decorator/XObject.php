@@ -16,6 +16,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\FilterNameValu
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SpecialColorSpaceNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpace;
 use PrinsFrank\PdfParser\Document\Image\ColorSpace\ColorSpaceFactory;
 use PrinsFrank\PdfParser\Document\Image\ImageType;
@@ -165,5 +166,13 @@ readonly class XObject extends DecoratedDictionary {
 
         return ContentStreamParser::parse([$this->dictionary->object])
             ->getPositionedTextElements($this, $transformationMatrix, $visitedObjectIds);
+    }
+
+    /** @throws PdfParserException */
+    public function getFont(DictionaryKey|NameObjectStringValue $dictionaryKey): Font {
+        return $this->getFontDictionary()
+            ?->getObjectForReference($dictionaryKey)
+            ?->getDictionary(Font::class)
+            ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $dictionaryKey->value));
     }
 }
