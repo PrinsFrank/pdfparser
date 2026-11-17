@@ -39,6 +39,13 @@ class ColumnGroupingStrategy {
         if ($visibleElements === []) {
             return [];
         }
+
+        $positionedElementsGroupedByLine = iterator_to_array(TextOverlapStrategy::group($positionedTextElements), false);
+        $nrOfLines = count($positionedElementsGroupedByLine);
+        if ($nrOfLines < self::NR_OF_LINES_TO_BE_CONSIDERED_COLUMNS) {
+            return [$positionedTextElements];
+        }
+
         $pageLeft = min(
             $elementsLeft = array_map(
                 static fn(PositionedTextElement $e) => floor($e->absoluteMatrix->offsetX / self::MINIMUM_GUTTER_WIDTH) * self::MINIMUM_GUTTER_WIDTH,
@@ -56,8 +63,7 @@ class ColumnGroupingStrategy {
             array_unique([...$elementsLeft, ...$elementsRight]),
             fn(float $xCandidate) => $xCandidate > $pageLeft + ($pageWidth * 0.07) && $xCandidate < $pageRight - ($pageWidth * 0.07),
         );
-        $positionedElementsGroupedByLine = iterator_to_array(TextOverlapStrategy::group($positionedTextElements), false);
-        $nrOfLines = count($positionedElementsGroupedByLine);
+
         $elementMissCounts = $headerEndLineIndices = [];
         sort($xCandidates);
         foreach ($xCandidates as $xCandidateIndex => $xCandidate) {
