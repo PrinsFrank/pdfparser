@@ -3,7 +3,6 @@
 namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 
 use Override;
-use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\Object\TextObjectOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
@@ -160,12 +159,7 @@ readonly class XObject extends DecoratedDictionary {
      * @return list<PositionedTextElement>
      */
     public function getPositionedTextElements(TransformationMatrix $transformationMatrix, array $visitedObjectIds): array {
-        if ($this->isForm() === false) {
-            return [];
-        }
-
-        if (($stream = $this->getContent())->firstPos(TextObjectOperator::BEGIN, 0, $stream->getSizeInBytes()) === null
-            || $this->dictionary->object === null) {
+        if ($this->isForm() === false || $this->dictionary->object === null) {
             return [];
         }
 
