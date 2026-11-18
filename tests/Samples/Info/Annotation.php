@@ -6,6 +6,7 @@ readonly class Annotation {
     public function __construct(
         public ?string $subType,
         public ?string $linkLocation,
+        public ?string $namedDestination,
         public ?string $partialFieldName,
         public ?string $alternativeFieldName,
         public ?string $mappingName,

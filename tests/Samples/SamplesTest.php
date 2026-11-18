@@ -52,6 +52,8 @@ class SamplesTest extends TestCase {
             }
             foreach ($expectedPage->annotations as $annotationIndex => $annotation) {
                 self::assertSame($annotation->subType, $page->getAnnotations()[$annotationIndex]->getSubType()?->value);
+                self::assertSame($annotation->linkLocation, $page->getAnnotations()[$annotationIndex]->getLinkLocation()?->getText());
+                self::assertSame($annotation->namedDestination, $page->getAnnotations()[$annotationIndex]->getNamedDestination()?->getText());
                 self::assertSame($annotation->partialFieldName, $page->getAnnotations()[$annotationIndex]->getPartialFieldName());
                 self::assertSame($annotation->alternativeFieldName, $page->getAnnotations()[$annotationIndex]->getAlternativeFieldName());
                 self::assertSame($annotation->mappingName, $page->getAnnotations()[$annotationIndex]->getMappingName());

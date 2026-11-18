@@ -109,16 +109,22 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0001-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0002-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0003-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0001-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0002-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0003-001_ACT
   -
     text: |-
       L 170/2                                                                                                                                           DE Amtsblatt der Europäischen Union 12.5.2021  
@@ -237,16 +243,22 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0004-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0005-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0006-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0004-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0005-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0006-001_ACT
   -
     text: |-
       12.5.2021                                                                                                                                           DE Amtsblatt der Europäischen Union L 170/3  
@@ -470,8 +482,10 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0007-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0007-001_ACT
   -
     text: |-
       12.5.2021                                                                                                                                           DE Amtsblatt der Europäischen Union L 170/5  
@@ -602,8 +616,10 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0008-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0008-001_ACT
   -
     text: |-
       L 170/6                                                                                                                                           DE Amtsblatt der Europäischen Union 12.5.2021  
@@ -728,8 +744,10 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0009-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0009-001_ACT
   -
     text: |-
       12.5.2021                                                                                                                                           DE Amtsblatt der Europäischen Union L 170/7  
@@ -969,12 +987,16 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0010-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0011-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0010-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0011-001_ACT
   -
     text: |-
       12.5.2021                                                                                                                                           DE Amtsblatt der Europäischen Union L 170/9  
@@ -1075,20 +1097,28 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0012-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0013-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0014-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0015-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0012-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0013-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0014-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0015-001_ACT
   -
     text: |-
       L 170/10                                                                                                                                         DE Amtsblatt der Europäischen Union 12.5.2021  
@@ -1201,36 +1231,52 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0016-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0017-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0018-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0019-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0020-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0021-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0022-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0023-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0016-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0017-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0018-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0019-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0020-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0021-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0022-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0023-001_ACT
   -
     text: |-
       12.5.2021                                                                                                                                         DE Amtsblatt der Europäischen Union L 170/11  
@@ -1343,8 +1389,10 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0024-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0024-001_ACT
   -
     text: |-
       L 170/12                                                                                                                                         DE Amtsblatt der Europäischen Union 12.5.2021  
@@ -1459,8 +1507,10 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0025-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0025-001_ACT
   -
     text: |-
       12.5.2021                                                                                                                                         DE Amtsblatt der Europäischen Union L 170/13  
@@ -1672,8 +1722,10 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0026-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0026-001_ACT
   -
     text: |-
       12.5.2021                                                                                                                                         DE Amtsblatt der Europäischen Union L 170/15  
@@ -1887,8 +1939,10 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0027-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0027-001_ACT
   -
     text: |-
       12.5.2021                                                                                                                                         DE Amtsblatt der Europäischen Union L 170/17  
@@ -3139,8 +3193,10 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0028-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0028-001_ACT
   -
     text: |-
       L 170/30                                                                                                                                         DE Amtsblatt der Europäischen Union 12.5.2021  
@@ -3530,12 +3586,16 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0029-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_E0030-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0029-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0030-001_ACT
   -
     text: |-
       L 170/34                                                                                                                                         DE Amtsblatt der Europäischen Union 12.5.2021  
@@ -3713,8 +3773,10 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0031-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0031-001_ACT
   -
     text: |-
       L 170/36                                                                                                                                         DE Amtsblatt der Europäischen Union 12.5.2021  
@@ -3985,8 +4047,10 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0032-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0032-001_ACT
   -
     text: |-
       12.5.2021                                                                                                                                         DE Amtsblatt der Europäischen Union L 170/39  
@@ -4746,8 +4810,10 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0033-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0033-001_ACT
   -
     text: |-
       12.5.2021                                                                                                                                         DE Amtsblatt der Europäischen Union L 170/47  
@@ -4959,8 +5025,10 @@ pages:
     annotations:
       -
         subType: Link
+        namedDestination: BK_NOTE_E0034-001_ACT
       -
         subType: Link
+        namedDestination: BK_NOTE_REF_E0034-001_ACT
   -
     text: |-
       12.5.2021                                                                                                                                         DE Amtsblatt der Europäischen Union L 170/49  
