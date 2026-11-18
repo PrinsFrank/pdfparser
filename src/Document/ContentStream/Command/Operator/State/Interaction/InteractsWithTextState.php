@@ -7,5 +7,5 @@ use PrinsFrank\PdfParser\Document\Dictionary\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Dictionary\Decorator\XObject;
 
 interface InteractsWithTextState {
-    public function applyToTextState(string $operands, TextState $textState, Page|XObject $context): TextState;
+    public function applyToTextState(string $operands, TextState $textState, Page|XObject $context, ?Page $parent): TextState;
 }

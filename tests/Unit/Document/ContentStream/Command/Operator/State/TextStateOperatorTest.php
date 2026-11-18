@@ -19,18 +19,18 @@ class TextStateOperatorTest extends TestCase {
         $page->expects(self::atLeastOnce())->method('getFont')->with(new NameObjectStringValue('F0'))->willReturn($fontMock = $this->createMock(Font::class));
         static::assertEquals(
             new TextState($fontMock, 12, 0, 0, 100, 0, 0, 0),
-            TextStateOperator::FONT_SIZE->applyToTextState('/F0 12', new TextState(null, null), $page),
+            TextStateOperator::FONT_SIZE->applyToTextState('/F0 12', new TextState(null, null), $page, null),
         );
         static::assertEquals(
             new TextState($fontMock, -12, 0, 0, 100, 0, 0, 0),
-            TextStateOperator::FONT_SIZE->applyToTextState('/F0 -12', new TextState(null, null), $page),
+            TextStateOperator::FONT_SIZE->applyToTextState('/F0 -12', new TextState(null, null), $page, null),
         );
 
         $page = $this->createMock(Page::class);
         $page->expects(self::atLeastOnce())->method('getFont')->with(new NameObjectStringValue('F2+0'))->willReturn($fontMock = $this->createMock(Font::class));
         static::assertEquals(
             new TextState($fontMock, 12, 0, 0, 100, 0, 0, 0),
-            TextStateOperator::FONT_SIZE->applyToTextState('/F2+0 12', new TextState(null, null), $page),
+            TextStateOperator::FONT_SIZE->applyToTextState('/F2+0 12', new TextState(null, null), $page, null),
         );
     }
 
@@ -38,7 +38,7 @@ class TextStateOperatorTest extends TestCase {
     public function testApplyToTextStateWithValidScaleOperand(string $operand, float $expectedScale): void {
         static::assertEquals(
             new TextState(null, null, 0, 0, $expectedScale, 0, 0, 0),
-            TextStateOperator::SCALE->applyToTextState($operand, new TextState(null, null), $this->createMock(Page::class)),
+            TextStateOperator::SCALE->applyToTextState($operand, new TextState(null, null), $this->createMock(Page::class), null),
         );
     }
 
@@ -56,7 +56,7 @@ class TextStateOperatorTest extends TestCase {
         $this->expectException(ParseFailureException::class);
         $this->expectExceptionMessage(sprintf('Invalid scale operand "%s" for scale operator', $operand));
 
-        TextStateOperator::SCALE->applyToTextState($operand, new TextState(null, null), $this->createMock(Page::class));
+        TextStateOperator::SCALE->applyToTextState($operand, new TextState(null, null), $this->createMock(Page::class), null);
     }
 
     /** @return iterable<string, array{0: string}> */

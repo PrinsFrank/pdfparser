@@ -159,20 +159,19 @@ readonly class XObject extends DecoratedDictionary {
      * @param list<int> $visitedObjectIds
      * @return list<PositionedTextElement>
      */
-    public function getPositionedTextElements(TransformationMatrix $transformationMatrix, array $visitedObjectIds): array {
+    public function getPositionedTextElements(TransformationMatrix $transformationMatrix, ?Page $parent, array $visitedObjectIds): array {
         if ($this->isForm() === false || $this->dictionary->object === null) {
             return [];
         }
 
         return ContentStreamParser::parse([$this->dictionary->object])
-            ->getPositionedTextElements($this, $transformationMatrix, $visitedObjectIds);
+            ->getPositionedTextElements($this, $parent, $transformationMatrix, $visitedObjectIds);
     }
 
     /** @throws PdfParserException */
-    public function getFont(DictionaryKey|NameObjectStringValue $dictionaryKey): Font {
+    public function getFont(DictionaryKey|NameObjectStringValue $dictionaryKey): ?Font {
         return $this->getFontDictionary()
             ?->getObjectForReference($dictionaryKey)
-            ?->getDictionary(Font::class)
-            ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $dictionaryKey->value));
+            ?->getDictionary(Font::class);
     }
 }

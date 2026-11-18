@@ -52,7 +52,7 @@ enum TextPositioningOperator: string implements InteractsWithTransformationMatri
 
     /** @throws ParseFailureException */
     #[Override]
-    public function applyToTextState(string $operands, TextState $textState, Page|XObject $context): TextState {
+    public function applyToTextState(string $operands, TextState $textState, Page|XObject $context, ?Page $parent): TextState {
         if ($this === self::MOVE_OFFSET_LEADING) {
             $offsets = explode(' ', trim($operands));
             if (count($offsets) !== 2) {

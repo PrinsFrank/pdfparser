@@ -60,11 +60,10 @@ class CrossReferenceSubSectionTest extends TestCase {
             ->getCrossReferenceEntry(42);
     }
 
-    public function testGetGrossReferenceEntryThrowsExceptionWhenFreeObject(): void {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Cross reference entry for object should point to either a compressed or uncompressed entry, not a free object nr');
-
-        (new CrossReferenceSubSection(42, 1, new CrossReferenceEntryFreeObject(0, 0)))
-            ->getCrossReferenceEntry(42);
+    public function testGetGrossReferenceEntryDoesntReturnFreeObject(): void {
+        static::assertNull(
+            (new CrossReferenceSubSection(42, 1, new CrossReferenceEntryFreeObject(0, 0)))
+                ->getCrossReferenceEntry(42),
+        );
     }
 }

@@ -37,7 +37,7 @@ enum TextShowingOperator: string implements InteractsWithTextState, ProducesPosi
 
     /** @throws ParseFailureException */
     #[Override]
-    public function applyToTextState(string $operands, TextState $textState, Page|XObject $context): TextState {
+    public function applyToTextState(string $operands, TextState $textState, Page|XObject $context, ?Page $parent): TextState {
         if ($this === self::MOVE_SHOW_SPACING) {
             $spacing = explode(' ', trim($operands));
             if (count($spacing) !== 2) {

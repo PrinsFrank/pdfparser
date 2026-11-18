@@ -26,7 +26,7 @@ readonly class Page extends DecoratedDictionary {
      */
     public function getPositionedTextElements(): array {
         return $this->getContentStream()
-            ?->getPositionedTextElements($this, new TransformationMatrix(1, 0, 0, 1, 0, 0), []) ?? [];
+            ?->getPositionedTextElements($this, null, new TransformationMatrix(1, 0, 0, 1, 0, 0), []) ?? [];
     }
 
     /** @throws PdfParserException */
