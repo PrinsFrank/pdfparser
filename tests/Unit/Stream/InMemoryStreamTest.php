@@ -91,4 +91,9 @@ class InMemoryStreamTest extends TestCase {
             $stream->lastPos(Marker::TRAILER, 0),
         );
     }
+
+    public function testToString(): void {
+        static::assertSame('42', (new InMemoryStream('42'))->toString());
+        static::assertSame('', (new InMemoryStream(''))->toString());
+    }
 }

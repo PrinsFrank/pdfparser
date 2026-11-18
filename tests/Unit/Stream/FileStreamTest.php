@@ -94,4 +94,9 @@ class FileStreamTest extends TestCase {
         static::assertSame(22, $byteOffsetEndPos);
         static::assertSame('1234', $stream->read($byteOffsetPos, $byteOffsetEndPos - $byteOffsetPos));
     }
+
+    public function testToString(): void {
+        static::assertSame('42', FileStream::fromString('42')->toString());
+        static::assertSame('', FileStream::fromString('')->toString());
+    }
 }
