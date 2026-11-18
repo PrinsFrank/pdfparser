@@ -5,12 +5,12 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\Dictionary\DictionaryValue\Te
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\HexadecimalStringValue;
-use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 #[CoversClass(HexadecimalStringValue::class)]
 class HexadecimalStringValueTest extends TestCase {
     public function testFromValue(): void {
         static::assertEquals(new HexadecimalStringValue('0000'), HexadecimalStringValue::fromValue('<0000>'));
+        static::assertNull(HexadecimalStringValue::fromValue('</Foo (bar)>'));
     }
 
     /** @see 7.9.2.2 Text string type — UTF-16BE with a leading byte order mark */
@@ -65,19 +65,18 @@ class HexadecimalStringValueTest extends TestCase {
     public function testGetBinaryStringIgnoresWhitespaceInHexString(): void {
         static::assertSame(
             "\x90\x1F\xA3",
-            (new HexadecimalStringValue("90 1F\tA3"))->getBinaryString(),
+            HexadecimalStringValue::fromValue("<90 1F\tA3>")?->getBinaryString(),
         );
 
         static::assertSame(
             'He',
-            (new HexadecimalStringValue("FE FF 00 48\n00 65"))->getText(),
+            HexadecimalStringValue::fromValue("<FE FF 00 48\n00 65>")?->getText(),
         );
     }
 
     /** @see 7.3.4.3 — a hexadecimal string with non-hex content is rejected */
     public function testGetBinaryStringRejectsInvalidHexString(): void {
-        $this->expectException(ParseFailureException::class);
-        (new HexadecimalStringValue('90ZZ'))->getBinaryString();
+        static::assertNull(HexadecimalStringValue::fromValue('90ZZ'));
     }
 
     public function testGetCodePoints(): void {
@@ -87,11 +86,11 @@ class HexadecimalStringValueTest extends TestCase {
         );
         static::assertSame(
             [0, 72, 0, 101],
-            (new HexadecimalStringValue('00 480065'))->getBytes(),
+            HexadecimalStringValue::fromValue('<00 480065>')?->getBytes(),
         );
         static::assertSame(
             [0, 72, 0, 101],
-            (new HexadecimalStringValue('0048 0065'))->getBytes(),
+            HexadecimalStringValue::fromValue('<0048 0065>')?->getBytes(),
         );
     }
 }

@@ -32,12 +32,7 @@ readonly class HexadecimalStringValue implements DictionaryValue {
 
     /** @throws ParseFailureException */
     public function getBinaryString(): string {
-        $string = preg_replace('/[\x00\x09\x0A\x0C\x0D\x20]+/', '', $this->value)
-            ?? throw new ParseFailureException();
-        if (preg_match('/^[0-9A-Fa-f]*$/', $string) !== 1) {
-            throw new ParseFailureException(sprintf('Invalid hex string %s', $this->value));
-        }
-
+        $string = $this->value;
         if (strlen($string) % 2 !== 0) {
             $string .= '0';
         }
@@ -68,6 +63,12 @@ readonly class HexadecimalStringValue implements DictionaryValue {
             return null;
         }
 
-        return new self(substr($valueString, 1, -1));
+        $string = preg_replace('/[\x00\x09\x0A\x0C\x0D\x20]+/', '', substr($valueString, 1, -1))
+            ?? throw new ParseFailureException();
+        if (preg_match('/^[0-9A-Fa-f]*$/', $string) !== 1) {
+            return null;
+        }
+
+        return new self($string);
     }
 }
