@@ -3,16 +3,11 @@
 namespace PrinsFrank\PdfParser\Document\Dictionary\Decorator;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject;
-use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
 
 /** @see 12.7.3 Interactive form dictionary */
 readonly class InteractiveForm extends DecoratedDictionary {
     /** @return list<Field> */
     public function getFields(): array {
-        return array_map(
-            static fn(UncompressedObject|CompressedObject $object) => $object->getDictionary(Field::class),
-            $this->getObjectsForReference(DictionaryKey::FIELDS),
-        );
+        return $this->getSubDictionaries(DictionaryKey::FIELDS, Field::class);
     }
 }
