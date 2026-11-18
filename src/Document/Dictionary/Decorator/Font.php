@@ -13,7 +13,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CIDFontWidths;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CrossReferenceStreamByteSizes;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DifferencesArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\Item\RangeCIDWidth;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
@@ -21,7 +20,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameVa
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\ToUnicodeCMapNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Document\Font\Core14FontWidths;
 use PrinsFrank\PdfParser\Document\Font\FontWidths;
@@ -202,33 +200,7 @@ readonly class Font extends DecoratedDictionary {
             return $this->descendantFontsCache;
         }
 
-        $valueType = $this->getTypeForKey(DictionaryKey::DESCENDANT_FONTS);
-        if ($valueType === null) {
-            return $this->descendantFontsCache = [];
-        }
-
-        if ($valueType === ReferenceValue::class) {
-            $descendantFontsReference = $this->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValue::class) ?? throw new ParseFailureException();
-            return [
-                ($this->dictionary->object?->document->getObject($descendantFontsReference->objectNumber) ?? throw new ParseFailureException(sprintf('Descendant font with number %d could not be found', $descendantFontsReference->objectNumber)))
-                    ->getDictionary(Font::class),
-            ];
-        }
-
-        if ($valueType === DictionaryArrayValue::class) {
-            return $this->descendantFontsCache = array_map(
-                fn(Dictionary $dictionary) => new self($dictionary),
-                $this->getValueForKey(DictionaryKey::DESCENDANT_FONTS, DictionaryArrayValue::class)->dictionaries ?? throw new ParseFailureException(),
-            );
-        }
-
-        $descendantFonts = [];
-        foreach ($this->getValueForKey(DictionaryKey::DESCENDANT_FONTS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
-            $descendantFonts[] = ($this->dictionary->object?->document->getObject($referenceValue->objectNumber) ?? throw new ParseFailureException(sprintf('Descendant font with number %d could not be found', $referenceValue->objectNumber)))
-                ->getDictionary(Font::class);
-        }
-
-        return $this->descendantFontsCache = $descendantFonts;
+        return $this->descendantFontsCache = $this->getSubDictionaries(DictionaryKey::DESCENDANT_FONTS, Font::class);
     }
 
     public function isCIDFont(): bool {

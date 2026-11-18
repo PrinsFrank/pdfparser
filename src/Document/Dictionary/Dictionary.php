@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary;
 
+use PrinsFrank\PdfParser\Document\Dictionary\Decorator\DecoratedDictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
@@ -147,6 +148,40 @@ readonly class Dictionary {
             return ($this->getObjectForReference($dictionaryKey) ?? throw new ParseFailureException())
                 ->getDictionary()
                 ->dictionary;
+        }
+
+        throw new ParseFailureException(sprintf('Invalid type "%s" for subDictionary with key %s', $subDictionaryType, $dictionaryKey->name));
+    }
+
+    /**
+     * @template T of DecoratedDictionary
+     * @param class-string<T> $expectedDecorator
+     * @return list<T>
+     */
+    public function getSubDictionaries(DictionaryKey $dictionaryKey, string $expectedDecorator): array {
+        $subDictionaryType = $this->getTypeForKey($dictionaryKey);
+        if ($subDictionaryType === null
+            || ($subDictionaryType === ArrayValue::class && ($this->getValueForKey($dictionaryKey, ArrayValue::class)->value ?? []) === [])) {
+            return [];
+        }
+
+        if ($subDictionaryType === Dictionary::class) {
+            return [new $expectedDecorator($this->getValueForKey($dictionaryKey, Dictionary::class))];
+        }
+
+        if ($subDictionaryType === DictionaryArrayValue::class) {
+            return array_map(
+                static fn(Dictionary $dictionary) => new $expectedDecorator($dictionary),
+                $this->getValueForKey($dictionaryKey, DictionaryArrayValue::class)->dictionaries ?? [],
+            );
+        }
+
+        if ($subDictionaryType === ReferenceValue::class
+            || $subDictionaryType === ReferenceValueArray::class) {
+            return array_map(
+                static fn(UncompressedObject|CompressedObject $object) => $object->getDictionary($expectedDecorator),
+                $this->getObjectsForReference($dictionaryKey),
+            );
         }
 
         throw new ParseFailureException(sprintf('Invalid type "%s" for subDictionary with key %s', $subDictionaryType, $dictionaryKey->name));

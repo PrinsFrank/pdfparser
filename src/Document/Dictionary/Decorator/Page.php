@@ -11,7 +11,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
 use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject;
 use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
@@ -160,13 +159,6 @@ readonly class Page extends DecoratedDictionary {
 
     /** @return list<Annotation> */
     public function getAnnotations(): array {
-        if (in_array($this->getTypeForKey(DictionaryKey::ANNOTS), [ReferenceValueArray::class, ReferenceValue::class], true) === false) {
-            return [];
-        }
-
-        return array_map(
-            static fn(UncompressedObject|CompressedObject $object) => $object->getDictionary(Annotation::class),
-            $this->getObjectsForReference(DictionaryKey::ANNOTS),
-        );
+        return $this->getSubDictionaries(DictionaryKey::ANNOTS, Annotation::class);
     }
 }
