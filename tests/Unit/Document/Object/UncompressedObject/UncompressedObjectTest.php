@@ -69,4 +69,28 @@ class UncompressedObjectTest extends TestCase {
                 ->toString(),
         );
     }
+
+    public function testGetContentEmptyObject(): void {
+        static::assertSame(
+            '',
+            (new UncompressedObject(
+                new Document(
+                    $stream = new InMemoryStream(
+                        <<<EOD
+                        42 0 objendobj
+                        EOD,
+                    ),
+                    Version::V1_0,
+                    new CrossReferenceSource(),
+                    null,
+                ),
+                42,
+                0,
+                0,
+                $stream->getSizeInBytes(),
+            ))
+                ->getContent()
+                ->toString(),
+        );
+    }
 }
