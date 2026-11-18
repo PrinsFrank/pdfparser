@@ -23,6 +23,10 @@ readonly class Annotation extends DecoratedDictionary {
         return $action->getStringValue(DictionaryKey::URI);
     }
 
+    public function getNamedDestination(): LiteralStringValue|HexadecimalStringValue|NameObjectStringValue|null {
+        return $this->getStringValue(DictionaryKey::DEST);
+    }
+
     public function getRect(): ?Rectangle {
         return $this->getValueForKey(DictionaryKey::RECT, Rectangle::class);
     }
