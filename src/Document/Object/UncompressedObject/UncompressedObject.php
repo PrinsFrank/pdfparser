@@ -10,7 +10,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
-use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject;
 use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObjectByteOffsetParser;
@@ -119,8 +118,15 @@ class UncompressedObject implements ObjectItem {
     public function getContent(): Stream {
         if (($startStreamPos = $this->document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)) !== null
             && ($endStreamPos = $this->document->stream->lastPos(Marker::END_STREAM, $this->document->stream->getSizeInBytes() - $this->endOffset)) !== null) {
-            if ($startStreamPos === $endStreamPos
-                || $startStreamPos === ($eolEndStreamPos = $this->document->stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset))) {
+            if ($startStreamPos !== $endStreamPos
+                && in_array($previousChar = $this->document->stream->read($endStreamPos - 1, 1), ["\r", "\n"], true)) {
+                $endStreamPos--;
+                if ($previousChar === "\n" && $this->document->stream->read($endStreamPos - 1, 1) === "\r") {
+                    $endStreamPos--;
+                }
+            }
+
+            if ($startStreamPos === $endStreamPos) {
                 return new InMemoryStream('');
             }
 
@@ -128,7 +134,7 @@ class UncompressedObject implements ObjectItem {
                 $this->getEncryptionContext(),
                 $this->document,
                 $startStreamPos,
-                ($eolEndStreamPos ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value))) - $startStreamPos,
+                $endStreamPos - $startStreamPos,
                 $this->getDictionary()->dictionary,
             );
         }
