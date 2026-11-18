@@ -1180,7 +1180,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::TC => [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class],
             self::TEMPLATE_INSTANTIATED => [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class],
             self::TEMPLATES => [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class, DictionaryArrayValue::class],
-            self::TEXT => [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class],
+            self::TEXT => [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class, IntegerValue::class, FloatValue::class],
             self::TF => [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class],
             self::THREADS => [DictionaryArrayValue::class],
             self::THREE_DA => [Dictionary::class, HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class],
