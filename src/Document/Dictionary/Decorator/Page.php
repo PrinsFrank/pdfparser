@@ -12,8 +12,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\NameObjectStringValue;
-use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject;
-use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -118,10 +116,7 @@ readonly class Page extends DecoratedDictionary {
 
     /** @return list<FileSpecification> */
     public function getFileSpecifications(): array {
-        return array_map(
-            static fn(UncompressedObject|CompressedObject $object) => $object->getDictionary(FileSpecification::class),
-            $this->getObjectsForReference(DictionaryKey::AF),
-        );
+        return $this->getSubDictionaries(DictionaryKey::AF, FileSpecification::class);
     }
 
     public function getMediaBox(): ?Rectangle {
