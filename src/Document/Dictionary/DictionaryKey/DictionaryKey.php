@@ -678,7 +678,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::AFTER => [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class],
             self::AFTER_PERMS_READY => [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class],
             self::AIS => [BooleanValue::class, HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class],
-            self::ALT => [ArrayValue::class],
+            self::ALT => [ArrayValue::class, LiteralStringValue::class, HexadecimalStringValue::class, NameObjectStringValue::class],
             self::ALTERNATE => [ArrayValue::class, HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class],
             self::ALTERNATE_IMAGES => [IntegerValue::class],
             self::ALTERNATE_PRESENTATIONS => [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class],
