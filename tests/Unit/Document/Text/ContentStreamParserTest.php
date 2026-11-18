@@ -167,6 +167,25 @@ class ContentStreamParserTest extends TestCase {
         );
     }
 
+    public function testParseWithSequentialEscapedReverseSolidusInStringLiteral(): void {
+        $contentStream = FileStream::fromString(
+            <<<'EOD'
+            BT
+            (a\\\)b\)c) Tj
+            ET
+            EOD,
+        );
+        $object = $this->createMock(UncompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(a\\\\\\)b\\)c)')),
+            ),
+            ContentStreamParser::parse([$object]),
+        );
+    }
+
     public function testParseShowArraySyntax(): void {
         $contentStream = FileStream::fromString(
             <<<EOD
