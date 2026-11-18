@@ -111,12 +111,23 @@ readonly class Dictionary {
     }
 
     public function getStringValue(DictionaryKey|NameObjectStringValue $dictionaryKey): HexadecimalStringValue|LiteralStringValue|NameObjectStringValue|null {
-        return match ($this->getTypeForKey($dictionaryKey)) {
-            HexadecimalStringValue::class => $this->getValueForKey($dictionaryKey, HexadecimalStringValue::class),
-            LiteralStringValue::class => $this->getValueForKey($dictionaryKey, LiteralStringValue::class),
-            NameObjectStringValue::class => $this->getValueForKey($dictionaryKey, NameObjectStringValue::class),
-            default => null,
-        };
+        if (($type = $this->getTypeForKey($dictionaryKey)) === null) {
+            return null;
+        }
+
+        if (in_array($type, [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class], true)) {
+            return $this->getValueForKey($dictionaryKey, $type);
+        }
+
+        if ($type === ReferenceValue::class) {
+            $object = $this->getObjectForReference($dictionaryKey) ?? throw new ParseFailureException();
+
+            return HexadecimalStringValue::fromValue($object->getContent()->toString())
+                ?? LiteralStringValue::fromValue($object->getContent()->toString())
+                ?? NameObjectStringValue::fromValue($object->getContent()->toString());
+        }
+
+        return null;
     }
 
     /** @return class-string<DictionaryValue|NameValue|Dictionary> */
