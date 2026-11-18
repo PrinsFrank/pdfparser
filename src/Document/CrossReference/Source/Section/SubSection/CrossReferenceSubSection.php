@@ -47,7 +47,7 @@ readonly class CrossReferenceSubSection {
         $object = $this->crossReferenceEntries[$objNumber - $this->firstObjectNumber]
             ?? throw new RuntimeException(sprintf('Object with key %d not found', $objNumber - $this->firstObjectNumber));
         if ($object instanceof CrossReferenceEntryFreeObject) {
-            throw new RuntimeException('Cross reference entry for object should point to either a compressed or uncompressed entry, not a free object nr');
+            return null;
         }
 
         return $object;

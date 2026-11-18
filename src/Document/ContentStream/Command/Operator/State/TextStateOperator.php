@@ -25,7 +25,7 @@ enum TextStateOperator: string implements InteractsWithTextState {
 
     /** @throws ParseFailureException|InvalidArgumentException */
     #[Override]
-    public function applyToTextState(string $operands, TextState $textState, Page|XObject $context): TextState {
+    public function applyToTextState(string $operands, TextState $textState, Page|XObject $context, ?Page $parent): TextState {
         if ($this === self::CHAR_SPACE) {
             return $textState->withCharSpace((float) $operands);
         }
@@ -52,8 +52,9 @@ enum TextStateOperator: string implements InteractsWithTextState {
                 throw new InvalidArgumentException(sprintf('Invalid font operand "%s" for Tf operator', substr($operands, 0, 200)));
             }
 
+            $fontReference = DictionaryKey::tryFrom($matches['fontReference']) ?? new NameObjectStringValue($matches['fontReference']);
             return $textState->withFont(
-                $context->getFont(DictionaryKey::tryFrom($matches['fontReference']) ?? new NameObjectStringValue($matches['fontReference'])),
+                $context->getFont($fontReference) ?? $parent?->getFont($fontReference),
                 (float) $matches['FontSize'],
             );
         }

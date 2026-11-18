@@ -38,6 +38,6 @@ enum XObjectOperator: string implements IncludesXObjects {
         }
 
         $visitedObjectIds[] = $xObject->objectNumber;
-        return $xObjectDictionary->getPositionedTextElements($transformationMatrix, $visitedObjectIds);
+        return $xObjectDictionary->getPositionedTextElements($transformationMatrix, $context instanceof Page ? $context : null, $visitedObjectIds);
     }
 }

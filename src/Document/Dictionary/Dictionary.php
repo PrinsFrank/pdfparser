@@ -221,8 +221,7 @@ readonly class Dictionary {
             return null;
         }
 
-        return $this->object?->document?->getObject($reference->objectNumber)
-            ?? throw new ParseFailureException();
+        return $this->object?->document?->getObject($reference->objectNumber);
     }
 
     /** @return list<UncompressedObject|CompressedObject> */

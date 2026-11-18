@@ -35,7 +35,7 @@ readonly class ContentStream {
      * @param list<int> $visitedObjectIds
      * @return list<PositionedTextElement>
      */
-    public function getPositionedTextElements(Page|XObject $context, TransformationMatrix $transformationMatrix, array $visitedObjectIds): array {
+    public function getPositionedTextElements(Page|XObject $context, ?Page $parent, TransformationMatrix $transformationMatrix, array $visitedObjectIds): array {
         $positionedTextElements = $transformationStateStack = $textStateStack = [];
         $textState = new TextState(null, null); // See table 103, Tf operator for initial value
         $colorState = new ColorState();
@@ -56,7 +56,7 @@ readonly class ContentStream {
                 }
 
                 if ($content->operator instanceof InteractsWithTextState) {
-                    $textState = $content->operator->applyToTextState($content->operands, $textState, $context);
+                    $textState = $content->operator->applyToTextState($content->operands, $textState, $context, $parent);
                 }
 
                 if ($content->operator instanceof InteractsWithTransformationMatrix) {
@@ -77,7 +77,7 @@ readonly class ContentStream {
                 }
 
                 if ($contentStreamCommand->operator instanceof InteractsWithTextState) {
-                    $textState = $contentStreamCommand->operator->applyToTextState($contentStreamCommand->operands, $textState, $context);
+                    $textState = $contentStreamCommand->operator->applyToTextState($contentStreamCommand->operands, $textState, $context, $parent);
                 }
 
                 if ($contentStreamCommand->operator instanceof InteractsWithTransformationMatrix) {
