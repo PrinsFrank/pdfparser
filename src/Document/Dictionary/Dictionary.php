@@ -187,12 +187,29 @@ readonly class Dictionary {
             );
         }
 
-        if ($subDictionaryType === ReferenceValue::class
-            || $subDictionaryType === ReferenceValueArray::class) {
-            return array_map(
-                static fn(UncompressedObject|CompressedObject $object) => $object->getDictionary($expectedDecorator),
-                $this->getObjectsForReference($dictionaryKey),
-            );
+        if ($subDictionaryType === ReferenceValue::class || $subDictionaryType === ReferenceValueArray::class) {
+            $dictionaries = [];
+            foreach ($this->getObjectsForReference($dictionaryKey) as $object) {
+                if (($objectDictionary = $object->getDictionary($expectedDecorator))->dictionary->dictionaryEntries !== []) {
+                    $dictionaries[] = $objectDictionary;
+                } elseif (($referenceValue = ReferenceValue::fromValue($object->getContent()->toString())) !== null) {
+                    $dictionaries[] = $this->object?->objectNumber === $referenceValue->objectNumber
+                        ? throw new ParseFailureException()
+                        : $this->object?->document?->getObject($referenceValue->objectNumber)?->getDictionary($expectedDecorator);
+                } elseif (($referenceValueArray = ReferenceValueArray::fromValue($object->getContent()->toString())) !== null) {
+                    $dictionaries = [
+                        ...$dictionaries,
+                        ...array_map(
+                            fn(ReferenceValue $referenceValue) => $this->object?->objectNumber === $referenceValue->objectNumber
+                                ? throw new ParseFailureException()
+                                : $this->object?->document?->getObject($referenceValue->objectNumber)?->getDictionary($expectedDecorator),
+                            $referenceValueArray->referenceValues,
+                        ),
+                    ];
+                }
+            }
+
+            return array_values(array_filter($dictionaries));
         }
 
         throw new ParseFailureException(sprintf('Invalid type "%s" for subDictionary with key %s', $subDictionaryType, $dictionaryKey->name));

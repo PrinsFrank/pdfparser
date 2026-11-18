@@ -114,7 +114,18 @@ pages:
       Nieders%C3%A4chsischen,des%20Landesrechnungshofs%2C%20Sandra%20von%20Klaeden. 
       1 
     annotations:
-      - {  }
+      -
+        subType: Link
+      -
+        subType: Link
+      -
+        subType: Link
+      -
+        subType: Link
+      -
+        subType: Link
+      -
+        subType: Link
   -
     text: |-
       Niedersächsischer Landtag – 19. Wahlperiode Drucksache 19/7396 
@@ -439,7 +450,10 @@ pages:
       4  https://www.nsgb.de/infrastrukturpaket-ist-ein-bluff/ 
       4 
     annotations:
-      - {  }
+      -
+        subType: Link
+      -
+        subType: Link
   -
     text: |-
       Niedersächsischer Landtag – 19. Wahlperiode Drucksache 19/7396 
@@ -969,4 +983,6 @@ pages:
       © Landesamt für Statistik Niedersachsen, Hannover 2025
       Vervielfältigung und Verbreitung, auch auszugsweise, mit Quellenangabe gestattet.
     annotations:
-      - {  }
+      -
+        subType: FreeText
+        partialFieldName: JulianeBrandt
