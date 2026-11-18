@@ -138,11 +138,11 @@ class UncompressedObject implements ObjectItem {
         $endObjPos = $this->document->stream->lastPos(Marker::END_OBJ, $this->document->stream->getSizeInBytes() - $this->endOffset)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_OBJ->value));
 
-        return FileStream::fromString(
-            $this->document->stream->read(
-                $startObjPos + Marker::OBJ->length(),
-                $endObjPos - ($startObjPos + Marker::OBJ->length()),
-            ),
-        );
+        $streamLength = $endObjPos - ($startObjPos + Marker::OBJ->length());
+        if ($streamLength === 0) {
+            return new InMemoryStream('');
+        }
+
+        return FileStream::fromString($this->document->stream->read($startObjPos + Marker::OBJ->length(), $streamLength));
     }
 }

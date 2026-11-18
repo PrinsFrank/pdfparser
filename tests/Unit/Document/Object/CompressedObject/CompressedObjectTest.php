@@ -55,4 +55,32 @@ class CompressedObjectTest extends TestCase {
             $compressedObject->getDictionary(),
         );
     }
+
+    public function testGetEmptyContent(): void {
+        $totalStream = new InMemoryStream(
+            "11 0 obj\n"
+            . "<< /First 4 >>\n"
+            . "stream\n"
+            . "\n"
+            . "endstream\n"
+            . "endobj",
+        );
+
+        $document = new Document($totalStream, Version::V1_0, new CrossReferenceSource(), null);
+        $compressedObject = new CompressedObject(
+            $document,
+            12,
+            new UncompressedObject(
+                $document,
+                11,
+                0,
+                0,
+                $totalStream->getSizeInBytes(),
+            ),
+            0,
+            0,
+        );
+
+        static::assertEquals('', $compressedObject->getContent()->toString());
+    }
 }
