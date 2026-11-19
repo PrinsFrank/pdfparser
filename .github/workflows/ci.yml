@@ -107,3 +107,22 @@ jobs:
             echo
             exit 1
           fi
+
+  yaml-validate:
+    name: YAML validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: YAML validate
+        uses: GrantBirki/json-yaml-validate@9dbc6e6ff950c53200156e8afbc16ef1355f1c8d # v5.0.1
+        with:
+          yaml_as_json: true
+          use_inline_schema: true
+          allow_multiple_documents: false
+          exclude_file: .github/.ymllintignore
