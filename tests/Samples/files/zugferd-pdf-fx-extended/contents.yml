@@ -1,0 +1,197 @@
+# yaml-language-server: $schema=../../schema.json
+version: '1.6'
+userPassword: null
+ownerPassword: null
+fileEncryptionKey: null
+title: 'LE FOURNISSEUR: Invoice F20200027'
+producer: PyPDF4
+author: 'LE FOURNISSEUR'
+creator: 'factur-x Python lib v1.8 by Alexis de Lattre'
+subject: 'Factur-X Invoice F20200027 dated 2020-01-15 issued by LE FOURNISSEUR'
+keywords: 'Invoice, Factur-X'
+creationDate: 2020-03-16T14:40:58+00:00
+modificationDate: 2020-03-16T14:40:58+00:00
+associatedFiles:
+  -
+    fileSpecificationString: factur-x.xml
+    embeddedFile:
+      length: 15698
+      size: 15698
+      modificationDate: 2020-03-16T14:40:58+00:00
+      path: file_0.xml
+pages:
+  -
+    text: |-
+      FACTURE N° : F20200027
+      LOGO Vendeur
+      Date : 15/01/2020
+      SELLER TRADE NAME Adresse du Client
+      LE FOURNISSEUR
+      35 rue d'ici, Seller line 2
+      LE CLIENT
+      75018 PARIS, FR
+      58 rue de la mer
+      Buyer line 2
+      EMAIL : moi@seller.com
+      06000 NICE, FR
+      GLN : 587451236587
+      SIREN / SIRET : 123 456 789 00014 me@buyer.com
+      N° TVA : FR 32 123 456 789
+      Représentant Fiscal
+       
+      Nos références Vos identifiants
+      N° DE CLIENT : REFCLI0215 GLN : 3654789851
+      N° BON DE VENTE : SALES REF 2547 SIREN / SIRET : 987 654 321 00029
+      N° TVA : FR 05 987 654 321
+      Vos références Livraison: adresse, références
+      SERVICE EXECUTANT : SERVEXEC DEL Name
+      REF APPEL D'OFFRES : TENDER-002
+      DEL 58 rue de la mer
+      REF PROJET : PROJET2547
+      DEL line 2
+      REF COMPTABLE : BUYER ACCOUNT REF
+      06000 NICE, FR
+      N° CONTRAT : CT2018120802
+      N° BON DE COMMANDE : PO201925478
+      Références sur la facture GLN : 3654789851
+      TYPE DE PROCESSUS (CHORUS PRO) : A1 N° BON DE LIVRAISON : DESPADV002
+      N° DE FACTURE ASSOCIÉE : F20200003 DATE DE LIVRAISON : 20200115
+      DATE DE FACTURE ASSOCIÉE : 30/11/2019 N° BON DE RECEPTION : RECEIV-ADV002
+      DATE DE DEBUT DE PRESTATION : 01/12/2019
+      DATE DE FIN DE PRESTATION : 31/12/2019 DEVISE : EURO (EUR)
+      # # ligne BC
+      UNIT Remise (-) 
+      Ligne CODE ARTICLE, NOM & DESIGNATION P.U. HT (EUR) Qté
+      for P.U. Charge (+) (EUR)
+      FACT REFERENCE
+      # ligne BC: 1
+      PRESTATION SUPPORT - Description
+      1 GLN:5987854125 60,00 PCE 1,00
+      Période de 01/12/2019 au 31/12/2019
+      98745
+      FOURNITURES DIVERSES - Description
+      2 # ligne BC: 3 10,00 PCE 3,00
+      Date début : 01/12/2019
+      APPEL - Description
+      3 5,00 PCE 1,00
+      Date fin : 31/12/2019
+      REMISE : REMISE COMMERCIALE
+      CHARGE : FRAIS DEPLACEMENT
+      Détail TVA (motif si exonération, code E, O, K, AE) Code Taux Base TVA
+      S 10,00% 100,00
+      TVA acquittée sur les encaissements
+      Tout retard de paiement engendre une pénalité exigible à compter de la date d'échéance, calculée sur la base 
+      TOTAL HT TOTAL TVA
+      de trois fois le taux d'interêt légal. Indemnité forfaitaire pour frais de recouvrement en cas de retard de 
+      paiement : 40 €
+      100,00 10,00
+      Les réglements reçus avant la date d'échéance ne donneront pas lieu à escompte.
+      Acompte :
+      TOTAL HT 
+      TVA
+      (EUR)
+      60,00 10,00%
+      30,00 10,00%
+      5,00 10,00%
+      -5,00 10,00%
+      10,00 10,00%
+      Montant TVA
+      10,00
+      TOTAL TTC
+      110,00
+      10,00
+      Date d'échéance : 15/02/2020 NET A PAYER 100,00 EUR
+      Bénéficiaire MOYEN DE PAIEMENT : VIREMENT
+      NOM : LE FOURNISSEUR COMPTE : 
+      IBAN : FR76 1254 2547 2569 8542 5874 698
+      REFERENCE AVIS DE PAIEMENT : F20180023BUYER
+      Ma société. Société anonyme au capital de xx.xxx EUROS - R.C.S. MAVILLE 123 456 789 - NAF ZZZZZ
+      35 ma rue a moi, code postal Ville Pays – contact@masociete.fr - www.masociete.fr  – N° TVA : FR32 123 456 789 Page 1 / 1
+    markdown: |-
+      **FACTURE N° :** ***F20200027***
+      ***LOGO Vendeur***
+      **Date :** ***15/01/2020***
+      ***SELLER TRADE NAME*** **Adresse du Client**
+      ***LE FOURNISSEUR***
+      ***35 rue d'ici, Seller line 2***
+      ***LE CLIENT***
+      ***75018 PARIS, FR***
+      ***58 rue de la mer***
+      ***Buyer line 2***
+      ***EMAIL : moi@seller.com***
+      ***06000 NICE, FR***
+      ***GLN : 587451236587***
+      ***SIREN / SIRET : 123 456 789 00014*** *me@buyer.com*
+      ***N° TVA : FR 32 123 456 789***
+      **Représentant Fiscal**
+       ******
+      **Nos références Vos identifiants**
+      ***N° DE CLIENT : REFCLI0215 GLN : 3654789851***
+      ***N° BON DE VENTE : SALES REF 2547 SIREN / SIRET : 987 654 321 00029***
+      ***N° TVA : FR 05 987 654 321***
+      **Vos références Livraison: adresse, références**
+      ***SERVICE EXECUTANT : SERVEXEC*** *DEL Name*
+      ***REF APPEL D'OFFRES : TENDER-002***
+      *DEL 58 rue de la mer*
+      ***REF PROJET : PROJET2547***
+      *DEL line 2*
+      ***REF COMPTABLE : BUYER ACCOUNT REF***
+      *06000 NICE, FR*
+      ***N° CONTRAT : CT2018120802***
+      ***N° BON DE COMMANDE : PO201925478***
+      **Références sur la facture** ***GLN : 3654789851***
+      ***TYPE DE PROCESSUS (CHORUS PRO) : A1 N° BON DE LIVRAISON : DESPADV002***
+      ***N° DE FACTURE ASSOCIÉE : F20200003 DATE DE LIVRAISON : 20200115***
+      ***DATE DE FACTURE ASSOCIÉE : 30/11/2019 N° BON DE RECEPTION : RECEIV-ADV002***
+      DATE DE DEBUT DE PRESTATION : 01/12/2019
+      DATE DE FIN DE PRESTATION : 31/12/2019 ***DEVISE : EURO (EUR)***
+      **# # ligne BC**
+      **UNIT Remise (-)** 
+      **Ligne CODE ARTICLE, NOM & DESIGNATION P.U. HT (EUR) Qté**
+      **for P.U. Charge (+) (EUR)**
+      **FACT REFERENCE**
+      *# ligne BC: 1*
+      *PRESTATION SUPPORT - Description*
+      *1 GLN:5987854125* ***60,00 PCE 1,00***
+      *Période de 01/12/2019 au 31/12/2019*
+      *98745*
+      *FOURNITURES DIVERSES - Description*
+      *2 # ligne BC: 3* ***10,00 PCE 3,00***
+      *Date début : 01/12/2019*
+      *APPEL - Description*
+      *3* ***5,00 PCE 1,00***
+      *Date fin : 31/12/2019*
+      *REMISE : REMISE COMMERCIALE*
+      *CHARGE : FRAIS DEPLACEMENT*
+      **Détail TVA (motif si exonération, code E, O, K, AE) Code Taux Base TVA**
+      ***S*** *10,00%* ***100,00***
+      *TVA acquittée sur les encaissements*
+      *Tout retard de paiement engendre une pénalité exigible à compter de la date d'échéance, calculée sur la base* 
+      **TOTAL HT TOTAL TVA**
+      *de trois fois le taux d'interêt légal. Indemnité forfaitaire pour frais de recouvrement en cas de retard de* 
+      *paiement : 40 €*
+      **100,00 10,00**
+      *Les réglements reçus avant la date d'échéance ne donneront pas lieu à escompte.*
+      Acompte :
+      **TOTAL HT** 
+      **TVA**
+      **(EUR)**
+      ***60,00 10,00%***
+      ***30,00 10,00%***
+      ***5,00 10,00%***
+      **-5,00** ***10,00%***
+      **10,00** ***10,00%***
+      **Montant TVA**
+      ***10,00***
+      **TOTAL TTC**
+      **110,00**
+      **10,00**
+      **Date d'échéance :** ***15/02/2020*** **NET A PAYER 100,00 EUR**
+      **Bénéficiaire** *MOYEN DE PAIEMENT : VIREMENT*
+      *NOM : LE FOURNISSEUR COMPTE :* 
+      *IBAN : FR76 1254 2547 2569 8542 5874 698*
+      ***REFERENCE AVIS DE PAIEMENT : F20180023BUYER***
+      Ma société. **Société anonyme** au **capital de xx.xxx EUROS** - **R.C.S. MAVILLE 123 456 789** - NAF ZZZZZ
+      **35 ma rue a moi, code postal Ville Pays** – contact@masociete.fr - www.masociete.fr  – N° TVA : FR32 123 456 789 Page 1 / 1
+    images:
+      - page_0_image_0.png
