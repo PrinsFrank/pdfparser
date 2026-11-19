@@ -10,8 +10,7 @@ use PrinsFrank\PdfParser\Document\Version\Version;
 class VersionTest extends TestCase {
     public function testLength(): void {
         static::assertSame(3, Version::length());
-        static::assertNotEmpty($cases = Version::cases());
-        foreach ($cases as $case) {
+        foreach (Version::cases() as $case) {
             static::assertSame(Version::length(), strlen($case->value));
         }
     }

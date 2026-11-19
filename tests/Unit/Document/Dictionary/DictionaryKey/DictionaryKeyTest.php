@@ -52,7 +52,7 @@ class DictionaryKeyTest extends TestCase {
 
     #[DataProvider('cases')]
     public function testGetValueTypes(DictionaryKey $dictionaryKey): void {
-        static::assertNotEmpty($dictionaryKey->getValueTypes());
+        static::assertTrue(count($dictionaryKey->getValueTypes()) > 0);
     }
 
     /** @return iterable<array<DictionaryKey>> */
