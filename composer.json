@@ -10,7 +10,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "PrinsFrank\\PdfParser\\Tests\\": "tests/"
+            "PrinsFrank\\PdfParser\\Tests\\": "tests/",
+            "PrinsFrank\\PdfParser\\Dev\\": "dev/"
         }
     },
     "require": {
