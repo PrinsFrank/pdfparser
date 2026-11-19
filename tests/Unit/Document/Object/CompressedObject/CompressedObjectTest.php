@@ -81,6 +81,6 @@ class CompressedObjectTest extends TestCase {
             0,
         );
 
-        static::assertEquals('', $compressedObject->getContent()->toString());
+        static::assertSame('', $compressedObject->getContent()->toString());
     }
 }

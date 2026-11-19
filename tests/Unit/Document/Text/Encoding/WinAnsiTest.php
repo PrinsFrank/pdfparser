@@ -11,11 +11,11 @@ class WinAnsiTest extends TestCase {
     public function testToUnicode(): void {
         $string = mb_convert_encoding('transakèní', 'Windows-1252');
         static::assertNotFalse($string);
-        static::assertEquals('transakèní', WinAnsi::textToUnicode($string));
+        static::assertSame('transakèní', WinAnsi::textToUnicode($string));
     }
 
     public function testToUnicodeReturnsValueWhenCorrectlyEncoded(): void {
-        static::assertEquals('foo', WinAnsi::textToUnicode('foo'));
-        static::assertEquals('æöü', WinAnsi::textToUnicode('æöü'));
+        static::assertSame('foo', WinAnsi::textToUnicode('foo'));
+        static::assertSame('æöü', WinAnsi::textToUnicode('æöü'));
     }
 }
