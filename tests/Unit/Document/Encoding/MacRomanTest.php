@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Tests\Unit\Document\Text\Encoding;
+namespace PrinsFrank\PdfParser\Tests\Unit\Document\Encoding;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;

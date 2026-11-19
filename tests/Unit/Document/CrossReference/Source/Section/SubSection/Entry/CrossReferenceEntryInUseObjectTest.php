@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 
 #[CoversClass(CrossReferenceEntryInUseObject::class)]
-class CrossReferenceInUseObjectTest extends TestCase {
+class CrossReferenceEntryInUseObjectTest extends TestCase {
     public function testConstruct(): void {
         $entry = new CrossReferenceEntryInUseObject(42, 43);
         static::assertSame(42, $entry->byteOffsetInDecodedStream);

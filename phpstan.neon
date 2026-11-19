@@ -35,6 +35,11 @@ parameters:
         check:
             missingCheckedExceptionInThrows: true
             tooWideThrowType: true
+services:
+    -
+        class: PrinsFrank\PdfParser\Dev\PHPStan\Rules\UnitTestFQNShouldMatchCoveredClassFQN
+        tags:
+            - phpstan.rules.rule
 includes:
     - phar://phpstan.phar/conf/bleedingEdge.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon

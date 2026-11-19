@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryFreeObject;
 
 #[CoversClass(CrossReferenceEntryFreeObject::class)]
-class CrossReferenceFreeObjectTest extends TestCase {
+class CrossReferenceEntryFreeObjectTest extends TestCase {
     public function testConstruct(): void {
         $entry = new CrossReferenceEntryFreeObject(42, 43);
         static::assertSame(42, $entry->objectNumberNextFreeObject);
