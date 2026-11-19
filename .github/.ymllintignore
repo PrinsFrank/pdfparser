@@ -1,0 +1,4 @@
+.github/dependabot.yml
+tests/Samples/files/issue-235/contents.yml
+tests/Samples/files/issue-291/contents.yml
+tests/Samples/files/text-objects-across-multiple-streams/contents.yml

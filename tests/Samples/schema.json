@@ -3,7 +3,7 @@
     "type": "object",
     "properties": {
         "version": {
-            "type": "number",
+            "type": ["string", "null"],
             "description": "PDF version"
         },
         "userPassword": {
@@ -45,7 +45,7 @@
             "description": "The last modification date of the document"
         },
         "associatedFiles": {
-            "type": "array",
+            "type": ["array", "null"],
             "description": "An array of objects containing information about associated files",
             "items": {
                 "type": "object",
@@ -90,13 +90,14 @@
                         "description": "Text content of the page as markdown"
                     }
                 },
-                "required": ["content"]
+                "required": ["text", "markdown"]
             }
         }
     },
     "required": [
         "version",
-        "password",
+        "userPassword",
+        "ownerPassword",
         "title",
         "producer",
         "author",
