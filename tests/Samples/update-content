@@ -56,12 +56,38 @@ foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sa
             $pages[$pageIndex]['annotations'][] = array_filter([
                 'subType' => $annotation->getSubType()?->value,
                 'linkLocation' => $annotation->getLinkLocation()?->getText(),
+                'namedDestination' => $annotation->getNamedDestination()?->getText(),
                 'partialFieldName' => $annotation->getPartialFieldName(),
                 'alternativeFieldName' => $annotation->getAlternativeFieldName(),
                 'mappingName' => $annotation->getMappingName(),
                 'value' => $annotation->getValue(),
             ], fn (?string $value) => $value !== null);
         }
+    }
+
+    $associatedFiles = [];
+    foreach ($parsedPDF->getCatalog()->getFileSpecifications() ?? [] as $fileIndex => $fileSpecification) {
+        $embeddedFile = $fileSpecification->getEmbeddedFile();
+        if ($embeddedFile !== null) {
+            $embeddedFileFolder = $sampleFolder . DIRECTORY_SEPARATOR . 'embeddedFiles';
+            if (!is_dir($embeddedFileFolder) && !mkdir($embeddedFileFolder, 0777, true) && !is_dir($embeddedFileFolder)) {
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $embeddedFileFolder));
+            }
+
+            $fileName = sprintf('file_%d.%s', $fileIndex, substr($fileSpecification->getFileSpecificationString(), strrpos($fileSpecification->getFileSpecificationString(), '.') + 1));
+            file_put_contents(sprintf('%s/%s', $embeddedFileFolder, $fileName), $embeddedFile->getContent()->toString());
+        }
+
+        $associatedFiles[] = array_filter([
+            'fileSpecificationString' => $fileSpecification->getFileSpecificationString(),
+            'embeddedFile' => array_filter([
+                'length' => $embeddedFile->getLength(),
+                'size' => $embeddedFile->getSize(),
+                'creationDate' => $embeddedFile->getCreationDate(),
+                'modificationDate' => $embeddedFile->getModificationDate(),
+                'path' => $fileName ?? null,
+            ]),
+        ]);
     }
 
     $yamlContent = Yaml::dump(
@@ -78,6 +104,7 @@ foreach (array_diff(scandir($filesDir = __DIR__ . '/files'), ['..', '.']) as $sa
             'keywords' => $parsedPDF->getInformationDictionary()?->getKeywords(),
             'creationDate' => $parsedPDF->getInformationDictionary()?->getCreationDate(),
             'modificationDate' => $parsedPDF->getInformationDictionary()?->getModificationDate(),
+            'associatedFiles' => $associatedFiles === [] ? null : $associatedFiles,
             'pages' => $pages,
         ],
         inline: 10,

@@ -44,15 +44,50 @@
             "format": "date-time",
             "description": "The last modification date of the document"
         },
+        "associatedFiles": {
+            "type": "array",
+            "description": "An array of objects containing information about associated files",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "fileSpecificationString": {
+                        "type": "string",
+                        "description": "the file specification string"
+                    },
+                    "embeddedFile": {
+                        "type": "object",
+                        "description": "Information about the embedded file",
+                        "properties": {
+                            "length": {
+                                "type": "number"
+                            },
+                            "size": {
+                                "type": "number"
+                            },
+                            "modificationDate": {
+                                "type": "string"
+                            },
+                            "path": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "pages": {
             "type": "array",
             "description": "An array of objects containing information for each page",
             "items": {
                 "type": "object",
                 "properties": {
-                    "content": {
+                    "text": {
                         "type": "string",
                         "description": "Text content of the page"
+                    },
+                    "markdown": {
+                        "type": "string",
+                        "description": "Text content of the page as markdown"
                     }
                 },
                 "required": ["content"]

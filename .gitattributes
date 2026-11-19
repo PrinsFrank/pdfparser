@@ -15,3 +15,6 @@
 /CONTRIBUTING.md    export-ignore
 /phpstan.neon       export-ignore
 /phpunit.xml.dist   export-ignore
+
+# Test fixtures
+tests/Samples/files/zugferd-pdf-fx-extended/embeddedFiles/file_0.xml -text

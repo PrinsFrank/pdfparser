@@ -26,3 +26,9 @@ indent_size = unset
 
 [*.php]
 indent_size = unset
+
+[tests/Samples/files/zugferd-pdf-fx-extended/embeddedFiles/file_0.xml]
+charset = unset
+indent_size = unset
+trim_trailing_whitespace = unset
+end_of_line = unset

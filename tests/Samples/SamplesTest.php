@@ -39,6 +39,20 @@ class SamplesTest extends TestCase {
         static::assertEquals($fileInfo->creationDate, $document->getInformationDictionary()?->getCreationDate());
         static::assertEquals($fileInfo->modificationDate, $document->getInformationDictionary()?->getModificationDate());
         static::assertSame(count($fileInfo->pages ?? []), $document->getNumberOfPages());
+        foreach ($fileInfo->associatedFiles ?? [] as $index => $expectedAssociatedFile) {
+            static::assertNotNull($associatedFile = $document->getCatalog()->getFileSpecifications()[$index]);
+            static::assertSame($expectedAssociatedFile->fileSpecificationString, $associatedFile->getFileSpecificationString());
+            $embeddedFile = $associatedFile->getEmbeddedFile();
+            static::assertSame($expectedAssociatedFile->length, $embeddedFile?->getLength());
+            static::assertSame($expectedAssociatedFile->size, $embeddedFile?->getSize());
+            static::assertEquals($expectedAssociatedFile->creationDate, $embeddedFile?->getCreationDate());
+            static::assertEquals($expectedAssociatedFile->modificationDate, $embeddedFile?->getModificationDate());
+            self::assertSame(
+                $expectedAssociatedFile->path !== null ? file_get_contents($expectedAssociatedFile->path) : '',
+                $embeddedFile?->getContent()?->toString(),
+            );
+        }
+
         foreach ($fileInfo->pages ?? [] as $index => $expectedPage) {
             static::assertNotNull($page = $document->getPage($index + 1));
             static::assertSame(trim($expectedPage->text), trim($page->getText()));

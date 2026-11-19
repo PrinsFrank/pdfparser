@@ -24,7 +24,7 @@ class SampleProvider {
                 throw new RuntimeException();
             }
 
-            /** @var object{version: float, userPassword: ?string, ownerPassword: ?string, fileEncryptionKey: ?string, title: ?string, producer: ?string, author: ?string, creator: ?string, subject: ?string, keywords: ?string, creationDate: ?DateTimeImmutable, modificationDate: ?DateTimeImmutable, pages: list<object{text: string, markdown: string, images?: string[], annotations?: list<object{subType?: string, linkLocation?: string, namedDestination?: string, partialFieldName?: string, alternativeFieldName?: string, mappingName?: string, value?: string}>}>} $content */
+            /** @var object{version: float, userPassword: ?string, ownerPassword: ?string, fileEncryptionKey: ?string, title: ?string, producer: ?string, author: ?string, creator: ?string, subject: ?string, keywords: ?string, creationDate: ?DateTimeImmutable, modificationDate: ?DateTimeImmutable, associatedFiles?: list<object{fileSpecificationString: string, embeddedFile: object{length: int, size: int, creationDate: DateTimeImmutable, modificationDate: DateTimeImmutable, path: string}}>, pages: list<object{text: string, markdown: string, images?: string[], annotations?: list<object{subType?: string, linkLocation?: string, namedDestination?: string, partialFieldName?: string, alternativeFieldName?: string, mappingName?: string, value?: string}>}>} $content */
             $content = Yaml::parseFile($contentsPath, Yaml::PARSE_OBJECT_FOR_MAP | Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE | Yaml::PARSE_DATETIME);
             yield $sampleName => [
                 new FileInfo(
@@ -41,6 +41,18 @@ class SampleProvider {
                     $content->keywords,
                     $content->creationDate,
                     $content->modificationDate,
+                    array_map(
+                        /** @param object{fileSpecificationString: string, embeddedFile: object{length: int, size: int, creationDate: DateTimeImmutable, modificationDate: DateTimeImmutable, path: string}} $associatedFile */
+                        fn(object $associatedFile) => new AssociatedFile(
+                            $associatedFile->fileSpecificationString ?? null,
+                            $associatedFile->embeddedFile->length ?? null,
+                            $associatedFile->embeddedFile->size ?? null,
+                            $associatedFile->embeddedFile->creationDate ?? null,
+                            $associatedFile->embeddedFile->modificationDate ?? null,
+                            isset($associatedFile->embeddedFile->path) ? sprintf('%s/embeddedFiles/%s', $sampleFolder, $associatedFile->embeddedFile->path) : null,
+                        ),
+                        $content->associatedFiles ?? [],
+                    ),
                     array_map(
                         /** @param object{text: string, markdown: string, images?: string[], annotations?: list<object{subType?: string, linkLocation?: string, namedDestination?: string, partialFieldName?: string, alternativeFieldName?: string, mappingName?: string, value?: string}>} $page */
                         fn(object $page) => new Page(
