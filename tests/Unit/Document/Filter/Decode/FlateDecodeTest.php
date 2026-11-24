@@ -24,6 +24,15 @@ class FlateDecodeTest extends TestCase {
         static::assertSame('', FlateDecode::decodeBinary((string) gzcompress(''), LZWFlatePredictorValue::None));
     }
 
+    public function testDecodeBinaryWithInvalidChecksum(): void {
+        $value = str_repeat(self::TEXT, 1000);
+
+        static::assertSame(
+            $value,
+            FlateDecode::decodeBinary(substr((string) gzcompress($value), 0, -4) . "\0\0\0\0", LZWFlatePredictorValue::None),
+        );
+    }
+
     public function testDecodeBinaryWithMissingEnd(): void {
         $value = implode(' ', range(1, 20000));
         $compressedValue = (string) gzcompress($value);
@@ -41,7 +50,7 @@ class FlateDecodeTest extends TestCase {
 
     public function testDecodeBinaryThrowsExceptionWhenDecodedValueIsTooLarge(): void {
         $this->expectException(ParseFailureException::class);
-        $this->expectExceptionMessage('Unable to gzuncompress value as the resulting decoded value was larger than');
+        $this->expectExceptionMessage('Unable to gzuncompress value as the resulting decoded value was larger than 67108864 bytes');
         FlateDecode::decodeBinary((string) gzcompress(str_repeat("\0", 64 * 1024 ** 2 + 1)), LZWFlatePredictorValue::None);
     }
 

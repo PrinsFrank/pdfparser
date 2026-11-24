@@ -11,6 +11,7 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 /** @internal */
 class FlateDecode {
     private const BYTES_IN_MEGABYTE = 1024 ** 2;
+    private const CHUNK_SIZE = 8192;
 
     /**
      * @throws PdfParserException
@@ -120,28 +121,28 @@ class FlateDecode {
 
     /** @param int<0, max> $maxBytes */
     protected static function decode(string $value, int $maxBytes): string {
-        $decodedValue = @gzuncompress($value, $maxBytes);
-        if ($decodedValue === false) {
-            if (($tmpFile = tempnam(sys_get_temp_dir(), 'gz')) === false) {
-                throw new RuntimeException('Unable to create temporary file');
+        if (($context = inflate_init(ZLIB_ENCODING_DEFLATE)) === false) {
+            throw new RuntimeException('Unable to initialize inflate context');
+        }
+
+        $decodedValue = '';
+        foreach ([...str_split(substr($value, 0, -4), self::CHUNK_SIZE), substr($value, -4)] as $chunk) {
+            if (($decodedChunk = @inflate_add($context, $chunk, ZLIB_SYNC_FLUSH)) === false) {
+                break;
             }
 
-            try {
-                if (file_put_contents($tmpFile, "\x1f\x8b\x08\x00\x00\x00\x00\x00" . $value) === false) {
-                    throw new RuntimeException('Unable to write data to be uncompressed to temporary file');
-                }
+            $decodedValue .= $decodedChunk;
+            if (strlen($decodedValue) > $maxBytes) {
+                throw new ParseFailureException(sprintf('Unable to gzuncompress value as the resulting decoded value was larger than %d bytes', $maxBytes));
+            }
 
-                $decodedValue = file_get_contents('compress.zlib://' . $tmpFile, length: $maxBytes + 1);
-                if (in_array($decodedValue, ['', false], true)) {
-                    throw new ParseFailureException('Unable to gzuncompress value "' . substr(trim($value), 0, 30) . '..."');
-                }
-            } finally {
-                is_file($tmpFile) && unlink($tmpFile);
+            if (inflate_get_status($context) === ZLIB_STREAM_END) {
+                break;
             }
         }
 
-        if (strlen($decodedValue) > $maxBytes) {
-            throw new ParseFailureException('Unable to gzuncompress value as the resulting decoded value was larger than a gigabyte');
+        if ($decodedValue === '' && inflate_get_status($context) !== ZLIB_STREAM_END) {
+            throw new ParseFailureException('Unable to gzuncompress value "' . substr(trim($value), 0, 30) . '..."');
         }
 
         return $decodedValue;
