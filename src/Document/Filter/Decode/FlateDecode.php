@@ -30,92 +30,46 @@ class FlateDecode {
             throw new ParseFailureException('Unsupported predictor ' . $predictor->value);
         }
 
-        $hexTable = array_map(fn(string $row) => str_split($row, 2), str_split(bin2hex($decodedValue), ($columns + 1) * 2));
-        $decodedValue = '';
-        foreach ($hexTable as $rowIndex => $row) {
-            if (!is_array($row) || !array_is_list($row) || count($row) < 2) {
-                throw new RuntimeException(sprintf('Expected at least 2 items per row, got %d', count($row)));
+        $predictedValue = '';
+        $previousRow = str_repeat("\0", $columns);
+        for ($offset = 0, $length = strlen($decodedValue); $offset < $length; $offset += $columns + 1) {
+            if (($row = substr($decodedValue, $offset + 1, $columns)) === '') {
+                throw new RuntimeException('Expected at least 2 items per row, got 1');
             }
 
-            if (!is_int($algorithmNumber = hexdec($row[0]))) {
-                throw new ParseFailureException(sprintf('Expected algorithm number to be an integer, got %s', $algorithmNumber));
-            }
-
-            $rowAlgorithm = PNGPredictorAlgorithm::tryFrom($algorithmNumber)
+            $rowAlgorithm = PNGPredictorAlgorithm::tryFrom($algorithmNumber = ord($decodedValue[$offset]))
                 ?? throw new ParseFailureException(sprintf('Unrecognized row algorithm %d', $algorithmNumber));
-            if ($rowAlgorithm === PNGPredictorAlgorithm::None) {
-                $decodedValue .= implode('', array_slice($row, 1));
-            } elseif ($rowAlgorithm === PNGPredictorAlgorithm::Sub) {
-                foreach ($row as $columnIndex => $columnValue) {
-                    if ($columnIndex === 0) {
-                        continue;
-                    }
-
-                    $left = $columnIndex > 1 ? hexdec($hexTable[$rowIndex][$columnIndex - 1]) : 0;
-                    $hexTable[$rowIndex][$columnIndex] = str_pad(dechex((hexdec($columnValue) + $left) % 256), 2, '0', STR_PAD_LEFT);
+            if ($rowAlgorithm !== PNGPredictorAlgorithm::None) {
+                for ($columnIndex = 0, $rowLength = strlen($row); $columnIndex < $rowLength; $columnIndex++) {
+                    $left = $columnIndex > 0 ? ord($row[$columnIndex - 1]) : 0;
+                    $above = ord($previousRow[$columnIndex]);
+                    $upperLeft = $columnIndex > 0 ? ord($previousRow[$columnIndex - 1]) : 0;
+                    $row[$columnIndex] = chr((ord($row[$columnIndex]) + match ($rowAlgorithm) {
+                        PNGPredictorAlgorithm::Sub => $left,
+                        PNGPredictorAlgorithm::Up => $above,
+                        PNGPredictorAlgorithm::Average => intdiv($left + $above, 2),
+                        PNGPredictorAlgorithm::Paeth => self::paethPredictor($left, $above, $upperLeft),
+                    }) % 256);
                 }
-
-                $decodedValue .= implode('', array_slice($hexTable[$rowIndex], 1));
-            } elseif ($rowAlgorithm === PNGPredictorAlgorithm::Up) {
-                if ($rowIndex === 0) {
-                    $decodedValue .= implode('', array_slice($row, 1));
-
-                    continue;
-                }
-
-                foreach ($row as $columnIndex => $columnValue) {
-                    /** @phpstan-ignore offsetAccess.notFound, offsetAccess.notFound */
-                    $hexTable[$rowIndex][$columnIndex] = str_pad(dechex((hexdec($columnValue) + hexdec($hexTable[$rowIndex - 1][$columnIndex])) % 256), 2, '0', STR_PAD_LEFT);
-                }
-
-                $decodedValue .= implode('', array_slice($hexTable[$rowIndex], 1));
-            } elseif ($rowAlgorithm === PNGPredictorAlgorithm::Average) {
-                foreach ($row as $columnIndex => $columnValue) {
-                    if ($columnIndex === 0) {
-                        continue;
-                    }
-
-                    $left = $columnIndex > 1 ? hexdec($hexTable[$rowIndex][$columnIndex - 1]) : 0;
-                    $above = $rowIndex > 0 ? hexdec($hexTable[$rowIndex - 1][$columnIndex]) : 0;
-                    $hexTable[$rowIndex][$columnIndex] = str_pad(dechex((hexdec($columnValue) + (int) floor(($left + $above) / 2)) % 256), 2, '0', STR_PAD_LEFT);
-                }
-
-                $decodedValue .= implode('', array_slice($hexTable[$rowIndex], 1));
-            } elseif ($rowAlgorithm === PNGPredictorAlgorithm::Paeth) {
-                foreach ($row as $columnIndex => $columnValue) {
-                    if ($columnIndex === 0) {
-                        continue;
-                    }
-
-                    $left = $columnIndex > 1 ? hexdec($hexTable[$rowIndex][$columnIndex - 1]) : 0;
-                    $above = $rowIndex > 0 ? hexdec($hexTable[$rowIndex - 1][$columnIndex]) : 0;
-                    $upperLeft = ($rowIndex > 0 && $columnIndex > 1) ? hexdec($hexTable[$rowIndex - 1][$columnIndex - 1]) : 0;
-
-                    $p = $left + $above - $upperLeft;
-                    $pa = abs($p - $left);
-                    $pb = abs($p - $above);
-                    $pc = abs($p - $upperLeft);
-
-                    if ($pa <= $pb && $pa <= $pc) {
-                        $predictor = $left;
-                    } elseif ($pb <= $pc) {
-                        $predictor = $above;
-                    } else {
-                        $predictor = $upperLeft;
-                    }
-
-                    $hexTable[$rowIndex][$columnIndex] = str_pad(dechex((hexdec($columnValue) + $predictor) % 256), 2, '0', STR_PAD_LEFT);
-                }
-
-                $decodedValue .= implode('', array_slice($hexTable[$rowIndex], 1));
             }
+
+            $predictedValue .= $row;
+            $previousRow = $row;
         }
 
-        if (($decodedValue = hex2bin($decodedValue)) === false) {
-            throw new ParseFailureException('Unable to hex2bin value "' . substr(trim($value), 0, 30) . '..."');
+        return $predictedValue;
+    }
+
+    private static function paethPredictor(int $left, int $above, int $upperLeft): int {
+        $p = $left + $above - $upperLeft;
+        $pa = abs($p - $left);
+        $pb = abs($p - $above);
+        $pc = abs($p - $upperLeft);
+        if ($pa <= $pb && $pa <= $pc) {
+            return $left;
         }
 
-        return $decodedValue;
+        return $pb <= $pc ? $above : $upperLeft;
     }
 
     /** @param int<0, max> $maxBytes */
