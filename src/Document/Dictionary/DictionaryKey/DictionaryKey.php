@@ -60,6 +60,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
     case ACCURATE_SCREENS = 'AccurateScreens';
     case ACRO_FORM = 'AcroForm';
     case ACTION = 'Action';
+    case ACTUAL_TEXT = 'ActualText';
     case ADD_REV_INFO = 'AddRevInfo';
     case ADDITIONAL_STREAMS = 'AdditionalStreams';
     case AFTER = 'After';
@@ -673,6 +674,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::ACCURATE_SCREENS => [BooleanValue::class],
             self::ACRO_FORM => [Dictionary::class],
             self::ACTION => [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class],
+            self::ACTUAL_TEXT => [HexadecimalStringValue::class, LiteralStringValue::class],
             self::ADD_REV_INFO => [BooleanValue::class],
             self::ADDITIONAL_STREAMS => [ArrayValue::class],
             self::AFTER => [HexadecimalStringValue::class, LiteralStringValue::class, NameObjectStringValue::class],

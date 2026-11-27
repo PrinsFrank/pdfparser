@@ -173,11 +173,9 @@ class ContentStreamParser {
                         }
                     } elseif ($char === 'D' && $previousChar === 'I' && ($secondToLastChar !== '\\' || ($thirdToLastChar === '\\' && $fourthToLastChar !== '\\'))) {
                         $inInlineImage = true;
-                    } elseif ($char === 'C'
-                        && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
-                        $startCurrentOperandIndex = $index + 1;
                     } elseif (($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null
-                        && (($nextChar = $rawStream[$index + 1] ?? '') === '' || self::getOperator($nextChar, $char, $previousChar, $secondToLastChar) === null)) { // Skip the current hit if the next iteration is also a valid operator
+                        && (($nextChar = $rawStream[$index + 1] ?? '') === '' || self::getOperator($nextChar, $char, $previousChar, $secondToLastChar) === null)
+                        && !isset(self::OPERATOR_MAP[$char . $nextChar . ($rawStream[$index + 2] ?? '')])) { // Skip the current hit if it starts a three-character operator, as the B in BDC
                         $operands = '';
                         if ($previousContentStream !== null && $startPreviousOperandIndex !== null && $startPreviousOperandIndex < $previousContentStream->getSizeInBytes()) {
                             $operands .= $previousContentStream->read($startPreviousOperandIndex, $previousContentStream->getSizeInBytes() - $startPreviousOperandIndex);
