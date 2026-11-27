@@ -17,10 +17,15 @@ readonly class PositionedTextElement {
         public array $textSegments,
         public TransformationMatrix $absoluteMatrix,
         public TextState $textState,
+        public ?string $actualText = null,
     ) {}
 
     /** @throws ParseFailureException */
     public function getText(): string {
+        if ($this->actualText !== null) {
+            return $this->actualText;
+        }
+
         $text = '';
         foreach ($this->textSegments as $textSegment) {
             $textSegmentText = $textSegment->getText($this->textState->getFontOrThrow());

@@ -145,8 +145,8 @@ class ContentStreamTest extends TestCase {
                 new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0028'))], new TransformationMatrix(0.75, 0, 0, 0.75, 79.938205725, 745.1358641075001), new TextState($fontMock, 14.666667)),
                 new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0029'))], new TransformationMatrix(0.75, 0, 0, 0.75, 87.269908875, 745.1358641075001), new TextState($fontMock, 14.666667)),
                 new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 93.984375, 745.1358641075001), new TextState($fontMock, 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 730.5896001075), new TextState($fontMock, 14.666667)),
-                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 108.0, 730.5896001075), new TextState($fontMock, 14.666667)),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 72.0, 730.5896001075), new TextState($fontMock, 14.666667), "\u{200B}"),
+                new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('0003'))], new TransformationMatrix(0.75, 0, 0, 0.75, 108.0, 730.5896001075), new TextState($fontMock, 14.666667), "\u{200B}"),
                 new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002A'))], new TransformationMatrix(0.75, 0, 0, 0.75, 144.0, 730.5896001075), new TextState($fontMock, 14.666667)),
                 new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002B'))], new TransformationMatrix(0.75, 0, 0, 0.75, 152.550075525, 730.5896001075), new TextState($fontMock, 14.666667)),
                 new PositionedTextElement([new TextSegment(null, new HexadecimalStringValue('002C'))], new TransformationMatrix(0.75, 0, 0, 0.75, 160.48828125, 730.5896001075), new TextState($fontMock, 14.666667)),
@@ -185,6 +185,44 @@ class ContentStreamTest extends TestCase {
             [
                 new PositionedTextElement([new TextSegment(null, new LiteralStringValue('[Hello'))], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState($fontMock, 7)),
                 new PositionedTextElement([new TextSegment(null, new LiteralStringValue('World]'))], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState($fontMock, 7)),
+            ],
+            ContentStreamParser::parse([$object])->getPositionedTextElements($page, null, new TransformationMatrix(1, 0, 0, 1, 0, 0), []),
+        );
+    }
+
+    public function testGetPositionedTextElementsWithActualText(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            /Span<</ActualText (fi) >> BDC
+            BT
+            /F1 7 Tf
+            (f) Tj
+            (i) Tj
+            ET
+            EMC
+            /P <</MCID 0 >>BDC
+            BT
+            /F1 7 Tf
+            /Span<</ActualText <FEFF2013> >> BDC
+            /Span<</ActualText (x) >> BDC
+            (-) Tj
+            EMC
+            EMC
+            (a) Tj
+            ET
+            EMC
+            EOD,
+        );
+        $object = $this->createMock(UncompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
+        $page = $this->createMock(Page::class);
+        $page->expects(self::atLeastOnce())->method('getFont')->with(new NameObjectStringValue('F1'))->willReturn($fontMock = $this->createMock(Font::class));
+        static::assertEquals(
+            [
+                new PositionedTextElement([new TextSegment(null, new LiteralStringValue('f'))], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState($fontMock, 7), 'fi'),
+                new PositionedTextElement([new TextSegment(null, new LiteralStringValue('i'))], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState($fontMock, 7), ''),
+                new PositionedTextElement([new TextSegment(null, new LiteralStringValue('-'))], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState($fontMock, 7), '–'),
+                new PositionedTextElement([new TextSegment(null, new LiteralStringValue('a'))], new TransformationMatrix(1.0, 0, 0, 1.0, 0.0, 0.0), new TextState($fontMock, 7)),
             ],
             ContentStreamParser::parse([$object])->getPositionedTextElements($page, null, new TransformationMatrix(1, 0, 0, 1, 0, 0), []),
         );

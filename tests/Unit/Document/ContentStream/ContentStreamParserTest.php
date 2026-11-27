@@ -429,4 +429,38 @@ class ContentStreamParserTest extends TestCase {
             }
         }
     }
+
+    public function testParseMarkedContent(): void {
+        $contentStream = FileStream::fromString(
+            <<<EOD
+            /Span<</ActualText (-) >> BDC
+            BT
+            (a) Tj
+            ET
+            EMC
+            /P BMC
+            Q
+            BT
+            (b) Tj
+            ET
+            EMC
+            EOD,
+        );
+        $object = $this->createMock(CompressedObject::class);
+        $object->expects(self::once())->method('getContent')->willReturn($contentStream);
+        static::assertEquals(
+            new ContentStream(
+                new ContentStreamCommand(MarkedContentOperator::BeginMarkedContentWithProperties, '/Span<</ActualText (-) >>'),
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(a)')),
+                new ContentStreamCommand(MarkedContentOperator::EndMarkedContent, ''),
+                new ContentStreamCommand(MarkedContentOperator::BeginMarkedContent, '/P'),
+                new ContentStreamCommand(GraphicsStateOperator::RestoreMostRecentStateFromStack, ''),
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '(b)')),
+                new ContentStreamCommand(MarkedContentOperator::EndMarkedContent, ''),
+            ),
+            ContentStreamParser::parse([$object]),
+        );
+    }
 }
