@@ -24,7 +24,7 @@ readonly class NameObjectStringValue implements DictionaryKeyInterface, Dictiona
 
     public function getText(): string {
         return preg_replace_callback(
-            '/#([0-9A-F]{2})/',
+            '/#([0-9A-F]{2})/i',
             fn(array $matches) => chr((int) hexdec($matches[1])),
             $this->value,
         ) ?? throw new ParseFailureException();
