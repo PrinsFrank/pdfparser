@@ -58,5 +58,17 @@ class NameObjectStringValueTest extends TestCase {
             '/AB',
             (new NameObjectStringValue('/A#42'))->getText(),
         );
+        static::assertSame(
+            '/image/png',
+            (new NameObjectStringValue('/image#2Fpng'))->getText(),
+        );
+        static::assertSame(
+            '/image/png',
+            (new NameObjectStringValue('/image#2fpng'))->getText(),
+        );
+        static::assertSame(
+            '/Image/PNG',
+            (new NameObjectStringValue('/Image#2fPNG'))->getText(),
+        );
     }
 }
